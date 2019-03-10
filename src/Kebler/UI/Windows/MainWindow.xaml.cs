@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using log4net;
 
 namespace Kebler.UI.Windows
@@ -13,13 +10,25 @@ namespace Kebler.UI.Windows
     public partial class MainWindow : Window
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ConnectionManager CMWindow;
+
+
         public MainWindow()
         {
             log4net.Config.XmlConfigurator.Configure();
 
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
+
         }
 
-      
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            //CMWindow = new ConnectionManager();
+            //CMWindow.ShowDialog();
+        }
+
+
     }
 }

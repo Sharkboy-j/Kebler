@@ -8,6 +8,6 @@
     Title="{DynamicResource MainWindowTitle}"
     Width="800"
     Height="450"
-    mc:Ignorable="d">
-    <Grid />
-</Window>
+
+    Style="{DynamicResource WindowStyle}"
+    mc:Ignorable="d" />

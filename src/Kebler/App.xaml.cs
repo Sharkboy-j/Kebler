@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,19 +22,15 @@ namespace Kebler
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
-        private static MainWindow MainWindow;
+        private static MainWindow _mainWindow;
 
         private static CultureInfo Language
         {
             get => System.Threading.Thread.CurrentThread.CurrentUICulture;
             set
             {
-                if (value == null)
-                {
-
-                    return;
-                }
-                if (value == System.Threading.Thread.CurrentThread.CurrentUICulture) return;
+                if (value == null) return;
+                if (Equals(value, System.Threading.Thread.CurrentThread.CurrentUICulture)) return;
 
                 //1. Меняем язык приложения:
                 System.Threading.Thread.CurrentThread.CurrentUICulture = value;
@@ -76,7 +71,7 @@ namespace Kebler
             Log.Info("============= Application Started =============");
 
             LanguageChanged += App_LanguageChanged;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException; ;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Dispatcher_UnhandledException;
             Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
@@ -109,8 +104,8 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            MainWindow = new MainWindow();
-            MainWindow.Show();
+            _mainWindow = new MainWindow();
+            _mainWindow.Show();
 
             base.OnStartup(e);
         }
@@ -164,6 +159,8 @@ namespace Kebler
 
             return text;
         }
+
+       
         #endregion
 
     }

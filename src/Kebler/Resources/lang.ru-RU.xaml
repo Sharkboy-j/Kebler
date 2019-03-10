@@ -7,4 +7,8 @@
     <!--  Main Window  -->
     <sys:String x:Key="MainWindowTitle">Kebler Transmission Remote GUI</sys:String>
 
+
+    <!--  ConnectionManager  -->
+    <sys:String x:Key="GeneralTabTitle">General</sys:String>
+    <sys:String x:Key="ProxyTabTitle">Proxy</sys:String>
 </ResourceDictionary>

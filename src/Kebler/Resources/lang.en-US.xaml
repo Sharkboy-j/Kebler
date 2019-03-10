@@ -7,4 +7,24 @@
     <!--  Main Window  -->
     <sys:String x:Key="MainWindowTitle">Kebler Transmission Remote GUI</sys:String>
 
+
+    <!--  ConnectionManager  -->
+    <sys:String x:Key="ConnectionManagerTitle">Connection Manager</sys:String>
+    <sys:String x:Key="GeneralTabTitle">General</sys:String>
+    <sys:String x:Key="ProxyTabTitle">Proxy</sys:String>
+
+    <sys:String x:Key="AddBtnContent">Add</sys:String>
+    <sys:String x:Key="RemoveBtnContent">Remove</sys:String>
+
+    <sys:String x:Key="ServerTitleLblContent">Connection title:</sys:String>
+    <sys:String x:Key="RemoteHostLblContent">Remote Host:</sys:String>
+    <sys:String x:Key="RemotPortLblContent">Remote Port:</sys:String>
+    <sys:String x:Key="IsNeedAuthLblContent">Authentication required</sys:String>
+    <sys:String x:Key="UserLblContent">Username:</sys:String>
+    <sys:String x:Key="PswdLblContent">Password:</sys:String>
+    <sys:String x:Key="IsNeedSllbtnContent">Use SSL</sys:String>
+    <sys:String x:Key="CredGroupBoxHeader">Credentials:</sys:String>
+    <sys:String x:Key="AlwaysAskPassword">Ask for password</sys:String>
+    <sys:String x:Key="OtherSettingsGroupHeader">Other:</sys:String>
+    <sys:String x:Key="RpcPathLabelContent">RPC path:</sys:String>
 </ResourceDictionary>
