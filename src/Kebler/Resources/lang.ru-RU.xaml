@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+
+    <!--  Main Window  -->
+    <sys:String x:Key="MainWindowTitle">Kebler Transmission Remote GUI</sys:String>
+
+
+    <!--  ConnectionManager  -->
+    <sys:String x:Key="GeneralTabTitle">General</sys:String>
+    <sys:String x:Key="ProxyTabTitle">Proxy</sys:String>
+</ResourceDictionary>

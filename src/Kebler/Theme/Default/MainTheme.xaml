@@ -1,0 +1,213 @@
+﻿<ResourceDictionary
+    x:Class="Kebler.Theme.Default.MainTheme"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#007ACC" />
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="#007ACC" />
+    <SolidColorBrush x:Key="WindowBorderBrushInactive" Color="#999999" />
+    <SolidColorBrush x:Key="WindowStatusForeground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="WindowStatusForegroundInactive" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#FFE5E5E5" />
+
+    <Style x:Key="WindowButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border x:Name="PART_border" Background="Transparent" />
+                        <ContentPresenter />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="#FFF" />
+                            <Setter TargetName="PART_border" Property="Opacity" Value="0.7" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource WindowBorderBrush}" />
+                            <Setter TargetName="PART_border" Property="Opacity" Value="1" />
+                            <Setter Property="Foreground" Value="#FFF" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="AllowsTransparency" Value="true" />
+        <Setter Property="Background" Value="{DynamicResource WindowBackground}" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="Icon" Value="../../Theme/Transmission.ico" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome
+                    CaptionHeight="32"
+                    GlassFrameThickness="0"
+                    NonClientFrameEdges="None"
+                    ResizeBorderThickness="7" />
+            </Setter.Value>
+        </Setter>
+        <EventSetter Event="Loaded" Handler="WindowLoaded" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <!--
+                        7 is a magic number. By default Windows fits a maximized window with Margin
+                        7 7 7 5 to fill entire screen (WPF .Net 4.5). Larger numbers produce a gap
+                        between maximized window and screen edges; smaller numbers show parts of
+                        the window outside of the current monitor on multi-display computers.
+                    -->
+                    <Border x:Name="PART_Container" Padding="7,7,7,5">
+                        <Grid TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
+                            <Border
+                                x:Name="PART_Border"
+                                Width="Auto"
+                                Height="Auto"
+                                Padding="0"
+                                Background="#EFEFF2"
+                                BorderBrush="{StaticResource WindowBorderBrush}"
+                                BorderThickness="1">
+                                <DockPanel
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent">
+                                    <Border
+                                        x:Name="TitleBar"
+                                        Background="{StaticResource TitleBarBackgroundBrush}"
+                                        BorderThickness="0"
+                                        DockPanel.Dock="Top">
+                                        <Grid Height="32">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="36" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="34" />
+                                                <ColumnDefinition Width="34" />
+                                                <ColumnDefinition Width="34" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image
+                                                x:Name="Icon"
+                                                Grid.Column="0"
+                                                Width="32"
+                                                Height="32"
+                                                Margin="4,-7,0,7"
+                                                HorizontalAlignment="Right"
+                                                MouseLeftButtonDown="IconMouseLeftButtonDown"
+                                                MouseUp="IconMouseUp"
+                                                Source="{Binding Path=Icon, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                WindowChrome.IsHitTestVisibleInChrome="True" />
+                                            <TextBlock
+                                                x:Name="Caption"
+                                                Grid.Column="1"
+                                                Margin="4,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="12"
+                                                Opacity="0.66"
+                                                Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <Button
+                                                x:Name="MinButton"
+                                                Grid.Column="2"
+                                                Width="34"
+                                                Height="26"
+                                                VerticalAlignment="Top"
+                                                Click="MinButtonClick"
+                                                Style="{StaticResource WindowButtonStyle}"
+                                                WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        Data="M0,8 H8 M0,7 H8 M0,6 H8"
+                                                        RenderOptions.EdgeMode="Aliased"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1" />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                                x:Name="MaxButton"
+                                                Grid.Column="3"
+                                                Width="34"
+                                                Height="26"
+                                                VerticalAlignment="Top"
+                                                Click="MaxButtonClick"
+                                                Style="{StaticResource WindowButtonStyle}"
+                                                WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        x:Name="PART_MaxButton_Path"
+                                                        Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
+                                                        RenderOptions.EdgeMode="Aliased"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1" />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                                x:Name="CloseButton"
+                                                Grid.Column="4"
+                                                Width="34"
+                                                Height="26"
+                                                VerticalAlignment="Top"
+                                                Click="CloseButtonClick"
+                                                Style="{StaticResource WindowButtonStyle}"
+                                                WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        Data="M0,0 L8,8 M0,8 L8,0"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1.5" />
+                                                </Grid>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                    <ContentPresenter />
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8" />
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Normal">
+                            <Setter TargetName="PART_Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="7"
+                                        Direction="315"
+                                        Opacity="0.5"
+                                        ShadowDepth="2"
+                                        Color="black" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource WindowBorderBrushInactive}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Resources>
+            <Style TargetType="{x:Type StatusBar}">
+                <Setter Property="Foreground" Value="{StaticResource WindowStatusForeground}" />
+                <Setter Property="Background" Value="{StaticResource WindowBorderBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource WindowStatusForegroundInactive}" />
+                        <Setter Property="Background" Value="{StaticResource WindowBorderBrushInactive}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type ResizeGrip}">
+                <Setter Property="WindowChrome.ResizeGripDirection" Value="BottomRight" />
+            </Style>
+        </Style.Resources>
+    </Style>
+</ResourceDictionary>
