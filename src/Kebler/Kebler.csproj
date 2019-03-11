@@ -54,12 +54,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Theme\Transmission.ico</ApplicationIcon>
+    <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiteDB, Version=4.1.4.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.4.1.4\lib\net40\LiteDB.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -96,10 +99,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\GlobalConfiguration.cs" />
     <Compile Include="Models\Server.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Services\SecureStorage.cs" />
+    <Compile Include="Services\StorageRepository.cs" />
     <Compile Include="Theme\Default\MainTheme.cs" />
     <Compile Include="UI\Windows\ConnectionManager.xaml.cs">
       <DependentUpon>ConnectionManager.xaml</DependentUpon>
@@ -112,6 +118,14 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Resource Include="Theme\Icons\Kebler_darl2_512x512.png" />
+    <Resource Include="Theme\Icons\Kebler_dark_512x512.png" />
+    <Resource Include="Theme\Icons\Kebler.ico" />
+    <Content Include="Theme\Icons\Kebler.svg" />
+    <Resource Include="Theme\Icons\Kebler_16x16.png" />
+    <Resource Include="Theme\Icons\Kebler_32x32.png" />
+    <Resource Include="Theme\Icons\Kebler_512x512.png" />
+    <Resource Include="Theme\Icons\Kebler_64x64.png" />
     <Resource Include="FodyWeavers.xml" />
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -123,9 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\Controls\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Theme\Transmission.ico" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\lang.en-US.xaml">
