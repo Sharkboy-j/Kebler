@@ -112,6 +112,8 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Resource Include="Theme\Icons\Kebler_darl2_512x512.png" />
+    <Resource Include="Theme\Icons\Kebler_dark_512x512.png" />
     <Resource Include="Theme\Icons\Kebler.ico" />
     <Content Include="Theme\Icons\Kebler.svg" />
     <Resource Include="Theme\Icons\Kebler_16x16.png" />

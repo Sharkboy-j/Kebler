@@ -15,13 +15,32 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <StackPanel
+                Height="Auto"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <Image Width="150" Source="../../Theme/Icons/Kebler_dark_512x512.png" />
+                <Label
+                    Width="Auto"
+                    Margin="0,5,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{DynamicResource NoSelectedServerContent}"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource LabelSnipForegroundActiveBrush}" />
+            </StackPanel>
 
+        </Grid>
         <TabControl
             x:Name="SelectedServerTab"
             Grid.Column="1"
             IsEnabled="{Binding IsSelectedServerTabEnabled}"
             SelectedIndex="0"
-            TabStripPlacement="Top">
+            TabStripPlacement="Top"
+            Visibility="Visible">
             <TabItem Header="{DynamicResource GeneralTabTitle}">
                 <Grid x:Name="SelectedServerGrid">
                     <Grid.ColumnDefinitions>
@@ -64,7 +83,6 @@
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Margin="5,5,10,5"
-                                Padding="0"
                                 HorizontalContentAlignment="Left"
                                 VerticalContentAlignment="Center" />
                             <TextBox
@@ -88,6 +106,7 @@
                                 Margin="81,9,0,5"
                                 HorizontalAlignment="Left"
                                 Content="{DynamicResource IsNeedSllbtnContent}"
+                                IsChecked="False"
                                 IsEnabled="False" />
 
                         </Grid>
@@ -113,7 +132,8 @@
                                         Padding="0"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
-                                        Content="{DynamicResource PswdLblContent}" />
+                                        Content="{DynamicResource PswdLblContent}"
+                                        IsEnabled="{Binding IsChecked, ElementName=AskPass}" />
                                     <TextBox
                                         Grid.Row="0"
                                         Grid.Column="1"
@@ -139,7 +159,6 @@
                                             x:Name="AskPass"
                                             Grid.Column="1"
                                             Margin="5,0,0,0"
-                                            Padding="3,0,0,0"
                                             HorizontalContentAlignment="Left"
                                             VerticalContentAlignment="Center"
                                             Content="{DynamicResource AlwaysAskPassword}" />
@@ -152,12 +171,12 @@
                                 Margin="7,-6,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Background="{StaticResource WindowBackgroundActive}">
+                                Background="{StaticResource WindowBackgroundActiveBrush}">
                                 <CheckBox
                                     x:Name="AuthEnebled"
                                     Margin="3,0,3,0"
-                                    Padding="3,0,0,0"
                                     Content="{DynamicResource IsNeedAuthLblContent}"
+                                    IsChecked="False"
                                     IsEnabled="{Binding IsSelectedServerTabEnabled}" />
                             </Grid>
                         </Grid>
@@ -200,12 +219,11 @@
             <TabItem Header="{DynamicResource ProxyTabTitle}" IsEnabled="True">
                 <Grid />
             </TabItem>
-
         </TabControl>
+
         <Border
             Grid.RowSpan="2"
             Grid.Column="0"
-            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="0,0,1,0">
             <Grid>
                 <Grid.RowDefinitions>
@@ -214,16 +232,24 @@
                 </Grid.RowDefinitions>
                 <ListBox />
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Button
-                        Width="50"
-                        Margin="5,5,5,5"
-                        Content="{DynamicResource AddBtnContent}" />
-                    <Button
-                        Width="50"
-                        Margin="5,5,5,5"
-                        Content="{DynamicResource RemoveBtnContent}" />
-                </StackPanel>
+                <Border
+                    Grid.Row="1"
+                    Background="{DynamicResource WindowBackgroundBrush}"
+                    BorderThickness="0,1,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Width="25"
+                            Height="25"
+                            Margin="1,0,0,0"
+                            Content="{DynamicResource AddBtnContent}" />
+                        <Button
+                            Width="25"
+                            Height="25"
+                            Margin="1,0,0,0"
+                            Content="{DynamicResource RemoveBtnContent}" />
+                    </StackPanel>
+                </Border>
+
 
             </Grid>
         </Border>
