@@ -28,4 +28,7 @@
     <sys:String x:Key="OtherSettingsGroupHeader">Other:</sys:String>
     <sys:String x:Key="RpcPathLabelContent">RPC path:</sys:String>
     <sys:String x:Key="NoSelectedServerContent">No Selected Server</sys:String>
+    <sys:String x:Key="SaveServerContent">Save</sys:String>
+    <sys:String x:Key="CloseServerContent">Close</sys:String>
+    <sys:String x:Key="RemoveErrorContent">Error while removing server</sys:String>
 </ResourceDictionary>
