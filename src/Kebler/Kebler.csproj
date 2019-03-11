@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Theme\Transmission.ico</ApplicationIcon>
+    <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -112,6 +112,12 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Resource Include="Theme\Icons\Kebler.ico" />
+    <Content Include="Theme\Icons\Kebler.svg" />
+    <Resource Include="Theme\Icons\Kebler_16x16.png" />
+    <Resource Include="Theme\Icons\Kebler_32x32.png" />
+    <Resource Include="Theme\Icons\Kebler_512x512.png" />
+    <Resource Include="Theme\Icons\Kebler_64x64.png" />
     <Resource Include="FodyWeavers.xml" />
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -123,9 +129,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\Controls\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Theme\Transmission.ico" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\lang.en-US.xaml">

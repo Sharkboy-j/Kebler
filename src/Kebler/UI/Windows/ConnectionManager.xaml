@@ -15,34 +15,13 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <ListBox
-                Margin="5"
-                Background="White"
-                BorderThickness="1" />
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button
-                    Width="50"
-                    Margin="5,5,5,5"
-                    Content="{DynamicResource AddBtnContent}" />
-                <Button
-                    Width="50"
-                    Margin="5,5,5,5"
-                    Content="{DynamicResource RemoveBtnContent}" />
-            </StackPanel>
-
-        </Grid>
 
         <TabControl
             x:Name="SelectedServerTab"
             Grid.Column="1"
-            Margin="5"
             IsEnabled="{Binding IsSelectedServerTabEnabled}"
-            SelectedIndex="0">
+            SelectedIndex="0"
+            TabStripPlacement="Top">
             <TabItem Header="{DynamicResource GeneralTabTitle}">
                 <Grid x:Name="SelectedServerGrid">
                     <Grid.ColumnDefinitions>
@@ -173,10 +152,11 @@
                                 Margin="7,-6,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Background="White">
+                                Background="{StaticResource WindowBackgroundActive}">
                                 <CheckBox
                                     x:Name="AuthEnebled"
                                     Margin="3,0,3,0"
+                                    Padding="3,0,0,0"
                                     Content="{DynamicResource IsNeedAuthLblContent}"
                                     IsEnabled="{Binding IsSelectedServerTabEnabled}" />
                             </Grid>
@@ -217,10 +197,38 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource ProxyTabTitle}" IsEnabled="False">
+            <TabItem Header="{DynamicResource ProxyTabTitle}" IsEnabled="True">
                 <Grid />
             </TabItem>
 
         </TabControl>
+        <Border
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <ListBox />
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button
+                        Width="50"
+                        Margin="5,5,5,5"
+                        Content="{DynamicResource AddBtnContent}" />
+                    <Button
+                        Width="50"
+                        Margin="5,5,5,5"
+                        Content="{DynamicResource RemoveBtnContent}" />
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+
+
     </Grid>
 </Window>

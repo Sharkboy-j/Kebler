@@ -5,7 +5,7 @@
 
 
     <!--  Main Window  -->
-    <sys:String x:Key="MainWindowTitle">Kebler Transmission Remote GUI</sys:String>
+    <sys:String x:Key="MainWindowTitle">Kebler</sys:String>
 
 
     <!--  ConnectionManager  -->

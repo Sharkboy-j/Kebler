@@ -10,7 +10,7 @@ namespace Kebler.UI.Windows
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool IsSelectedServerTabEnabled { get; set; } = false;
+        public bool IsSelectedServerTabEnabled { get; set; } = true;
 
         public ConnectionManager()
         {
