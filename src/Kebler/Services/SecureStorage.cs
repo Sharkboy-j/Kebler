@@ -39,6 +39,22 @@ namespace Kebler.Services
             }
         }
 
+        public static string DecryptStringAndUnSecure(string encryptedData)
+        {
+            try
+            {
+                var decryptedData = ProtectedData.Unprotect(
+                    Convert.FromBase64String(encryptedData),
+                    Encoding.Unicode.GetBytes(Entropy),
+                    DataProtectionScope.CurrentUser);
+                return UnSecureString(SecureString(Encoding.Unicode.GetString(decryptedData)));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string UnSecureString(SecureString input)
         {
             string returnValue;

@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     x:Class="Kebler.Theme.Default.MainTheme"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Kebler.UI.Controls">
     <!--  Colors  -->
     <!--<SolidColorBrush x:Key="BorderBrush" Color="#FF525252" />-->
     <!--<SolidColorBrush x:Key="ContentColor" Color="White" />-->
@@ -124,6 +125,20 @@
         G="69"
         R="69" />
 
+    <Color
+        x:Key="RedColor"
+        A="255"
+        B="32"
+        G="39"
+        R="170" />
+
+    <Color
+        x:Key="GreenColor"
+        A="255"
+        B="66"
+        G="132"
+        R="56" />
+
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="{DynamicResource BackgroundDefaultColor}" />
     <SolidColorBrush x:Key="TitleBarButtonForegroundBrush" Color="{DynamicResource ContetnSnipColor}" />
     <SolidColorBrush x:Key="TitleBarLabelForegroundBrush" Color="{DynamicResource ContetnSnipColor}" />
@@ -199,6 +214,9 @@
     <SolidColorBrush x:Key="ListBoxItemBackgroundSelectedBrush" Color="{DynamicResource BorderBrushBlueColor}" />
     <SolidColorBrush x:Key="ListBoxItemBorderBrush" Color="{DynamicResource BorderBrushDefaultColor}" />
     <SolidColorBrush x:Key="ListBoxBackgroundBrush" Color="{DynamicResource BackgroundDefaultColor}" />
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource GreenColor}" />
+    <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource RedColor}" />
 
 
 
@@ -1163,6 +1181,7 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border
                         x:Name="border"
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -1320,5 +1339,66 @@
         </Setter>
     </Style>
 
+    <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="controls:WaterBox">
+        <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundActiveBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundActiveBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:WaterBox">
+
+                    <Border BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="3" />
+                            <TextBlock
+                                x:Name="watermarkText"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource LabelSnipForegroundActiveBrush}"
+                                Text="{TemplateBinding Watermark}" />
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="watermarkText" Property="Visibility" Value="Collapsed" />
+                        </MultiTrigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="RemoveWatermark" Value="True" />
+                                <Condition Property="IsFocused" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="watermarkText" Property="Visibility" Value="Collapsed" />
+                        </MultiTrigger>
+
+
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundInActiveBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderDisabledBrush}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundActiveBrush}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextSelectionBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderSelectedBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

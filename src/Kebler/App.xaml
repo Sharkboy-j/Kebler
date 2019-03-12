@@ -12,6 +12,9 @@
                 <ResourceDictionary Source="Theme/Default/MainTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <conv:ReverseBoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" />
+            <conv:ReverseBoolToBoolConverter x:Key="ReverseBoolToBoolConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

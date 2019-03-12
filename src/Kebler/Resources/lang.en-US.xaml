@@ -31,4 +31,13 @@
     <sys:String x:Key="SaveServerContent">Save</sys:String>
     <sys:String x:Key="CloseServerContent">Close</sys:String>
     <sys:String x:Key="RemoveErrorContent">Error while removing server</sys:String>
+    <sys:String x:Key="TestConnectionButtonContent">Test Connection</sys:String>
+    <sys:String x:Key="TestConnectionGood">Connected</sys:String>
+    <sys:String x:Key="TestConnectionBad">Error</sys:String>
+
+
+    <!--  Dialogs  -->
+    <sys:String x:Key="DialogEnterPasswordContent">Please enter password:</sys:String>
+    <sys:String x:Key="DialogOkButtonContent">Ok</sys:String>
+
 </ResourceDictionary>
