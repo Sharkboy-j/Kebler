@@ -25,7 +25,7 @@ namespace Kebler.UI.Windows
 
         public MainWindow()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            //log4net.Config.XmlConfigurator.Configure();
 
             InitializeComponent();
             DBServers = StorageRepository.ServersList();
@@ -46,8 +46,6 @@ namespace Kebler.UI.Windows
                 SelectedServerTest = ServersList.FirstOrDefault();
                 //TODO: Init connection to all servers
             }
-
-            TestConnectionInit();
         }
 
         private void ShowCMWindow()
@@ -56,26 +54,6 @@ namespace Kebler.UI.Windows
             CMWindow.ShowDialog();
         }
 
-        private async void TestConnectionInit()
-        {
-           
-            var host = $"{SelectedServerTest.Host}:{SelectedServerTest.Port}{SelectedServerTest.RPCPath}";//SelectedServerTest.Host +SelectedServerTest.Port+ SelectedServerTest.RPCPath;
-            var password = SecureStorage.UnSecureString(SecureStorage.DecryptString(SelectedServerTest.Password));
-
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-            var client = new Client(host, null, SelectedServerTest.UserName,password);
-
-            //After initialization, client can call methods:
-            var sessionInfo = await client.GetSessionInformationAsync();
-            var allTorrents = await client.TorrentGetAsync(TorrentFields.ALL_FIELDS, null);
-           
-        }
+      
     }
 }

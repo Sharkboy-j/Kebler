@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Xml;
 using Kebler.UI.Windows;
 using log4net;
+using log4net.Config;
 using SharpConfig;
 
 namespace Kebler
@@ -67,7 +70,13 @@ namespace Kebler
 
         App()
         {
-            log4net.Config.XmlConfigurator.Configure();
+
+
+            var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
+
+
+            //log4net.Config.XmlConfigurator.Configure(null);
             Log.Info("============= Application Started =============");
 
             LanguageChanged += App_LanguageChanged;
@@ -160,7 +169,7 @@ namespace Kebler
             return text;
         }
 
-       
+
         #endregion
 
     }

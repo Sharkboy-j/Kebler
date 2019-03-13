@@ -146,7 +146,7 @@ namespace Kebler.UI.Windows
         {
 
             Log.Info($"Try save Server {SelectedServer}");
-            
+
             if (ValidateServer(SelectedServer, out var error))
             {
                 SelectedServer.Password = SelectedServer.AskForPassword ? string.Empty : SecureStorage.EncryptString(ServerPasswordBox.Password);
@@ -222,11 +222,11 @@ namespace Kebler.UI.Windows
                     return;
                 }
             }
-           
+
 
             IsTesting = true;
             var result = await TesConnection(pass);
-            ConnectStatusResult = result 
+            ConnectStatusResult = result
                 ? Application.Current.FindResource("TestConnectionGood")?.ToString()
                 : Application.Current.FindResource("TestConnectionBad")?.ToString();
 
@@ -262,7 +262,7 @@ namespace Kebler.UI.Windows
                     Log.Error(ex.Message, ex);
                     return false;
                 }
-                
+
 
                 return true;
             });
@@ -270,12 +270,14 @@ namespace Kebler.UI.Windows
 
         private void SSL_Checked(object sender, RoutedEventArgs e)
         {
-            SelectedServer.SSLEnabled = true;
+            if (SelectedServer != null)
+                SelectedServer.SSLEnabled = true;
         }
 
         private void SSL_Uncheked(object sender, RoutedEventArgs e)
         {
-            SelectedServer.SSLEnabled = false;
+            if (SelectedServer != null)
+                SelectedServer.SSLEnabled = false;
         }
     }
 }

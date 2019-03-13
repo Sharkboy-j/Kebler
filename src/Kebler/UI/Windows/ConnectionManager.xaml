@@ -285,9 +285,10 @@
                 </Grid.RowDefinitions>
                 <ListBox
                     x:Name="ServersListBox"
+                    Margin="0,-1,0,0"
                     Padding="-1,0,-1,0"
                     BorderBrush="{DynamicResource BorderBorderBrush}"
-                    BorderThickness="0,0,1,0"
+                    BorderThickness="0,1,1,0"
                     SelectedIndex="1"
                     SelectionChanged="ServersListBox_SelectedItemChanged" />
 
