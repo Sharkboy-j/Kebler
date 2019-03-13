@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using System.Xml;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;
@@ -23,7 +22,7 @@ namespace Kebler
 
         private static Models.GlobalConfiguration Configuration;
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
-        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
+        public  static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
         private static MainWindow _mainWindow;
 

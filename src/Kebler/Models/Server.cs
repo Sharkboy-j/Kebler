@@ -29,5 +29,18 @@ namespace Kebler.Models
         {
             return JsonConvert.SerializeObject(this,Formatting.Indented);
         }
+        [BsonIgnore,JsonIgnore]
+        public string FullUriPath
+        {
+            get
+            {
+                var type = SSLEnabled ? "https://" : "http://";
+
+                if (!RPCPath.StartsWith("/")) RPCPath = $"/{RPCPath}";
+                var uri = $"{type}{Host}:{Port}{RPCPath}";
+                if (!uri.EndsWith("/")) uri += "/";
+                return uri;
+            }
+        }
     }
 }

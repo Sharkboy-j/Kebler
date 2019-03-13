@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Kebler.Models;
+using Kebler.Services;
+using Kebler.UI.Windows.Dialogs;
+using LiteDB;
+using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,11 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Kebler.Models;
-using Kebler.Services;
-using Kebler.UI.Windows.Dialogs;
-using log4net;
-using LiteDB;
 using Transmission.API.RPC;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -68,8 +68,7 @@ namespace Kebler.UI.Windows
         private void GetServers(int selectedId = -1)
         {
 
-            var items = DbServersList?.FindAll();
-            items = items ?? new List<Server>();
+            var items = DbServersList?.FindAll() ?? new List<Server>();
 
             ServerList = new ObservableCollection<Server>(items);
             LogServers();
@@ -103,17 +102,7 @@ namespace Kebler.UI.Windows
 
         private void LogServers()
         {
-            if (ServerList.Count == 0)
-            {
-                Log.Info("ServerListCount: 0");
-            }
-            var txt = $"ServersList[{ServerList.Count}]:{Environment.NewLine}";
-            foreach (var server in ServerList)
-            {
-                txt += server + Environment.NewLine;
-            }
-            Log.Info(txt);
-
+           
         }
 
         //TODO: add background 
@@ -251,11 +240,12 @@ namespace Kebler.UI.Windows
 
                 try
                 {
-                    var client = new Client(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
+                    var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
 
                     var sessionInfo = client.GetSessionInformation();
 
-                    client.CloseSession();
+                    
+                    //client.CloseSession();
                 }
                 catch (Exception ex)
                 {

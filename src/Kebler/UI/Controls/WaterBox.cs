@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable once MemberCanBePrivate.Global
@@ -30,13 +28,13 @@ namespace Kebler.UI.Controls
                 new FrameworkPropertyMetadata(typeof(WaterBox)));
 
             TextProperty.OverrideMetadata(typeof(WaterBox),
-                new FrameworkPropertyMetadata(new PropertyChangedCallback(TextPropertyChanged)));
+                new FrameworkPropertyMetadata(TextPropertyChanged));
         }
 
         private static readonly DependencyPropertyKey RemoveWatermarkPropertyKey =
             DependencyProperty.RegisterReadOnly("RemoveWatermark", typeof(bool),
                 typeof(WaterBox),
-                new FrameworkPropertyMetadata((bool)false));
+                new FrameworkPropertyMetadata(false));
 
         public static readonly DependencyProperty RemoveWatermarkProperty =
             RemoveWatermarkPropertyKey.DependencyProperty;

@@ -15,7 +15,7 @@ using Transmission.API.RPC.Arguments;
 
 namespace Transmission.API.RPC
 {
-    public class Client
+    public class TransmissionClient
     {
 		public string Host
 		{
@@ -44,7 +44,7 @@ namespace Transmission.API.RPC
 		/// <param name="login">Login</param>
 		/// <param name="password">Password</param>
 		/// <exception cref="UriFormatException"></exception>
-		public Client(string host, string sessionID = null, string login = null, string password = null)
+		public TransmissionClient(string host, string sessionID = null, string login = null, string password = null)
         {
             var res = Uri.TryCreate(host,UriKind.Absolute,out var tt);
 

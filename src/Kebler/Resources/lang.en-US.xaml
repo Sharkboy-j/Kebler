@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
 
     <!--  Main Window  -->
@@ -40,4 +40,8 @@
     <sys:String x:Key="DialogEnterPasswordContent">Please enter password:</sys:String>
     <sys:String x:Key="DialogOkButtonContent">Ok</sys:String>
 
+    <!--  MainWindow  -->
+    <sys:String x:Key="NotYetConnectedContent">Not Connected To Server:</sys:String>
+    <sys:String x:Key="NoAnyTorrents">No Any Torrents</sys:String>
+    <sys:String x:Key="RetryConnectionButtonContent">Retry</sys:String>
 </ResourceDictionary>

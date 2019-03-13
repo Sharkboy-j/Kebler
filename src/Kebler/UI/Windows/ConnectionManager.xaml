@@ -257,7 +257,7 @@
                                 Margin="98,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Visibility="{Binding IsTesting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
+                                Visibility="{Binding IsConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
 
                         </Grid>
                     </StackPanel>

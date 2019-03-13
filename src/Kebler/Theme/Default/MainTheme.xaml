@@ -283,14 +283,14 @@
                                 BorderThickness="1">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="26" />
+                                        <RowDefinition Height="27" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <Border
                                         x:Name="TitleBar"
                                         Grid.Row="0"
                                         Background="{StaticResource TitleBarBackgroundBrush}"
-                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderBrush="{DynamicResource Red}"
                                         BorderThickness="0,0,0,1"
                                         MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
                                         MouseMove="TitleBarMouseMove">
@@ -469,9 +469,9 @@
                             <Setter TargetName="PART_Border" Property="BorderThickness" Value="1" />
                         </Trigger>
 
-                        <Trigger Property="IsActive" Value="False">
+                        <!--<Trigger Property="IsActive" Value="False">
                             <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource WindowBackgroundBrush}" />
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="ResizeMode" Value="NoResize">
                             <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="MinButton" Property="Visibility" Value="Collapsed" />
