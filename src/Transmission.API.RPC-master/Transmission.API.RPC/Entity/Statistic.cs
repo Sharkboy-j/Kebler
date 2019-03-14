@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Transmission.API.RPC.Entity
 {
-    public class Statistic
+    public class Statistic : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         [JsonProperty("activeTorrentCount")]
         public int ActiveTorrentCount { get; set; }
 
@@ -31,8 +33,9 @@ namespace Transmission.API.RPC.Entity
         public CommonStatistic CurrentStats { get; set; }
     }
 
-    public class CommonStatistic
+    public class CommonStatistic : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         [JsonProperty("uploadedBytes")]
         public double uploadedBytes{ get; set; }
         

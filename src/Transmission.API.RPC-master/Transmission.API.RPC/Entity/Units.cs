@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Transmission.API.RPC.Entity
 {
-    public class Units
+    public class Units : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         [JsonProperty("speed-units")]
         public string[] SpeedUnits { get; set; }
 

@@ -13,6 +13,10 @@ using Kebler.UI.Windows.Dialogs;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Transmission.API.RPC.Entity;
+using System.Threading;
+using System.Collections.ObjectModel;
+using Kebler.UI.ViewModels;
+using Kebler.Services.Converters;
 
 namespace Kebler.UI.Windows
 {
@@ -20,22 +24,12 @@ namespace Kebler.UI.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private ConnectionManager CMWindow;
-        private LiteCollection<Server> DBServers;
-        private List<Server> ServersList;
-        private TransmissionClient transmissionClient;
 
+        private readonly MainWindowViewModel VM;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public bool IsConnected { get; set; } = false;
-        public bool IsConnecting { get; set; } = false;
-
-        public string StatusText { get; set; } = string.Empty;
-        public bool IsErrorOccuredWhileConnecting { get; set; } = false;
-
+        
 
         public MainWindow()
         {
@@ -43,118 +37,23 @@ namespace Kebler.UI.Windows
 
             InitializeComponent();
 
-            DataContext = this;
-            Start();
-        }
-
-        private void Start()
-        {
-            Task.Factory.StartNew(() =>
-            {
-                GetAllServer();
-                TryConnect();
-            });
-        }
-
-
-        private void TryConnect()
-        {
-            if (ServersList.Count == 0)
-            {
-                ShowCm();
-            }
-            else
-            {
-                new Task(() => { TryConnect(ServersList.FirstOrDefault()); }).Start();
-
-            }
-        }
-
-
-
-        private void ShowCm()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                CMWindow = new ConnectionManager(DBServers);
-                CMWindow.ShowDialog();
-            });
-
-          
-        }
-        private async void TryConnect(Server server)
-        {
-            Log.Info("Start Connection");
-            IsErrorOccuredWhileConnecting = false;
-            StatusText = "Connecting";
-            try
-            {
-                IsConnecting = true;
-                if (server.AskForPassword)
-                {
-                    var pass = await GetPassword();
-                    if (string.IsNullOrEmpty(pass)) return;
-                    try
-                    {
-                        transmissionClient = new TransmissionClient(server.FullUriPath, null, server.UserName, server.AskForPassword? pass : SecureStorage.DecryptStringAndUnSecure(server.Password));
-
-                        var sessionInfo = transmissionClient.GetSessionInformation();
-                        StatusText = $"RPC: v.{sessionInfo.RpcVersion} Transmission: v.{sessionInfo.Version}";
-                        await Dispatcher.InvokeAsync(async () =>
-                        {
-                            TorrentsDataGrid.ItemsSource = (await transmissionClient.TorrentGetAsync(TorrentFields.ALL_FIELDS)).Torrents;
-                        });
-                        
-                        IsConnected = true;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex.Message, ex);
-                        StatusText = ex.Message;
-                        IsConnected = false;
-                        IsErrorOccuredWhileConnecting = true;
-                    }
-                }
-            }
-            finally
-            {
-                IsConnecting = false;
-            }
-
-
+            VM = new MainWindowViewModel();
+            DataContext = VM;
 
         }
-
-        private async Task<string> GetPassword()
-        {
-            var pass = string.Empty;
-            await Dispatcher.InvokeAsync(() =>
-            {
-                var dialog = new DialogPassword();
-                pass = dialog.ShowDialog() == true ? dialog.ResponseText : string.Empty;
-            });
-            return pass;
-        }
-
-
-        private void GetAllServer()
-        {
-            DBServers = StorageRepository.ServersList();
-            ServersList = new List<Server>(DBServers.FindAll() ?? new List<Server>());
-            ServersList.LogServers();
-        }
-
-
-        #region Events
-
-        #endregion
 
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
-         
-            new Task(() => { TryConnect(ServersList.FirstOrDefault()); }).Start();
-            
+           // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
+
+        }
+
+        private void TorrentsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if(TorrentsDataGrid.SelectedValue is TorrentInfo tor)
+            {
+                VM.SelectedTorrent = tor;
+            }
         }
     }
 }

@@ -89,18 +89,24 @@
                     <DataGrid
                         x:Name="TorrentsDataGrid"
                         Grid.Column="2"
-                        AutoGenerateColumns="True"
+                        AutoGenerateColumns="False"
                         BorderThickness="0"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
+                        SelectionChanged="TorrentsDataGrid_SelectionChanged"
                         Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <!--<DataGrid.Columns>
-                            <DataGridTextColumn x:Name="sss" Header="Name" />
-                            <DataGridTextColumn Header="Size" />
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                            <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Upload speed" />
+                            <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Download speed" />
+
+                            <!--<DataGridTextColumn Header="Size" />
                             <DataGridTextColumn Header="Done" />
                             <DataGridTextColumn Header="Status" />
                             <DataGridTextColumn Header="Seeds" />
                             <DataGridTextColumn Header="Peers" />
                             <DataGridTextColumn Header="Download speed" />
-                            <DataGridTextColumn Header="Upload speed" />
                             <DataGridTextColumn Header="ETA" />
                             <DataGridTextColumn Header="Ratio" />
                             <DataGridTextColumn Header="Downloaded" />
@@ -117,8 +123,8 @@
                             <DataGridTextColumn Header="Queue positionme" />
                             <DataGridTextColumn Header="Seeding time" />
                             <DataGridTextColumn Header="Size left" />
-                            <DataGridTextColumn Header="Private" />
-                        </DataGrid.Columns>-->
+                            <DataGridTextColumn Header="Private" />-->
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </Grid>
@@ -135,15 +141,73 @@
                 BorderThickness="0,0,0,0.5"
                 ShowsPreview="False" />
             <!--  torrent properties  -->
-            <Grid Grid.Row="1" />
+            <Grid Grid.Row="2">
+                <Image
+                    x:Name="SelectedPP"
+                    Height="50"
+                    VerticalAlignment="Top"
+                    Source="{Binding SelectedTorrent, Converter={StaticResource PieceToImage}}"
+                    Stretch="Fill" />
+                <ProgressBar
+                    Height="35"
+                    VerticalAlignment="Bottom"
+                    Foreground="{DynamicResource TextSelectionBrush}"
+                    Maximum="1"
+                    Value="{Binding SelectedTorrent.PercentDone}" />
+            </Grid>
         </Grid>
 
         <!--  footer  -->
         <StatusBar Grid.Row="2">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="225" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Width="Auto"
+                    Height="Auto"
+                    Margin="5,0,0,0"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding IsConnectedStatusText}"
+                    Foreground="White" />
+                <Label
+                    Grid.Column="1"
+                    Width="Auto"
+                    Height="Auto"
+                    Margin="10,0,0,0"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding DownloadSpeed}"
+                    Foreground="White" />
+                <Label
+                    Grid.Column="2"
+                    Width="Auto"
+                    Height="Auto"
+                    Margin="10,0,0,0"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding UploadSpeed}"
+                    Foreground="White" />
+            </Grid>
+
             <!--<StatusBarItem HorizontalAlignment="Right">
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>-->
-            <StatusBarItem HorizontalAlignment="Left">
+            <!--<StatusBarItem HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
                     <Label
                         Width="Auto"
@@ -164,7 +228,7 @@
                         Padding="0"
                         Content="{Binding StatusText}" />
                 </StackPanel>
-            </StatusBarItem>
+            </StatusBarItem>-->
         </StatusBar>
     </Grid>
 </Window>

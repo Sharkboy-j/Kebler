@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Transmission.API.RPC.Entity
     /// <summary>
     /// Torrent information
     /// </summary>
-    public class TorrentInfo
+    public class TorrentInfo : INotifyPropertyChanged
     {
         /// <summary>
         /// The torrent's unique Id.
@@ -212,9 +213,11 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("webseedsSendingToUs")]
         public int WebseedsSendingToUs { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentFiles
+    public class TransmissionTorrentFiles : INotifyPropertyChanged
     {
         [JsonProperty("bytesCompleted")]
         public double BytesCompleted{ get; set; }
@@ -224,9 +227,10 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("name")]
         public string Name{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentFileStats
+    public class TransmissionTorrentFileStats : INotifyPropertyChanged
     {
         [JsonProperty("bytesCompleted")]
         public double BytesCompleted{ get; set; }
@@ -236,9 +240,10 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("priority")]
         public int Priority{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentPeers
+    public class TransmissionTorrentPeers : INotifyPropertyChanged
     {
         [JsonProperty("address")]
         public string Address{ get; set; }
@@ -284,9 +289,10 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("rateToPeer")]
         public int RateToPeer{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentPeersFrom
+    public class TransmissionTorrentPeersFrom : INotifyPropertyChanged
     {
         [JsonProperty("fromDht")]
         public int FromDHT{ get; set; }
@@ -305,9 +311,10 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("fromTracker")]
         public int FromTracker{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentTrackers
+    public class TransmissionTorrentTrackers : INotifyPropertyChanged
     {
         [JsonProperty("announce")]
         public string announce{ get; set; }
@@ -320,9 +327,10 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("tier")]
         public int Tier{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class TransmissionTorrentTrackerStats
+    public class TransmissionTorrentTrackerStats : INotifyPropertyChanged
     {
 
         [JsonProperty("announce")]
@@ -402,13 +410,14 @@ namespace Transmission.API.RPC.Entity
 
         [JsonProperty("seederCount")]
         public int SeederCount{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     //TODO: Separate "remove" and "active" torrents in "torrentsGet"
     /// <summary>
     /// Contains arrays of torrents and removed torrents
     /// </summary>
-    public class TransmissionTorrents
+    public class TransmissionTorrents : INotifyPropertyChanged
     {
         /// <summary>
         /// Array of torrents
@@ -421,5 +430,6 @@ namespace Transmission.API.RPC.Entity
         /// </summary>
         [JsonProperty("removed")]
         public TorrentInfo[] Removed{ get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

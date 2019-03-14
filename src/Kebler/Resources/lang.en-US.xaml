@@ -44,4 +44,6 @@
     <sys:String x:Key="NotYetConnectedContent">Not Connected To Server:</sys:String>
     <sys:String x:Key="NoAnyTorrents">No Any Torrents</sys:String>
     <sys:String x:Key="RetryConnectionButtonContent">Retry</sys:String>
+
+    <sys:String x:Key="StatusBarConenctionText">Transmission</sys:String>
 </ResourceDictionary>

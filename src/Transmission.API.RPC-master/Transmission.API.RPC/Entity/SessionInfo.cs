@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -9,8 +10,9 @@ using Transmission.API.RPC.Arguments;
 
 namespace Transmission.API.RPC.Entity
 {
-    public class SessionInfo
+    public class SessionInfo : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// Max global download speed (KBps)
         /// </summary>
