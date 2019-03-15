@@ -52,13 +52,13 @@ namespace Kebler.UI.Windows
         //    GetServers();
         //}
 
-        public ConnectionManager(LiteCollection<Server> dbServersList)
+        public ConnectionManager(ref LiteCollection<Server> dbServersList)
         {
             Log.Info("Open ConnectionManager");
 
             InitializeComponent();
-            this.DbServersList = dbServersList;
-            this.DataContext = this;
+            DbServersList = dbServersList;
+            DataContext = this;
 
             GetServers();
         }

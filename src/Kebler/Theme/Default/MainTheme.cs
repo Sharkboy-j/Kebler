@@ -105,6 +105,7 @@ namespace Kebler.Theme.Default
             sender.ForWindowFromTemplate(w => w.Close());
         }
 
+
         private void MinButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.WindowState = WindowState.Minimized);
@@ -181,6 +182,19 @@ namespace Kebler.Theme.Default
             SouthWest = 7
         }
 
+        #endregion
+
+        #region TopBar Events
+
+        private void OpenCM(object sender, RoutedEventArgs e)
+        {
+            App.MainWindowControl.OpenCM();
+        }
+        private void ConnectFirst(object sender, RoutedEventArgs e)
+        {
+            App.MainWindowControl.Connect();
+        }
+        
         #endregion
     }
 }

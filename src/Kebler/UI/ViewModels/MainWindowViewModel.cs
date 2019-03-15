@@ -23,14 +23,15 @@ namespace Kebler.UI.ViewModels
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private List<Server> ServersList;
-        private ConnectionManager CMWindow;
-        private LiteCollection<Server> DBServers;
+        private List<Server> serversList;
+        private LiteCollection<Server> dbServers;
         private Statistic stats;
         private SessionInfo sessionInfo;
         private TransmissionClient transmissionClient;
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ConnectionManager cmWindow;
 
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static Dispatcher Dispatcher => Application.Current.Dispatcher;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public bool IsConnected { get; set; } = false;
@@ -63,27 +64,27 @@ namespace Kebler.UI.ViewModels
             });
         }
 
-        private void InitConnection()
+        public void InitConnection()
         {
-            if (ServersList.Count == 0)
+            if (serversList.Count == 0)
             {
                 ShowCm();
             }
             else
             {
-                new Task(() => { TryConnect(ServersList.FirstOrDefault()); }).Start();
+                new Task(() => { TryConnect(serversList.FirstOrDefault()); }).Start();
 
             }
         }
 
 
 
-        private void ShowCm()
+        public void ShowCm()
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                CMWindow = new ConnectionManager(DBServers);
-                CMWindow.ShowDialog();
+                cmWindow = new ConnectionManager(ref dbServers);
+                cmWindow.ShowDialog();
             });
 
 
@@ -146,9 +147,9 @@ namespace Kebler.UI.ViewModels
 
         private void GetAllServer()
         {
-            DBServers = StorageRepository.ServersList();
-            ServersList = new List<Server>(DBServers.FindAll() ?? new List<Server>());
-            ServersList.LogServers();
+            dbServers = StorageRepository.ServersList();
+            serversList = new List<Server>(dbServers.FindAll() ?? new List<Server>());
+            serversList.LogServers();
         }
 
         private void StartWhileCycle()
@@ -164,7 +165,7 @@ namespace Kebler.UI.ViewModels
 
                     var newTorrentsDataList = await UpdateTorrentList();
 
-                    UpdateTorrentListAtUI(newTorrentsDataList);
+                    UpdateTorrentListAtUI(ref newTorrentsDataList);
                     UpdateStatsInfo();
 
                     Thread.Sleep(3000);
@@ -190,7 +191,7 @@ namespace Kebler.UI.ViewModels
 
 
         #region ParsersToUserFriendlyFormat
-        private void UpdateTorrentListAtUI(List<TorrentInfo> list)
+        private void UpdateTorrentListAtUI(ref List<TorrentInfo> list)
         {
             foreach (var item in list)
             {
@@ -202,18 +203,13 @@ namespace Kebler.UI.ViewModels
                 }
                 else
                 {
-                    Application.Current.Dispatcher.InvokeAsync(() => { TorrentList.Add(item); });
-
+                   Dispatcher.Invoke(() => { TorrentList.Add(item); });
                 }
             }
-            //Dispatcher.InvokeAsync(() => { OnPropertyChanged(nameof(TorrentList)); });
-
-            //Dispatcher.Invoke(delegate { TorrentsDataGrid.Items.Refresh(); });
-
         }
         private void UpdateTorrentData(int index, TorrentInfo newData)
         {
-
+            if (SelectedTorrent == null) return;
             if (SelectedTorrent.ID == newData.ID) SelectedTorrent = newData;
 
             TorrentList[index].RateUpload = newData.RateUpload;
@@ -246,7 +242,7 @@ namespace Kebler.UI.ViewModels
 
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
-            new Task(() => { TryConnect(ServersList.FirstOrDefault()); }).Start();
+            new Task(() => { TryConnect(serversList.FirstOrDefault()); }).Start();
 
         }
         #endregion

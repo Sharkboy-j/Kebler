@@ -89,15 +89,20 @@
                     <DataGrid
                         x:Name="TorrentsDataGrid"
                         Grid.Column="2"
+                        Margin="0,0,0,3"
                         AutoGenerateColumns="False"
-                        BorderThickness="0"
-                        IsReadOnly="True"
+                        Background="Gray"
+                        BorderBrush="Gray"
+                        BorderThickness="0,0,0,3"
                         ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
                         SelectionChanged="TorrentsDataGrid_SelectionChanged"
                         Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding Name}"
+                                Header="Name" />
                             <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Upload speed" />
                             <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Download speed" />
 
@@ -142,18 +147,59 @@
                 ShowsPreview="False" />
             <!--  torrent properties  -->
             <Grid Grid.Row="2">
-                <Image
-                    x:Name="SelectedPP"
-                    Height="50"
-                    VerticalAlignment="Top"
-                    Source="{Binding SelectedTorrent, Converter={StaticResource PieceToImage}}"
-                    Stretch="Fill" />
-                <ProgressBar
-                    Height="35"
-                    VerticalAlignment="Bottom"
-                    Foreground="{DynamicResource TextSelectionBrush}"
-                    Maximum="1"
-                    Value="{Binding SelectedTorrent.PercentDone}" />
+                <TabControl
+                    x:Name="SelectedServerTab"
+                    Grid.Column="1"
+                    SelectedIndex="0"
+                    TabStripPlacement="Top">
+                    <TabItem Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}">
+                        <Grid x:Name="SelectedServerGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="15" />
+                                <RowDefinition Height="2" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="5" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="5" />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                x:Name="SelectedPP"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Margin="0"
+                                Source="{Binding SelectedTorrent, Converter={StaticResource PieceToImage}}"
+                                Stretch="Fill" />
+                            <ProgressBar
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="0"
+                                Foreground="{DynamicResource TextSelectionBrush}"
+                                Maximum="1"
+                                Value="{Binding SelectedTorrent.PercentDone}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                Margin="0"
+                                Padding="0,0,5,0"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Content="Downloaded" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="{DynamicResource TorrentInfoTabTrackersHeaderContent}" />
+                    <TabItem Header="{DynamicResource TorrentInfoTabPeersHeaderContent}" />
+                    <TabItem Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
+                    <TabItem Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
+
+                </TabControl>
+
             </Grid>
         </Grid>
 

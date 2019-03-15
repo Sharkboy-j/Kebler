@@ -24,7 +24,7 @@ namespace Kebler
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
         public  static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
-        private static MainWindow _mainWindow;
+        public static MainWindow MainWindowControl;
 
         private static CultureInfo Language
         {
@@ -112,8 +112,8 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            _mainWindow = new MainWindow();
-            _mainWindow.Show();
+            MainWindowControl = new MainWindow();
+            MainWindowControl.Show();
 
             base.OnStartup(e);
         }

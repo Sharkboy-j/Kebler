@@ -6,13 +6,28 @@
 
     <!--  Main Window  -->
     <sys:String x:Key="MainWindowTitle">Kebler</sys:String>
+    <sys:String x:Key="NotYetConnectedContent">Not Connected To Server:</sys:String>
+    <sys:String x:Key="NoAnyTorrents">No Any Torrents</sys:String>
+    <sys:String x:Key="RetryConnectionButtonContent">Retry</sys:String>
+    <sys:String x:Key="StatusBarConenctionText">Transmission</sys:String>
+    <sys:String x:Key="TorrentInfoTabGeneralHeaderContent">General</sys:String>
+    <sys:String x:Key="TorrentInfoTabTrackersHeaderContent">Trackers</sys:String>
+    <sys:String x:Key="TorrentInfoTabPeersHeaderContent">Peers</sys:String>
+    <sys:String x:Key="TorrentInfoTabFilesHeaderContent">Files</sys:String>
+    <sys:String x:Key="TorrentInfoTabStatsHeaderContent">Stats</sys:String>
+
+    <!--  Top Bar  -->
+    <sys:String x:Key="TopBarTorrentButtonContent">Torrent</sys:String>
+    <sys:String x:Key="TopBarToolsButtonContent">Tools</sys:String>
+    <sys:String x:Key="TopBarInfoButtonContent">Info</sys:String>
+    <sys:String x:Key="TopBarCMButtonContent">Connection Manager</sys:String>
+    <sys:String x:Key="TopBarConnectButtonContent">Connect To Server</sys:String>
 
 
     <!--  ConnectionManager  -->
     <sys:String x:Key="ConnectionManagerTitle">Connection Manager</sys:String>
     <sys:String x:Key="GeneralTabTitle">General</sys:String>
     <sys:String x:Key="ProxyTabTitle">Proxy</sys:String>
-
     <sys:String x:Key="AddBtnContent">+</sys:String>
     <sys:String x:Key="RemoveBtnContent">-</sys:String>
 
@@ -40,10 +55,5 @@
     <sys:String x:Key="DialogEnterPasswordContent">Please enter password:</sys:String>
     <sys:String x:Key="DialogOkButtonContent">Ok</sys:String>
 
-    <!--  MainWindow  -->
-    <sys:String x:Key="NotYetConnectedContent">Not Connected To Server:</sys:String>
-    <sys:String x:Key="NoAnyTorrents">No Any Torrents</sys:String>
-    <sys:String x:Key="RetryConnectionButtonContent">Retry</sys:String>
 
-    <sys:String x:Key="StatusBarConenctionText">Transmission</sys:String>
 </ResourceDictionary>

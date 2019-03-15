@@ -61,12 +61,7 @@
         B="51"
         G="51"
         R="51" />
-    <Color
-        x:Key="BorderBrushBlueColor"
-        A="255"
-        B="204"
-        G="122"
-        R="0" />
+
     <Color
         x:Key="BorderBrushDefaultColor"
         A="255"
@@ -139,6 +134,18 @@
         G="132"
         R="56" />
 
+    <Color
+        x:Key="WhiteColor"
+        A="255"
+        B="255"
+        G="255"
+        R="255" />
+    <Color
+        x:Key="BorderBrushBlueColor"
+        A="255"
+        B="204"
+        G="122"
+        R="0" />
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="{DynamicResource BackgroundDefaultColor}" />
     <SolidColorBrush x:Key="TitleBarButtonForegroundBrush" Color="{DynamicResource ContetnSnipColor}" />
     <SolidColorBrush x:Key="TitleBarLabelForegroundBrush" Color="{DynamicResource ContetnSnipColor}" />
@@ -205,7 +212,6 @@
     <SolidColorBrush x:Key="ButtonBorderActiveBrush" Color="{DynamicResource BorderBrushDefaultColor}" />
     <SolidColorBrush x:Key="ButtonForegroundActiveBrush" Color="{DynamicResource ContetnSnipColor}" />
     <SolidColorBrush x:Key="ButtonBorderDefaultBrush" Color="{DynamicResource BorderBrushBlueColor}" />
-    <SolidColorBrush x:Key="ButtonBorderMouseOverBrush" Color="{DynamicResource ContetnOverColor}" />
     <SolidColorBrush x:Key="ButtonBorderBackgroundMouseOverBrush" Color="{DynamicResource ContetnOver2Color}" />
     <SolidColorBrush x:Key="ButtonBorderBackgroundMousePressedBrush" Color="{DynamicResource ContetnOver3Color}" />
     <SolidColorBrush x:Key="ButtonBorderBorderMousePressedBrush" Color="{DynamicResource ContetnOver4Color}" />
@@ -218,8 +224,51 @@
     <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource GreenColor}" />
     <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource RedColor}" />
 
+    <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
+    <SolidColorBrush x:Key="MouseOverBrush" Color="{DynamicResource BackgroundMouseOverColor}" />
 
 
+    <!--  New Colors  -->
+    <Color
+        x:Key="GrayColor"
+        A="255"
+        B="51"
+        G="51"
+        R="51" />
+    <Color
+        x:Key="GrayColor2"
+        A="255"
+        B="39"
+        G="39"
+        R="39" />
+    <Color
+        x:Key="GrayColor3"
+        A="255"
+        B="82"
+        G="82"
+        R="82" />
+    <Color
+        x:Key="GrayColor4"
+        A="255"
+        B="74"
+        G="74"
+        R="74" />
+    <Color
+        x:Key="BlueColor"
+        A="255"
+        B="204"
+        G="122"
+        R="0" />
+    <!--  New Brushes  -->
+    <SolidColorBrush x:Key="MainWindowStyleTopBarBackground" Color="{DynamicResource GrayColor}" />
+
+    <SolidColorBrush x:Key="TopBarPopUpBackground" Color="{DynamicResource GrayColor2}" />
+    <SolidColorBrush x:Key="TopBarPopUpButtonMouseOverBackground" Color="{DynamicResource GrayColor3}" />
+    <SolidColorBrush x:Key="TopBarPopUpButtonMouseOveBorderBrush" Color="{DynamicResource GrayColor4}" />
+
+    <SolidColorBrush x:Key="CheckBoxMouseOverBrush" Color="{DynamicResource BlueColor}" />
+
+    <SolidColorBrush x:Key="ButtonBorderMouseOverBrush" Color="{DynamicResource BlueColor}" />
 
 
 
@@ -229,7 +278,7 @@
 
     <Style x:Key="TitleBarWindowButton" TargetType="{x:Type Button}">
         <Setter Property="Focusable" Value="false" />
-        <Setter Property="Foreground" Value="{DynamicResource TitleBarLabelForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
@@ -240,14 +289,231 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_border" Property="Background" Value="#FFF" />
-                            <Setter TargetName="PART_border" Property="Opacity" Value="0.7" />
+                            <Setter TargetName="PART_border" Property="Background" Value="{DynamicResource MouseOverBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="PART_border" Property="Background" Value="Transparent" />
-                            <Setter TargetName="PART_border" Property="Opacity" Value="1" />
                             <Setter Property="Foreground" Value="#FFF" />
                         </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Menu}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Menu}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TopBarMenuButton" TargetType="{x:Type MenuItem}">
+        <Setter Property="Height" Value="27" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border
+                        x:Name="templateRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <Grid VerticalAlignment="Center">
+                            <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
+                                Content="{TemplateBinding Header}"
+                                ContentSource="Header"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Popup
+                                x:Name="PART_Popup"
+                                Margin="0"
+                                AllowsTransparency="True"
+                                Focusable="False"
+                                IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Bottom"
+                                VerticalOffset="5">
+                                <Border
+                                    x:Name="SubMenuBorder"
+                                    Margin="0"
+                                    Padding="0"
+                                    Background="{DynamicResource TopBarPopUpBackground}"
+                                    BorderBrush="{DynamicResource BorderBorderBrush}"
+                                    BorderThickness="1">
+                                    <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                        <Grid x:Name="Grid1" RenderOptions.ClearTypeHint="Enabled">
+                                            <Canvas
+                                                x:Name="Canvas"
+                                                Width="0"
+                                                Height="0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                                <Rectangle
+                                                    x:Name="OpaqueRect"
+                                                    Width="{Binding ActualWidth, ElementName=SubMenuBorder}"
+                                                    Height="{Binding ActualHeight, ElementName=SubMenuBorder}"
+                                                    Fill="{Binding Background, ElementName=SubMenuBorder}" />
+                                            </Canvas>
+                                            <Rectangle
+                                                x:Name="Rectangle"
+                                                Width="1"
+                                                Margin="29,2,0,2"
+                                                HorizontalAlignment="Left"
+                                                Fill="Red"
+                                                Visibility="Collapsed" />
+                                            <ItemsPresenter
+                                                x:Name="ItemsPresenter"
+                                                Grid.IsSharedSizeScope="True"
+                                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                KeyboardNavigation.TabNavigation="Cycle"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                            <Setter TargetName="PART_Popup" Property="PopupAnimation" Value="None" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource MouseOverBrush}" />
+                        </Trigger>
+                        <Trigger SourceName="PART_Popup" Property="IsOpen" Value="True">
+                            <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource MouseOverBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="PopUpTopBarMenuButton" TargetType="{x:Type MenuItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border
+                        x:Name="templateRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <Grid x:Name="borderOfText">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto"
+                                    MinWidth="22"
+                                    SharedSizeGroup="MenuItemIconColumnGroup" />
+                                <ColumnDefinition Width="13" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter
+                                x:Name="Icon"
+                                Width="16"
+                                Height="16"
+                                Margin="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Icon}"
+                                ContentSource="Icon"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                            <!--  fucking checkbox border ...  -->
+                            <Border
+                                x:Name="GlyphPanel"
+                                Width="22"
+                                Height="22"
+                                Margin="-1,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#3D26A0DA"
+                                BorderBrush="#FF26A0DA"
+                                BorderThickness="1"
+                                ClipToBounds="False"
+                                Visibility="Collapsed">
+                                <Path
+                                    x:Name="Glyph"
+                                    Width="10"
+                                    Height="11"
+                                    Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z"
+                                    Fill="#FF212121"
+                                    FlowDirection="LeftToRight" />
+                            </Border>
+
+                            <ContentPresenter
+                                x:Name="menuHeaderContainer"
+                                Grid.Column="2"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentSource="Header"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <TextBlock
+                                x:Name="menuGestureText"
+                                Grid.Column="4"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="Center"
+                                Opacity="0.7"
+                                Text="{TemplateBinding InputGestureText}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!--<Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>-->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="borderOfText" Property="Background" Value="{DynamicResource TopBarPopUpButtonMouseOverBackground}" />
+                        </Trigger>
+                        <!--<Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="templateRoot" Property="Background" Value="#3D26A0DA" />
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#FF26A0DA" />
+                        </Trigger>-->
+                        <!--<Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="#FF707070" />
+                            <Setter TargetName="Glyph" Property="Fill" Value="#FF707070" />
+                        </Trigger>-->
+                        <!--<MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="True" />
+                                <Condition Property="IsEnabled" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="templateRoot" Property="Background" Value="#0A000000" />
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#21000000" />
+                        </MultiTrigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -263,16 +529,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
-                    <!--
-                        7 is a magic number. By default Windows fits a maximized window with Margin
-                        7 7 7 7 to fill entire screen (WPF .Net 4.5). Larger numbers produce a gap
-                        between maximized window and screen edges; smaller numbers show parts of
-                        the window outside of the current monitor on multi-display computers.
-                    -->
                     <Border x:Name="PART_Container">
                         <Grid TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
-
-
                             <Border
                                 x:Name="PART_Border"
                                 Grid.RowSpan="2"
@@ -289,7 +547,7 @@
                                     <Border
                                         x:Name="TitleBar"
                                         Grid.Row="0"
-                                        Background="{StaticResource TitleBarBackgroundBrush}"
+                                        Background="{StaticResource MainWindowStyleTopBarBackground}"
                                         BorderBrush="{DynamicResource Red}"
                                         BorderThickness="0,0,0,1"
                                         MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
@@ -297,14 +555,29 @@
                                         <Grid>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition />
                                                     <ColumnDefinition Width="34" />
                                                     <ColumnDefinition Width="34" />
                                                     <ColumnDefinition Width="34" />
                                                 </Grid.ColumnDefinitions>
+                                                <Menu x:Name="TopBarMenu" Grid.Column="0">
+                                                    <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
+                                                        <MenuItem
+                                                            Click="OpenCM"
+                                                            Header="{DynamicResource TopBarCMButtonContent}"
+                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
+                                                        <MenuItem
+                                                            Click="ConnectFirst"
+                                                            Header="{DynamicResource TopBarConnectButtonContent}"
+                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
+                                                    </MenuItem>
+                                                    <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
+                                                    <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
+                                                </Menu>
                                                 <Button
                                                     x:Name="MinButton"
-                                                    Grid.Column="1"
+                                                    Grid.Column="2"
                                                     VerticalAlignment="Stretch"
                                                     Click="MinButtonClick"
                                                     Style="{StaticResource TitleBarWindowButton}">
@@ -319,7 +592,7 @@
                                                 </Button>
                                                 <Button
                                                     x:Name="MaxButton"
-                                                    Grid.Column="2"
+                                                    Grid.Column="3"
                                                     VerticalAlignment="Stretch"
                                                     Click="MaxButtonClick"
                                                     Style="{StaticResource TitleBarWindowButton}">
@@ -335,7 +608,7 @@
                                                 </Button>
                                                 <Button
                                                     x:Name="CloseButton"
-                                                    Grid.Column="3"
+                                                    Grid.Column="4"
                                                     VerticalAlignment="Stretch"
                                                     Click="CloseButtonClick"
                                                     Style="{StaticResource TitleBarWindowButton}">
@@ -483,7 +756,7 @@
                             <Setter TargetName="lnSizeWest" Property="IsEnabled" Value="False" />
                             <Setter TargetName="lnSizeSouth" Property="IsEnabled" Value="False" />
                             <Setter TargetName="lnSizeNorth" Property="IsEnabled" Value="False" />
-
+                            <Setter TargetName="TopBarMenu" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -505,6 +778,8 @@
             </Style>
         </Style.Resources>
     </Style>
+
+
 
     <Style TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{StaticResource LabelForegroundActiveBrush}" />
@@ -949,12 +1224,14 @@
                             <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}" />
                             <Setter Property="Padding" Value="2,-1,0,0" />
                         </Trigger>
-                        <!--<Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="checkBoxBorder" Property="Background" Value="{StaticResource OptionMark.MouseOver.Background}" />
-                            <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{StaticResource OptionMark.MouseOver.Border}" />
-                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource OptionMark.MouseOver.Glyph}" />
-                            <Setter TargetName="indeterminateMark" Property="Fill" Value="{StaticResource OptionMark.MouseOver.Glyph}" />
-                        </Trigger>-->
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{DynamicResource CheckBoxMouseOverBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource CheckBoxMouseOverBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{DynamicResource CheckBoxMouseOverBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource CheckBoxMouseOverBrush}" />
+                        </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="checkBoxBorder" Property="Background" Value="{DynamicResource CheckBoxBackgroundBrush}" />
                             <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{DynamicResource CheckBoxBorderInActiveBrush}" />
@@ -1201,6 +1478,9 @@
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource ButtonBorderBackgroundMouseOverBrush}" />
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource ButtonBorderMouseOverBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ButtonBorderMouseOverBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource ButtonBorderBackgroundMousePressedBrush}" />

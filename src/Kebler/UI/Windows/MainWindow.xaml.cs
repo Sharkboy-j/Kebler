@@ -42,6 +42,15 @@ namespace Kebler.UI.Windows
 
         }
 
+        public void OpenCM()
+        {
+            VM.ShowCm();
+        }
+        public void Connect()
+        {
+            VM.InitConnection();
+        }
+
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
            // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
