@@ -29,6 +29,9 @@ namespace Kebler.UI.ViewModels
         private SessionInfo sessionInfo;
         private TransmissionClient transmissionClient;
         private ConnectionManager cmWindow;
+        private Task whileCycleTask;
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+
 
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static Dispatcher Dispatcher => Application.Current.Dispatcher;
@@ -154,23 +157,41 @@ namespace Kebler.UI.ViewModels
 
         private void StartWhileCycle()
         {
-            new Task(async () =>
+          
+            if (whileCycleTask != null)
+                cancelTokenSource.Cancel();
+            whileCycleTask?.Dispose();
+
+            cancelTokenSource = new CancellationTokenSource();
+            var token = cancelTokenSource.Token;
+
+            
+
+            whileCycleTask = new Task(async () =>
             {
-                while (IsConnected)
+                try
                 {
-                    if (Application.Current.Dispatcher.HasShutdownStarted) return;
+                    while (IsConnected && !token.IsCancellationRequested)
+                    {
+                        if (Application.Current.Dispatcher.HasShutdownStarted) return;
 
-                    stats = await UpdateStats();
-                    //sessionInfo = await UpdateSessionInfo();
+                        stats = await UpdateStats();
+                        //sessionInfo = await UpdateSessionInfo();
 
-                    var newTorrentsDataList = await UpdateTorrentList();
+                        var newTorrentsDataList = await UpdateTorrentList();
 
-                    UpdateTorrentListAtUI(ref newTorrentsDataList);
-                    UpdateStatsInfo();
+                        UpdateTorrentListAtUI(ref newTorrentsDataList);
+                        UpdateStatsInfo();
 
-                    Thread.Sleep(3000);
+                        await Task.Delay(3000, token);
+                    }
                 }
-            }).Start();
+                catch(TaskCanceledException)
+                {
+                    return;
+                }
+            }, token);
+            whileCycleTask.Start();
         }
 
         #region GetTorrentServerData
@@ -203,7 +224,7 @@ namespace Kebler.UI.ViewModels
                 }
                 else
                 {
-                   Dispatcher.Invoke(() => { TorrentList.Add(item); });
+                    Dispatcher.Invoke(() => { TorrentList.Add(item); });
                 }
             }
         }
