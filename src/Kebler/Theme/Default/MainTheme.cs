@@ -2,34 +2,31 @@
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
-using System.Windows.Media;
 
 namespace Kebler.Theme.Default
 {
 
     internal static class LocalExtensions
     {
-        public static void ForWindowFromChild(this object childDependencyObject, Action<Window> action)
-        {
-            var element = childDependencyObject as DependencyObject;
-            while (element != null)
-            {
-                element = VisualTreeHelper.GetParent(element);
-                if (element is Window) { action(element as Window); break; }
-            }
-        }
+        //    public static void ForWindowFromChild(this object childDependencyObject, Action<Window> action)
+        //    {
+        //        var element = childDependencyObject as DependencyObject;
+        //        while (element != null)
+        //        {
+        //            element = VisualTreeHelper.GetParent(element);
+        //            if (element is Window window) { action(window); break; }
+        //        }
+        //    }
 
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            Window window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
-            if (window != null) action(window);
+            if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
         }
 
         public static IntPtr GetWindowHandle(this Window window)
         {
-            WindowInteropHelper helper = new WindowInteropHelper(window);
+            var helper = new WindowInteropHelper(window);
             return helper.Handle;
         }
     }
@@ -38,16 +35,16 @@ namespace Kebler.Theme.Default
     {
         #region sizing event handlers
 
-        void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }
-        void OnSizeNorth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.North); }
-        void OnSizeEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.East); }
-        void OnSizeWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.West); }
-        void OnSizeNorthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthWest); }
-        void OnSizeNorthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthEast); }
-        void OnSizeSouthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthEast); }
-        void OnSizeSouthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthWest); }
+        private void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }
+        private void OnSizeNorth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.North); }
+        private void OnSizeEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.East); }
+        private void OnSizeWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.West); }
+        private void OnSizeNorthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthWest); }
+        private void OnSizeNorthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthEast); }
+        private void OnSizeSouthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthEast); }
+        private void OnSizeSouthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthWest); }
 
-        void OnSize(object sender, SizingAction action)
+        private void OnSize(object sender, SizingAction action)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -59,63 +56,67 @@ namespace Kebler.Theme.Default
             }
         }
 
-        void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        /*
+                private void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+                {
+                    if (e.ClickCount > 1)
+                    {
+                        sender.ForWindowFromTemplate(w => w.Close());
+                    }
+                    else
+                    {
+                        sender.ForWindowFromTemplate(w =>
+                            SendMessage(w.GetWindowHandle(), WmSyscommand, (IntPtr)ScKeymenu, (IntPtr)' '));
+                    }
+                }
+        */
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            if (e.ClickCount > 1)
-            {
-                sender.ForWindowFromTemplate(w => w.Close());
-            }
-            else
-            {
-                sender.ForWindowFromTemplate(w =>
-                    SendMessage(w.GetWindowHandle(), WM_SYSCOMMAND, (IntPtr)SC_KEYMENU, (IntPtr)' '));
-            }
         }
 
-        void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            ((Window)sender).StateChanged += WindowStateChanged;
-        }
-        void WindowStateChanged(object sender, EventArgs e)
-        {
-            var w = ((Window)sender);
-            var handle = w.GetWindowHandle();
-            var containerBorder = (Border)w.Template.FindName("PART_Container", w);
+        //private static void WindowStateChanged(object sender, EventArgs e)
+        //{
+        //    var w = ((Window)sender);
+        //    var handle = w.GetWindowHandle();
+        //    var containerBorder = (Border)w.Template.FindName("PART_Container", w);
 
-            //if (w.WindowState == WindowState.Maximized)
-            //{
-            //    // Make sure window doesn't overlap with the taskbar.
-            //    var screen = System.Windows.Forms.Screen.FromHandle(handle);
-            //    if (screen.Primary)
-            //    {
-            //        containerBorder.Padding = new Thickness(
-            //            SystemParameters.WorkArea.Left + 7,
-            //            SystemParameters.WorkArea.Top + 7,
-            //            (SystemParameters.PrimaryScreenWidth - SystemParameters.WorkArea.Right) + 7,
-            //            (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Bottom) + 5);
-            //    }
-            //}
-            //else
-            //{
-            //    containerBorder.Padding = new Thickness(7, 7, 7, 5);
-            //}
-        }
-        void CloseButtonClick(object sender, RoutedEventArgs e)
+        //    //if (w.WindowState == WindowState.Maximized)
+        //    //{
+        //    //    // Make sure window doesn't overlap with the taskbar.
+        //    //    var screen = System.Windows.Forms.Screen.FromHandle(handle);
+        //    //    if (screen.Primary)
+        //    //    {
+        //    //        containerBorder.Padding = new Thickness(
+        //    //            SystemParameters.WorkArea.Left + 7,
+        //    //            SystemParameters.WorkArea.Top + 7,
+        //    //            (SystemParameters.PrimaryScreenWidth - SystemParameters.WorkArea.Right) + 7,
+        //    //            (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Bottom) + 5);
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    containerBorder.Padding = new Thickness(7, 7, 7, 5);
+        //    //}
+        //}
+
+        private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.Close());
         }
 
-        void MinButtonClick(object sender, RoutedEventArgs e)
+
+        private void MinButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.WindowState = WindowState.Minimized);
         }
 
-        void MaxButtonClick(object sender, RoutedEventArgs e)
+        private void MaxButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.WindowState = (w.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized);
         }
 
-        void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount > 1)
             {
@@ -127,7 +128,7 @@ namespace Kebler.Theme.Default
             }
         }
 
-        void TitleBarMouseMove(object sender, MouseEventArgs e)
+        private void TitleBarMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -154,20 +155,22 @@ namespace Kebler.Theme.Default
 
         #region P/Invoke
 
-        const int WM_SYSCOMMAND = 0x112;
-        const int SC_SIZE = 0xF000;
-        const int SC_KEYMENU = 0xF100;
+        private const int WmSyscommand = 0x112;
+        private const int ScSize = 0xF000;
+        /*
+                private const int ScKeymenu = 0xF100;
+        */
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
-        void DragSize(IntPtr handle, SizingAction sizingAction)
+        private static void DragSize(IntPtr handle, SizingAction sizingAction)
         {
-            SendMessage(handle, WM_SYSCOMMAND, (IntPtr)(SC_SIZE + sizingAction), IntPtr.Zero);
+            SendMessage(handle, WmSyscommand, (IntPtr)(ScSize + sizingAction), IntPtr.Zero);
             SendMessage(handle, 514, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public enum SizingAction
+        private enum SizingAction
         {
             North = 3,
             South = 6,
@@ -179,6 +182,19 @@ namespace Kebler.Theme.Default
             SouthWest = 7
         }
 
+        #endregion
+
+        #region TopBar Events
+
+        private void OpenCM(object sender, RoutedEventArgs e)
+        {
+            App.MainWindowControl.OpenCM();
+        }
+        private void ConnectFirst(object sender, RoutedEventArgs e)
+        {
+            App.MainWindowControl.Connect();
+        }
+        
         #endregion
     }
 }

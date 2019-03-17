@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Kebler.UI.Windows;
 using log4net;
+using log4net.Config;
 using SharpConfig;
 
 namespace Kebler
@@ -20,9 +22,9 @@ namespace Kebler
 
         private static Models.GlobalConfiguration Configuration;
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
-        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
+        public  static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
-        private static MainWindow _mainWindow;
+        public static MainWindow MainWindowControl;
 
         private static CultureInfo Language
         {
@@ -67,7 +69,13 @@ namespace Kebler
 
         App()
         {
-            log4net.Config.XmlConfigurator.Configure();
+
+
+            var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
+
+
+            //log4net.Config.XmlConfigurator.Configure(null);
             Log.Info("============= Application Started =============");
 
             LanguageChanged += App_LanguageChanged;
@@ -104,8 +112,8 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            _mainWindow = new MainWindow();
-            _mainWindow.Show();
+            MainWindowControl = new MainWindow();
+            MainWindowControl.Show();
 
             base.OnStartup(e);
         }
@@ -160,7 +168,7 @@ namespace Kebler
             return text;
         }
 
-       
+
         #endregion
 
     }
