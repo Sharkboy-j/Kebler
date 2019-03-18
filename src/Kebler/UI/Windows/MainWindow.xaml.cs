@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using Kebler.UI.ViewModels;
 using Kebler.Services.Converters;
 using Microsoft.Win32;
+using System.Windows.Interop;
 
 namespace Kebler.UI.Windows
 {
@@ -34,14 +35,16 @@ namespace Kebler.UI.Windows
 
         public MainWindow()
         {
-            //log4net.Config.XmlConfigurator.Configure();
-
             InitializeComponent();
+            //disable hardwarerendering
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             VM = new MainWindowViewModel();
             DataContext = VM;
 
         }
+
+      
 
         public void OpenCM()
         {

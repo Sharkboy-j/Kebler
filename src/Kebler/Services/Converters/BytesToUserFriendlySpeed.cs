@@ -48,7 +48,7 @@ namespace Kebler.Services.Converters
             }
             else
             {
-                return string.Empty;
+                return $"0 bt/s";
             }
 
             size = Math.Round(length / SelSize, 2);

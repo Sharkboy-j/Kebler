@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -215,6 +216,27 @@ namespace Transmission.API.RPC.Entity
         public int WebseedsSendingToUs { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public void Set(string propertyName,object value)
+        {
+           
+            Type myType = typeof(TorrentInfo);
+            PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+            myPropInfo?.SetValue(this, value, null);
+
+
+        }
+        public object Get(string propertyName)
+        {
+
+            Type myType = typeof(TorrentInfo);
+            PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+            return myPropInfo?.GetValue(this, null);
+
+
+        }
+       
     }
 
     public class TransmissionTorrentFiles : INotifyPropertyChanged

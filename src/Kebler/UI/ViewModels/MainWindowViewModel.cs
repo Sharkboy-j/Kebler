@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -42,7 +43,7 @@ namespace Kebler.UI.ViewModels
         public bool IsConnecting { get; set; } = false;
         public Server ConnectedServer { get; set; }
         public bool IsDoingStuff { get; set; } = false;
-
+        public string LongStatusText { get; set; }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         public TorrentInfo SelectedTorrent { get; set; }
@@ -85,27 +86,66 @@ namespace Kebler.UI.ViewModels
             }
         }
 
-        public async void AddTorrent(string path)
+        public void AddTorrent(string path)
         {
-            if (!File.Exists(path))
-                throw new Exception("Torrent file not found");
-
-            using (var fstream = File.OpenRead(path))
+            new Task(async () =>
             {
-                byte[] filebytes = new byte[fstream.Length];
-                fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
+                if (!File.Exists(path))
+                    throw new Exception("Torrent file not found");
 
-                string encodedData = Convert.ToBase64String(filebytes);
-
-                var torrent = new NewTorrent
+                using (var fstream = File.OpenRead(path))
                 {
-                    Metainfo = encodedData,
-                    Paused = false
-                };
-                await transmissionClient.TorrentAddAsync(torrent);
-            }
+                    byte[] filebytes = new byte[fstream.Length];
+                    fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
 
+                    string encodedData = Convert.ToBase64String(filebytes);
 
+                    var torrent = new NewTorrent
+                    {
+                        Metainfo = encodedData,
+                        Paused = false
+                    };
+
+                    while (true)
+                    {
+                        Debug.WriteLine($"Start Adding torrent {torrent.Filename}");
+                        Log.Info($"Start adding torrent {torrent.Filename}");
+
+                        if (Dispatcher.HasShutdownStarted) return;
+                        try
+                        {
+                            var info = await transmissionClient.TorrentAddAsync(torrent);
+
+                            switch (info)
+                            {
+                                case Transmission.API.RPC.Entity.Enums.AddResult.Error:
+                                case Transmission.API.RPC.Entity.Enums.AddResult.Duplicate:
+                                case Transmission.API.RPC.Entity.Enums.AddResult.Added:
+                                    {
+                                        Debug.WriteLine($"Torrent added {torrent.Filename}");
+                                        Log.Info($"Torrent added {torrent.Filename}");
+                                        return;
+                                    }
+                                case Transmission.API.RPC.Entity.Enums.AddResult.ResponseNull:
+                                    {
+                                        Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
+                                        Log.Info($"Adding torrent result Null {torrent.Filename}");
+
+                                        await Task.Delay(100);
+                                        continue;
+                                    }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex);
+                            return;
+                        }
+                    }
+
+                }
+
+            }).Start();
 
         }
 
@@ -128,7 +168,7 @@ namespace Kebler.UI.ViewModels
             IsConnectedStatusText = "Connecting";
             try
             {
-                IsConnecting = IsDoingStuff = true;
+                IsConnecting = true;
                 var pass = string.Empty;
                 if (server.AskForPassword)
                 {
@@ -142,7 +182,7 @@ namespace Kebler.UI.ViewModels
                     transmissionClient = new TransmissionClient(server.FullUriPath, null, server.UserName, server.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(server.Password));
 
                     sessionInfo = await UpdateSessionInfo();
-                    IsConnectedStatusText = $"Transmission {sessionInfo.Version} (RPC:{sessionInfo.RpcVersion})";
+                    IsConnectedStatusText = $"Transmission {sessionInfo?.Version} (RPC:{sessionInfo?.RpcVersion})";
 
                     StartWhileCycle();
                     ConnectedServer = server;
@@ -159,7 +199,6 @@ namespace Kebler.UI.ViewModels
             finally
             {
                 IsConnecting = false;
-                IsDoingStuff = false;
             }
 
 
@@ -204,18 +243,22 @@ namespace Kebler.UI.ViewModels
                     {
 
                         if (Application.Current.Dispatcher.HasShutdownStarted) return;
-                        IsDoingStuff = true;
+
+                        Debug.WriteLine("Start updating stats");
                         stats = await UpdateStats();
+                        Debug.WriteLine("Stats updated");
+
                         //sessionInfo = await UpdateSessionInfo();
 
+                        Debug.WriteLine("Start updating torrents");
                         var newTorrentsDataList = await UpdateTorrentList();
+                        Debug.WriteLine("Torrents updated");
 
-                        var torrents = newTorrentsDataList.Torrents.ToList();
-                        var remTorrents = newTorrentsDataList.Removed?.ToList();
 
-                        UpdateTorrentListAtUI(ref torrents, ref remTorrents);
+                        var torrents = newTorrentsDataList?.Torrents.ToList();
+
+                        UpdateTorrentListAtUI(ref torrents);
                         UpdateStatsInfo();
-                        IsDoingStuff = false;
                         await Task.Delay(3000, token);
                     }
                 }
@@ -228,28 +271,55 @@ namespace Kebler.UI.ViewModels
         }
 
         #region GetTorrentServerData
-        private async Task<TransmissionTorrents> UpdateTorrentList(string[] fields = null)
+        private async Task<TransmissionTorrents> UpdateTorrentList()
         {
-            return await transmissionClient.TorrentGetAsync(fields ?? TorrentFields.ALL_FIELDS);
+            return await ExecuteLongTask(transmissionClient.TorrentGetAsync, "Getting torrents");
         }
         private async Task<Statistic> UpdateStats()
         {
-            return await transmissionClient.GetSessionStatisticAsync();
+            return await ExecuteLongTask(transmissionClient.GetSessionStatisticAsync, "Updating stats");
         }
+
+
         private async Task<SessionInfo> UpdateSessionInfo()
         {
-            return await transmissionClient.GetSessionInformationAsync();
+            return await ExecuteLongTask(transmissionClient.GetSessionInformationAsync, "Connectiong to session");
 
+        }
+
+
+        private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
+        {
+            while (true)
+            {
+                Debug.WriteLine($"Start getting {nameof(asyncTask)}");
+                if (Dispatcher.HasShutdownStarted) return null;
+                var resp = await asyncTask();
+                if (resp == null)
+                {
+                    Debug.WriteLine($"w8ing for response");
+                    IsDoingStuff = true;
+                    LongStatusText = longStatusText;
+                    await Task.Delay(100);
+                }
+                else
+                {
+                    IsDoingStuff = false;
+                    LongStatusText = string.Empty;
+                    Debug.WriteLine($"Response geted");
+                    return resp;
+                }
+            }
         }
         #endregion
 
 
         #region ParsersToUserFriendlyFormat
-        private void UpdateTorrentListAtUI(ref List<TorrentInfo> list, ref List<TorrentInfo> remList)
+        private void UpdateTorrentListAtUI(ref List<TorrentInfo> list)
         {
 
+            if (list == null) return;
 
-           
             //add new one or update old
             foreach (var item in list)
             {
@@ -275,7 +345,7 @@ namespace Kebler.UI.ViewModels
                     var ind = TorrentList.IndexOf(data);
                     if (SelectedTorrent.ID == data.ID) SelectedTorrent = null;
                     Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
-                 
+
                 }
             }
 
@@ -286,12 +356,18 @@ namespace Kebler.UI.ViewModels
             if (SelectedTorrent == null) return;
             if (SelectedTorrent.ID == newData.ID) SelectedTorrent = newData;
 
-            TorrentList[index].RateUpload = newData.RateUpload;
-            TorrentList[index].RateDownload = newData.RateDownload;
-            TorrentList[index].AddedDate = newData.AddedDate;
-            TorrentList[index].Pieces = newData.Pieces;
-            TorrentList[index].PieceCount = newData.PieceCount;
-            TorrentList[index].DownloadedEver = newData.DownloadedEver;
+            Type myType = typeof(TorrentInfo);
+            var props = myType.GetProperties();
+            foreach (var item in props)
+            {
+                TorrentList[index].Set(item.Name, newData.Get(item.Name));
+            }
+            //TorrentList[index].RateUpload = newData.RateUpload;
+            //TorrentList[index].RateDownload = newData.RateDownload;
+            //TorrentList[index].AddedDate = newData.AddedDate;
+            //TorrentList[index].Pieces = newData.Pieces;
+            //TorrentList[index].PieceCount = newData.PieceCount;
+            //TorrentList[index].DownloadedEver = newData.DownloadedEver;
             TorrentList[index].PercentDone = newData.PercentDone;
 
         }

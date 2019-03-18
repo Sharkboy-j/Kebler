@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;
@@ -67,9 +69,12 @@ namespace Kebler
             }
         }
 
+          
+
         App()
         {
 
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
