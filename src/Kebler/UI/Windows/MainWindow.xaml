@@ -21,15 +21,66 @@
         <Border
             Grid.Row="0"
             BorderBrush="{DynamicResource BorderBorderBrush}"
-            BorderThickness="0,0,0,0.5">
-            <Grid />
+            BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    Grid.Column="1"
+                    Background="{DynamicResource MainWindowHeaderCenterBorderBackgroundBrush}"
+                    BorderThickness="1,0,1,0">
+                    <Grid>
+
+                        <Grid Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*" />
+                                <RowDefinition Height="6*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel
+                                Grid.Row="0"
+                                Margin="0,3,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                                <controls:LoadingRing
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,0.5,3,0"
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <Label
+                                    Padding="0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="{Binding ConnectedServer.Title}"
+                                    Foreground="White" />
+                            </StackPanel>
+
+
+                            <Label
+                                Grid.Row="1"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Foreground="White" />
+
+                        </Grid>
+
+
+
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
         <!--  BODY  -->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <!--  splitter column  -->
-                <RowDefinition Height="0.5" />
+                <RowDefinition Height="1" />
             </Grid.RowDefinitions>
 
             <!--  body of all torrents  -->
@@ -38,12 +89,12 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
                         <!--  splitter column  -->
-                        <ColumnDefinition Width="0.5" />
+                        <ColumnDefinition Width="1" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
-                        <RowDefinition Height="0.5" />
+                        <RowDefinition Height="1" />
                         <RowDefinition Height="120" />
                     </Grid.RowDefinitions>
                     <!--  categories list  -->
@@ -62,7 +113,7 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         BorderBrush="{DynamicResource BorderBorderBrush}"
-                        BorderThickness="0,0,0.5,0"
+                        BorderThickness="0,0,1,0"
                         ShowsPreview="False" />
                     <StackPanel
                         Grid.Column="2"
@@ -97,7 +148,6 @@
                         x:Name="TorrentsDataGrid"
                         Grid.Column="2"
                         AutoGenerateColumns="False"
-                        BorderThickness="0"
                         CanUserAddRows="False"
                         IsReadOnly="True"
                         ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -147,14 +197,14 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         BorderBrush="{DynamicResource BorderBorderBrush}"
-                        BorderThickness="0,0,0,0.5"
+                        BorderThickness="0,0,0,1"
                         ShowsPreview="False" />
                     <!--  torrent properties  -->
                     <TabControl
                         x:Name="SelectedServerTab"
                         Grid.Row="2"
                         Grid.Column="2"
-                        Background="{DynamicResource FooterGridBackgroundBrush}"
+                        Background="Transparent"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
                         <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}">
@@ -210,56 +260,57 @@
             </Grid>
         </Grid>
         <!--  footer  -->
-        <StatusBar Grid.Row="2">
+        <Border
+            Grid.Row="2"
+            BorderBrush="{DynamicResource BorderBorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StatusBar>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="225" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Label
-                    Grid.Column="0"
-                    Width="Auto"
-                    Height="Auto"
-                    Margin="5,0,0,0"
-                    Padding="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    Content="{Binding IsConnectedStatusText}"
-                    Foreground="White" />
-                <Label
-                    Grid.Column="1"
-                    Width="Auto"
-                    Height="Auto"
-                    Margin="10,0,0,0"
-                    Padding="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    Content="{Binding DownloadSpeed}"
-                    Foreground="White" />
-                <Label
-                    Grid.Column="2"
-                    Width="Auto"
-                    Height="Auto"
-                    Margin="10,0,0,0"
-                    Padding="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    Content="{Binding UploadSpeed}"
-                    Foreground="White" />
-            </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="225" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="5,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        Content="{Binding IsConnectedStatusText}" />
+                    <Label
+                        Grid.Column="1"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="10,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        Content="{Binding DownloadSpeed}" />
+                    <Label
+                        Grid.Column="2"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="10,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        Content="{Binding UploadSpeed}" />
+                </Grid>
 
-            <!--<StatusBarItem HorizontalAlignment="Right">
+                <!--<StatusBarItem HorizontalAlignment="Right">
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>-->
-            <!--<StatusBarItem HorizontalAlignment="Left">
+                <!--<StatusBarItem HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
                     <Label
                         Width="Auto"
@@ -281,6 +332,8 @@
                         Content="{Binding StatusText}" />
                 </StackPanel>
             </StatusBarItem>-->
-        </StatusBar>
+            </StatusBar>
+        </Border>
+
     </Grid>
 </Window>

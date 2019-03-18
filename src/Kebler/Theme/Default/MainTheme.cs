@@ -18,7 +18,6 @@ namespace Kebler.Theme.Default
         //            if (element is Window window) { action(window); break; }
         //        }
         //    }
-
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
             if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
@@ -194,7 +193,12 @@ namespace Kebler.Theme.Default
         {
             App.MainWindowControl.Connect();
         }
+        private void AddTorrent(object sender, RoutedEventArgs e)
+        {
+            App.MainWindowControl.AddTorrent();
+        }
         
+
         #endregion
     }
 }

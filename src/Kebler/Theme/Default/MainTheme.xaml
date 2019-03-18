@@ -325,6 +325,8 @@
     <SolidColorBrush x:Key="ScrollBarThumbBackgroundBrush" Color="{DynamicResource GrayColor7}" />
     <SolidColorBrush x:Key="ScrollBarThumbBackgroundMouseOverBrush" Color="{DynamicResource BlueColor}" />
 
+    <SolidColorBrush x:Key="MainWindowHeaderCenterBorderBackgroundBrush" Color="{DynamicResource GrayColor6}" />
+
     <!--  Default Colors  -->
 
     <BorderGapMaskConverter x:Key="BorderGapMaskConverter" />
@@ -624,6 +626,11 @@
                                                             Click="ConnectFirst"
                                                             Header="{DynamicResource TopBarConnectButtonContent}"
                                                             Style="{DynamicResource PopUpTopBarMenuButton}" />
+                                                        <Separator />
+                                                        <MenuItem
+                                                            Click="AddTorrent"
+                                                            Header="{DynamicResource TopBarAddTorrentButtonContent}"
+                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
                                                     </MenuItem>
                                                     <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
                                                     <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
@@ -818,14 +825,13 @@
 
         <Style.Resources>
             <Style TargetType="{x:Type StatusBar}">
+                <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundBrush}" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WindowStatusForegroundBrush}" />
-                        <Setter Property="Background" Value="{StaticResource WindowBorderBrush}" />
+                        <Setter Property="Background" Value="{StaticResource WindowBackgroundActiveBrush}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource WindowStatusForegroundBrush}" />
-                        <Setter Property="Background" Value="{StaticResource WindowBorderBrush}" />
+                        <Setter Property="Background" Value="{StaticResource WindowBackgroundActiveBrush}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -1337,6 +1343,8 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto" />
                             <RowDefinition x:Name="RowDefinition1" Height="*" />
                         </Grid.RowDefinitions>
+
+                        <!--  header background  -->
                         <TabPanel
                             x:Name="HeaderPanel"
                             Grid.Row="0"
@@ -1423,12 +1431,14 @@
 
                     <Grid
                         x:Name="templateRoot"
-                        Height="24"
+                        Height="26"
+                        Background="Transparent"
                         SnapsToDevicePixels="true"
                         TextOptions.TextFormattingMode="Display"
                         TextOptions.TextRenderingMode="ClearType">
-                        <Border
+                        <!--<Border
                             x:Name="mainBorder"
+                            Visibility="Collapsed"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="0,0,1,0">
@@ -1438,12 +1448,18 @@
                                 BorderBrush="{StaticResource TabItemBorderBrush}"
                                 BorderThickness="0,0,1,0"
                                 Opacity="0" />
-                        </Border>
+                        </Border>-->
+                        <Border
+                            x:Name="selectionBorder"
+                            Background="Transparent"
+                            BorderBrush="{DynamicResource TabItemSelectedHeaderBackgroundBrush}"
+                            BorderThickness="0,0,0,1"
+                            Visibility="Collapsed" />
                         <ContentPresenter
                             x:Name="contentPresenter"
                             Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                            VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
                             ContentSource="Header"
                             Focusable="False"
                             RecognizesAccessKey="True"
@@ -1462,36 +1478,35 @@
                             <Setter TargetName="mainBorder" Property="BorderThickness" Value="1,1,1,0" />
                         </MultiDataTrigger>-->
 
-                        <MultiDataTrigger>
+                        <!--<MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false" />
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="contentPresenter" Property="Opacity" Value="0.56" />
-                            <Setter TargetName="mainBorder" Property="Background" Value="{DynamicResource TabItemHeaderBackgroundInActiveBrush}" />
-                            <Setter TargetName="innerBorder" Property="BorderThickness" Value="1,1,1,0" />
-                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="1,1,1,0" />
-                        </MultiDataTrigger>
+                        -->
+                        <!--<Setter TargetName="mainBorder" Property="Background" Value="{DynamicResource TabItemHeaderBackgroundInActiveBrush}" />-->
+                        <!--<Setter TargetName="innerBorder" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="1,1,1,0" />-->
+                        <!--
+                        </MultiDataTrigger>-->
 
-                        <MultiDataTrigger>
+                        <!--<MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="innerBorder" Property="BorderThickness" Value="0,0,1,0" />
                             <Setter TargetName="mainBorder" Property="BorderThickness" Value="0,0,1,0" />
-                        </MultiDataTrigger>
+                        </MultiDataTrigger>-->
 
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Panel.ZIndex" Value="1" />
-                            <Setter TargetName="innerBorder" Property="Opacity" Value="0" />
-                            <Setter TargetName="mainBorder" Property="Background" Value="{DynamicResource TabItemSelectedHeaderBackgroundBrush}" />
-                            <Setter TargetName="innerBorder" Property="BorderThickness" Value="0,0,1,0" />
-                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="0,0,1,0" />
+                            <Setter TargetName="selectionBorder" Property="Visibility" Value="Visible" />
+
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1816,7 +1831,7 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Rectangle x:Name="thumbRect" Fill="{DynamicResource ScrollBarThumbBackgroundBrush}" />
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger Property="IsDragging" Value="True">
                             <Setter TargetName="thumbRect" Property="Fill" Value="{DynamicResource ScrollBarThumbBackgroundMouseOverBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -2014,6 +2029,7 @@
         <Setter Property="Background" Value="{DynamicResource DataGridBackgroundBrush}" />
         <Setter Property="HorizontalGridLinesBrush" Value="#00E9ECF1" />
         <Setter Property="VerticalGridLinesBrush" Value="#00E9ECF1" />
+
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="AutoGenerateColumns" Value="False" />
@@ -2043,12 +2059,10 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="22" />
                                             <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <!--<Button
                                             Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}"
@@ -2094,14 +2108,20 @@
                                             ContentTemplate="{TemplateBinding ContentTemplate}" />
                                         <ScrollBar
                                             x:Name="PART_VerticalScrollBar"
-                                            Grid.RowSpan="3"
-                                            Grid.Column="2"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Right"
                                             Maximum="{TemplateBinding ScrollableHeight}"
                                             Orientation="Vertical"
                                             ViewportSize="{TemplateBinding ViewportHeight}"
                                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                             Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <Grid Grid.Row="2" Grid.Column="1">
+                                        <Grid
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0,0,17,0"
+                                            VerticalAlignment="Bottom">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}" />
                                                 <ColumnDefinition Width="*" />
@@ -2131,6 +2151,9 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="BorderThickness" Value="0,0,1,1" />
+        <Setter Property="Opacity" Value="100" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBorderBrush}" />
+
 
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="12" />
@@ -2141,7 +2164,7 @@
                     <Border
                         x:Name="BackgroundBorder"
                         Background="{TemplateBinding Background}"
-                        BorderBrush="{DynamicResource DataGridHeaderCellBorderBrush}"
+                        BorderBrush="{DynamicResource BorderBorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True"
                         UseLayoutRounding="True">

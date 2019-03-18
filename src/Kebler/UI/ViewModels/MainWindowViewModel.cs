@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +40,10 @@ namespace Kebler.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public bool IsConnected { get; set; } = false;
         public bool IsConnecting { get; set; } = false;
+        public Server ConnectedServer { get; set; }
+        public bool IsDoingStuff { get; set; } = false;
+
+
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         public TorrentInfo SelectedTorrent { get; set; }
 
@@ -80,6 +85,30 @@ namespace Kebler.UI.ViewModels
             }
         }
 
+        public async void AddTorrent(string path)
+        {
+            if (!File.Exists(path))
+                throw new Exception("Torrent file not found");
+
+            using (var fstream = File.OpenRead(path))
+            {
+                byte[] filebytes = new byte[fstream.Length];
+                fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
+
+                string encodedData = Convert.ToBase64String(filebytes);
+
+                var torrent = new NewTorrent
+                {
+                    Metainfo = encodedData,
+                    Paused = false
+                };
+                await transmissionClient.TorrentAddAsync(torrent);
+            }
+
+
+
+        }
+
 
 
         public void ShowCm()
@@ -99,7 +128,7 @@ namespace Kebler.UI.ViewModels
             IsConnectedStatusText = "Connecting";
             try
             {
-                IsConnecting = true;
+                IsConnecting = IsDoingStuff = true;
                 var pass = string.Empty;
                 if (server.AskForPassword)
                 {
@@ -116,9 +145,8 @@ namespace Kebler.UI.ViewModels
                     IsConnectedStatusText = $"Transmission {sessionInfo.Version} (RPC:{sessionInfo.RpcVersion})";
 
                     StartWhileCycle();
-
+                    ConnectedServer = server;
                     IsConnected = true;
-
                 }
                 catch (Exception ex)
                 {
@@ -131,6 +159,7 @@ namespace Kebler.UI.ViewModels
             finally
             {
                 IsConnecting = false;
+                IsDoingStuff = false;
             }
 
 
@@ -157,7 +186,7 @@ namespace Kebler.UI.ViewModels
 
         private void StartWhileCycle()
         {
-          
+
             if (whileCycleTask != null)
                 cancelTokenSource.Cancel();
             whileCycleTask?.Dispose();
@@ -165,7 +194,7 @@ namespace Kebler.UI.ViewModels
             cancelTokenSource = new CancellationTokenSource();
             var token = cancelTokenSource.Token;
 
-            
+
 
             whileCycleTask = new Task(async () =>
             {
@@ -173,20 +202,24 @@ namespace Kebler.UI.ViewModels
                 {
                     while (IsConnected && !token.IsCancellationRequested)
                     {
-                        if (Application.Current.Dispatcher.HasShutdownStarted) return;
 
+                        if (Application.Current.Dispatcher.HasShutdownStarted) return;
+                        IsDoingStuff = true;
                         stats = await UpdateStats();
                         //sessionInfo = await UpdateSessionInfo();
 
                         var newTorrentsDataList = await UpdateTorrentList();
 
-                        UpdateTorrentListAtUI(ref newTorrentsDataList);
-                        UpdateStatsInfo();
+                        var torrents = newTorrentsDataList.Torrents.ToList();
+                        var remTorrents = newTorrentsDataList.Removed?.ToList();
 
+                        UpdateTorrentListAtUI(ref torrents, ref remTorrents);
+                        UpdateStatsInfo();
+                        IsDoingStuff = false;
                         await Task.Delay(3000, token);
                     }
                 }
-                catch(TaskCanceledException)
+                catch (TaskCanceledException)
                 {
                     return;
                 }
@@ -195,9 +228,9 @@ namespace Kebler.UI.ViewModels
         }
 
         #region GetTorrentServerData
-        private async Task<List<TorrentInfo>> UpdateTorrentList(string[] fields = null)
+        private async Task<TransmissionTorrents> UpdateTorrentList(string[] fields = null)
         {
-            return (await transmissionClient.TorrentGetAsync(fields ?? TorrentFields.ALL_FIELDS)).Torrents.ToList();
+            return await transmissionClient.TorrentGetAsync(fields ?? TorrentFields.ALL_FIELDS);
         }
         private async Task<Statistic> UpdateStats()
         {
@@ -212,8 +245,12 @@ namespace Kebler.UI.ViewModels
 
 
         #region ParsersToUserFriendlyFormat
-        private void UpdateTorrentListAtUI(ref List<TorrentInfo> list)
+        private void UpdateTorrentListAtUI(ref List<TorrentInfo> list, ref List<TorrentInfo> remList)
         {
+
+
+           
+            //add new one or update old
             foreach (var item in list)
             {
                 if (TorrentList.Any(x => x.ID == item.ID))
@@ -227,6 +264,22 @@ namespace Kebler.UI.ViewModels
                     Dispatcher.Invoke(() => { TorrentList.Add(item); });
                 }
             }
+
+
+            //remove removed torrent
+            foreach (var item in TorrentList.ToList())
+            {
+                if (!list.Any(x => x.ID == item.ID))
+                {
+                    var data = TorrentList.First(x => x.ID == item.ID);
+                    var ind = TorrentList.IndexOf(data);
+                    if (SelectedTorrent.ID == data.ID) SelectedTorrent = null;
+                    Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
+                 
+                }
+            }
+
+
         }
         private void UpdateTorrentData(int index, TorrentInfo newData)
         {

@@ -17,6 +17,7 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using Kebler.UI.ViewModels;
 using Kebler.Services.Converters;
+using Microsoft.Win32;
 
 namespace Kebler.UI.Windows
 {
@@ -29,7 +30,7 @@ namespace Kebler.UI.Windows
 
         private readonly MainWindowViewModel VM;
 
-        
+
 
         public MainWindow()
         {
@@ -50,16 +51,34 @@ namespace Kebler.UI.Windows
         {
             VM.InitConnection();
         }
+        public void AddTorrent()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.torrent)|*.torrent|All files (*.*)|*.*",
+                Multiselect = true,
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach(var item in openFileDialog.FileNames)
+                {
+                    VM.AddTorrent(item);
+                }
+                
+            }
+            //txtEditor.Text = File.ReadAllText();
+        }
+
 
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
-           // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
+            // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
 
         }
 
         private void TorrentsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if(TorrentsDataGrid.SelectedValue is TorrentInfo tor)
+            if (TorrentsDataGrid.SelectedValue is TorrentInfo tor)
             {
                 VM.SelectedTorrent = tor;
             }
