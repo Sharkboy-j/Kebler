@@ -12,13 +12,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Entity;
+using Enums = Transmission.API.RPC.Entity.Enums;
 
 namespace Kebler.UI.ViewModels
 {
@@ -95,10 +95,10 @@ namespace Kebler.UI.ViewModels
 
                 using (var fstream = File.OpenRead(path))
                 {
-                    byte[] filebytes = new byte[fstream.Length];
+                    var filebytes = new byte[fstream.Length];
                     fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
 
-                    string encodedData = Convert.ToBase64String(filebytes);
+                    var encodedData = Convert.ToBase64String(filebytes);
 
                     var torrent = new NewTorrent
                     {
@@ -106,11 +106,17 @@ namespace Kebler.UI.ViewModels
                         Paused = false
                     };
 
+                    Debug.WriteLine($"Start Adding torrent {path}");
+                    Log.Info($"Start adding torrent {path}");
+
                     while (true)
                     {
-                        Debug.WriteLine($"Start Adding torrent {torrent.Filename}");
-                        Log.Info($"Start adding torrent {torrent.Filename}");
 
+                        if (!IsConnected)
+                        {
+                            await Task.Delay(500);
+                            continue;
+                        }
                         if (Dispatcher.HasShutdownStarted) return;
                         try
                         {
@@ -122,15 +128,14 @@ namespace Kebler.UI.ViewModels
                                 case Transmission.API.RPC.Entity.Enums.AddResult.Duplicate:
                                 case Transmission.API.RPC.Entity.Enums.AddResult.Added:
                                     {
-                                        Debug.WriteLine($"Torrent added {torrent.Filename}");
-                                        Log.Info($"Torrent added {torrent.Filename}");
+                                        Debug.WriteLine($"Torrent {path} added as {info}");
+                                        Log.Info($"Torrent {path} added as {info}");
                                         return;
                                     }
                                 case Transmission.API.RPC.Entity.Enums.AddResult.ResponseNull:
                                     {
-                                        Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
-                                        Log.Info($"Adding torrent result Null {torrent.Filename}");
-
+                                        //Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
+                                        //Log.Info($"Adding torrent result Null {torrent.Filename}");
                                         await Task.Delay(100);
                                         continue;
                                     }
@@ -146,7 +151,6 @@ namespace Kebler.UI.ViewModels
                 }
 
             }).Start();
-
         }
 
 
@@ -158,8 +162,6 @@ namespace Kebler.UI.ViewModels
                 cmWindow = new ConnectionManager(ref dbServers);
                 cmWindow.ShowDialog();
             });
-
-
         }
         private async void TryConnect(Server server)
         {
@@ -183,9 +185,8 @@ namespace Kebler.UI.ViewModels
 
                     sessionInfo = await UpdateSessionInfo();
                     IsConnectedStatusText = $"Transmission {sessionInfo?.Version} (RPC:{sessionInfo?.RpcVersion})";
-
-                    StartWhileCycle();
                     ConnectedServer = server;
+                    StartWhileCycle();
                     IsConnected = true;
                 }
                 catch (Exception ex)
@@ -264,13 +265,12 @@ namespace Kebler.UI.ViewModels
                 }
                 catch (TaskCanceledException)
                 {
-                    return;
                 }
             }, token);
             whileCycleTask.Start();
         }
 
-        #region GetTorrentServerData
+        #region ServerActions
         private async Task<TransmissionTorrents> UpdateTorrentList()
         {
             return await ExecuteLongTask(transmissionClient.TorrentGetAsync, "Getting torrents");
@@ -284,9 +284,46 @@ namespace Kebler.UI.ViewModels
         private async Task<SessionInfo> UpdateSessionInfo()
         {
             return await ExecuteLongTask(transmissionClient.GetSessionInformationAsync, "Connectiong to session");
+        }
+
+        public async void RemoveTorrent(bool removeData = false)
+        {
+            var torrentInfo = SelectedTorrent;
+
+            await Task.Factory.StartNew(async () =>
+            {
+                Log.Info($"Try remove {torrentInfo.Name}");
+
+                var exitCondition = Enums.RemoveResult.Error;
+                while (exitCondition != Enums.RemoveResult.Ok)
+                {
+                    if (Dispatcher.HasShutdownStarted) return;
+
+                    exitCondition = await transmissionClient.TorrentRemoveAsync(new[] { torrentInfo.ID }, removeData);
+
+                    await Task.Delay(500);
+                }
+                Log.Info($"Removed {torrentInfo.Name}");
+            });
+
 
         }
 
+        public async void PauseTorrent()
+        {
+            var torrentInfo = SelectedTorrent;
+
+            await Task.Factory.StartNew(async () =>
+            {
+                Log.Info($"Try pause {torrentInfo.Name}");
+
+                await transmissionClient.TorrentStopAsync(new[] { torrentInfo.ID });
+
+                Log.Info($"Paused {torrentInfo.Name}");
+            });
+
+
+        }
 
         private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
         {
@@ -339,7 +376,7 @@ namespace Kebler.UI.ViewModels
             //remove removed torrent
             foreach (var item in TorrentList.ToList())
             {
-                if (!list.Any(x => x.ID == item.ID))
+                if (list.All(x => x.ID != item.ID))
                 {
                     var data = TorrentList.First(x => x.ID == item.ID);
                     var ind = TorrentList.IndexOf(data);
@@ -351,6 +388,7 @@ namespace Kebler.UI.ViewModels
 
 
         }
+
         private void UpdateTorrentData(int index, TorrentInfo newData)
         {
             if (SelectedTorrent == null) return;
@@ -384,6 +422,7 @@ namespace Kebler.UI.ViewModels
             UploadSpeed = $"U: {uSpeed}";
         }
         #endregion
+
 
 
 

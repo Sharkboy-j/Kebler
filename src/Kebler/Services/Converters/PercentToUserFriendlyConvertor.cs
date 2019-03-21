@@ -13,7 +13,7 @@ namespace Kebler.Services.Converters
             {
                 return $"{Math.Round(val*100,2)}%";
             }
-            return $"0%";
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -274,8 +274,7 @@ namespace Transmission.API.RPC
         {
             string[] fields = TorrentFields.ALL_FIELDS;
 
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("fields", fields);
+            var arguments = new Dictionary<string, object> { { "fields", fields } };
 
             //if (ids != null && ids.Length > 0)
             //    arguments.Add("ids", ids);
@@ -309,15 +308,15 @@ namespace Transmission.API.RPC
         /// </summary>
         /// <param name="ids">Torrents id</param>
         /// <param name="deleteLocalData">Remove local data</param>
-        public async void TorrentRemoveAsync(int[] ids, bool deleteData = false)
+        public async Task<RemoveResult> TorrentRemoveAsync(int[] ids, bool deleteData = false)
         {
-            var arguments = new Dictionary<string, object>();
+            var arguments = new Dictionary<string, object> { { "ids", ids }, { "delete-local-data", deleteData } };
 
-            arguments.Add("ids", ids);
-            arguments.Add("delete-local-data", deleteData);
 
             var request = new TransmissionRequest("torrent-remove", arguments);
             var response = await SendRequestAsync(request);
+
+            return response.Result == "success" ? RemoveResult.Ok : RemoveResult.Error;
         }
 
         /// <summary>
@@ -374,7 +373,13 @@ namespace Transmission.API.RPC
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public async void TorrentStopAsync(int[] ids)
+        public async 
+        /// <summary>
+        /// Stop torrents (API: torrent-stop)
+        /// </summary>
+        /// <param name="ids">Torrents id</param>
+        Task
+TorrentStopAsync(int[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
             var response = await SendRequestAsync(request);

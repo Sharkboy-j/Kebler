@@ -56,20 +56,18 @@ namespace Kebler.UI.Windows
         }
         public void AddTorrent()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "Image files (*.torrent)|*.torrent|All files (*.*)|*.*",
                 Multiselect = true,
             };
-            if (openFileDialog.ShowDialog() == true)
+
+            if (openFileDialog.ShowDialog() != true) return;
+
+            foreach(var item in openFileDialog.FileNames)
             {
-                foreach(var item in openFileDialog.FileNames)
-                {
-                    VM.AddTorrent(item);
-                }
-                
+                VM.AddTorrent(item);
             }
-            //txtEditor.Text = File.ReadAllText();
         }
 
 
@@ -85,6 +83,20 @@ namespace Kebler.UI.Windows
             {
                 VM.SelectedTorrent = tor;
             }
+        }
+
+        private void RemoveTorrent_ItemClick(object sender, RoutedEventArgs e)
+        { 
+            VM.RemoveTorrent();
+        }
+        private void RemoveTorrentData_ItemClick(object sender, RoutedEventArgs e)
+        { 
+            VM.RemoveTorrent(true);
+        }
+
+        private void PauseTorrent_ItemClick(object sender, RoutedEventArgs e)
+        {
+           VM.PauseTorrent();
         }
     }
 }

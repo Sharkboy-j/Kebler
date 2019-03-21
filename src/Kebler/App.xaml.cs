@@ -74,6 +74,7 @@ namespace Kebler
         App()
         {
 
+
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());

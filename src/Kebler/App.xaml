@@ -18,6 +18,7 @@
             <conv:ReverseBoolToBoolConverter x:Key="ReverseBoolToBoolConverter" />
             <conv:BytesToUserFriendlySpeed x:Key="BytesToUserFriendlySpeed" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
+            <conv:IntToColorConverter x:Key="IntToColorConverter" />
 
             <conv:PieceToImage x:Key="PieceToImage" />
 
