@@ -12,55 +12,61 @@ using Transmission.API.RPC.Entity;
 using Newtonsoft.Json.Linq;
 using Transmission.API.RPC.Common;
 using Transmission.API.RPC.Arguments;
+using static Transmission.API.RPC.Entity.Enums;
 
 namespace Transmission.API.RPC
 {
     public class TransmissionClient
     {
-		public string Host
-		{
-			get;
-			private set;
-		}
-		public string SessionID
-		{
-			get;
-			private set;
-		}
-		public int CurrentTag
-		{
-			get;
-			private set;
-		}
-  
+        public string Host
+        {
+            get;
+            private set;
+        }
+        public string SessionID
+        {
+            get;
+            private set;
+        }
+        public int CurrentTag
+        {
+            get;
+            private set;
+        }
+
         private string _authorization;
         private bool _needAuthorization;
 
-		/// <summary>
-		/// Initialize client
-		/// </summary>
-		/// <param name="host">Host adresse</param>
-		/// <param name="sessionID">Session ID</param>
-		/// <param name="login">Login</param>
-		/// <param name="password">Password</param>
-		/// <exception cref="UriFormatException"></exception>
-		public TransmissionClient(string host, string sessionID = null, string login = null, string password = null)
+        /// <summary>
+        /// miliseconds
+        /// </summary>
+        public int timeOut = 5000;
+
+        /// <summary>
+        /// Initialize client
+        /// </summary>
+        /// <param name="host">Host adresse</param>
+        /// <param name="sessionID">Session ID</param>
+        /// <param name="login">Login</param>
+        /// <param name="password">Password</param>
+        /// <exception cref="UriFormatException"></exception>
+        public TransmissionClient(string host, string sessionID = null, string login = null, string password = null)
         {
-            var res = Uri.TryCreate(host,UriKind.Absolute,out var tt);
+            var res = Uri.TryCreate(host, UriKind.Absolute, out var tt);
 
             if (!res) throw new UriFormatException($"Unable cast {host} as uri");
 
             this.Host = host;
             this.SessionID = sessionID;
 
-			if (!String.IsNullOrWhiteSpace(login))
-			{
-				var authBytes = Encoding.UTF8.GetBytes(login + ":" + password);
-				var encoded = Convert.ToBase64String(authBytes);
+            if (!String.IsNullOrWhiteSpace(login))
+            {
+                var authBytes = Encoding.UTF8.GetBytes(login + ":" + password);
+                var encoded = Convert.ToBase64String(authBytes);
 
-				this._authorization = "Basic " + encoded;
-				this._needAuthorization = true;
-			}
+                this._authorization = "Basic " + encoded;
+                this._needAuthorization = true;
+            }
         }
 
         #region Session methods
@@ -111,7 +117,7 @@ namespace Transmission.API.RPC
         {
             var request = new TransmissionRequest("session-stats");
             var response = SendRequest(request);
-            var result = response.Deserialize<Statistic>();
+            var result = response?.Deserialize<Statistic>();
             return result;
         }
 
@@ -123,10 +129,10 @@ namespace Transmission.API.RPC
         {
             var request = new TransmissionRequest("session-stats");
             var response = await SendRequestAsync(request);
-            var result = response.Deserialize<Statistic>();
+            var result = response?.Deserialize<Statistic>();
             return result;
         }
-        
+
         /// <summary>
         /// Get information of current session (API: session-get)
         /// </summary>
@@ -137,7 +143,7 @@ namespace Transmission.API.RPC
         {
             var request = new TransmissionRequest("session-get");
             var response = SendRequest(request);
-            var result = response.Deserialize<SessionInfo>();
+            var result = response?.Deserialize<SessionInfo>();
             return result;
         }
 
@@ -145,11 +151,13 @@ namespace Transmission.API.RPC
         /// Get information of current session (API: session-get)
         /// </summary>
         /// <returns>Session information</returns>
+        /// <exception cref="WebException"
+        /// <exception cref="Exception"
         public async Task<SessionInfo> GetSessionInformationAsync()
         {
             var request = new TransmissionRequest("session-get");
             var response = await SendRequestAsync(request);
-            var result = response.Deserialize<SessionInfo>();
+            var result = response?.Deserialize<SessionInfo>();
             return result;
         }
 
@@ -168,7 +176,7 @@ namespace Transmission.API.RPC
 
             var request = new TransmissionRequest("torrent-add", torrent);
             var response = SendRequest(request);
-            var jObject = response.Deserialize<JObject>();
+            var jObject = response?.Deserialize<JObject>();
 
             if (jObject == null || jObject.First == null)
                 return null;
@@ -188,27 +196,30 @@ namespace Transmission.API.RPC
         /// Add torrent (API: torrent-add)
         /// </summary>
         /// <returns>Torrent info (ID, Name and HashString)</returns>
-        public async Task<NewTorrentInfo> TorrentAddAsync(NewTorrent torrent)
+        /// <exception cref="Exception"
+        public async Task<AddResult> TorrentAddAsync(NewTorrent torrent)
         {
+
             if (String.IsNullOrWhiteSpace(torrent.Metainfo) && String.IsNullOrWhiteSpace(torrent.Filename))
                 throw new Exception("Either \"filename\" or \"metainfo\" must be included.");
 
             var request = new TransmissionRequest("torrent-add", torrent);
             var response = await SendRequestAsync(request);
-            var jObject = response.Deserialize<JObject>();
+            var jObject = response?.Deserialize<JObject>();
 
             if (jObject == null || jObject.First == null)
-                return null;
+                return AddResult.ResponseNull;
 
             NewTorrentInfo result = null;
             JToken value = null;
 
             if (jObject.TryGetValue("torrent-duplicate", out value))
-                result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
+                return AddResult.Duplicate;
+            // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
             else if (jObject.TryGetValue("torrent-added", out value))
-                result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
-
-            return result;
+                // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
+                return AddResult.Added;
+            return AddResult.Error;
         }
 
         /// <summary>
@@ -248,7 +259,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("torrent-get", arguments);
 
             var response = SendRequest(request);
-            var result = response.Deserialize<TransmissionTorrents>();
+            var result = response?.Deserialize<TransmissionTorrents>();
 
             return result;
         }
@@ -259,18 +270,19 @@ namespace Transmission.API.RPC
         /// <param name="fields">Fields of torrents</param>
         /// <param name="ids">IDs of torrents (null or empty for get all torrents)</param>
         /// <returns>Torrents info</returns>
-        public async Task<TransmissionTorrents> TorrentGetAsync(string[] fields, params int[] ids)
+        public async Task<TransmissionTorrents> TorrentGetAsync(/*string[] fields, params int[] ids*/)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("fields", fields);
+            string[] fields = TorrentFields.ALL_FIELDS;
 
-            if (ids != null && ids.Length > 0)
-                arguments.Add("ids", ids);
+            var arguments = new Dictionary<string, object> { { "fields", fields } };
+
+            //if (ids != null && ids.Length > 0)
+            //    arguments.Add("ids", ids);
 
             var request = new TransmissionRequest("torrent-get", arguments);
 
             var response = await SendRequestAsync(request);
-            var result = response.Deserialize<TransmissionTorrents>();
+            var result = response?.Deserialize<TransmissionTorrents>();
 
             return result;
         }
@@ -296,15 +308,15 @@ namespace Transmission.API.RPC
         /// </summary>
         /// <param name="ids">Torrents id</param>
         /// <param name="deleteLocalData">Remove local data</param>
-        public async void TorrentRemoveAsync(int[] ids, bool deleteData = false)
+        public async Task<RemoveResult> TorrentRemoveAsync(int[] ids, bool deleteData = false)
         {
-            var arguments = new Dictionary<string, object>();
+            var arguments = new Dictionary<string, object> { { "ids", ids }, { "delete-local-data", deleteData } };
 
-            arguments.Add("ids", ids);
-            arguments.Add("delete-local-data", deleteData);
 
             var request = new TransmissionRequest("torrent-remove", arguments);
             var response = await SendRequestAsync(request);
+
+            return response.Result == "success" ? RemoveResult.Ok : RemoveResult.Error;
         }
 
         /// <summary>
@@ -361,7 +373,13 @@ namespace Transmission.API.RPC
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public async void TorrentStopAsync(int[] ids)
+        public async 
+        /// <summary>
+        /// Stop torrents (API: torrent-stop)
+        /// </summary>
+        /// <param name="ids">Torrents id</param>
+        Task
+TorrentStopAsync(int[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
             var response = await SendRequestAsync(request);
@@ -517,9 +535,9 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("torrent-rename-path", arguments);
             var response = SendRequest(request);
 
-			var result = response.Deserialize<RenameTorrentInfo>();
+            var result = response?.Deserialize<RenameTorrentInfo>();
 
-			return result;
+            return result;
         }
 
         /// <summary>
@@ -538,7 +556,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("torrent-rename-path", arguments);
             var response = await SendRequestAsync(request);
 
-            var result = response.Deserialize<RenameTorrentInfo>();
+            var result = response?.Deserialize<RenameTorrentInfo>();
 
             return result;
         }
@@ -570,7 +588,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("port-test");
             var response = SendRequest(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (bool)data.GetValue("port-is-open");
             return result;
         }
@@ -584,7 +602,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("port-test");
             var response = await SendRequestAsync(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (bool)data.GetValue("port-is-open");
             return result;
         }
@@ -598,7 +616,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("blocklist-update");
             var response = SendRequest(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (int)data.GetValue("blocklist-size");
             return result;
         }
@@ -612,7 +630,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("blocklist-update");
             var response = await SendRequestAsync(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (int)data.GetValue("blocklist-size");
             return result;
         }
@@ -629,7 +647,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("free-space", arguments);
             var response = SendRequest(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (long)data.GetValue("size-bytes");
             return result;
         }
@@ -646,7 +664,7 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("free-space", arguments);
             var response = await SendRequestAsync(request);
 
-            var data = response.Deserialize<JObject>();
+            var data = response?.Deserialize<JObject>();
             var result = (long)data.GetValue("size-bytes");
             return result;
         }
@@ -677,7 +695,7 @@ namespace Transmission.API.RPC
                 webRequest.ContentType = "application/json-rpc";
                 webRequest.Headers["X-Transmission-Session-Id"] = SessionID;
                 webRequest.Method = "POST";
-                
+                webRequest.Timeout = timeOut;
                 if (_needAuthorization)
                     webRequest.Headers["Authorization"] = _authorization;
 
@@ -690,7 +708,7 @@ namespace Transmission.API.RPC
 
                 var responseTask = webRequest.GetResponseAsync();
                 responseTask.WaitAndUnwrapException();
-                
+
                 //Send request and prepare response
                 using (var webResponse = responseTask.Result)
                 {
@@ -727,6 +745,12 @@ namespace Transmission.API.RPC
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request)
         {
             TransmissionResponse result = new TransmissionResponse();
@@ -744,7 +768,7 @@ namespace Transmission.API.RPC
                 webRequest.ContentType = "application/json-rpc";
                 webRequest.Headers["X-Transmission-Session-Id"] = SessionID;
                 webRequest.Method = "POST";
-
+                webRequest.Timeout = timeOut;
                 if (_needAuthorization)
                     webRequest.Headers["Authorization"] = _authorization;
 
@@ -769,7 +793,12 @@ namespace Transmission.API.RPC
             }
             catch (WebException ex)
             {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
+                if (ex.Status == WebExceptionStatus.Timeout)
+                {
+                    return null;
+                }
+
+                if (((HttpWebResponse)ex?.Response)?.StatusCode == HttpStatusCode.Conflict)
                 {
                     if (ex.Response.Headers.Count > 0)
                     {
@@ -783,7 +812,7 @@ namespace Transmission.API.RPC
                     }
                 }
                 else
-                    throw ex;
+                    return null;
             }
 
             return result;

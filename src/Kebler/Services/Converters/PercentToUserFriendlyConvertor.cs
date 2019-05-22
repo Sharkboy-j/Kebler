@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace Kebler.Services.Converters
 {
-    public class ObjectToVisibilityConverter : IValueConverter
+    public class PercentToUserFriendlyConvertor : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? Visibility.Collapsed : Visibility.Visible;
+            if(value is double val)
+            {
+                return $"{Math.Round(val*100,2)}%";
+            }
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

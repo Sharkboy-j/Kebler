@@ -17,6 +17,8 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using Kebler.UI.ViewModels;
 using Kebler.Services.Converters;
+using Microsoft.Win32;
+using System.Windows.Interop;
 
 namespace Kebler.UI.Windows
 {
@@ -29,18 +31,20 @@ namespace Kebler.UI.Windows
 
         private readonly MainWindowViewModel VM;
 
-        
+
 
         public MainWindow()
         {
-            //log4net.Config.XmlConfigurator.Configure();
-
             InitializeComponent();
+            //disable hardwarerendering
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             VM = new MainWindowViewModel();
             DataContext = VM;
 
         }
+
+      
 
         public void OpenCM()
         {
@@ -50,19 +54,49 @@ namespace Kebler.UI.Windows
         {
             VM.InitConnection();
         }
+        public void AddTorrent()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.torrent)|*.torrent|All files (*.*)|*.*",
+                Multiselect = true,
+            };
+
+            if (openFileDialog.ShowDialog() != true) return;
+
+            foreach(var item in openFileDialog.FileNames)
+            {
+                VM.AddTorrent(item);
+            }
+        }
+
 
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
-           // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
+            // new Task(() => { VM.TryConnect(ServersList.FirstOrDefault()); }).Start();
 
         }
 
         private void TorrentsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if(TorrentsDataGrid.SelectedValue is TorrentInfo tor)
+            if (TorrentsDataGrid.SelectedValue is TorrentInfo tor)
             {
                 VM.SelectedTorrent = tor;
             }
+        }
+
+        private void RemoveTorrent_ItemClick(object sender, RoutedEventArgs e)
+        { 
+            VM.RemoveTorrent();
+        }
+        private void RemoveTorrentData_ItemClick(object sender, RoutedEventArgs e)
+        { 
+            VM.RemoveTorrent(true);
+        }
+
+        private void PauseTorrent_ItemClick(object sender, RoutedEventArgs e)
+        {
+           VM.PauseTorrent();
         }
     }
 }
