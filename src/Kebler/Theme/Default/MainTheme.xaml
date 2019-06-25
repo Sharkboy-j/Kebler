@@ -619,7 +619,7 @@
                                                 <Menu x:Name="TopBarMenu" Grid.Column="0">
                                                     <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
                                                         <MenuItem
-                                                            Click="OpenCM"
+                                                            Click="OpenConnectionManager"
                                                             Header="{DynamicResource TopBarCMButtonContent}"
                                                             Style="{DynamicResource PopUpTopBarMenuButton}" />
                                                         <MenuItem

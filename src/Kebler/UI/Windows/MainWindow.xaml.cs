@@ -29,30 +29,30 @@ namespace Kebler.UI.Windows
     public partial class MainWindow : Window
     {
 
-        private readonly MainWindowViewModel VM;
+        private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
 
-
+        
 
         public MainWindow()
         {
             InitializeComponent();
-            //disable hardwarerendering
+
+            //disable hardware rendering
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
-            VM = new MainWindowViewModel();
-            DataContext = VM;
+            DataContext = new MainWindowViewModel();
 
         }
 
       
 
-        public void OpenCM()
+        public void OpenConnectionManager()
         {
-            VM.ShowCm();
+            Vm.ShowConnectionManager();
         }
         public void Connect()
         {
-            VM.InitConnection();
+            Vm.InitConnection();
         }
         public void AddTorrent()
         {
@@ -66,7 +66,7 @@ namespace Kebler.UI.Windows
 
             foreach(var item in openFileDialog.FileNames)
             {
-                VM.AddTorrent(item);
+                Vm.AddTorrent(item);
             }
         }
 
@@ -81,22 +81,22 @@ namespace Kebler.UI.Windows
         {
             if (TorrentsDataGrid.SelectedValue is TorrentInfo tor)
             {
-                VM.SelectedTorrent = tor;
+                Vm.SelectedTorrent = tor;
             }
         }
 
         private void RemoveTorrent_ItemClick(object sender, RoutedEventArgs e)
         { 
-            VM.RemoveTorrent();
+            Vm.RemoveTorrent();
         }
         private void RemoveTorrentData_ItemClick(object sender, RoutedEventArgs e)
         { 
-            VM.RemoveTorrent(true);
+            Vm.RemoveTorrent(true);
         }
 
         private void PauseTorrent_ItemClick(object sender, RoutedEventArgs e)
         {
-           VM.PauseTorrent();
+           Vm.PauseTorrent();
         }
     }
 }

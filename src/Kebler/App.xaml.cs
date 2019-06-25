@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Kebler.Models;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;

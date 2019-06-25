@@ -5,11 +5,11 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Kebler</AssemblyName>
     <LangVersion>8.0</LangVersion>
-    <Company />
     <PackageIconUrl></PackageIconUrl>
     <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
     <StartupObject>Kebler.App</StartupObject>
+    <PublishReadyToRun>false</PublishReadyToRun>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -19,6 +19,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Theme\Icons\Kebler.svg" />
@@ -53,5 +55,8 @@
     <None Update="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishReadyToRunExclude Include="Transmission.API.RPC.dll" />
   </ItemGroup>
 </Project>

@@ -51,6 +51,7 @@
     <sys:String x:Key="TestConnectionGood">Connected</sys:String>
     <sys:String x:Key="TestConnectionBad">Error</sys:String>
 
+    <sys:String x:Key="ThereAreNoAnyServersWhenCloseCm">There are no any servers. Please add one before closing this window</sys:String>
 
     <!--  Dialogs  -->
     <sys:String x:Key="DialogEnterPasswordContent">Please enter password:</sys:String>

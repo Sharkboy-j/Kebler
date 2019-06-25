@@ -185,9 +185,9 @@ namespace Kebler.Theme.Default
 
         #region TopBar Events
 
-        private void OpenCM(object sender, RoutedEventArgs e)
+        private void OpenConnectionManager(object sender, RoutedEventArgs e)
         {
-            App.MainWindowControl.OpenCM();
+            App.MainWindowControl.OpenConnectionManager();
         }
         private void ConnectFirst(object sender, RoutedEventArgs e)
         {
