@@ -98,5 +98,49 @@ namespace Kebler.UI.Windows
         {
            Vm.PauseTorrent();
         }
+
+        private void StartAll_Button_CLick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddTorrent();
+        }
+
+        private void PauseAll_ButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StartSelected_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void PauseSelected_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            Vm.PauseTorrent();
+        }
+
+        private void StopSelected_ButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveTorrent_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            Vm.RemoveTorrent();
+        }
+        private void RemoveTorrentWithData_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new DialogBox("You are perform to remove %n torrents with data","Please, confirm action.");
+            dialog.ShowDialog();
+            if(dialog.Response)
+            {
+
+            }
+        }
     }
 }

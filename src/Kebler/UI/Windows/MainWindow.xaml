@@ -28,6 +28,132 @@
                     <ColumnDefinition Width="280" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        Margin="10,3,0,3"
+                        Padding="0"
+                        BorderThickness="0"
+                        Click="Button_Click">
+                        <Grid Height="37">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Path
+                                Width="18"
+                                Height="15"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Data="{StaticResource Icon.Open}"
+                                Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Text="{DynamicResource TopBarAddTorrentButtonContent}" />
+
+                        </Grid>
+
+                    </Button>
+
+                    <Button
+                        Margin="10,3,0,3"
+                        Padding="0"
+                        BorderThickness="0"
+                        Click="StartAll_Button_CLick">
+                        <Grid Height="37">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Data="{StaticResource Icon.Resume}"
+                                Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Text="{DynamicResource TopBarStartAllTorrentsContent}" />
+
+                        </Grid>
+
+                    </Button>
+
+                    <Button
+                        Margin="0,3,0,3"
+                        Padding="0"
+                        BorderThickness="0"
+                        Click="PauseAll_ButtonClick">
+                        <Grid Height="37">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Data="{StaticResource Icon.Pause}"
+                                Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Text="{DynamicResource TopBarPauseAllTorrentsContent}" />
+
+                        </Grid>
+
+                    </Button>
+
+                    <Button
+                        Margin="0,3,0,3"
+                        Padding="0"
+                        BorderThickness="0">
+                        <Grid Height="37">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Data="{StaticResource Icon.Stop}"
+                                Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Text="{DynamicResource TopBarStopAllTorrentsContent}" />
+
+                        </Grid>
+
+                    </Button>
+
+
+                </StackPanel>
                 <Border
                     Grid.Column="1"
                     Background="{DynamicResource MainWindowHeaderCenterBorderBackgroundBrush}"
@@ -56,18 +182,46 @@
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
+                                <Grid Visibility="{Binding IsDoingStuffReverse, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding DownloadSpeed}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding UploadSpeed}" />
+                                </Grid>
                                 <controls:LoadingRing
                                     Width="16"
                                     Height="16"
                                     Margin="0,0.5,3,0"
-                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                                 <Label
                                     Padding="0"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
                                     Content="{Binding LongStatusText}"
                                     Foreground="White"
-                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                             </StackPanel>
                         </Grid>
 
@@ -75,6 +229,182 @@
 
                     </Grid>
                 </Border>
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="150" />
+
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                        <Button
+                            Margin="10,3,0,3"
+                            Padding="0"
+                            BorderThickness="0"
+                            Click="StartSelected_ButtonClick">
+                            <Grid Height="37">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Path
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Data="{StaticResource Icon.Resume}"
+                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                    Stretch="Fill" />
+                                <TextBlock
+                                    Margin="4,0,4,2"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="11"
+                                    Text="{DynamicResource TopBarStartSelectedTorrentButtonContent}" />
+
+                            </Grid>
+
+                        </Button>
+
+                        <Button
+                            Margin="0,3,0,3"
+                            Padding="0"
+                            BorderThickness="0"
+                            Click="PauseSelected_ButtonClick">
+                            <Grid Height="37">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Path
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Data="{StaticResource Icon.Pause}"
+                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                    Stretch="Fill" />
+                                <TextBlock
+                                    Margin="4,0,4,2"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="11"
+                                    Text="{DynamicResource TopBarPauseSelectedTorrentsContent}" />
+
+                            </Grid>
+
+                        </Button>
+
+                        <Button
+                            Margin="0,3,0,3"
+                            Padding="0"
+                            BorderThickness="0"
+                            Click="StopSelected_ButtonClick">
+                            <Grid Height="37">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Path
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Data="{StaticResource Icon.Stop}"
+                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                    Stretch="Fill" />
+                                <TextBlock
+                                    Margin="4,0,4,2"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="11"
+                                    Text="{DynamicResource TopBarStopSelectedTorrentsContent}" />
+
+                            </Grid>
+
+                        </Button>
+
+
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+
+
+
+                        <Button
+                            Margin="0,3,0,3"
+                            Padding="0"
+                            HorizontalAlignment="Right"
+                            BorderThickness="0"
+                            Click="RemoveTorrent_ButtonClick">
+                            <Grid Height="37">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Path
+                                    Width="16"
+                                    Height="18"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Data="{StaticResource Icon.Remove}"
+                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                    Stretch="Fill" />
+                                <TextBlock
+                                    Margin="4,0,4,2"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="11"
+                                    Text="{DynamicResource TopBarDeleteSelectedTorrentsContent}" />
+
+                            </Grid>
+
+                        </Button>
+
+                        <Button
+                            Margin="0,3,10,3"
+                            Padding="0"
+                            HorizontalAlignment="Right"
+                            BorderThickness="0"
+                            Click="RemoveTorrentWithData_ButtonClick">
+                            <Grid Height="37">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Path
+                                    Width="16"
+                                    Height="18"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Data="{StaticResource Icon.RemoveData}"
+                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
+                                    Stretch="Fill" />
+                                <TextBlock
+                                    Margin="4,0,4,2"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="11"
+                                    Text="{DynamicResource TopBarDeleteWithDataSelectedTorrentsContent}" />
+
+                            </Grid>
+
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
             </Grid>
         </Border>
         <!--  BODY  -->
@@ -150,7 +480,8 @@
                     </StackPanel>
                     <DataGrid
                         x:Name="TorrentsDataGrid"
-                        Grid.Row="0" Grid.Column="2"
+                        Grid.Row="0"
+                        Grid.Column="2"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         IsReadOnly="True"
@@ -200,13 +531,9 @@
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Pause" Click="PauseTorrent_ItemClick" />
-                                <MenuItem
-                                    Click="RemoveTorrent_ItemClick"
-                                    Header="Remove Torrent" />
-                                <MenuItem
-                                    Click="RemoveTorrentData_ItemClick"
-                                    Header="Remove Torrent And Data" />
+                                <MenuItem Click="PauseTorrent_ItemClick" Header="Pause" />
+                                <MenuItem Click="RemoveTorrent_ItemClick" Header="Remove Torrent" />
+                                <MenuItem Click="RemoveTorrentData_ItemClick" Header="Remove Torrent And Data" />
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </DataGrid>
@@ -306,28 +633,6 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         Content="{Binding IsConnectedStatusText}" />
-                    <Label
-                        Grid.Column="1"
-                        Width="Auto"
-                        Height="Auto"
-                        Margin="10,0,0,0"
-                        Padding="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        Content="{Binding DownloadSpeed}" />
-                    <Label
-                        Grid.Column="2"
-                        Width="Auto"
-                        Height="Auto"
-                        Margin="10,0,0,0"
-                        Padding="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        Content="{Binding UploadSpeed}" />
                 </Grid>
 
                 <!--<StatusBarItem HorizontalAlignment="Right">

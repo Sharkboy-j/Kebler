@@ -44,6 +44,8 @@ namespace Kebler.UI.ViewModels
         public Server ConnectedServer { get; set; }
 
         public bool IsDoingStuff { get; set; } = false;
+        public bool IsDoingStuffReverse => !IsDoingStuff;
+
         public string LongStatusText { get; set; }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
@@ -159,6 +161,8 @@ namespace Kebler.UI.ViewModels
         }
         private async void TryConnect(Server server)
         {
+            if(server==null) return;
+
             Log.Info("Start Connection");
             IsErrorOccuredWhileConnecting = false;
             IsConnectedStatusText = "Connecting";
