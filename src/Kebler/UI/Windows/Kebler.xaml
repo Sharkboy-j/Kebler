@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="Kebler.UI.Windows.MainWindow"
+    x:Class="Kebler.UI.Windows.Kebler"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
@@ -33,7 +33,7 @@
                         Margin="10,3,0,3"
                         Padding="0"
                         BorderThickness="0"
-                        Click="Button_Click">
+                        Click="AddTorrentButtonClick">
                         <Grid Height="37">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -91,6 +91,7 @@
 
                     </Button>
 
+
                     <Button
                         Margin="0,3,0,3"
                         Padding="0"
@@ -108,36 +109,6 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Data="{StaticResource Icon.Pause}"
-                                Fill="{DynamicResource LabelForegroundActiveBrush}"
-                                Stretch="Fill" />
-                            <TextBlock
-                                Margin="4,0,4,2"
-                                Padding="0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Bottom"
-                                FontSize="11"
-                                Text="{DynamicResource TopBarPauseAllTorrentsContent}" />
-
-                        </Grid>
-
-                    </Button>
-
-                    <Button
-                        Margin="0,3,0,3"
-                        Padding="0"
-                        BorderThickness="0">
-                        <Grid Height="37">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-
-                            <Path
-                                Width="16"
-                                Height="16"
-                                Margin="0,2,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                Data="{StaticResource Icon.Stop}"
                                 Fill="{DynamicResource LabelForegroundActiveBrush}"
                                 Stretch="Fill" />
                             <TextBlock
@@ -243,9 +214,6 @@
                             BorderThickness="0"
                             Click="StartSelected_ButtonClick">
                             <Grid Height="37">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
 
                                 <Path
                                     Width="16"
@@ -274,9 +242,6 @@
                             BorderThickness="0"
                             Click="PauseSelected_ButtonClick">
                             <Grid Height="37">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
 
                                 <Path
                                     Width="16"
@@ -299,36 +264,7 @@
 
                         </Button>
 
-                        <Button
-                            Margin="0,3,0,3"
-                            Padding="0"
-                            BorderThickness="0"
-                            Click="StopSelected_ButtonClick">
-                            <Grid Height="37">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
 
-                                <Path
-                                    Width="16"
-                                    Height="16"
-                                    Margin="0,2,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Data="{StaticResource Icon.Stop}"
-                                    Fill="{DynamicResource LabelForegroundActiveBrush}"
-                                    Stretch="Fill" />
-                                <TextBlock
-                                    Margin="4,0,4,2"
-                                    Padding="0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Bottom"
-                                    FontSize="11"
-                                    Text="{DynamicResource TopBarStopSelectedTorrentsContent}" />
-
-                            </Grid>
-
-                        </Button>
 
 
                     </StackPanel>
@@ -490,9 +426,14 @@
                         SelectionChanged="TorrentsDataGrid_SelectionChanged"
                         Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="5" MinWidth="1">
+                            <DataGridTextColumn
+                                Width="5"
+                                MinWidth="1"
+                                CanUserResize="False">
                                 <DataGridTextColumn.CellStyle>
                                     <Style TargetType="DataGridCell">
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
                                         <Setter Property="Background" Value="{Binding Status, Converter={StaticResource IntToColorConverter}}" />
                                     </Style>
                                 </DataGridTextColumn.CellStyle>

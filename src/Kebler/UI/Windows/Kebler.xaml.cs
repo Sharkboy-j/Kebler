@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using Transmission.API.RPC.Entity;
 using System.Threading;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Kebler.UI.ViewModels;
 using Kebler.Services.Converters;
 using Microsoft.Win32;
@@ -22,19 +23,22 @@ using System.Windows.Interop;
 
 namespace Kebler.UI.Windows
 {
-    /// <inheritdoc cref="MainWindow" />
+    /// <inheritdoc cref="Kebler" />
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Kebler.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Kebler : Window
     {
 
         private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
 
-        
-
-        public MainWindow()
+     
+        public Kebler()
         {
+            //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+            //source.AddHook(new HwndSourceHook(WndProc));
+
+          
             InitializeComponent();
 
             //disable hardware rendering
@@ -43,8 +47,37 @@ namespace Kebler.UI.Windows
             DataContext = new MainWindowViewModel();
 
         }
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            source.AddHook(WndProc);
+        }
 
-      
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            switch (msg)
+            {
+                case Win32.WM_COPYDATA:
+                    MessageBox.Show("");
+                    Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(lParam, typeof(Win32.CopyDataStruct));
+                    string strData = Marshal.PtrToStringUni(st.lpData);
+
+                    foreach (var text in strData.Split(' ')) 
+                    {
+                        if (text.Contains(".torrent"))
+                        {
+                            OpenTorrent(new[] {text});
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return IntPtr.Zero;
+        }
+
 
         public void OpenConnectionManager()
         {
@@ -64,7 +97,12 @@ namespace Kebler.UI.Windows
 
             if (openFileDialog.ShowDialog() != true) return;
 
-            foreach(var item in openFileDialog.FileNames)
+            OpenTorrent(openFileDialog.FileNames);
+        }
+
+        private void OpenTorrent(string[] names)
+        {
+            foreach (var item in names)
             {
                 Vm.AddTorrent(item);
             }
@@ -101,32 +139,27 @@ namespace Kebler.UI.Windows
 
         private void StartAll_Button_CLick(object sender, RoutedEventArgs e)
         {
-
+            Vm.StartAll();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddTorrentButtonClick(object sender, RoutedEventArgs e)
         {
             AddTorrent();
         }
 
         private void PauseAll_ButtonClick(object sender, RoutedEventArgs e)
         {
-
+            Vm.StopAll();
         }
 
         private void StartSelected_ButtonClick(object sender, RoutedEventArgs e)
         {
-            
+            Vm.StartOne();
         }
 
         private void PauseSelected_ButtonClick(object sender, RoutedEventArgs e)
         {
             Vm.PauseTorrent();
-        }
-
-        private void StopSelected_ButtonClick(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void RemoveTorrent_ButtonClick(object sender, RoutedEventArgs e)
@@ -139,7 +172,7 @@ namespace Kebler.UI.Windows
             dialog.ShowDialog();
             if(dialog.Response)
             {
-
+                Vm.RemoveTorrent(true);
             }
         }
     }

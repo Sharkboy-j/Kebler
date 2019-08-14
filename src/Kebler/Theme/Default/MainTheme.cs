@@ -187,15 +187,15 @@ namespace Kebler.Theme.Default
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)
         {
-            App.MainWindowControl.OpenConnectionManager();
+            App.KeblerControl.OpenConnectionManager();
         }
         private void ConnectFirst(object sender, RoutedEventArgs e)
         {
-            App.MainWindowControl.Connect();
+            App.KeblerControl.Connect();
         }
         private void AddTorrent(object sender, RoutedEventArgs e)
         {
-            App.MainWindowControl.AddTorrent();
+            App.KeblerControl.AddTorrent();
         }
         
 

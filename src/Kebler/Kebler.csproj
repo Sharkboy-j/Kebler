@@ -8,8 +8,10 @@
     <PackageIconUrl></PackageIconUrl>
     <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <StartupObject>Kebler.App</StartupObject>
+    <StartupObject></StartupObject>
     <PublishReadyToRun>false</PublishReadyToRun>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>

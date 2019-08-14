@@ -323,6 +323,46 @@ namespace Kebler.UI.ViewModels
 
         }
 
+        public async void StartOne()
+        {
+            var torrentInfo = SelectedTorrent;
+
+            await Task.Factory.StartNew(() =>
+            {
+                Log.Info($"Try start {torrentInfo.Name}");
+
+                transmissionClient.TorrentStartAsync(new[] { torrentInfo.ID });
+
+                Log.Info($"Started {torrentInfo.Name}");
+            });
+        }
+
+        public async void StartAll()
+        {
+            var torrentIds = TorrentList.Select(x => x.ID).ToArray();
+            await Task.Factory.StartNew(() =>
+            {
+                Log.Info($"Try start all torrents");
+
+                transmissionClient.TorrentStartAsync(torrentIds);
+
+                Log.Info($"Started all");
+            });
+        }
+
+        public async void StopAll()
+        {
+            var torrentIds = TorrentList.Select(x => x.ID).ToArray();
+            await Task.Factory.StartNew(async () =>
+            {
+                Log.Info($"Try pause all torrents");
+
+                await transmissionClient.TorrentStopAsync( torrentIds );
+
+                Log.Info($"Paused all");
+            });
+        }
+
         private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
         {
             while (true)

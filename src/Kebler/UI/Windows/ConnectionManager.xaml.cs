@@ -74,7 +74,7 @@ namespace Kebler.UI.Windows
                 return;
             }
 
-            App.MainWindowControl.Connect();
+            App.KeblerControl.Connect();
         }
 
 
