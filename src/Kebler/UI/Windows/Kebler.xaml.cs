@@ -1,50 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows;
-using Kebler.Models;
-using Kebler.Services;
-using log4net;
-using LiteDB;
-using Transmission.API.RPC;
-using System.Threading.Tasks;
 using Kebler.UI.Windows.Dialogs;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Transmission.API.RPC.Entity;
-using System.Threading;
-using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Kebler.UI.ViewModels;
-using Kebler.Services.Converters;
-using Microsoft.Win32;
 using System.Windows.Interop;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace Kebler.UI.Windows
 {
-    /// <inheritdoc cref="Kebler" />
+    /// <inheritdoc cref="KeblerWindow" />
     /// <summary>
     /// Interaction logic for Kebler.xaml
     /// </summary>
-    public partial class Kebler : Window
+    public partial class KeblerWindow : Window
     {
 
         private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
+        NotifyIcon nIcon = new System.Windows.Forms.NotifyIcon();
 
-     
-        public Kebler()
+
+        public KeblerWindow()
         {
             //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
             //source.AddHook(new HwndSourceHook(WndProc));
 
-          
+      
+
             InitializeComponent();
 
             //disable hardware rendering
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             DataContext = new MainWindowViewModel();
+  
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Kebler.Theme.Icons.Kebler.ico";
+
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            nIcon.Icon = new Icon(stream);
+            nIcon.Visible = true;
+            nIcon.ShowBalloonTip(5000, "Title", "Text", System.Windows.Forms.ToolTipIcon.Info);
+            nIcon.Click += NIcon_Click;
 
         }
         protected override void OnSourceInitialized(EventArgs e)
@@ -60,7 +64,6 @@ namespace Kebler.UI.Windows
             switch (msg)
             {
                 case Win32.WM_COPYDATA:
-                    MessageBox.Show("");
                     Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(lParam, typeof(Win32.CopyDataStruct));
                     string strData = Marshal.PtrToStringUni(st.lpData);
 
@@ -173,6 +176,30 @@ namespace Kebler.UI.Windows
             if(dialog.Response)
             {
                 Vm.RemoveTorrent(true);
+            }
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+   
+        }
+
+        private void NIcon_Click(object sender, EventArgs e)
+        {
+            WindowState = WindowState.Normal;
+            Show();
+            Activate();
+        }
+
+        private void Window_StateChanged_1(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                ShowInTaskbar = false;
+            }
+            else
+            {
+                ShowInTaskbar = true;
             }
         }
     }

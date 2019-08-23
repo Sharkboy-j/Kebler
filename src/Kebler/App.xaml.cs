@@ -30,7 +30,7 @@ namespace Kebler
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
-        public static UI.Windows.Kebler KeblerControl;
+        public static UI.Windows.KeblerWindow KeblerControl;
 
         Mutex myMutex;
 
@@ -84,7 +84,7 @@ namespace Kebler
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
-            int hwnd = Win32.FindWindow(null, nameof(Kebler));
+            int hwnd = Win32.FindWindow(null, "Kebler");
             if (hwnd != 0)
             {
 
@@ -95,7 +95,7 @@ namespace Kebler
                 }
 
                 SendArgs((IntPtr)hwnd, data);
-                App.Current.Shutdown();
+                //App.Current.Shutdown();
             }
 
             FileAssociations.Create_abc_FileAssociation();
@@ -158,7 +158,7 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            KeblerControl = new UI.Windows.Kebler();
+            KeblerControl = new UI.Windows.KeblerWindow();
             KeblerControl.Show();
 
             base.OnStartup(e);
@@ -222,7 +222,7 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            KeblerControl = new UI.Windows.Kebler();
+            KeblerControl = new UI.Windows.KeblerWindow();
             KeblerControl.Show();
 
             base.OnStartup(e);

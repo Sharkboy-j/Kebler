@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -98,18 +99,20 @@ namespace Kebler.UI.ViewModels
                 fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
 
                 var encodedData = Convert.ToBase64String(filebytes);
-
+                string decodedString = Encoding.UTF8.GetString(filebytes);
                 var torrent = new NewTorrent
                 {
                     Metainfo = encodedData,
                     Paused = false
                 };
 
+                var dsd = Torrent.Torrent.FromData(filebytes);
+
                 //Debug.WriteLine($"Start Adding torrent {path}");
-                Log.Info($"Start adding torrent {path}");
+                   Log.Info($"Start adding torrent {path}");
 
                 //try upload torrent
-                while (true)
+                while (!true)
                 {
                     if (!IsConnected)
                     {

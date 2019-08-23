@@ -8,7 +8,7 @@
     <PackageIconUrl></PackageIconUrl>
     <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <StartupObject></StartupObject>
+    <StartupObject>Kebler.App</StartupObject>
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
@@ -37,15 +37,17 @@
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="NotifyIconWpf" Version="1.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" />
     <PackageReference Include="sharpconfig" Version="3.2.8" />
+    <PackageReference Include="Torrent" Version="1.4.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transmission.API.RPC-master\Transmission.API.RPC\Transmission.API.RPC.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Theme\Icons\Kebler.ico" />
-    <Resource Include="Theme\Icons\Kebler.svg" />
+    <EmbeddedResource Include="Theme\Icons\Kebler.ico" />
+    <EmbeddedResource Include="Theme\Icons\Kebler.svg" />
     <Resource Include="Theme\Icons\Kebler_16x16.png" />
     <Resource Include="Theme\Icons\Kebler_32x32.png" />
     <Resource Include="Theme\Icons\Kebler_512x512.png" />
