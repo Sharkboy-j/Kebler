@@ -373,13 +373,7 @@ namespace Transmission.API.RPC
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public async 
-        /// <summary>
-        /// Stop torrents (API: torrent-stop)
-        /// </summary>
-        /// <param name="ids">Torrents id</param>
-        Task
-TorrentStopAsync(int[] ids)
+        public async Task TorrentStopAsync(int[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
             var response = await SendRequestAsync(request);

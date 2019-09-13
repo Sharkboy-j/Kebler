@@ -11,8 +11,7 @@
     Height="370"
     ResizeMode="NoResize"
     Style="{DynamicResource WindowStyle}"
-    WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
+    WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -263,7 +262,7 @@
                                 Margin="98,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Visibility="{Binding IsConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
+                                Visibility="{Binding IsTesting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
 
                         </Grid>
                     </StackPanel>
@@ -311,6 +310,7 @@
                             Content="{DynamicResource AddBtnContent}" />
                         <Button
                             Width="25"
+                            IsEnabled="{Binding SelectedServer,Converter={StaticResource ObjectToBoolConverter}}"
                             Height="25"
                             Margin="1,0,0,0"
                             Click="RemoveServer_ButtonClicked"

@@ -23,8 +23,15 @@
     <sys:String x:Key="TopBarCMButtonContent">Connection Manager</sys:String>
     <sys:String x:Key="TopBarConnectButtonContent">Connect To Server</sys:String>
     <sys:String x:Key="TopBarAddTorrentButtonContent">Add Torrent</sys:String>
+    <sys:String x:Key="TopBarStartAllTorrentsContent">Start all</sys:String>
+    <sys:String x:Key="TopBarPauseAllTorrentsContent">Pause all</sys:String>
+    <sys:String x:Key="TopBarStopAllTorrentsContent">Stop all</sys:String>
 
-
+    <sys:String x:Key="TopBarStartSelectedTorrentButtonContent">Start</sys:String>
+    <sys:String x:Key="TopBarPauseSelectedTorrentsContent">Pause</sys:String>
+    <sys:String x:Key="TopBarStopSelectedTorrentsContent">Stop</sys:String>
+    <sys:String x:Key="TopBarDeleteSelectedTorrentsContent">Delete</sys:String>
+    <sys:String x:Key="TopBarDeleteWithDataSelectedTorrentsContent">Delete with data</sys:String>
     <!--  ConnectionManager  -->
     <sys:String x:Key="ConnectionManagerTitle">Connection Manager</sys:String>
     <sys:String x:Key="GeneralTabTitle">General</sys:String>
@@ -51,6 +58,7 @@
     <sys:String x:Key="TestConnectionGood">Connected</sys:String>
     <sys:String x:Key="TestConnectionBad">Error</sys:String>
 
+    <sys:String x:Key="ThereAreNoAnyServersWhenCloseCm">There are no any servers. Please add one before closing this window</sys:String>
 
     <!--  Dialogs  -->
     <sys:String x:Key="DialogEnterPasswordContent">Please enter password:</sys:String>

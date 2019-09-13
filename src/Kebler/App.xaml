@@ -9,7 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/lang.en-US.xaml" />
                 <!--<ResourceDictionary Source="Resources/lang.ru-RU.xaml" />-->
-
+                <ResourceDictionary Source="Resources/Icons.xaml" />
                 <ResourceDictionary Source="Theme/Default/MainTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
@@ -19,8 +19,9 @@
             <conv:BytesToUserFriendlySpeed x:Key="BytesToUserFriendlySpeed" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:IntToColorConverter x:Key="IntToColorConverter" />
+            <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
 
-            <conv:PieceToImage x:Key="PieceToImage" />
+            <!--<conv:PieceToImage x:Key="PieceToImage" />-->
 
 
         </ResourceDictionary>

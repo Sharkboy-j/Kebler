@@ -54,6 +54,7 @@ namespace Kebler.UI.Windows
 
         public ConnectionManager(ref LiteCollection<Server> dbServersList)
         {
+            Closing += ConnectionManager_Closing;
             Log.Info("Open ConnectionManager");
 
             InitializeComponent();
@@ -63,15 +64,27 @@ namespace Kebler.UI.Windows
             GetServers();
         }
 
+        private void ConnectionManager_Closing(object sender, CancelEventArgs e)
+        {
+
+            if (ServerList.Count == 0)
+            {
+                MessageBox.Show(Application.Current.FindResource("ThereAreNoAnyServersWhenCloseCm")?.ToString());
+                e.Cancel = true;
+                return;
+            }
+
+            App.KeblerControl.Connect();
+        }
+
 
         //TODO: Add background loading
         private void GetServers(int selectedId = -1)
         {
-
             var items = DbServersList?.FindAll() ?? new List<Server>();
 
             ServerList = new ObservableCollection<Server>(items);
-            LogServers();
+            //LogServers();
 
             ServersListBox.ItemsSource = ServerList;
 
@@ -81,15 +94,12 @@ namespace Kebler.UI.Windows
 
                 foreach (var item in ServersListBox.Items)
                 {
-                    if (item is Server server)
-                    {
-                        if (server.Id == selectedId)
-                        {
-                            var ind = ServersListBox.Items.IndexOf(item);
-                            ServersListBox.SelectedIndex = ind;
-                            break;
-                        }
-                    }
+                    if (!(item is Server server)) continue;
+                    if (server.Id != selectedId) continue;
+
+                    var ind = ServersListBox.Items.IndexOf(item);
+                    ServersListBox.SelectedIndex = ind;
+                    break;
                 }
             }
             else
@@ -100,10 +110,10 @@ namespace Kebler.UI.Windows
         }
 
 
-        private void LogServers()
-        {
+        //private void LogServers()
+        //{
            
-        }
+        //}
 
         //TODO: add background 
         private void AddNewServer_ButtonClick(object sender, RoutedEventArgs e)
@@ -152,7 +162,7 @@ namespace Kebler.UI.Windows
 
         }
 
-        private bool ValidateServer(Server server, out Enums.ValidateError error)
+        private static bool ValidateServer(Server server, out Enums.ValidateError error)
         {
             error = Enums.ValidateError.Ok;
             if (string.IsNullOrEmpty(server.Title))
@@ -161,13 +171,11 @@ namespace Kebler.UI.Windows
                 return false;
             }
 
-            if (string.IsNullOrEmpty(server.Host))
-            {
-                error = Enums.ValidateError.IpOrHostError;
-                return false;
-            }
-            //TODO: Chech ipadress port
-            return true;
+            if (!string.IsNullOrEmpty(server.Host)) return true;
+
+            error = Enums.ValidateError.IpOrHostError;
+            return false;
+            //TODO: Check ipadress port
         }
         private void CloseServer_ButtonClick(object sender, RoutedEventArgs e)
         {
@@ -182,6 +190,8 @@ namespace Kebler.UI.Windows
             if (SelectedServer == null) return;
 
             Log.Info($"Try remove server: {SelectedServer}");
+
+   
 
             var result = StorageRepository.ServersList().Delete(SelectedServer.Id);
             Log.Info($"RemoveResult: {result}");

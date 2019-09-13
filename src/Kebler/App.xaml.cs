@@ -4,9 +4,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Kebler.Models;
+using Kebler.Services;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;
@@ -24,9 +28,11 @@ namespace Kebler
 
         private static Models.GlobalConfiguration Configuration;
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
-        public  static readonly ILog Log = LogManager.GetLogger(typeof(App));
+        public static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
-        public static MainWindow MainWindowControl;
+        public static UI.Windows.KeblerWindow KeblerControl;
+
+        Mutex myMutex;
 
         private static CultureInfo Language
         {
@@ -69,20 +75,37 @@ namespace Kebler
             }
         }
 
-          
+
 
         App()
         {
 
 
-            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
-
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
+            int hwnd = Win32.FindWindow(null, "Kebler");
+            if (hwnd != 0)
+            {
+
+                var data = "";
+                foreach (var text in Environment.GetCommandLineArgs())
+                {
+                    data += $"{text} ";
+                }
+
+                SendArgs((IntPtr)hwnd, data);
+                //App.Current.Shutdown();
+            }
+
+            FileAssociations.Create_abc_FileAssociation();
+
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+
+
 
             //log4net.Config.XmlConfigurator.Configure(null);
-            Log.Info("============= Application Started =============");
+
 
             LanguageChanged += App_LanguageChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -97,7 +120,24 @@ namespace Kebler
                 Languages.Add(new CultureInfo(lang));
             }
         }
+        public static bool SendArgs(IntPtr targetHWnd, string args)
+        {
+            var cds = new Win32.CopyDataStruct();
+            try
+            {
+                cds.cbData = (args.Length + 1) * 2;
+                cds.lpData = Win32.LocalAlloc(0x40, cds.cbData);
+                Marshal.Copy(args.ToCharArray(), 0, cds.lpData, args.Length);
+                cds.dwData = (IntPtr)1;
+                Win32.SendMessage(targetHWnd, Win32.WM_COPYDATA, IntPtr.Zero, ref cds);
+            }
+            finally
+            {
+                cds.Dispose();
+            }
 
+            return true;
+        }
 
         #region Events
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -118,8 +158,8 @@ namespace Kebler
         {
             Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
 
-            MainWindowControl = new MainWindow();
-            MainWindowControl.Show();
+            KeblerControl = new UI.Windows.KeblerWindow();
+            KeblerControl.Show();
 
             base.OnStartup(e);
         }
@@ -132,6 +172,7 @@ namespace Kebler
         }
 
         #endregion
+
 
         #region Actions
 
@@ -177,5 +218,14 @@ namespace Kebler
 
         #endregion
 
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
+
+            KeblerControl = new UI.Windows.KeblerWindow();
+            KeblerControl.Show();
+
+            base.OnStartup(e);
+        }
     }
 }
