@@ -19,17 +19,6 @@ namespace Kebler.Services
             return servers;
         }
 
-        public static LiteCollection<DefaultSettings> GetSettingsList()
-        {
-            LiteCollection<DefaultSettings> settings;
-            using (var db = new LiteDatabase(@"MyData.db"))
-            {
-                settings = db.GetCollection<DefaultSettings>(nameof(GetSettingsList));
-            }
-
-            //TODO: Check null expression
-            return settings;
-        }
 
 
 

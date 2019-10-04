@@ -217,6 +217,10 @@ namespace Transmission.API.RPC.Entity
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public override string ToString()
+        {
+            return $"{this.Name}";
+        }
 
         public void Set(string propertyName,object value)
         {
@@ -312,6 +316,8 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("rateToPeer")]
         public int RateToPeer{ get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+     
     }
 
     public class TransmissionTorrentPeersFrom : INotifyPropertyChanged

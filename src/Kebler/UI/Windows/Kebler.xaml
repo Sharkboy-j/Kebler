@@ -8,9 +8,9 @@
     Title="{DynamicResource MainWindowTitle}"
     Width="800"
     Height="450"
+    StateChanged="Window_StateChanged_1"
     Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen"
-    StateChanged="Window_StateChanged_1"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -362,7 +362,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition MinHeight="160"/>
+                        <RowDefinition MinHeight="160" />
                         <RowDefinition Height="27" />
                         <RowDefinition Height="120" />
                     </Grid.RowDefinitions>
@@ -418,8 +418,8 @@
                     <DataGrid
                         x:Name="TorrentsDataGrid"
                         Grid.Row="0"
-                        MinHeight="160"
                         Grid.Column="2"
+                        MinHeight="160"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         IsReadOnly="True"
@@ -447,7 +447,7 @@
                             <DataGridTextColumn Binding="{Binding PercentDone, Converter={StaticResource PercentToUserFriendlyConvertor}}" Header="Progress" />
                             <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Upload speed" />
                             <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Download speed" />
-                            <DataGridTextColumn Binding="{Binding UploadedEver,Converter={StaticResource BytesToUserFriendlyString}}" Header="Uploaded" />
+                            <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}}" Header="Uploaded" />
 
                             <!--<DataGridTextColumn Header="Size" />
                             <DataGridTextColumn Header="Done" />
@@ -496,18 +496,16 @@
                     <TabControl
                         x:Name="SelectedServerTab"
                         Grid.Row="1"
-                         Panel.ZIndex="0"
                         Grid.RowSpan="2"
                         Grid.Column="2"
+                        Panel.ZIndex="0"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
-                        <TabItem  Panel.ZIndex="2" Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}">
-                           
-                        </TabItem>
-                        <TabItem  Header="{DynamicResource TorrentInfoTabTrackersHeaderContent}" />
-                        <TabItem  Header="{DynamicResource TorrentInfoTabPeersHeaderContent}" />
-                        <TabItem  Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
-                        <TabItem  Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
+                        <TabItem Panel.ZIndex="2" Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabTrackersHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabPeersHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
 
                     </TabControl>
                 </Grid>
@@ -517,7 +515,6 @@
         <Border
             Grid.Row="2"
             BorderBrush="{DynamicResource BorderBorderBrush}"
-            
             BorderThickness="0,1,0,0">
             <StatusBar Background="{DynamicResource BorderBackgroundBrush}">
 

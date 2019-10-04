@@ -33,33 +33,43 @@
                 <MenuItem
                     x:Name="HighSort"
                     default:MenuItemExtensions.GroupName="SortType"
+                    Click="SortTypeMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortFromHighButtonContent}"
                     IsCheckable="True"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="0" />
                 <MenuItem
                     x:Name="LowSort"
                     default:MenuItemExtensions.GroupName="SortType"
+                    Click="SortTypeMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortFromLowButtonContent}"
                     IsCheckable="True"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="1" />
 
 
                 <Separator />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
+                    Click="SortValMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortUploadedButtonContent}"
                     IsCheckable="True"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="UploadedEver" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
+                    Click="SortValMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortUploadSpeedButtonContent}"
                     IsCheckable="True"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="RateUpload" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
+                    Click="SortValMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortDownloadSpeedButtonContent}"
                     IsCheckable="True"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="RateDownload" />
             </MenuItem>
             <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
             <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />

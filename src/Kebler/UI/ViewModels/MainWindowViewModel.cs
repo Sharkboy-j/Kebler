@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,7 +110,7 @@ namespace Kebler.UI.ViewModels
                 var dsd = Torrent.Torrent.FromData(filebytes);
 
                 //Debug.WriteLine($"Start Adding torrent {path}");
-                   Log.Info($"Start adding torrent {path}");
+                Log.Info($"Start adding torrent {path}");
 
                 //try upload torrent
                 while (true)
@@ -129,18 +130,18 @@ namespace Kebler.UI.ViewModels
                             case Enums.AddResult.Error:
                             case Enums.AddResult.Duplicate:
                             case Enums.AddResult.Added:
-                            {
-                                Debug.WriteLine($"Torrent {path} added as {info}");
-                                Log.Info($"Torrent {path} added as {info}");
-                                return;
-                            }
+                                {
+                                    Debug.WriteLine($"Torrent {path} added as {info}");
+                                    Log.Info($"Torrent {path} added as {info}");
+                                    return;
+                                }
                             case Enums.AddResult.ResponseNull:
-                            {
-                                //Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
-                                Log.Info($"Adding torrent result Null {torrent.Filename}");
-                                await Task.Delay(100);
-                                continue;
-                            }
+                                {
+                                    //Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
+                                    Log.Info($"Adding torrent result Null {torrent.Filename}");
+                                    await Task.Delay(100);
+                                    continue;
+                                }
                         }
                     }
                     catch (Exception ex)
@@ -164,7 +165,7 @@ namespace Kebler.UI.ViewModels
         }
         private async void TryConnect(Server server)
         {
-            if(server==null) return;
+            if (server == null) return;
 
             Log.Info("Start Connection");
             IsErrorOccuredWhileConnecting = false;
@@ -257,7 +258,29 @@ namespace Kebler.UI.ViewModels
                         Debug.WriteLine("Torrents updated");
 
 
-                        var torrents = newTorrentsDataList?.Torrents.OrderByDescending(x=>x.UploadedEver).ToList();
+                        List<TorrentInfo> torrents;
+
+                        var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
+
+                        if (prop != null)
+                        {
+                            switch (ConfigService.ConfigurationData.SortType)
+                            {
+                                case 0:
+                                    torrents = newTorrentsDataList?.Torrents.OrderBy(x => prop.GetValue(x, null)).ToList();
+                                    break;
+                                case 1:
+                                    torrents = newTorrentsDataList?.Torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                                    break;
+                                default:
+                                    torrents = newTorrentsDataList?.Torrents.ToList();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            torrents = newTorrentsDataList?.Torrents.ToList();
+                        }
 
                         UpdateTorrentListAtUi(ref torrents);
                         UpdateStatsInfo();
@@ -375,7 +398,7 @@ namespace Kebler.UI.ViewModels
             {
                 Log.Info($"Try pause all torrents");
 
-                await transmissionClient.TorrentStopAsync( torrentIds );
+                await transmissionClient.TorrentStopAsync(torrentIds);
 
                 Log.Info($"Paused all");
             });
@@ -412,35 +435,35 @@ namespace Kebler.UI.ViewModels
         {
 
             if (list == null) return;
+            TorrentList =  new ObservableCollection<TorrentInfo>(list);
+            ////add new one or update old
+            //foreach (var item in list)
+            //{
+            //    if (TorrentList.Any(x => x.ID == item.ID))
+            //    {
+            //        var data = TorrentList.First(x => x.ID == item.ID);
+            //        var ind = TorrentList.IndexOf(data);
+            //        UpdateTorrentData(ind, item);
+            //    }
+            //    else
+            //    {
+            //        Dispatcher.Invoke(() => { TorrentList.Add(item); });
+            //    }
+            //}
 
-            //add new one or update old
-            foreach (var item in list)
-            {
-                if (TorrentList.Any(x => x.ID == item.ID))
-                {
-                    var data = TorrentList.First(x => x.ID == item.ID);
-                    var ind = TorrentList.IndexOf(data);
-                    UpdateTorrentData(ind, item);
-                }
-                else
-                {
-                    Dispatcher.Invoke(() => { TorrentList.Add(item); });
-                }
-            }
 
+            ////remove removed torrent
+            //foreach (var item in TorrentList.ToList())
+            //{
+            //    if (list.All(x => x.ID != item.ID))
+            //    {
+            //        var data = TorrentList.First(x => x.ID == item.ID);
+            //        var ind = TorrentList.IndexOf(data);
+            //        if (SelectedTorrent.ID == data.ID) SelectedTorrent = null;
+            //        Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
 
-            //remove removed torrent
-            foreach (var item in TorrentList.ToList())
-            {
-                if (list.All(x => x.ID != item.ID))
-                {
-                    var data = TorrentList.First(x => x.ID == item.ID);
-                    var ind = TorrentList.IndexOf(data);
-                    if (SelectedTorrent.ID == data.ID) SelectedTorrent = null;
-                    Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
-
-                }
-            }
+            //    }
+            //}
 
 
         }

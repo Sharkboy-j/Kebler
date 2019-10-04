@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 
 namespace Kebler.Theme.Default
 {
+
     public class MenuItemExtensions : DependencyObject
     {
         public static Dictionary<MenuItem, String> ElementToGroupNames = new Dictionary<MenuItem, String>();

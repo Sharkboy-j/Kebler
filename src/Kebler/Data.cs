@@ -10,7 +10,5 @@ namespace Kebler
 
         public static readonly List<string> LangList = new List<string> { "en-US", "ru-RU" };
 
-        public static LiteCollection<DefaultSettings> SettingsData;
-
     }
 }
