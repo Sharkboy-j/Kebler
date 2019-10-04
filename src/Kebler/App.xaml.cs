@@ -119,7 +119,15 @@ namespace Kebler
             {
                 Languages.Add(new CultureInfo(lang));
             }
+
+            ReadSettings();
         }
+
+        private static void ReadSettings()
+        {
+            Data.SettingsData = StorageRepository.GetSettingsList();
+        }
+
         public static bool SendArgs(IntPtr targetHWnd, string args)
         {
             var cds = new Win32.CopyDataStruct();

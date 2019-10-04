@@ -193,7 +193,7 @@ namespace Kebler.UI.Windows
 
    
 
-            var result = StorageRepository.ServersList().Delete(SelectedServer.Id);
+            var result = StorageRepository.GetServersList().Delete(SelectedServer.Id);
             Log.Info($"RemoveResult: {result}");
             if (!result)
             {

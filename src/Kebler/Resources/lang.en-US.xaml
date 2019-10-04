@@ -19,6 +19,14 @@
     <!--  Top Bar  -->
     <sys:String x:Key="TopBarTorrentButtonContent">Torrent</sys:String>
     <sys:String x:Key="TopBarToolsButtonContent">Tools</sys:String>
+    <sys:String x:Key="TopBarViewButtonContent">View</sys:String>
+
+    <sys:String x:Key="TopBarViewSortFromHighButtonContent">From High</sys:String>
+    <sys:String x:Key="TopBarViewSortFromLowButtonContent">From Low</sys:String>
+    <sys:String x:Key="TopBarViewSortUploadedButtonContent">Uploaded</sys:String>
+    <sys:String x:Key="TopBarViewSortDownloadSpeedButtonContent">Download speed</sys:String>
+    <sys:String x:Key="TopBarViewSortUploadSpeedButtonContent">Upload speed</sys:String>
+    
     <sys:String x:Key="TopBarInfoButtonContent">Info</sys:String>
     <sys:String x:Key="TopBarCMButtonContent">Connection Manager</sys:String>
     <sys:String x:Key="TopBarConnectButtonContent">Connect To Server</sys:String>
