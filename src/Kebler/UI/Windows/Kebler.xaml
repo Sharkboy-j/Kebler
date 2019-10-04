@@ -5,13 +5,17 @@
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
     Title="{DynamicResource MainWindowTitle}"
     Width="800"
     Height="450"
+    d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
     StateChanged="Window_StateChanged_1"
     Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="42" />

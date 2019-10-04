@@ -42,6 +42,7 @@ namespace Kebler.UI.Controls
 
             ConfigService.ConfigurationData.SortVal = mi.Tag.ToString();
             ConfigService.Save();
+            App.KeblerControl.UpdateSorting();
         }
 
         private void SortTypeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -53,6 +54,8 @@ namespace Kebler.UI.Controls
             ConfigService.ConfigurationData.SortType = val;
 
             ConfigService.Save();
+
+            App.KeblerControl.UpdateSorting();
         }
     }
 }

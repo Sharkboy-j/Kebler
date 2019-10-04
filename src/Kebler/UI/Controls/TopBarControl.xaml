@@ -14,7 +14,7 @@
             <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Click="OpenConnectionManager"
-                    Header="{DynamicResource TopBarCMButtonContent}"
+                    Header="{DynamicResource TopBarCmButtonContent}"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
                 <MenuItem
                     Click="ConnectFirst"
@@ -37,7 +37,7 @@
                     Header="{DynamicResource TopBarViewSortFromHighButtonContent}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
-                    Tag="0" />
+                    Tag="1" />
                 <MenuItem
                     x:Name="LowSort"
                     default:MenuItemExtensions.GroupName="SortType"
@@ -45,7 +45,7 @@
                     Header="{DynamicResource TopBarViewSortFromLowButtonContent}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
-                    Tag="1" />
+                    Tag="0" />
 
 
                 <Separator />
@@ -71,7 +71,18 @@
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="RateDownload" />
             </MenuItem>
-            <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
+            <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}">
+                <MenuItem
+                    Header="{DynamicResource TopBarToolsPropertiesButtonContent}"
+                    IsCheckable="False"
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="RateDownload" />
+                <MenuItem
+                    Header="{DynamicResource TopBarToolsSettingsButtonContent}"
+                    IsCheckable="False"
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="RateDownload" />
+            </MenuItem>
             <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
         </Menu>
     </Grid>

@@ -58,6 +58,10 @@ namespace Kebler.UI.Windows
             source.AddHook(WndProc);
         }
 
+        public void UpdateSorting()
+        {
+            Vm.UpdateSortingManualy();
+        }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
