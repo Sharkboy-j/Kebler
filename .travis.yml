@@ -1,14 +1,9 @@
-dist: xenial
-os: windows
-sudo: required
 language: csharp
+dist: xenial
 mono: none
-solution: Kebler.sln
-install:
-  - PowerShell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
+sudo: required
+services:
+  - docker
 script:
-  - PowerShell -File dotnet-install.ps1 -Version 3.0.100
-  - cd C:\Users\travis\AppData\Local\Microsoft\dotnet\3.0.100\win10-x64\
-  - dotnet --version
-  - dotnet restore Kebler.sln
-  - dotnet build Kebler.sln
+  - docker build -t build-core-sdk-3.0.100-preview2-alpine3.8:latest .
+  - docker run --rm -it --name build-core-sdk-3.0.100-preview2-alpine3.8 build-core-sdk-3.0.100-preview2-alpine3.8:latest
