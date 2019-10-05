@@ -1,4 +1,5 @@
 dist: xenial
+os: windows
 addons:
   snaps:
   - name: dotnet-sdk
