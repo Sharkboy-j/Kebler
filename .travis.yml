@@ -2,8 +2,8 @@ language: csharp
 dist: xenial
 mono: none
 sudo: required
+os: windows
 services:
   - docker
 script:
-  - docker build -t build-core-sdk-3.0.100-preview2-alpine3.8:latest .
-  - docker run --rm -it --name build-core-sdk-3.0.100-preview2-alpine3.8 build-core-sdk-3.0.100-preview2-alpine3.8:latest
+  - docker build .
