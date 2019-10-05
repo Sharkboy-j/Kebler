@@ -1,0 +1,6 @@
+language: csharp
+solution: src/Kebler.sln
+mono: none
+dotnet: 3.0.100
+script:
+ - dotnet restore
