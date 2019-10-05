@@ -4,8 +4,10 @@ sudo: required
 language: csharp
 mono: none
 solution: Kebler.sln
+install:
+  - PowerShell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
 script:
-  - powershell ./dotnet-install.ps1 -Version 3.0.100
+  - PowerShell -File dotnet-install.ps1 -Version 3.0.100
   - dotnet --version
   - dotnet restore Kebler.sln
   - dotnet build Kebler.sln
