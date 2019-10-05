@@ -13,3 +13,4 @@ script:
   - sudo snap alias dotnet-sdk.dotnet dotnet
   - dotnet --version
   - dotnet restore Kebler.sln
+  - dotnet build Kebler.sln
