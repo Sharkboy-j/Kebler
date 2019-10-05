@@ -297,6 +297,45 @@
         B="0"
         G="0"
         R="0" />
+
+    <Color
+        x:Key="DarkRedColor"
+        A="0"
+        B="96"
+        G="102"
+        R="255" />
+
+    <Color
+        x:Key="DarkOrangeColor"
+        A="0"
+        B="59"
+        G="167"
+        R="248" />
+    <Color
+        x:Key="DarkYellowColor"
+        A="0"
+        B="59"
+        G="206"
+        R="244" />
+    <Color
+        x:Key="DarkGreenColor"
+        A="0"
+        B="80"
+        G="204"
+        R="113" />
+
+    <Color
+        x:Key="DarkBlueColor"
+        A="0"
+        B="77"
+        G="185"
+        R="244" />
+    <Color
+        x:Key="DarkPurpleColor"
+        A="0"
+        B="208"
+        G="138"
+        R="225" />
     <!--  New Brushes  -->
     <SolidColorBrush x:Key="MainWindowStyleTopBarBackground" Color="{DynamicResource GrayColor}" />
 
@@ -327,6 +366,17 @@
     <SolidColorBrush x:Key="ScrollBarThumbBackgroundMouseOverBrush" Color="{DynamicResource BlueColor}" />
 
     <SolidColorBrush x:Key="MainWindowHeaderCenterBorderBackgroundBrush" Color="{DynamicResource GrayColor6}" />
+
+    <SolidColorBrush x:Key="ListBoxSelectedBackGroundInActiveBrush" Color="{DynamicResource GrayColor3}" />
+    <SolidColorBrush x:Key="ListBoxSelectedBackGroundActiveBrush" Color="{DynamicResource BlueColor}" />
+    <SolidColorBrush x:Key="ListBoxContentForeGroundBrush" Color="{DynamicResource GrayColor9}" />
+
+    <SolidColorBrush x:Key="TagRedContentBrush" Color="{DynamicResource DarkRedColor}" />
+    <SolidColorBrush x:Key="TagGreenContentBrush" Color="{DynamicResource DarkGreenColor}" />
+    <SolidColorBrush x:Key="TagOrangeContentBrush" Color="{DynamicResource DarkOrangeColor}" />
+    <SolidColorBrush x:Key="TagPurpleContentBrush" Color="{DynamicResource DarkPurpleColor}" />
+    <SolidColorBrush x:Key="TagBlueContentBrush" Color="{DynamicResource DarkBlueColor}" />
+    <SolidColorBrush x:Key="TagYellowContentBrush" Color="{DynamicResource DarkYellowColor}" />
 
     <!--  Default Colors  -->
 
@@ -1196,6 +1246,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="OptionMarkFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -1210,6 +1261,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="Background" Value="{DynamicResource CheckBoxBackgroundBrush}" />

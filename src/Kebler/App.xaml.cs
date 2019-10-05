@@ -84,21 +84,21 @@ namespace Kebler
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
-            int hwnd = Win32.FindWindow(null, "Kebler");
-            if (hwnd != 0)
-            {
+            //int hwnd = Win32.FindWindow(null, "Kebler");
+            //if (hwnd != 0)
+            //{
 
-                var data = "";
-                foreach (var text in Environment.GetCommandLineArgs())
-                {
-                    data += $"{text} ";
-                }
+            //    var data = "";
+            //    foreach (var text in Environment.GetCommandLineArgs())
+            //    {
+            //        data += $"{text} ";
+            //    }
 
-                SendArgs((IntPtr)hwnd, data);
-                //App.Current.Shutdown();
-            }
+            //    SendArgs((IntPtr)hwnd, data);
+            //    //App.Current.Shutdown();
+            //}
 
-            FileAssociations.Create_abc_FileAssociation();
+           // FileAssociations.Create_abc_FileAssociation();
 
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
@@ -110,7 +110,8 @@ namespace Kebler
             LanguageChanged += App_LanguageChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Dispatcher_UnhandledException;
-            Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+            if (Current.Dispatcher != null) 
+                Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
             ConfigService.LoadConfig();
 

@@ -16,6 +16,23 @@
     <sys:String x:Key="TorrentInfoTabFilesHeaderContent">Files</sys:String>
     <sys:String x:Key="TorrentInfoTabStatsHeaderContent">Stats</sys:String>
 
+    <!--  Category  -->
+    <sys:String x:Key="Category.AllTorrents">All Torrents</sys:String>
+    <sys:String x:Key="Category.Downloading">Downloading</sys:String>
+    <sys:String x:Key="Category.Ended">Seeding</sys:String>
+    <sys:String x:Key="Category.Active">Active</sys:String>
+    <sys:String x:Key="Category.InActive">Inactive</sys:String>
+    <sys:String x:Key="Category.Stopped">Stopped</sys:String>
+    <sys:String x:Key="Category.Error">Error</sys:String>
+
+    <sys:String x:Key="Tag.Red">Red</sys:String>
+    <sys:String x:Key="Tag.Green">Green</sys:String>
+    <sys:String x:Key="Tag.Orange">Orange</sys:String>
+    <sys:String x:Key="Tag.Purple">Purple</sys:String>
+    <sys:String x:Key="Tag.Blue">Blue</sys:String>
+    <sys:String x:Key="Tag.Yellow">Yellow</sys:String>
+
+
     <!--  Top Bar  -->
     <sys:String x:Key="TopBarTorrentButtonContent">Torrent</sys:String>
     <sys:String x:Key="TopBarToolsButtonContent">Tools</sys:String>

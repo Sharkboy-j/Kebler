@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Entity;
 using Enums = Transmission.API.RPC.Entity.Enums;
@@ -35,6 +36,7 @@ namespace Kebler.UI.ViewModels
         private ConnectionManager _cmWindow;
         private Task _whileCycleTask;
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+        private Category.Categories _filterCategory = Category.Categories.All;
 
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -52,6 +54,8 @@ namespace Kebler.UI.ViewModels
         public string LongStatusText { get; set; }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
+        private TorrentInfo[] allTorrents = new TorrentInfo[0];
+
         public TorrentInfo SelectedTorrent { get; set; }
 
         public bool IsErrorOccuredWhileConnecting { get; set; }
@@ -258,32 +262,33 @@ namespace Kebler.UI.ViewModels
                         var newTorrentsDataList = await UpdateTorrentList();
                         Debug.WriteLine("Torrents updated");
 
+                        allTorrents = newTorrentsDataList.Torrents;
+                        //List<TorrentInfo> torrents;
 
-                        List<TorrentInfo> torrents;
+                        //var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
 
-                        var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
+                        //if (prop != null)
+                        //{
+                        //    switch (ConfigService.ConfigurationData.SortType)
+                        //    {
+                        //        case 0:
+                        //            torrents = newTorrentsDataList?.Torrents.OrderBy(x => prop.GetValue(x, null)).ToList();
+                        //            break;
+                        //        case 1:
+                        //            torrents = newTorrentsDataList?.Torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                        //            break;
+                        //        default:
+                        //            torrents = newTorrentsDataList?.Torrents.ToList();
+                        //            break;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    torrents = newTorrentsDataList?.Torrents.ToList();
+                        //}
 
-                        if (prop != null)
-                        {
-                            switch (ConfigService.ConfigurationData.SortType)
-                            {
-                                case 0:
-                                    torrents = newTorrentsDataList?.Torrents.OrderBy(x => prop.GetValue(x, null)).ToList();
-                                    break;
-                                case 1:
-                                    torrents = newTorrentsDataList?.Torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList();
-                                    break;
-                                default:
-                                    torrents = newTorrentsDataList?.Torrents.ToList();
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            torrents = newTorrentsDataList?.Torrents.ToList();
-                        }
-
-                        UpdateTorrentListAtUi(ref torrents);
+                        //UpdateTorrentListAtUi(ref torrents);
+                        UpdateSorting(newTorrentsDataList);
                         UpdateStatsInfo();
                         await Task.Delay(1000, token);
                     }
@@ -295,31 +300,73 @@ namespace Kebler.UI.ViewModels
             _whileCycleTask.Start();
         }
 
-        public void UpdateSortingManualy()
+        public void UpdateSorting(TransmissionTorrents newTorrents = null)
         {
-            var torrents = new List<TorrentInfo>();
-
             var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
 
-            if (prop != null)
-            {
-                switch (ConfigService.ConfigurationData.SortType)
-                {
-                    case 0:
-                        torrents = TorrentList.OrderBy(x => prop.GetValue(x, null)).ToList();
-                        break;
-                    case 1:
-                        torrents = TorrentList.OrderByDescending(x => prop.GetValue(x, null)).ToList();
-                        break;
-                    default:
-                        torrents = TorrentList.ToList();
-                        break;
-                }
+            if (prop == null) return;
+            var torrents = newTorrents == null ? allTorrents.ToList() : newTorrents.Torrents.ToList();
 
-                UpdateTorrentListAtUi(ref torrents);
+            //  var torrents = new List<TorrentInfo>(TorrentList);
+            //1: 'check pending',
+            //2: 'checking',
+
+            //5: 'seed pending',
+            //6: 'seeding',
+            switch (_filterCategory)
+            {
+                //3: 'download pending',
+                //4: 'downloading',
+                case Category.Categories.Downloading:
+                    torrents = torrents.Where(x => x.Status == 3 || x.Status == 4).ToList();
+                    break;
+
+                //4: 'downloading',
+                //6: 'seeding',
+                //2: 'checking',
+                case Category.Categories.Active:
+                    torrents = torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
+                    torrents = torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToList();
+                    break;
+
+                //0: 'stopped' and is error,
+                case Category.Categories.Stopped:
+                    torrents = torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToList();
+                    break;
+
+                case Category.Categories.Error:
+                    torrents = torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToList();
+                    break;
+
+
+                //4: 'downloading',
+                //6: 'seeding',
+                //2: 'checking',
+                case Category.Categories.Inactive:
+                    torrents = torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
+                    torrents = torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0).ToList();
+                    break;
+
+                //6: 'seeding',
+                case Category.Categories.Ended:
+                    torrents = torrents.Where(x => x.Status == 6).ToList();
+                    break;
+                case Category.Categories.All:
+                default:
+                    break;
             }
 
-      
+
+            torrents = ConfigService.ConfigurationData.SortType switch
+            {
+                0 => torrents.OrderBy(x => prop.GetValue(x, null)).ToList(),
+                1 => torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList(),
+                _ => torrents.ToList(),
+            };
+
+            UpdateTorrentListAtUi(ref torrents);
+
+
 
         }
 
@@ -337,6 +384,12 @@ namespace Kebler.UI.ViewModels
         private async Task<SessionInfo> UpdateSessionInfo()
         {
             return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, "Connecting to session");
+        }
+
+        public void ChangeFilterType(Category.Categories cat)
+        {
+            _filterCategory = cat;
+            UpdateSorting();
         }
 
         public async void RemoveTorrent(bool removeData = false)
@@ -490,7 +543,7 @@ namespace Kebler.UI.ViewModels
                 {
                     var data = TorrentList.First(x => x.ID == item.ID);
                     var ind = TorrentList.IndexOf(data);
-                    if (SelectedTorrent.ID == data.ID) SelectedTorrent = null;
+                    if (SelectedTorrent != null && SelectedTorrent.ID == data.ID) SelectedTorrent = null;
                     Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
 
                 }
@@ -505,7 +558,8 @@ namespace Kebler.UI.ViewModels
             if (SelectedTorrent.ID == newData.ID) SelectedTorrent = newData;
 
             var myType = typeof(TorrentInfo);
-            var props = myType.GetProperties();
+            var props = myType.GetProperties()
+                .Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length == 0);
             foreach (var item in props)
             {
                 TorrentList[index].Set(item.Name, newData.Get(item.Name));

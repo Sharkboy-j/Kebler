@@ -310,11 +310,11 @@
                             Content="{DynamicResource AddBtnContent}" />
                         <Button
                             Width="25"
-                            IsEnabled="{Binding SelectedServer,Converter={StaticResource ObjectToBoolConverter}}"
                             Height="25"
                             Margin="1,0,0,0"
                             Click="RemoveServer_ButtonClicked"
-                            Content="{DynamicResource RemoveBtnContent}" />
+                            Content="{DynamicResource RemoveBtnContent}"
+                            IsEnabled="{Binding SelectedServer, Converter={StaticResource ObjectToBoolConverter}}" />
                     </StackPanel>
                 </Border>
 

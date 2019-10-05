@@ -7,9 +7,11 @@ using Kebler.UI.Windows.Dialogs;
 using System.Windows.Media;
 using Transmission.API.RPC.Entity;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using Kebler.UI.ViewModels;
 using System.Windows.Interop;
+using Kebler.Models;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -60,7 +62,7 @@ namespace Kebler.UI.Windows
 
         public void UpdateSorting()
         {
-            Vm.UpdateSortingManualy();
+            Vm.UpdateSorting();
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -201,6 +203,14 @@ namespace Kebler.UI.Windows
             {
                 ShowInTaskbar = true;
             }
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is System.Windows.Controls.ListBox listBox)) return;
+
+            if (listBox.SelectedItem is Category catObj)
+                Vm.ChangeFilterType(catObj.Tag);
         }
     }
 }

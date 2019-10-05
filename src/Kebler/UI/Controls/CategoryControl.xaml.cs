@@ -22,5 +22,10 @@ namespace Kebler.UI.Controls
         {
             InitializeComponent();
         }
+
+        private void CategoryControl_OnPreviewMouseMove(object sender, MouseEventArgs e)
+        {
+           // this.Background = (Brush)ColorConverter.ConvertFromString("#FFDFD991");
+        }
     }
 }

@@ -17,6 +17,12 @@ namespace Transmission.API.RPC.Entity
         /// <summary>
         /// The torrent's unique Id.
         /// </summary>
+        ///
+        ///
+        /// 
+        [JsonIgnore]
+        public TorrentInfo Self => this;
+
         [JsonProperty("id")]
         public int ID { get; set; }
 
