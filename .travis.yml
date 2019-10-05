@@ -1,6 +1,7 @@
 language: csharp
 solution: src/Kebler.sln
 mono: none
+os: windows
 dotnet: 3.0.100
 script:
  - dotnet restore src/Kebler.sln
