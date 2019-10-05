@@ -1,0 +1,9 @@
+language: csharp
+dist: xenial
+mono: none
+sudo: required
+os: windows
+services:
+  - docker
+script:
+  - docker build .

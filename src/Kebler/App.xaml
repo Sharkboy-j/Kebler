@@ -17,6 +17,9 @@
             <conv:ReverseBoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" />
             <conv:ReverseBoolToBoolConverter x:Key="ReverseBoolToBoolConverter" />
             <conv:BytesToUserFriendlySpeed x:Key="BytesToUserFriendlySpeed" />
+            <conv:BytesToUserFriendlyString x:Key="BytesToUserFriendlyString" />
+            <conv:SolidColorToBrushConverter x:Key="SolidColorToBrushConverter" />
+
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:IntToColorConverter x:Key="IntToColorConverter" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />

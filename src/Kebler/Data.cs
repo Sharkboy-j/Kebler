@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Kebler.Models;
+using LiteDB;
+using System.Collections.Generic;
 
 namespace Kebler
 {
@@ -6,8 +8,7 @@ namespace Kebler
     {
         public const string ConfigName = "app.config";
 
-        public static readonly List<string> LangList  =  new List<string>{"en-US","ru-RU"};
+        public static readonly List<string> LangList = new List<string> { "en-US", "ru-RU" };
 
-   
     }
 }

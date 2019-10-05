@@ -5,13 +5,117 @@
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Kebler.Models"
+    xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
     Title="{DynamicResource MainWindowTitle}"
     Width="800"
     Height="450"
+    d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
+    StateChanged="Window_StateChanged_1"
     Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen"
-    StateChanged="Window_StateChanged_1"
     mc:Ignorable="d">
+    <Window.Resources>
+        <DataTemplate x:Key="CategoryItemTemplate">
+            <Grid Height="18">
+                <Label
+                    Padding="0"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding Title}"
+                    FontSize="12"
+                    Foreground="{StaticResource ListBoxContentForeGroundBrush}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="TagItemTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="22" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Ellipse
+                    Width="10"
+                    Height="10"
+                    Margin="4"
+                    Fill="{Binding Color, Converter={StaticResource SolidColorToBrushConverter}}"
+                    StrokeThickness="0" />
+                <Label
+                    Grid.Column="1"
+                    Padding="0"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding Title}"
+                    FontSize="12"
+                    Foreground="{StaticResource ListBoxContentForeGroundBrush}" />
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle
+                            Margin="0"
+                            SnapsToDevicePixels="true"
+                            Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                            StrokeDashArray="1 2"
+                            StrokeThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA" />
+        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da" />
+        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA" />
+        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA" />
+        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA" />
+        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA" />
+        <Style x:Key="ListBoxItemContainerStyle1" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Margin" Value="0" />
+
+            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border
+                            x:Name="Bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                    <Condition Property="IsSelected" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ListBoxSelectedBackGroundInActiveBrush}" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                    <Condition Property="IsSelected" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ListBoxSelectedBackGroundActiveBrush}" />
+                            </MultiTrigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="42" />
@@ -356,22 +460,108 @@
             <Grid Grid.Row="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" MinWidth="100" />
                         <!--  splitter column  -->
                         <ColumnDefinition Width="1" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="1" />
+                        <RowDefinition MinHeight="160" />
+                        <RowDefinition Height="27" />
                         <RowDefinition Height="120" />
                     </Grid.RowDefinitions>
                     <!--  categories list  -->
-                    <ListBox
+                    <Grid
                         Grid.RowSpan="3"
                         Grid.Column="0"
-                        Background="{DynamicResource BodyLeftGridBackgroundBrush}"
-                        BorderThickness="0" />
+                        Background="{DynamicResource BodyLeftGridBackgroundBrush}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="34" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ListBox
+                            Padding="-1"
+                            BorderThickness="0"
+                            ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
+                            ItemTemplate="{DynamicResource CategoryItemTemplate}"
+                            SelectionChanged="Selector_OnSelectionChanged">
+                            <models:Category
+                                Title="{StaticResource Category.AllTorrents}"
+                                Tag="All"
+                                Color="{x:Null}" />
+                            <models:Category
+                                Title="{StaticResource Category.Downloading}"
+                                Tag="Downloading"
+                                Color="{x:Null}" />
+                            <models:Category
+                                Title="{StaticResource Category.Active}"
+                                Tag="Active"
+                                Color="{x:Null}" />
+                            <models:Category
+                                Title="{StaticResource Category.InActive}"
+                                Tag="Inactive"
+                                Color="{x:Null}" />
+                            <models:Category
+                                Title="{StaticResource Category.Ended}"
+                                Tag="Ended"
+                                Color="{x:Null}" />
+                            <models:Category
+                                Title="{StaticResource Category.Stopped}"
+                                Tag="Stopped"
+                                Color="{x:Null}" />
+
+                            <models:Category
+                                Title="{StaticResource Category.Error}"
+                                Tag="Error"
+                                Color="{x:Null}" />
+                        </ListBox>
+                        <Border
+                            Grid.Row="1"
+                            Height="24"
+                            Margin="4,0,4,0"
+                            VerticalAlignment="Center"
+                            BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Image
+                                    Grid.Column="0"
+                                    Source="{StaticResource Icon.Search}"
+                                    Stretch="UniformToFill" />
+                                <controls:WaterBox
+                                    Grid.Column="1"
+                                    Margin="0"
+                                    Padding="0"
+                                    VerticalContentAlignment="Center"
+                                    BorderThickness="0"
+                                    Foreground="#FF929292"
+                                    Watermark="Filter" />
+
+                            </Grid>
+
+
+                        </Border>
+                        <ListBox
+                            Grid.Row="2"
+                            Padding="-1"
+                            BorderThickness="0"
+                            ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
+                            ItemTemplate="{DynamicResource TagItemTemplate}">
+                            <models:Category Title="{StaticResource Tag.Blue}" Color="DeepSkyBlue" />
+                            <models:Category Title="{StaticResource Tag.Green}" Color="MediumSeaGreen" />
+                            <models:Category Title="{StaticResource Tag.Orange}" Color="Orange" />
+                            <models:Category Title="{StaticResource Tag.Purple}" Color="MediumPurple" />
+                            <models:Category Title="{StaticResource Tag.Red}" Color="Red" />
+                            <models:Category Title="{StaticResource Tag.Yellow}" Color="Yellow" />
+                        </ListBox>
+
+                    </Grid>
+
+
                     <!--  splitter of categories and torrent list  -->
                     <GridSplitter
                         Grid.Row="0"
@@ -419,6 +609,7 @@
                         x:Name="TorrentsDataGrid"
                         Grid.Row="0"
                         Grid.Column="2"
+                        MinHeight="160"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         IsReadOnly="True"
@@ -435,7 +626,7 @@
                                     <Style TargetType="DataGridCell">
                                         <Setter Property="BorderThickness" Value="1" />
                                         <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="Background" Value="{Binding Status, Converter={StaticResource IntToColorConverter}}" />
+                                        <Setter Property="Background" Value="{Binding Self, Converter={StaticResource IntToColorConverter}}" />
                                     </Style>
                                 </DataGridTextColumn.CellStyle>
                             </DataGridTextColumn>
@@ -446,6 +637,7 @@
                             <DataGridTextColumn Binding="{Binding PercentDone, Converter={StaticResource PercentToUserFriendlyConvertor}}" Header="Progress" />
                             <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Upload speed" />
                             <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Download speed" />
+                            <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}}" Header="Uploaded" />
 
                             <!--<DataGridTextColumn Header="Size" />
                             <DataGridTextColumn Header="Done" />
@@ -456,7 +648,6 @@
                             <DataGridTextColumn Header="ETA" />
                             <DataGridTextColumn Header="Ratio" />
                             <DataGridTextColumn Header="Downloaded" />
-                            <DataGridTextColumn Header="Uploaded" />
                             <DataGridTextColumn Header="Tracker" />
                             <DataGridTextColumn Header="Tracker status" />
                             <DataGridTextColumn Header="Added at" />
@@ -483,69 +674,28 @@
                     <GridSplitter
                         Grid.Row="1"
                         Grid.Column="2"
-                        Margin="0,-3,0,0"
                         Padding="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
+                        Panel.ZIndex="1"
                         Background="Transparent"
                         BorderBrush="{DynamicResource BorderBorderBrush}"
-                        BorderThickness="0,0,0,1"
+                        BorderThickness="0,1,0,0"
                         ShowsPreview="False" />
                     <!--  torrent properties  -->
                     <TabControl
                         x:Name="SelectedServerTab"
-                        Grid.Row="2"
+                        Grid.Row="1"
+                        Grid.RowSpan="2"
                         Grid.Column="2"
-                        Background="Transparent"
+                        Panel.ZIndex="0"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
-                        <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}">
-                            <Grid x:Name="SelectedServerGrid">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="5" />
-                                    <RowDefinition Height="15" />
-                                    <RowDefinition Height="2" />
-                                    <RowDefinition Height="5" />
-                                    <RowDefinition Height="5" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="5" />
-                                </Grid.ColumnDefinitions>
-                                <!--<Image
-                                    x:Name="SelectedPP"
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    Margin="0"
-                                    Source="{Binding SelectedTorrent, Converter={StaticResource PieceToImage}}"
-                                    Stretch="Fill" />
-                                <ProgressBar
-                                    Grid.Row="3"
-                                    Grid.Column="2"
-                                    Margin="0"
-                                    Background="{DynamicResource ProgressBarBackGroundBrush}"
-                                    BorderThickness="0"
-                                    Foreground="{DynamicResource TextSelectionBrush}"
-                                    Maximum="1"
-                                    Value="{Binding SelectedTorrent.PercentDone}" />-->
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.RowSpan="3"
-                                    Grid.Column="1"
-                                    Margin="0"
-                                    Padding="0,0,5,0"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    Content="Downloaded" />
-                            </Grid>
-                        </TabItem>
-                        <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabTrackersHeaderContent}" />
-                        <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabPeersHeaderContent}" />
-                        <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
-                        <TabItem Background="Transparent" Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
+                        <TabItem Panel.ZIndex="2" Header="{DynamicResource TorrentInfoTabGeneralHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabTrackersHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabPeersHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
+                        <TabItem Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
 
                     </TabControl>
                 </Grid>
@@ -556,7 +706,7 @@
             Grid.Row="2"
             BorderBrush="{DynamicResource BorderBorderBrush}"
             BorderThickness="0,1,0,0">
-            <StatusBar>
+            <StatusBar Background="{DynamicResource BorderBackgroundBrush}">
 
                 <Grid>
                     <Grid.ColumnDefinitions>

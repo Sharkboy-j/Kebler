@@ -26,7 +26,7 @@ namespace Kebler
     {
         public static event EventHandler LanguageChanged;
 
-        private static Models.GlobalConfiguration Configuration;
+        //private static Models.GlobalConfiguration Configuration;
         private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static Configuration Conf;
@@ -84,21 +84,21 @@ namespace Kebler
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
-            int hwnd = Win32.FindWindow(null, "Kebler");
-            if (hwnd != 0)
-            {
+            //int hwnd = Win32.FindWindow(null, "Kebler");
+            //if (hwnd != 0)
+            //{
 
-                var data = "";
-                foreach (var text in Environment.GetCommandLineArgs())
-                {
-                    data += $"{text} ";
-                }
+            //    var data = "";
+            //    foreach (var text in Environment.GetCommandLineArgs())
+            //    {
+            //        data += $"{text} ";
+            //    }
 
-                SendArgs((IntPtr)hwnd, data);
-                //App.Current.Shutdown();
-            }
+            //    SendArgs((IntPtr)hwnd, data);
+            //    //App.Current.Shutdown();
+            //}
 
-            FileAssociations.Create_abc_FileAssociation();
+           // FileAssociations.Create_abc_FileAssociation();
 
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
@@ -110,16 +110,20 @@ namespace Kebler
             LanguageChanged += App_LanguageChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Dispatcher_UnhandledException;
-            Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+            if (Current.Dispatcher != null) 
+                Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
-            InitConfig();
+            ConfigService.LoadConfig();
+
             Languages.Clear();
 
             foreach (var lang in Data.LangList)
             {
                 Languages.Add(new CultureInfo(lang));
             }
+
         }
+
         public static bool SendArgs(IntPtr targetHWnd, string args)
         {
             var cds = new Win32.CopyDataStruct();
@@ -156,7 +160,7 @@ namespace Kebler
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
+            Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
 
             KeblerControl = new UI.Windows.KeblerWindow();
             KeblerControl.Show();
@@ -176,51 +180,13 @@ namespace Kebler
 
         #region Actions
 
-        private static void InitConfig()
-        {
-            if (!File.Exists(Data.ConfigName))
-                using (File.Create(Data.ConfigName))
-                {
-
-                }
-
-            Conf = SharpConfig.Configuration.LoadFromFile(Data.ConfigName);
-
-            Log.Info($"Configuration:{Environment.NewLine}" + PrintConfig(Conf));
-            Conf.SaveToFile(Data.ConfigName);
-            Configuration = Conf[nameof(Models.GlobalConfiguration)].ToObject<Models.GlobalConfiguration>();
-        }
-
-        private static string PrintConfig(Configuration cfg)
-        {
-            var text = string.Empty;
-
-            foreach (var section in cfg)
-            {
-                text += $"[{section.Name}]{Environment.NewLine}";
-
-                foreach (var setting in section)
-                {
-                    text += "  " + Environment.NewLine;
-
-                    if (setting.IsArray)
-                        text += $"[Array, {setting.ArraySize} elements] ";
-
-                    text += $"{setting}{Environment.NewLine}";
-                }
-
-                text += Environment.NewLine;
-            }
-
-            return text;
-        }
 
 
         #endregion
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            Language = Configuration.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(Configuration.Language);
+            Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
 
             KeblerControl = new UI.Windows.KeblerWindow();
             KeblerControl.Show();

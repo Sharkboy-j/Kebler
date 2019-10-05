@@ -7,9 +7,11 @@ using Kebler.UI.Windows.Dialogs;
 using System.Windows.Media;
 using Transmission.API.RPC.Entity;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using Kebler.UI.ViewModels;
 using System.Windows.Interop;
+using Kebler.Models;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -31,7 +33,7 @@ namespace Kebler.UI.Windows
             //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
             //source.AddHook(new HwndSourceHook(WndProc));
 
-      
+
 
             InitializeComponent();
 
@@ -39,16 +41,16 @@ namespace Kebler.UI.Windows
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             DataContext = new MainWindowViewModel();
-  
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Kebler.Theme.Icons.Kebler.ico";
 
-            using var stream = assembly.GetManifestResourceStream(resourceName);
-            nIcon.Icon = new Icon(stream);
-            nIcon.Visible = true;
-            nIcon.ShowBalloonTip(5000, "Title", "Text", System.Windows.Forms.ToolTipIcon.Info);
-            nIcon.Click += NIcon_Click;
+            //var assembly = Assembly.GetExecutingAssembly();
+            //var resourceName = "Kebler.Theme.Icons.Kebler.ico";
+
+            //using var stream = assembly.GetManifestResourceStream(resourceName);
+            //nIcon.Icon = new Icon(stream);
+            //nIcon.Visible = true;
+            //nIcon.ShowBalloonTip(5000, "Title", "Text", System.Windows.Forms.ToolTipIcon.Info);
+            //nIcon.Click += NIcon_Click;
 
         }
         protected override void OnSourceInitialized(EventArgs e)
@@ -58,6 +60,10 @@ namespace Kebler.UI.Windows
             source.AddHook(WndProc);
         }
 
+        public void UpdateSorting()
+        {
+            Vm.UpdateSorting();
+        }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -67,11 +73,11 @@ namespace Kebler.UI.Windows
                     Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(lParam, typeof(Win32.CopyDataStruct));
                     string strData = Marshal.PtrToStringUni(st.lpData);
 
-                    foreach (var text in strData.Split(' ')) 
+                    foreach (var text in strData.Split(' '))
                     {
                         if (text.Contains(".torrent"))
                         {
-                            OpenTorrent(new[] {text});
+                            OpenTorrent(new[] { text });
                         }
                     }
                     break;
@@ -127,17 +133,17 @@ namespace Kebler.UI.Windows
         }
 
         private void RemoveTorrent_ItemClick(object sender, RoutedEventArgs e)
-        { 
+        {
             Vm.RemoveTorrent();
         }
         private void RemoveTorrentData_ItemClick(object sender, RoutedEventArgs e)
-        { 
+        {
             Vm.RemoveTorrent(true);
         }
 
         private void PauseTorrent_ItemClick(object sender, RoutedEventArgs e)
         {
-           Vm.PauseTorrent();
+            Vm.PauseTorrent();
         }
 
         private void StartAll_Button_CLick(object sender, RoutedEventArgs e)
@@ -171,17 +177,13 @@ namespace Kebler.UI.Windows
         }
         private void RemoveTorrentWithData_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var dialog = new DialogBox("You are perform to remove %n torrents with data","Please, confirm action.");
-            dialog.ShowDialog();
-            if(dialog.Response)
-            {
-                Vm.RemoveTorrent(true);
-            }
+            Vm.RemoveTorrent(true);
+
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
-   
+
         }
 
         private void NIcon_Click(object sender, EventArgs e)
@@ -201,6 +203,14 @@ namespace Kebler.UI.Windows
             {
                 ShowInTaskbar = true;
             }
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is System.Windows.Controls.ListBox listBox)) return;
+
+            if (listBox.SelectedItem is Category catObj)
+                Vm.ChangeFilterType(catObj.Tag);
         }
     }
 }

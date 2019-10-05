@@ -3,32 +3,12 @@ using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace Kebler.Theme.Default
 {
 
-    internal static class LocalExtensions
-    {
-        //    public static void ForWindowFromChild(this object childDependencyObject, Action<Window> action)
-        //    {
-        //        var element = childDependencyObject as DependencyObject;
-        //        while (element != null)
-        //        {
-        //            element = VisualTreeHelper.GetParent(element);
-        //            if (element is Window window) { action(window); break; }
-        //        }
-        //    }
-        public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
-        {
-            if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
-        }
-
-        public static IntPtr GetWindowHandle(this Window window)
-        {
-            var helper = new WindowInteropHelper(window);
-            return helper.Handle;
-        }
-    }
 
     public partial class MainTheme
     {
@@ -70,34 +50,52 @@ namespace Kebler.Theme.Default
                 }
         */
 
+        private Window _main;
+        private MenuItem _topBarViewSortMenuItem;
+        private List<MenuItem>  SortType = new List<MenuItem>();
+        private List<MenuItem> SortVal = new List<MenuItem>();
+
+
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            _main = sender as Window;
+            //_topBarViewSortMenuItem = (MenuItem)_main.Template.FindName("TopBarViewSortMenuItem", _main);
+
+
+
+            //_topBarViewSortMenuItem.Items.Add(new MenuItem { Header =  "High"});
+            //_topBarViewSortMenuItem.Items.Add(new MenuItem { Header = "Low" });
+            //_topBarViewSortMenuItem.Items.Add(new Separator());
+
+            //_topBarViewSortMenuItem.Items.Add(new MenuItem { Header = "Total Uploaded" });
+            //_topBarViewSortMenuItem.Items.Add(new MenuItem { Header = "Upload Speed" });
+            //_topBarViewSortMenuItem.Items.Add(new MenuItem { Header = "Download Speed" });
         }
 
-        //private static void WindowStateChanged(object sender, EventArgs e)
-        //{
-        //    var w = ((Window)sender);
-        //    var handle = w.GetWindowHandle();
-        //    var containerBorder = (Border)w.Template.FindName("PART_Container", w);
+        private static void WindowStateChanged(object sender, EventArgs e)
+        {
+            var w = ((Window)sender);
+            var handle = w.GetWindowHandle();
+            var containerBorder = (Border)w.Template.FindName("PART_Container", w);
 
-        //    //if (w.WindowState == WindowState.Maximized)
-        //    //{
-        //    //    // Make sure window doesn't overlap with the taskbar.
-        //    //    var screen = System.Windows.Forms.Screen.FromHandle(handle);
-        //    //    if (screen.Primary)
-        //    //    {
-        //    //        containerBorder.Padding = new Thickness(
-        //    //            SystemParameters.WorkArea.Left + 7,
-        //    //            SystemParameters.WorkArea.Top + 7,
-        //    //            (SystemParameters.PrimaryScreenWidth - SystemParameters.WorkArea.Right) + 7,
-        //    //            (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Bottom) + 5);
-        //    //    }
-        //    //}
-        //    //else
-        //    //{
-        //    //    containerBorder.Padding = new Thickness(7, 7, 7, 5);
-        //    //}
-        //}
+            //if (w.WindowState == WindowState.Maximized)
+            //{
+            //    // Make sure window doesn't overlap with the taskbar.
+            //    var screen = System.Windows.Forms.Screen.FromHandle(handle);
+            //    if (screen.Primary)
+            //    {
+            //        containerBorder.Padding = new Thickness(
+            //            SystemParameters.WorkArea.Left + 7,
+            //            SystemParameters.WorkArea.Top + 7,
+            //            (SystemParameters.PrimaryScreenWidth - SystemParameters.WorkArea.Right) + 7,
+            //            (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Bottom) + 5);
+            //    }
+            //}
+            //else
+            //{
+            //    containerBorder.Padding = new Thickness(7, 7, 7, 5);
+            //}
+        }
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -197,8 +195,16 @@ namespace Kebler.Theme.Default
         {
             App.KeblerControl.AddTorrent();
         }
-        
+        private void SortFromClick(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         #endregion
+
+        private void SortType_OnInitialized(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

@@ -2,7 +2,8 @@
     x:Class="Kebler.Theme.Default.MainTheme"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Kebler.UI.Controls">
+    xmlns:controls="clr-namespace:Kebler.UI.Controls"
+    xmlns:loc="clr-namespace:Kebler.Theme.Default">
     <!--  Colors  -->
     <!--<SolidColorBrush x:Key="BorderBrush" Color="#FF525252" />-->
     <!--<SolidColorBrush x:Key="ContentColor" Color="White" />-->
@@ -296,6 +297,45 @@
         B="0"
         G="0"
         R="0" />
+
+    <Color
+        x:Key="DarkRedColor"
+        A="0"
+        B="96"
+        G="102"
+        R="255" />
+
+    <Color
+        x:Key="DarkOrangeColor"
+        A="0"
+        B="59"
+        G="167"
+        R="248" />
+    <Color
+        x:Key="DarkYellowColor"
+        A="0"
+        B="59"
+        G="206"
+        R="244" />
+    <Color
+        x:Key="DarkGreenColor"
+        A="0"
+        B="80"
+        G="204"
+        R="113" />
+
+    <Color
+        x:Key="DarkBlueColor"
+        A="0"
+        B="77"
+        G="185"
+        R="244" />
+    <Color
+        x:Key="DarkPurpleColor"
+        A="0"
+        B="208"
+        G="138"
+        R="225" />
     <!--  New Brushes  -->
     <SolidColorBrush x:Key="MainWindowStyleTopBarBackground" Color="{DynamicResource GrayColor}" />
 
@@ -326,6 +366,17 @@
     <SolidColorBrush x:Key="ScrollBarThumbBackgroundMouseOverBrush" Color="{DynamicResource BlueColor}" />
 
     <SolidColorBrush x:Key="MainWindowHeaderCenterBorderBackgroundBrush" Color="{DynamicResource GrayColor6}" />
+
+    <SolidColorBrush x:Key="ListBoxSelectedBackGroundInActiveBrush" Color="{DynamicResource GrayColor3}" />
+    <SolidColorBrush x:Key="ListBoxSelectedBackGroundActiveBrush" Color="{DynamicResource BlueColor}" />
+    <SolidColorBrush x:Key="ListBoxContentForeGroundBrush" Color="{DynamicResource GrayColor9}" />
+
+    <SolidColorBrush x:Key="TagRedContentBrush" Color="{DynamicResource DarkRedColor}" />
+    <SolidColorBrush x:Key="TagGreenContentBrush" Color="{DynamicResource DarkGreenColor}" />
+    <SolidColorBrush x:Key="TagOrangeContentBrush" Color="{DynamicResource DarkOrangeColor}" />
+    <SolidColorBrush x:Key="TagPurpleContentBrush" Color="{DynamicResource DarkPurpleColor}" />
+    <SolidColorBrush x:Key="TagBlueContentBrush" Color="{DynamicResource DarkBlueColor}" />
+    <SolidColorBrush x:Key="TagYellowContentBrush" Color="{DynamicResource DarkYellowColor}" />
 
     <!--  Default Colors  -->
 
@@ -545,11 +596,11 @@
                     <ControlTemplate.Triggers>
                         <!--<Trigger Property="Icon" Value="{x:Null}">
                             <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-                        </Trigger>-->
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="borderOfText" Property="Background" Value="{DynamicResource TopBarPopUpButtonMouseOverBackground}" />
                         </Trigger>
@@ -580,7 +631,6 @@
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="MinHeight" Value="300" />
         <Setter Property="MinWidth" Value="300" />
-        <EventSetter Event="Loaded" Handler="WindowLoaded" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -616,25 +666,7 @@
                                                     <ColumnDefinition Width="34" />
                                                     <ColumnDefinition Width="34" />
                                                 </Grid.ColumnDefinitions>
-                                                <Menu x:Name="TopBarMenu" Grid.Column="0">
-                                                    <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
-                                                        <MenuItem
-                                                            Click="OpenConnectionManager"
-                                                            Header="{DynamicResource TopBarCMButtonContent}"
-                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
-                                                        <MenuItem
-                                                            Click="ConnectFirst"
-                                                            Header="{DynamicResource TopBarConnectButtonContent}"
-                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
-                                                        <Separator />
-                                                        <MenuItem
-                                                            Click="AddTorrent"
-                                                            Header="{DynamicResource TopBarAddTorrentButtonContent}"
-                                                            Style="{DynamicResource PopUpTopBarMenuButton}" />
-                                                    </MenuItem>
-                                                    <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
-                                                    <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
-                                                </Menu>
+                                                <controls:TopBarControl x:Name="TopBarMenu" />
                                                 <Button
                                                     x:Name="MinButton"
                                                     Grid.Column="2"
@@ -1214,6 +1246,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="OptionMarkFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -1228,6 +1261,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="Background" Value="{DynamicResource CheckBoxBackgroundBrush}" />
@@ -1350,7 +1384,7 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Panel.ZIndex="1"
-                            Background="Transparent"
+                            Background="{DynamicResource TabItemContentBackgroundBrush}"
                             IsItemsHost="True"
                             KeyboardNavigation.TabIndex="1" />
                         <Border
