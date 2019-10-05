@@ -65,4 +65,4 @@ WORKDIR ./dotnetapp/
 RUN DIR
 RUN dotnet restore
 RUN dotnet publish -c Release -r win-x64 --self-contained true
-RUN dotnet publish --framework netcoreapp3.0 --runtime win10-x64
+RUN dotnet build
