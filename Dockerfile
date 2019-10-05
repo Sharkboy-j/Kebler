@@ -64,5 +64,4 @@ COPY src/ ./dotnetapp/
 WORKDIR ./dotnetapp/
 RUN DIR
 RUN dotnet restore
-RUN dotnet publish -c Release -r win-x64 --self-contained true
 RUN dotnet build
