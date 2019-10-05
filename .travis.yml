@@ -1,7 +1,9 @@
 language: csharp
-solution: src/Kebler.sln
+dist: xenial
 mono: none
-os: windows
-dotnet: 3.0.100
+sudo: required
+services:
+  - docker
 script:
- - dotnet restore src/Kebler.sln
+  - docker build -t build-core-sdk-3.0.100-preview2-alpine3.8:latest .
+  - docker run --rm -it --name build-core-sdk-3.0.100-preview2-alpine3.8 build-core-sdk-3.0.100-preview2-alpine3.8:latest
