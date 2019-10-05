@@ -1,16 +1,11 @@
 dist: xenial
 os: windows
-addons:
-  snaps:
-  - name: dotnet-sdk
-    classic: true
-    channel: latest/beta
 sudo: required
 language: csharp
 mono: none
 solution: Kebler.sln
 script:
-  - sudo snap alias dotnet-sdk.dotnet dotnet
+  - powershell ./dotnet-install.ps1 -Version 3.0.100
   - dotnet --version
   - dotnet restore Kebler.sln
   - dotnet build Kebler.sln
