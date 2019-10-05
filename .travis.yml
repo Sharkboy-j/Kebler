@@ -1,9 +1,14 @@
-language: csharp
 dist: xenial
-mono: none
+addons:
+  snaps:
+  - name: dotnet-sdk
+    classic: true
+    channel: latest/beta
 sudo: required
-services:
-  - docker
+language: csharp
+mono: none
+solution: Kebler.sln
 script:
-  - docker build -t build-core-sdk-3.0.100-preview2-alpine3.8:latest .
-  - docker run --rm -it --name build-core-sdk-3.0.100-preview2-alpine3.8 build-core-sdk-3.0.100-preview2-alpine3.8:latest
+  - sudo snap alias dotnet-sdk.dotnet dotnet
+  - dotnet --version
+  - dotnet restore Kebler.sln
