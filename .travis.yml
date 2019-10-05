@@ -8,6 +8,7 @@ install:
   - PowerShell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
 script:
   - PowerShell -File dotnet-install.ps1 -Version 3.0.100
+  - cd C:\Users\travis\AppData\Local\Microsoft\dotnet\3.0.100\win10-x64\
   - dotnet --version
   - dotnet restore Kebler.sln
   - dotnet build Kebler.sln
