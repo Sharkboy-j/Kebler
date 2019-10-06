@@ -207,6 +207,8 @@ namespace Kebler.UI.Windows
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!IsLoaded)
+                return;
             if (!(sender is System.Windows.Controls.ListBox listBox)) return;
 
             if (listBox.SelectedItem is Category catObj)

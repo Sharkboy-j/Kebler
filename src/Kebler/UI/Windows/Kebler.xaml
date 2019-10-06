@@ -8,8 +8,8 @@
     xmlns:models="clr-namespace:Kebler.Models"
     xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
     Title="{DynamicResource MainWindowTitle}"
-    Width="800"
-    Height="450"
+    Width="900"
+    Height="600"
     d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,
                                      IsDesignTimeCreatable=True}"
     StateChanged="Window_StateChanged_1"
@@ -510,6 +510,7 @@
                             BorderThickness="0"
                             ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
                             ItemTemplate="{DynamicResource CategoryItemTemplate}"
+                            SelectedIndex="0"
                             SelectionChanged="Selector_OnSelectionChanged">
                             <models:Category
                                 Title="{StaticResource Category.AllTorrents}"
