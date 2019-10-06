@@ -45,6 +45,7 @@
     <sys:String x:Key="TopBarViewSortUploadedButtonContent">Uploaded</sys:String>
     <sys:String x:Key="TopBarViewSortDownloadSpeedButtonContent">Download speed</sys:String>
     <sys:String x:Key="TopBarViewSortUploadSpeedButtonContent">Upload speed</sys:String>
+    <sys:String x:Key="TopBarViewSortDateAddedButtonContent">Added date</sys:String>
 
     <sys:String x:Key="TopBarInfoButtonContent">Info</sys:String>
     <sys:String x:Key="TopBarCmButtonContent">Connection Manager</sys:String>
@@ -53,6 +54,7 @@
     <sys:String x:Key="TopBarStartAllTorrentsContent">Start all</sys:String>
     <sys:String x:Key="TopBarPauseAllTorrentsContent">Pause all</sys:String>
     <sys:String x:Key="TopBarStopAllTorrentsContent">Stop all</sys:String>
+    <sys:String x:Key="TopBarTurtleContent">Slow mode</sys:String>
 
     <sys:String x:Key="TopBarStartSelectedTorrentButtonContent">Start</sys:String>
     <sys:String x:Key="TopBarPauseSelectedTorrentsContent">Pause</sys:String>

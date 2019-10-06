@@ -227,7 +227,32 @@
                         </Grid>
 
                     </Button>
+                    <Button
+                        Margin="0,3,0,3"
+                        Padding="0"
+                        BorderThickness="0"
+                        Click="ButtonBase_OnClick">
+                        <Grid Height="37">
 
+                            <Image
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Source="{Binding IsSlowModeEnabled, Converter={StaticResource BoolToSlowImageConveter}}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Text="{DynamicResource TopBarTurtleContent}" />
+
+                        </Grid>
+
+                    </Button>
 
                 </StackPanel>
                 <Border
@@ -466,7 +491,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition MinHeight="160" />
+                        <RowDefinition MinHeight="250" />
                         <RowDefinition Height="27" />
                         <RowDefinition Height="120" />
                     </Grid.RowDefinitions>
@@ -609,7 +634,6 @@
                         x:Name="TorrentsDataGrid"
                         Grid.Row="0"
                         Grid.Column="2"
-                        MinHeight="160"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         IsReadOnly="True"

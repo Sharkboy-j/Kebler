@@ -75,7 +75,10 @@ namespace Kebler
             }
         }
 
-
+        public object FindRes(string name)
+        {
+            return FindResource(name);
+        }
 
         App()
         {
@@ -83,7 +86,7 @@ namespace Kebler
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
-
+            
             //int hwnd = Win32.FindWindow(null, "Kebler");
             //if (hwnd != 0)
             //{

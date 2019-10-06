@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using Transmission.API.RPC;
+using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
 using Enums = Transmission.API.RPC.Entity.Enums;
 
@@ -46,6 +47,7 @@ namespace Kebler.UI.ViewModels
         public bool IsConnected { get; set; }
         public bool IsConnecting { get; set; }
         public Server ConnectedServer { get; set; }
+        public bool IsSlowModeEnabled { get; set; }
 
         public bool IsDoingStuff { get; set; }
         // ReSharper disable once UnusedMember.Global
@@ -55,7 +57,7 @@ namespace Kebler.UI.ViewModels
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         private TorrentInfo[] allTorrents = new TorrentInfo[0];
-
+        private SessionSettings _settings;
         public TorrentInfo SelectedTorrent { get; set; }
 
         public bool IsErrorOccuredWhileConnecting { get; set; }
@@ -257,7 +259,8 @@ namespace Kebler.UI.ViewModels
                         Debug.WriteLine("Stats updated");
 
                         //sessionInfo = await UpdateSessionInfo();
-
+                        _settings = await _transmissionClient.GetSessionSettingsAsync();
+                        IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
                         Debug.WriteLine("Start updating torrents");
                         var newTorrentsDataList = await UpdateTorrentList();
                         Debug.WriteLine("Torrents updated");
@@ -305,7 +308,7 @@ namespace Kebler.UI.ViewModels
             var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
 
             if (prop == null) return;
-            var torrents = newTorrents == null ? allTorrents.ToList() : newTorrents.Torrents.ToList();
+            var torrentsToSort = newTorrents == null ? allTorrents.ToList() : newTorrents.Torrents.ToList();
 
             //  var torrents = new List<TorrentInfo>(TorrentList);
             //1: 'check pending',
@@ -318,24 +321,24 @@ namespace Kebler.UI.ViewModels
                 //3: 'download pending',
                 //4: 'downloading',
                 case Category.Categories.Downloading:
-                    torrents = torrents.Where(x => x.Status == 3 || x.Status == 4).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.Status == 3 || x.Status == 4).ToList();
                     break;
 
                 //4: 'downloading',
                 //6: 'seeding',
                 //2: 'checking',
                 case Category.Categories.Active:
-                    torrents = torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
-                    torrents = torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToList();
                     break;
 
                 //0: 'stopped' and is error,
                 case Category.Categories.Stopped:
-                    torrents = torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToList();
                     break;
 
                 case Category.Categories.Error:
-                    torrents = torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToList();
                     break;
 
 
@@ -343,13 +346,13 @@ namespace Kebler.UI.ViewModels
                 //6: 'seeding',
                 //2: 'checking',
                 case Category.Categories.Inactive:
-                    torrents = torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
-                    torrents = torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0).ToList();
                     break;
 
                 //6: 'seeding',
                 case Category.Categories.Ended:
-                    torrents = torrents.Where(x => x.Status == 6).ToList();
+                    torrentsToSort = torrentsToSort.Where(x => x.Status == 6).ToList();
                     break;
                 case Category.Categories.All:
                 default:
@@ -357,14 +360,14 @@ namespace Kebler.UI.ViewModels
             }
 
 
-            torrents = ConfigService.ConfigurationData.SortType switch
+            torrentsToSort = ConfigService.ConfigurationData.SortType switch
             {
-                0 => torrents.OrderBy(x => prop.GetValue(x, null)).ToList(),
-                1 => torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList(),
-                _ => torrents.ToList(),
+                0 => torrentsToSort.OrderBy(x => prop.GetValue(x, null)).ToList(),
+                1 => torrentsToSort.OrderByDescending(x => prop.GetValue(x, null)).ToList(),
+                _ => torrentsToSort.ToList(),
             };
 
-            UpdateTorrentListAtUi(ref torrents);
+            UpdateTorrentListAtUi(ref torrentsToSort);
 
 
 
@@ -391,6 +394,8 @@ namespace Kebler.UI.ViewModels
             _filterCategory = cat;
             UpdateSorting();
         }
+
+
 
         public async void RemoveTorrent(bool removeData = false)
         {
@@ -420,6 +425,10 @@ namespace Kebler.UI.ViewModels
                 });
             }
 
+        }
+        public void SlowMode()
+        {
+            _transmissionClient.SetSessionSettingsAsync(new SessionSettings() { AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled });
         }
 
         public async void PauseTorrent()

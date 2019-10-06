@@ -212,5 +212,10 @@ namespace Kebler.UI.Windows
             if (listBox.SelectedItem is Category catObj)
                 Vm.ChangeFilterType(catObj.Tag);
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vm.SlowMode();
+        }
     }
 }

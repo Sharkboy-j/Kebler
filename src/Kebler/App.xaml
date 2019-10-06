@@ -19,7 +19,7 @@
             <conv:BytesToUserFriendlySpeed x:Key="BytesToUserFriendlySpeed" />
             <conv:BytesToUserFriendlyString x:Key="BytesToUserFriendlyString" />
             <conv:SolidColorToBrushConverter x:Key="SolidColorToBrushConverter" />
-
+            <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:IntToColorConverter x:Key="IntToColorConverter" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />

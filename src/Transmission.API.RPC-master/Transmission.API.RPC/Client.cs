@@ -110,6 +110,18 @@ namespace Transmission.API.RPC
         }
 
         /// <summary>
+        /// Set information to current session (API: session-set)
+        /// </summary>
+        /// <param name="settings">New session settings</param>
+        public async Task<SessionSettings> GetSessionSettingsAsync()
+        {
+            var request = new TransmissionRequest("session-get");
+            var response = await SendRequestAsync(request);
+            var result = response?.Deserialize<SessionSettings>();
+            return result;
+        }
+
+        /// <summary>
         /// Get session stat
         /// </summary>
         /// <returns>Session stat</returns>
