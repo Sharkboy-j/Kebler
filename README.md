@@ -1,6 +1,6 @@
 [![Build Status](https://dev.azure.com/SharkboyJeremi/KEBLER/_apis/build/status/JeremiSharkboy.Kebler)](https://dev.azure.com/SharkboyJeremi/KEBLER/_build?latest)
 [![Build Status](https://travis-ci.com/JeremiSharkboy/Kebler.svg?branch=master)](https://travis-ci.com/JeremiSharkboy/Kebler)
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/dotnet/wpf/blob/master/LICENSE.TXT)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/JeremiSharkboy/Kebler/blob/master/LICENSE)
 # Kebler - Transmission Remote GUI (Windows only)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/develop/Images/1.png)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/develop/Images/2.png)
