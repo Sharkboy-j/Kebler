@@ -2,8 +2,8 @@
 [![Build Status](https://travis-ci.com/JeremiSharkboy/Kebler.svg?branch=master)](https://travis-ci.com/JeremiSharkboy/Kebler)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/JeremiSharkboy/Kebler/blob/master/LICENSE)
 # Kebler - Transmission Remote GUI (Windows only)
-![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/develop/Images/1.png)
-![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/develop/Images/2.png)
+![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)
+![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/2.png)
 
 ## Some info
 
