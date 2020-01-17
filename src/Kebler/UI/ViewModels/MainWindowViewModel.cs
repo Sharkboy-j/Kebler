@@ -114,7 +114,7 @@ namespace Kebler.UI.ViewModels
                     Paused = false
                 };
 
-                var dsd = Torrent.Torrent.FromData(filebytes);
+              
 
                 //Debug.WriteLine($"Start Adding torrent {path}");
                 Log.Info($"Start adding torrent {path}");
