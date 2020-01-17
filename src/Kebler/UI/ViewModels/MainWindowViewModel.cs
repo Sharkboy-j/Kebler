@@ -96,68 +96,70 @@ namespace Kebler.UI.ViewModels
 
         public void AddTorrent(string path)
         {
-            new Task(async () =>
-            {
-                if (!File.Exists(path))
-                    throw new Exception("Torrent file not found");
-
-                await using var fstream = File.OpenRead(path);
-
-                var filebytes = new byte[fstream.Length];
-                fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
-
-                var encodedData = Convert.ToBase64String(filebytes);
-                string decodedString = Encoding.UTF8.GetString(filebytes);
-                var torrent = new NewTorrent
+          
+          
+                new Task(async () =>
                 {
-                    Metainfo = encodedData,
-                    Paused = false
-                };
+                    if (!File.Exists(path))
+                        throw new Exception("Torrent file not found");
 
-              
+                    await using var fstream = File.OpenRead(path);
+
+                    var filebytes = new byte[fstream.Length];
+                    fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
+
+                    var encodedData = Convert.ToBase64String(filebytes);
+                    string decodedString = Encoding.UTF8.GetString(filebytes);
+                    var torrent = new NewTorrent
+                    {
+                        Metainfo = encodedData,
+                        Paused = false
+                    };
+
+
 
                 //Debug.WriteLine($"Start Adding torrent {path}");
                 Log.Info($"Start adding torrent {path}");
 
                 //try upload torrent
                 while (true)
-                {
-                    if (!IsConnected)
                     {
-                        await Task.Delay(500);
-                        continue;
-                    }
-                    if (Dispatcher.HasShutdownStarted) return;
-                    try
-                    {
-                        var info = await _transmissionClient.TorrentAddAsync(torrent);
-
-                        switch (info)
+                        if (!IsConnected)
                         {
-                            case Enums.AddResult.Error:
-                            case Enums.AddResult.Duplicate:
-                            case Enums.AddResult.Added:
-                                {
-                                    Debug.WriteLine($"Torrent {path} added as {info}");
-                                    Log.Info($"Torrent {path} added as {info}");
-                                    return;
-                                }
-                            case Enums.AddResult.ResponseNull:
-                                {
+                            await Task.Delay(500);
+                            continue;
+                        }
+                        if (Dispatcher.HasShutdownStarted) return;
+                        try
+                        {
+                            var info = await _transmissionClient.TorrentAddAsync(torrent);
+
+                            switch (info)
+                            {
+                                case Enums.AddResult.Error:
+                                case Enums.AddResult.Duplicate:
+                                case Enums.AddResult.Added:
+                                    {
+                                        Debug.WriteLine($"Torrent {path} added as {info}");
+                                        Log.Info($"Torrent {path} added as {info}");
+                                        return;
+                                    }
+                                case Enums.AddResult.ResponseNull:
+                                    {
                                     //Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
                                     Log.Info($"Adding torrent result Null {torrent.Filename}");
-                                    await Task.Delay(100);
-                                    continue;
-                                }
+                                        await Task.Delay(100);
+                                        continue;
+                                    }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex);
+                            return;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex);
-                        return;
-                    }
-                }
-            }).Start();
+                }).Start();
         }
 
 
@@ -567,8 +569,8 @@ namespace Kebler.UI.ViewModels
             if (SelectedTorrent.ID == newData.ID) SelectedTorrent = newData;
 
             var myType = typeof(TorrentInfo);
-            var props = myType.GetProperties()
-                .Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length == 0);
+            var props = myType.GetProperties().Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length == 0);
+
             foreach (var item in props)
             {
                 TorrentList[index].Set(item.Name, newData.Get(item.Name));
@@ -578,14 +580,6 @@ namespace Kebler.UI.ViewModels
                 {
                     TorrentList.Move(index, newIndex);
                 });
-
-            //TorrentList[index].RateUpload = newData.RateUpload;
-            //TorrentList[index].RateDownload = newData.RateDownload;
-            //TorrentList[index].AddedDate = newData.AddedDate;
-            //TorrentList[index].Pieces = newData.Pieces;
-            //TorrentList[index].PieceCount = newData.PieceCount;
-            //TorrentList[index].DownloadedEver = newData.DownloadedEver;
-            //TorrentList[index].PercentDone = newData.PercentDone;
 
         }
 

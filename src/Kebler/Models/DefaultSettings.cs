@@ -9,7 +9,7 @@ namespace Kebler.Models
     {
         public int SortType { get; set; } = 0;
         public string SortVal { get; set; } = nameof(TorrentInfo.UploadedEver);
-        public string Language { get; set; } = "ru-RU";
+        public string Language { get; set; } = "en-US";
 
     }
 }

@@ -25,16 +25,10 @@ namespace Kebler.UI.Windows
     {
 
         private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
-        NotifyIcon nIcon = new System.Windows.Forms.NotifyIcon();
 
 
         public KeblerWindow()
         {
-            //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            //source.AddHook(new HwndSourceHook(WndProc));
-
-
-
             InitializeComponent();
 
             //disable hardware rendering
@@ -43,50 +37,15 @@ namespace Kebler.UI.Windows
             DataContext = new MainWindowViewModel();
 
 
-            //var assembly = Assembly.GetExecutingAssembly();
-            //var resourceName = "Kebler.Theme.Icons.Kebler.ico";
-
-            //using var stream = assembly.GetManifestResourceStream(resourceName);
-            //nIcon.Icon = new Icon(stream);
-            //nIcon.Visible = true;
-            //nIcon.ShowBalloonTip(5000, "Title", "Text", System.Windows.Forms.ToolTipIcon.Info);
-            //nIcon.Click += NIcon_Click;
-
         }
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-            source.AddHook(WndProc);
-        }
+
 
         public void UpdateSorting()
         {
             Vm.UpdateSorting();
         }
 
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            switch (msg)
-            {
-                case Win32.WM_COPYDATA:
-                    Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(lParam, typeof(Win32.CopyDataStruct));
-                    string strData = Marshal.PtrToStringUni(st.lpData);
-
-                    foreach (var text in strData.Split(' '))
-                    {
-                        if (text.Contains(".torrent"))
-                        {
-                            OpenTorrent(new[] { text });
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return IntPtr.Zero;
-        }
-
+   
 
         public void OpenConnectionManager()
         {

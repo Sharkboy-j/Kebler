@@ -174,8 +174,8 @@ namespace Kebler
         private static void App_LanguageChanged(object sender, EventArgs e)
         {
             Log.Info($"Set language: {Language.Name}");
-            Conf[nameof(Models.GlobalConfiguration)][nameof(Models.GlobalConfiguration.Language)].StringValue = Language.Name;
-            Conf.SaveToFile(Data.ConfigName);
+            //Conf[nameof(Models.GlobalConfiguration)][nameof(Models.GlobalConfiguration.Language)].StringValue = Language.Name;
+            //Conf.SaveToFile(Data.ConfigName);
         }
 
         #endregion

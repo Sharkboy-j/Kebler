@@ -126,7 +126,8 @@
         <Border
             Grid.Row="0"
             BorderBrush="{DynamicResource BorderBorderBrush}"
-            BorderThickness="0,0,0,1">
+            BorderThickness="0,0,0,1"
+            IsEnabled="{Binding IsConnected}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -565,6 +566,7 @@
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Foreground="#FF929292"
+                                    IsEnabled="False"
                                     Watermark="Filter" />
 
                             </Grid>
@@ -575,6 +577,7 @@
                             Grid.Row="2"
                             Padding="-1"
                             BorderThickness="0"
+                            IsEnabled="False"
                             ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
                             ItemTemplate="{DynamicResource TagItemTemplate}">
                             <models:Category Title="{StaticResource Tag.Blue}" Color="DeepSkyBlue" />
@@ -634,6 +637,7 @@
                     <DataGrid
                         x:Name="TorrentsDataGrid"
                         Grid.Row="0"
+                        Grid.RowSpan="3"
                         Grid.Column="2"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
@@ -696,7 +700,7 @@
                         </DataGrid.ContextMenu>
                     </DataGrid>
                     <!--  all torrent list and properties spliter  -->
-                    <GridSplitter
+                    <!--<GridSplitter
                         Grid.Row="1"
                         Grid.Column="2"
                         Padding="0"
@@ -706,9 +710,9 @@
                         Background="Transparent"
                         BorderBrush="{DynamicResource BorderBorderBrush}"
                         BorderThickness="0,1,0,0"
-                        ShowsPreview="False" />
+                        ShowsPreview="False" />-->
                     <!--  torrent properties  -->
-                    <TabControl
+                    <!--<TabControl
                         x:Name="SelectedServerTab"
                         Grid.Row="1"
                         Grid.RowSpan="2"
@@ -722,7 +726,7 @@
                         <TabItem Header="{DynamicResource TorrentInfoTabFilesHeaderContent}" />
                         <TabItem Header="{DynamicResource TorrentInfoTabStatsHeaderContent}" />
 
-                    </TabControl>
+                    </TabControl>-->
                 </Grid>
             </Grid>
         </Grid>
