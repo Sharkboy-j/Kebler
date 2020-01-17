@@ -40,7 +40,6 @@
     <PackageReference Include="NotifyIconWpf" Version="1.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" />
     <PackageReference Include="sharpconfig" Version="3.2.8" />
-    <PackageReference Include="Torrent" Version="1.4.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transmission.API.RPC-master\Transmission.API.RPC\Transmission.API.RPC.csproj" />
