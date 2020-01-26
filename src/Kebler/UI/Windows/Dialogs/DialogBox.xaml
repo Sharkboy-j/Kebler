@@ -5,41 +5,48 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Kebler.UI.Windows.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="Auto"
-    Height="96"
+    Width="450"
+    Height="100"
     ResizeMode="NoResize"
     Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="45" />
-            <ColumnDefinition Width="45" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Label
-            x:Name="Question"
+        <Border
             Grid.Column="0"
-            Margin="10,0,10,0"
+            Margin="10,0,0,0"
             Padding="0"
-            VerticalAlignment="Center"
-            HorizontalContentAlignment="Left"
-            VerticalContentAlignment="Center"
-            Content="dsadasdasasdsadasdasdasdasdasdasdsa asd sad sadasdasdsad asd dasdasd asdasdasd asd asd asd asd asdas ds sad as asd asdasds dasd as" />
+            BorderBrush="{x:Null}">
+            <TextBlock
+                x:Name="Question"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource WhiteBrush}"
+                Text="Some Text"
+                TextWrapping="Wrap" />
+        </Border>
         <Button
+            x:Name="Yes"
             Grid.Column="1"
-            Width="34"
-            Margin="0,23,0,22"
+            Width="Auto"
+            Margin="10,22"
+            Padding="10,3"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Click="YesButtonClick"
             Content="Yes" />
         <Button
             Grid.Column="2"
-            Width="34"
-            Margin="0,23,0,22"
+            Width="Auto"
+            Margin="10,22"
+            Padding="10,3"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Click="NoButtonClick"
-            Content="No"
-            IsDefault="True" />
+            Content="No" />
     </Grid>
 </Window>

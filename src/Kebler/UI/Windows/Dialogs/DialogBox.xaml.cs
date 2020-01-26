@@ -18,18 +18,19 @@ namespace Kebler.UI.Windows.Dialogs
     /// </summary>
     public partial class DialogBox : Window
     {
+
         public DialogBox()
         {
             InitializeComponent();
-            Question.Focus();
         }
 
         public DialogBox(string message,string title)
         {
             Title=title;
             InitializeComponent();
-            Question.Focus();
-            Question.Content= message;
+            Question.Text= message;
+            Yes.IsDefault = true;
+            Yes.Focus();
         }
 
         public bool Response = false;

@@ -121,19 +121,6 @@
         G="69"
         R="69" />
 
-    <Color
-        x:Key="RedColor"
-        A="255"
-        B="32"
-        G="39"
-        R="170" />
-
-    <Color
-        x:Key="GreenColor"
-        A="255"
-        B="66"
-        G="132"
-        R="56" />
 
 
     <Color
@@ -204,12 +191,7 @@
 
 
 
-    <SolidColorBrush x:Key="ButtonBackgroundActiveBrush" Color="{DynamicResource BackgroundActiveColor}" />
-    <SolidColorBrush x:Key="ButtonBorderActiveBrush" Color="{DynamicResource BorderBrushDefaultColor}" />
-    <SolidColorBrush x:Key="ButtonForegroundActiveBrush" Color="{DynamicResource ContetnSnipColor}" />
-    <SolidColorBrush x:Key="ButtonBorderDefaultBrush" Color="{DynamicResource BorderBrushBlueColor}" />
     <SolidColorBrush x:Key="ButtonBorderBackgroundMouseOverBrush" Color="{DynamicResource ContetnOver2Color}" />
-    <SolidColorBrush x:Key="ButtonBorderBackgroundMousePressedBrush" Color="{DynamicResource ContetnOver3Color}" />
     <SolidColorBrush x:Key="ButtonBorderBorderMousePressedBrush" Color="{DynamicResource ContetnOver4Color}" />
 
     <SolidColorBrush x:Key="ListBoxItemBackgroundBrush" Color="{DynamicResource BackgroundActiveColor}" />
@@ -279,63 +261,10 @@
         B="230"
         G="230"
         R="230" />
-    <Color
-        x:Key="BlueColor"
-        A="255"
-        B="204"
-        G="122"
-        R="0" />
-    <Color
-        x:Key="WhiteColor"
-        A="255"
-        B="255"
-        G="255"
-        R="255" />
-    <Color
-        x:Key="TransparentColor"
-        A="0"
-        B="0"
-        G="0"
-        R="0" />
 
-    <Color
-        x:Key="DarkRedColor"
-        A="0"
-        B="96"
-        G="102"
-        R="255" />
 
-    <Color
-        x:Key="DarkOrangeColor"
-        A="0"
-        B="59"
-        G="167"
-        R="248" />
-    <Color
-        x:Key="DarkYellowColor"
-        A="0"
-        B="59"
-        G="206"
-        R="244" />
-    <Color
-        x:Key="DarkGreenColor"
-        A="0"
-        B="80"
-        G="204"
-        R="113" />
 
-    <Color
-        x:Key="DarkBlueColor"
-        A="0"
-        B="77"
-        G="185"
-        R="244" />
-    <Color
-        x:Key="DarkPurpleColor"
-        A="0"
-        B="208"
-        G="138"
-        R="225" />
+   
     <!--  New Brushes  -->
     <SolidColorBrush x:Key="MainWindowStyleTopBarBackground" Color="{DynamicResource GrayColor}" />
 
@@ -346,6 +275,11 @@
     <SolidColorBrush x:Key="CheckBoxMouseOverBrush" Color="{DynamicResource BlueColor}" />
 
     <SolidColorBrush x:Key="ButtonBorderMouseOverBrush" Color="{DynamicResource BlueColor}" />
+
+
+
+    <!--  newbutton colors  -->
+
 
 
     <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="{DynamicResource GrayColor}" />
@@ -629,8 +563,6 @@
     <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
         <Setter Property="AllowsTransparency" Value="true" />
         <Setter Property="WindowStyle" Value="None" />
-        <Setter Property="MinHeight" Value="300" />
-        <Setter Property="MinWidth" Value="300" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -1548,56 +1480,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
-        <Setter Property="Background" Value="{DynamicResource ButtonBackgroundActiveBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderActiveBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundActiveBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
-                        x:Name="border"
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="true">
-                        <ContentPresenter
-                            x:Name="contentPresenter"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Focusable="False"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ButtonBorderDefaultBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ButtonBorderBackgroundMouseOverBrush}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource ButtonBorderMouseOverBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="true">
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ButtonBorderMouseOverBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ButtonBorderBackgroundMousePressedBrush}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ButtonBorderBorderMousePressedBrush}" />
-                        </Trigger>
-                        <!--<Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Button.Disabled.Background}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Button.Disabled.Border}" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Button.Disabled.Foreground}" />
-                        </Trigger>-->
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+
 
     <DataTemplate x:Key="MetroListBoxItemTemplate">
         <TextBlock Text="{Binding Path=Title, FallbackValue=Title}" />

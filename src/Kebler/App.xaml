@@ -11,6 +11,7 @@
                 <!--<ResourceDictionary Source="Resources/lang.ru-RU.xaml" />-->
                 <ResourceDictionary Source="Resources/Icons.xaml" />
                 <ResourceDictionary Source="Theme/Default/MainTheme.xaml" />
+                <ResourceDictionary Source="Theme/Default/FormatedStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
