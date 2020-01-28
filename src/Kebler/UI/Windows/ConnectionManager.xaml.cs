@@ -67,14 +67,15 @@ namespace Kebler.UI.Windows
         private void ConnectionManager_Closing(object sender, CancelEventArgs e)
         {
 
-            if (ServerList.Count == 0)
+            if (ServerList.Count != 0)
             {
-                MessageBox.Show(Application.Current.FindResource("ThereAreNoAnyServersWhenCloseCm")?.ToString());
-                e.Cancel = true;
-                return;
+                //MessageBox.Show(Application.Current.FindResource("ThereAreNoAnyServersWhenCloseCm")?.ToString());
+                //e.Cancel = true;
+                //return;
+                App.KeblerControl.Connect();
             }
 
-            App.KeblerControl.Connect();
+            
         }
 
 

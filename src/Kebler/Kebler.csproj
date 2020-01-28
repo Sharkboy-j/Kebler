@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Kebler</AssemblyName>
     <LangVersion>8.0</LangVersion>
@@ -12,6 +12,8 @@
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -40,14 +42,11 @@
     <PackageReference Include="NotifyIconWpf" Version="1.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" />
     <PackageReference Include="sharpconfig" Version="3.2.8" />
-    <PackageReference Include="Torrent" Version="1.4.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Transmission.API.RPC-master\Transmission.API.RPC\Transmission.API.RPC.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Theme\Icons\Kebler.ico" />
     <EmbeddedResource Include="Theme\Icons\Kebler.svg" />
+    <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
     <Resource Include="Theme\Icons\Kebler_16x16.png" />
     <Resource Include="Theme\Icons\Kebler_32x32.png" />
     <Resource Include="Theme\Icons\Kebler_512x512.png" />

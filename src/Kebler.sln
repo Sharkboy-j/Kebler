@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.438
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler", "Kebler\Kebler.csproj", "{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler", "Kebler\Kebler.csproj", "{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.API.RPC", "Transmission.API.RPC-master\Transmission.API.RPC\Transmission.API.RPC.csproj", "{6C0D46DB-C926-4439-A34E-88F630EA417D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.API.RPC", "Transmission.API.RPC\Transmission.API.RPC.csproj", "{95644F0A-6B5A-441B-B26F-108317E55CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C0D46DB-C926-4439-A34E-88F630EA417D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C0D46DB-C926-4439-A34E-88F630EA417D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C0D46DB-C926-4439-A34E-88F630EA417D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C0D46DB-C926-4439-A34E-88F630EA417D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95644F0A-6B5A-441B-B26F-108317E55CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95644F0A-6B5A-441B-B26F-108317E55CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95644F0A-6B5A-441B-B26F-108317E55CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95644F0A-6B5A-441B-B26F-108317E55CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

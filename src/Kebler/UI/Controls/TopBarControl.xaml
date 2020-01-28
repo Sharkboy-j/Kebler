@@ -70,8 +70,18 @@
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="RateDownload" />
+                <MenuItem
+                    default:MenuItemExtensions.GroupName="SorlVal"
+                    Click="SortValMenuItem_Click"
+                    Header="{DynamicResource TopBarViewSortDateAddedButtonContent}"
+                    IsCheckable="True"
+                    Style="{DynamicResource PopUpTopBarMenuButton}"
+                    Tag="AddedDate" />
             </MenuItem>
-            <MenuItem Header="{DynamicResource TopBarToolsButtonContent}" Style="{DynamicResource TopBarMenuButton}">
+            <MenuItem
+                Header="{DynamicResource TopBarToolsButtonContent}"
+                IsEnabled="False"
+                Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Header="{DynamicResource TopBarToolsPropertiesButtonContent}"
                     IsCheckable="False"
@@ -83,7 +93,10 @@
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="RateDownload" />
             </MenuItem>
-            <MenuItem Header="{DynamicResource TopBarInfoButtonContent}" Style="{DynamicResource TopBarMenuButton}" />
+            <MenuItem
+                Header="{DynamicResource TopBarInfoButtonContent}"
+                IsEnabled="False"
+                Style="{DynamicResource TopBarMenuButton}" />
         </Menu>
     </Grid>
 </UserControl>

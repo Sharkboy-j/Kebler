@@ -14,37 +14,36 @@ using System.Windows.Shapes;
 namespace Kebler.UI.Windows.Dialogs
 {
     /// <summary>
-    /// Interaction logic for DialogBox.xaml
+    /// Interaction logic for DialogTextBox.xaml
     /// </summary>
-    public partial class DialogBox : Window
+    public partial class DialogTextBox : Window
     {
-
-        public DialogBox()
+        public DialogTextBox()
         {
             InitializeComponent();
         }
 
-        public DialogBox(string message,string title)
+        public DialogTextBox(string text, string title)
         {
-            Title=title;
+
             InitializeComponent();
-            Question.Text= message;
-            Yes.IsDefault = true;
-            Yes.Focus();
+            Title = title;
+            Question.Text = text;
+            Okay.IsDefault = true;
+            Question.Focus();
         }
 
-        public bool Response = false;
+        public string Response = "";
 
         private void NoButtonClick(object sender, RoutedEventArgs e)
         {
             //ResponseText = ResponsePassword.Password;
-            Response = false;
-            DialogResult = true;
+            DialogResult = false;
         }
 
-        private void YesButtonClick(object sender, RoutedEventArgs e)
+        private void Okay_OnClick(object sender, RoutedEventArgs e)
         {
-            Response=true;
+            Response = Question.Text;
             DialogResult = true;
         }
     }

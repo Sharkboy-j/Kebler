@@ -19,6 +19,7 @@ namespace Transmission.API.RPC.Arguments
         /// <summary>
         /// True means use the alt speeds
         /// </summary>
+        [JsonProperty("alt-speed-enabled")]
         public bool? AlternativeSpeedEnabled { get { return GetValue<bool?>("alt-speed-enabled"); } set { this["alt-speed-enabled"] = value; } }
 
         /// <summary>

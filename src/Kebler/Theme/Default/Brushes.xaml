@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Kebler.Theme.Default">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  Text  -->
+    <SolidColorBrush x:Key="TextForegroundColorActiveGray" Color="{DynamicResource GrayColorContent}" />
+
+    <!--  Button  -->
+    <SolidColorBrush x:Key="ButtonForegroundDefaultBrush" Color="{DynamicResource ContetnSnipColor}" />
+    <SolidColorBrush x:Key="ButtonBackgroundDefaultBrush" Color="{DynamicResource BackgroundActiveColor}" />
+    <SolidColorBrush x:Key="ButtonBorderDefaultBrush" Color="{DynamicResource BorderBrushDefaultColor}" />
+    <SolidColorBrush x:Key="ButtonBackgroundGreyBrush" Color="{DynamicResource ContetnOver3Color}" />
+    <SolidColorBrush x:Key="ButtonBorderTransparentBrush" Color="{DynamicResource TransparentColor}" />
+    <SolidColorBrush x:Key="ButtonBorderBlueBrush" Color="{DynamicResource BlueColor}" />
+
+    <!--  DataGrid  -->
+    <SolidColorBrush x:Key="DataGridBackgroundBrush" Color="{DynamicResource GrayColor5}" />
+    <SolidColorBrush x:Key="HorizontalGridLinesBrush" Color="{DynamicResource GrayColor5}" />
+
+</ResourceDictionary>

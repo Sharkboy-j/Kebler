@@ -25,16 +25,10 @@ namespace Kebler.UI.Windows
     {
 
         private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
-        NotifyIcon nIcon = new System.Windows.Forms.NotifyIcon();
 
 
         public KeblerWindow()
         {
-            //HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            //source.AddHook(new HwndSourceHook(WndProc));
-
-
-
             InitializeComponent();
 
             //disable hardware rendering
@@ -43,49 +37,14 @@ namespace Kebler.UI.Windows
             DataContext = new MainWindowViewModel();
 
 
-            //var assembly = Assembly.GetExecutingAssembly();
-            //var resourceName = "Kebler.Theme.Icons.Kebler.ico";
-
-            //using var stream = assembly.GetManifestResourceStream(resourceName);
-            //nIcon.Icon = new Icon(stream);
-            //nIcon.Visible = true;
-            //nIcon.ShowBalloonTip(5000, "Title", "Text", System.Windows.Forms.ToolTipIcon.Info);
-            //nIcon.Click += NIcon_Click;
-
         }
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-            source.AddHook(WndProc);
-        }
+
 
         public void UpdateSorting()
         {
             Vm.UpdateSorting();
         }
 
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            switch (msg)
-            {
-                case Win32.WM_COPYDATA:
-                    Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(lParam, typeof(Win32.CopyDataStruct));
-                    string strData = Marshal.PtrToStringUni(st.lpData);
-
-                    foreach (var text in strData.Split(' '))
-                    {
-                        if (text.Contains(".torrent"))
-                        {
-                            OpenTorrent(new[] { text });
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return IntPtr.Zero;
-        }
 
 
         public void OpenConnectionManager()
@@ -178,20 +137,8 @@ namespace Kebler.UI.Windows
         private void RemoveTorrentWithData_ButtonClick(object sender, RoutedEventArgs e)
         {
             Vm.RemoveTorrent(true);
-
         }
 
-        private void Window_StateChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void NIcon_Click(object sender, EventArgs e)
-        {
-            WindowState = WindowState.Normal;
-            Show();
-            Activate();
-        }
 
         private void Window_StateChanged_1(object sender, EventArgs e)
         {
@@ -207,10 +154,48 @@ namespace Kebler.UI.Windows
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!IsLoaded)
+                return;
             if (!(sender is System.Windows.Controls.ListBox listBox)) return;
 
             if (listBox.SelectedItem is Category catObj)
                 Vm.ChangeFilterType(catObj.Tag);
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vm.SlowMode();
+        }
+
+        private void ListBox_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (CategoriesListBox.SelectedItem == null)
+                return;
+
+            if (CategoriesListBox.SelectedItem is Category cat)
+            {
+                FilterTextBox.Text = $"{{p}}:{cat.FullPath}";
+            }
+        }
+
+        private void Border_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            FilterTextBox.Clear();
+            CategoriesListBox.SelectedIndex = -1;
+        }
+
+        private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+            Vm.FilterText = FilterTextBox.Text;
+            Vm.UpdateSorting();
+
+        }
+
+        private void SetLocation_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vm.SetLocation();
         }
     }
 }
