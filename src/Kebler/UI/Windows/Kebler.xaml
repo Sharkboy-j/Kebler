@@ -30,7 +30,7 @@
         <DataTemplate x:Key="TagItemTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="22" />
+                    <ColumnDefinition Width="{Binding Color, Converter={StaticResource SolidColorToWidthConverter}}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Ellipse
@@ -43,7 +43,7 @@
                     Grid.Column="1"
                     Padding="0"
                     VerticalContentAlignment="Center"
-                    Content="{Binding Title}"
+                    Content="{Binding FolderName}"
                     FontSize="12"
                     Foreground="{StaticResource ListBoxContentForeGroundBrush}" />
             </Grid>
@@ -509,6 +509,7 @@
                         <ListBox
                             Padding="-1"
                             BorderThickness="0"
+                            Foreground="{StaticResource TextForegroundColorActiveGray}"
                             ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
                             ItemTemplate="{DynamicResource CategoryItemTemplate}"
                             SelectedIndex="0"
@@ -551,8 +552,9 @@
                             BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="0" />
                                     <ColumnDefinition />
+                                    <ColumnDefinition Width="20" />
                                 </Grid.ColumnDefinitions>
 
                                 <Image
@@ -560,33 +562,38 @@
                                     Source="{StaticResource Icon.Search}"
                                     Stretch="UniformToFill" />
                                 <controls:WaterBox
+                                    x:Name="FilterTextBox"
                                     Grid.Column="1"
                                     Margin="0"
                                     Padding="0"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
-                                    Foreground="#FF929292"
-                                    IsEnabled="False"
+                                    Foreground="{StaticResource TextForegroundColorActiveGray}"
+                                    TextChanged="FilterTextBox_OnTextChanged"
                                     Watermark="Filter" />
-
+                                <Border
+                                    Grid.Column="2"
+                                    Cursor="Hand"
+                                    PreviewMouseUp="Border_PreviewMouseUp">
+                                    <Image
+                                        Width="13"
+                                        Height="13"
+                                        Source="{StaticResource Icon.Clear}"
+                                        Stretch="UniformToFill" />
+                                </Border>
                             </Grid>
 
 
                         </Border>
                         <ListBox
+                            x:Name="CategoriesListBox"
                             Grid.Row="2"
                             Padding="-1"
                             BorderThickness="0"
-                            IsEnabled="False"
                             ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
-                            ItemTemplate="{DynamicResource TagItemTemplate}">
-                            <models:Category Title="{StaticResource Tag.Blue}" Color="DeepSkyBlue" />
-                            <models:Category Title="{StaticResource Tag.Green}" Color="MediumSeaGreen" />
-                            <models:Category Title="{StaticResource Tag.Orange}" Color="Orange" />
-                            <models:Category Title="{StaticResource Tag.Purple}" Color="MediumPurple" />
-                            <models:Category Title="{StaticResource Tag.Red}" Color="Red" />
-                            <models:Category Title="{StaticResource Tag.Yellow}" Color="Yellow" />
-                        </ListBox>
+                            ItemTemplate="{DynamicResource TagItemTemplate}"
+                            ItemsSource="{Binding Categories}"
+                            PreviewMouseUp="ListBox_PreviewMouseUp" />
 
                     </Grid>
 
@@ -639,9 +646,6 @@
                         Grid.Row="0"
                         Grid.RowSpan="3"
                         Grid.Column="2"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        IsReadOnly="True"
                         ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
                         SelectionChanged="TorrentsDataGrid_SelectionChanged"
@@ -667,35 +671,14 @@
                             <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Upload speed" />
                             <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}}" Header="Download speed" />
                             <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}}" Header="Uploaded" />
-
-                            <!--<DataGridTextColumn Header="Size" />
-                            <DataGridTextColumn Header="Done" />
-                            <DataGridTextColumn Header="Status" />
-                            <DataGridTextColumn Header="Seeds" />
-                            <DataGridTextColumn Header="Peers" />
-                            <DataGridTextColumn Header="Download speed" />
-                            <DataGridTextColumn Header="ETA" />
-                            <DataGridTextColumn Header="Ratio" />
-                            <DataGridTextColumn Header="Downloaded" />
-                            <DataGridTextColumn Header="Tracker" />
-                            <DataGridTextColumn Header="Tracker status" />
-                            <DataGridTextColumn Header="Added at" />
-                            <DataGridTextColumn Header="Completed at" />
-                            <DataGridTextColumn Header="Last active" />
-                            <DataGridTextColumn Header="Path" />
-                            <DataGridTextColumn Header="Priority" />
-                            <DataGridTextColumn Header="Size to download" />
-                            <DataGridTextColumn Header="ID" />
-                            <DataGridTextColumn Header="Queue positionme" />
-                            <DataGridTextColumn Header="Seeding time" />
-                            <DataGridTextColumn Header="Size left" />
-                            <DataGridTextColumn Header="Private" />-->
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Click="PauseTorrent_ItemClick" Header="Pause" />
                                 <MenuItem Click="RemoveTorrent_ItemClick" Header="Remove Torrent" />
                                 <MenuItem Click="RemoveTorrentData_ItemClick" Header="Remove Torrent And Data" />
+                                <MenuItem Click="SetLocation_OnClick" Header="Set Location" />
+
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </DataGrid>

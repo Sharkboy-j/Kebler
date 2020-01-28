@@ -45,7 +45,7 @@ namespace Kebler.UI.Windows
             Vm.UpdateSorting();
         }
 
-   
+
 
         public void OpenConnectionManager()
         {
@@ -137,20 +137,8 @@ namespace Kebler.UI.Windows
         private void RemoveTorrentWithData_ButtonClick(object sender, RoutedEventArgs e)
         {
             Vm.RemoveTorrent(true);
-
         }
 
-        private void Window_StateChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void NIcon_Click(object sender, EventArgs e)
-        {
-            WindowState = WindowState.Normal;
-            Show();
-            Activate();
-        }
 
         private void Window_StateChanged_1(object sender, EventArgs e)
         {
@@ -177,6 +165,37 @@ namespace Kebler.UI.Windows
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Vm.SlowMode();
+        }
+
+        private void ListBox_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (CategoriesListBox.SelectedItem == null)
+                return;
+
+            if (CategoriesListBox.SelectedItem is Category cat)
+            {
+                FilterTextBox.Text = $"{{p}}:{cat.FullPath}";
+            }
+        }
+
+        private void Border_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            FilterTextBox.Clear();
+            CategoriesListBox.SelectedIndex = -1;
+        }
+
+        private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+            Vm.FilterText = FilterTextBox.Text;
+            Vm.UpdateSorting();
+
+        }
+
+        private void SetLocation_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vm.SetLocation();
         }
     }
 }

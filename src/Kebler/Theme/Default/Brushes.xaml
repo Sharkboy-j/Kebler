@@ -6,13 +6,19 @@
         <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--  Button  -->
+    <!--  Text  -->
+    <SolidColorBrush x:Key="TextForegroundColorActiveGray" Color="{DynamicResource GrayColorContent}" />
 
+    <!--  Button  -->
     <SolidColorBrush x:Key="ButtonForegroundDefaultBrush" Color="{DynamicResource ContetnSnipColor}" />
     <SolidColorBrush x:Key="ButtonBackgroundDefaultBrush" Color="{DynamicResource BackgroundActiveColor}" />
     <SolidColorBrush x:Key="ButtonBorderDefaultBrush" Color="{DynamicResource BorderBrushDefaultColor}" />
     <SolidColorBrush x:Key="ButtonBackgroundGreyBrush" Color="{DynamicResource ContetnOver3Color}" />
     <SolidColorBrush x:Key="ButtonBorderTransparentBrush" Color="{DynamicResource TransparentColor}" />
     <SolidColorBrush x:Key="ButtonBorderBlueBrush" Color="{DynamicResource BlueColor}" />
+
+    <!--  DataGrid  -->
+    <SolidColorBrush x:Key="DataGridBackgroundBrush" Color="{DynamicResource GrayColor5}" />
+    <SolidColorBrush x:Key="HorizontalGridLinesBrush" Color="{DynamicResource GrayColor5}" />
 
 </ResourceDictionary>

@@ -54,8 +54,11 @@ namespace Kebler.UI.ViewModels
         public bool IsDoingStuffReverse => !IsDoingStuff;
 
         public string LongStatusText { get; set; }
+        public string FilterText { get; set; }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
+        public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
+
         private TorrentInfo[] allTorrents = new TorrentInfo[0];
         private SessionSettings _settings;
         public TorrentInfo SelectedTorrent { get; set; }
@@ -96,25 +99,23 @@ namespace Kebler.UI.ViewModels
 
         public void AddTorrent(string path)
         {
-          
-          
-                new Task(async () =>
+            new Task(async () =>
+            {
+                if (!File.Exists(path))
+                    throw new Exception("Torrent file not found");
+
+                await using var fstream = File.OpenRead(path);
+
+                var filebytes = new byte[fstream.Length];
+                fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
+
+                var encodedData = Convert.ToBase64String(filebytes);
+                string decodedString = Encoding.UTF8.GetString(filebytes);
+                var torrent = new NewTorrent
                 {
-                    if (!File.Exists(path))
-                        throw new Exception("Torrent file not found");
-
-                    await using var fstream = File.OpenRead(path);
-
-                    var filebytes = new byte[fstream.Length];
-                    fstream.Read(filebytes, 0, Convert.ToInt32(fstream.Length));
-
-                    var encodedData = Convert.ToBase64String(filebytes);
-                    string decodedString = Encoding.UTF8.GetString(filebytes);
-                    var torrent = new NewTorrent
-                    {
-                        Metainfo = encodedData,
-                        Paused = false
-                    };
+                    Metainfo = encodedData,
+                    Paused = false
+                };
 
 
 
@@ -123,47 +124,44 @@ namespace Kebler.UI.ViewModels
 
                 //try upload torrent
                 while (true)
+                {
+                    if (!IsConnected)
                     {
-                        if (!IsConnected)
-                        {
-                            await Task.Delay(500);
-                            continue;
-                        }
-                        if (Dispatcher.HasShutdownStarted) return;
-                        try
-                        {
-                            var info = await _transmissionClient.TorrentAddAsync(torrent);
+                        await Task.Delay(500);
+                        continue;
+                    }
+                    if (Dispatcher.HasShutdownStarted) return;
+                    try
+                    {
+                        var info = await _transmissionClient.TorrentAddAsync(torrent);
 
-                            switch (info)
-                            {
-                                case Enums.AddResult.Error:
-                                case Enums.AddResult.Duplicate:
-                                case Enums.AddResult.Added:
-                                    {
-                                        Debug.WriteLine($"Torrent {path} added as {info}");
-                                        Log.Info($"Torrent {path} added as {info}");
-                                        return;
-                                    }
-                                case Enums.AddResult.ResponseNull:
-                                    {
+                        switch (info)
+                        {
+                            case Enums.AddResult.Error:
+                            case Enums.AddResult.Duplicate:
+                            case Enums.AddResult.Added:
+                                {
+                                    Debug.WriteLine($"Torrent {path} added as {info}");
+                                    Log.Info($"Torrent {path} added as {info}");
+                                    return;
+                                }
+                            case Enums.AddResult.ResponseNull:
+                                {
                                     //Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
                                     Log.Info($"Adding torrent result Null {torrent.Filename}");
-                                        await Task.Delay(100);
-                                        continue;
-                                    }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex);
-                            return;
+                                    await Task.Delay(100);
+                                    continue;
+                                }
                         }
                     }
-                }).Start();
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                        return;
+                    }
+                }
+            }).Start();
         }
-
-
-
         public void ShowConnectionManager()
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -227,7 +225,6 @@ namespace Kebler.UI.ViewModels
             return pass;
         }
 
-
         private void GetAllServers()
         {
             _dbServers = StorageRepository.GetServersList();
@@ -254,7 +251,7 @@ namespace Kebler.UI.ViewModels
                     while (IsConnected && !token.IsCancellationRequested)
                     {
 
-                        if (Application.Current.Dispatcher.HasShutdownStarted) return;
+                        if (Application.Current.Dispatcher != null && Application.Current.Dispatcher.HasShutdownStarted) return;
 
                         Debug.WriteLine("Start updating stats");
                         _stats = await UpdateStats();
@@ -262,37 +259,20 @@ namespace Kebler.UI.ViewModels
 
                         //sessionInfo = await UpdateSessionInfo();
                         _settings = await _transmissionClient.GetSessionSettingsAsync();
-                        IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
+
+                        if (_settings == null) continue;
+
+                        if (_settings.AlternativeSpeedEnabled != null)
+                            IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
                         Debug.WriteLine("Start updating torrents");
                         var newTorrentsDataList = await UpdateTorrentList();
                         Debug.WriteLine("Torrents updated");
 
                         allTorrents = newTorrentsDataList.Torrents;
-                        //List<TorrentInfo> torrents;
 
-                        //var prop = typeof(TorrentInfo).GetProperty(ConfigService.ConfigurationData.SortVal);
-
-                        //if (prop != null)
-                        //{
-                        //    switch (ConfigService.ConfigurationData.SortType)
-                        //    {
-                        //        case 0:
-                        //            torrents = newTorrentsDataList?.Torrents.OrderBy(x => prop.GetValue(x, null)).ToList();
-                        //            break;
-                        //        case 1:
-                        //            torrents = newTorrentsDataList?.Torrents.OrderByDescending(x => prop.GetValue(x, null)).ToList();
-                        //            break;
-                        //        default:
-                        //            torrents = newTorrentsDataList?.Torrents.ToList();
-                        //            break;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    torrents = newTorrentsDataList?.Torrents.ToList();
-                        //}
 
                         //UpdateTorrentListAtUi(ref torrents);
+                        UpdateCategories(newTorrentsDataList.Torrents.Select(x => x.DownloadDir).ToList());
                         UpdateSorting(newTorrentsDataList);
                         UpdateStatsInfo();
                         await Task.Delay(1000, token);
@@ -304,6 +284,33 @@ namespace Kebler.UI.ViewModels
             }, token);
             _whileCycleTask.Start();
         }
+
+        //TODO: add auto removing
+        private void UpdateCategories(IEnumerable<string> dirrectories)
+        {
+            if (dirrectories == null) return;
+
+            var dirs = dirrectories.Distinct().ToList();
+
+
+            foreach (var path in dirs)
+            {
+                var cat = new Category(path);
+
+                if (!IsExist(Categories, cat))
+                    Dispatcher.Invoke(() =>
+                    {
+                        Categories.Add(cat);
+                    });
+            }
+        }
+
+        public bool IsExist(IEnumerable<Category> list, Category item)
+        {
+            return list.Any(x => x.FolderName == item.FolderName);
+        }
+
+
 
         public void UpdateSorting(TransmissionTorrents newTorrents = null)
         {
@@ -368,7 +375,7 @@ namespace Kebler.UI.ViewModels
                 1 => torrentsToSort.OrderByDescending(x => prop.GetValue(x, null)).ToList(),
                 _ => torrentsToSort.ToList(),
             };
-
+            FilterTorrents(ref torrentsToSort);
             UpdateTorrentListAtUi(ref torrentsToSort);
 
 
@@ -398,6 +405,37 @@ namespace Kebler.UI.ViewModels
         }
 
 
+        public async void SetLocation()
+        {
+            if (!IsConnected) return;
+
+            var torrentInfo = SelectedTorrent;
+
+            var dialog = new DialogTextBox(torrentInfo.DownloadDir, "Please, enter new location.");
+
+            if ((bool)dialog.ShowDialog())
+            {
+                await Task.Factory.StartNew(async () =>
+                {
+                    Log.Info($"Try set location {torrentInfo.Name}({torrentInfo.DownloadDir} => {dialog.Response})");
+
+                    var exitCondition = Enums.RemoveResult.Error;
+                    while (exitCondition != Enums.RemoveResult.Ok)
+                    {
+                        if (Dispatcher.HasShutdownStarted) return;
+                        _transmissionClient.TorrentSetLocationAsync(new[] { torrentInfo.ID }, dialog.Response, true);
+
+                        await Task.Delay(500);
+                    }
+                    Log.Info($"Location set {torrentInfo.Name} true");
+                });
+
+            }
+
+
+
+
+        }
 
         public async void RemoveTorrent(bool removeData = false)
         {
@@ -562,6 +600,27 @@ namespace Kebler.UI.ViewModels
 
 
         }
+        private void FilterTorrents(ref List<TorrentInfo> list)
+        {
+            if (string.IsNullOrEmpty(FilterText))
+                return;
+
+            var filterType = FilterText.Contains("{p}:") ? Models.Enums.FilterType.Path : Models.Enums.FilterType.Name;
+            var splited = FilterText.Split("{p}:");
+            var filterKey = filterType == Models.Enums.FilterType.Path ? splited[^1] : FilterText;
+
+
+            switch (filterType)
+            {
+                case Models.Enums.FilterType.Name:
+                    list = list.Where(x => x.Name.ToLower().Contains(filterKey.ToLower())).ToList();
+                    break;
+                case Models.Enums.FilterType.Path:
+                    list = list.Where(x => x.DownloadDir.Equals(filterKey)).ToList();
+                    break;
+            }
+        }
+
 
         private void UpdateTorrentData(int index, int newIndex, TorrentInfo newData)
         {
@@ -578,7 +637,14 @@ namespace Kebler.UI.ViewModels
             if (index != newIndex)
                 Dispatcher.Invoke(() =>
                 {
-                    TorrentList.Move(index, newIndex);
+                    try
+                    {
+                        TorrentList.Move(index, newIndex);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 });
 
         }
@@ -595,9 +661,6 @@ namespace Kebler.UI.ViewModels
             UploadSpeed = $"U: {uSpeed}";
         }
         #endregion
-
-
-
 
 
         #region Events

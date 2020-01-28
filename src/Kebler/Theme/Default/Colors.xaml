@@ -8,42 +8,17 @@
         B="0"
         G="0"
         R="0" />
-    <Color
-        x:Key="DarkRedColor"
-        A="0"
-        B="96"
-        G="102"
-        R="255" />
 
-
-    <Color
-        x:Key="RedColor"
-        A="255"
-        B="32"
-        G="39"
-        R="170" />
-
-    <Color
-        x:Key="GreenColor"
-        A="255"
-        B="66"
-        G="132"
-        R="56" />
-
-
-    <!--<Color
-        x:Key="DarkBlueColor"
-        A="0"
-        B="77"
-        G="185"
-        R="244" />-->
-
-
-    <Color x:Key="WhiteColor">#FFFFFF</Color>
+    <Color x:Key="WhiteColor">White</Color>
+    <Color x:Key="RedColor">Red</Color>
     <Color x:Key="BlueColor">#007ACC</Color>
+    <Color x:Key="GreenColor">Green</Color>
+    <Color x:Key="GrayColor5">#222222</Color>
+    <Color x:Key="GrayColorContent">#FF929292</Color>
+
     <Color x:Key="DarkPurpleColor">#7D206B</Color>
-    <Color x:Key="DarkGreenColor">#71CC50</Color>
+    <Color x:Key="DarkGreenColor">#388442</Color>
     <Color x:Key="DarkYellowColor">#F4CE3B</Color>
     <Color x:Key="DarkOrangeColor">Orange</Color>
-
+    <Color x:Key="DarkRedColor">#AA2720</Color>
 </ResourceDictionary>
