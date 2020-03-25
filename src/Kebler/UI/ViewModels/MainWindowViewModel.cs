@@ -23,6 +23,7 @@ using Transmission.API.RPC;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
 using Enums = Transmission.API.RPC.Entity.Enums;
+using System.Runtime.CompilerServices;
 
 namespace Kebler.UI.ViewModels
 {
@@ -285,6 +286,7 @@ namespace Kebler.UI.ViewModels
             _whileCycleTask.Start();
         }
 
+
         //TODO: add auto removing
         private void UpdateCategories(IEnumerable<string> dirrectories)
         {
@@ -296,7 +298,7 @@ namespace Kebler.UI.ViewModels
             foreach (var path in dirs)
             {
                 var cat = new Category(path);
-
+                cat.Title += $"{cat.FolderName} ({allTorrents.Count(x => x.DownloadDir == cat.FullPath)})";
                 if (!IsExist(Categories, cat))
                     Dispatcher.Invoke(() =>
                     {
@@ -564,41 +566,41 @@ namespace Kebler.UI.ViewModels
         #region ParsersToUserFriendlyFormat
         private void UpdateTorrentListAtUi(ref List<TorrentInfo> list)
         {
-
-            if (list == null) return;
-            //TorrentList =  new ObservableCollection<TorrentInfo>(list);
-            //add new one or update old
-            for (var ind = 0; ind < list.Count; ind++)
+            lock (TorrentList)
             {
-                var item = list[ind];
-
-                if (TorrentList.Any(x => x.ID == item.ID))
+                if (list == null) return;
+                //TorrentList =  new ObservableCollection<TorrentInfo>(list);
+                //add new one or update old
+                for (var ind = 0; ind < list.Count; ind++)
                 {
-                    var data = TorrentList.First(x => x.ID == item.ID);
+                    var item = list[ind];
 
-                    UpdateTorrentData(TorrentList.IndexOf(data), ind, item);
+                    if (TorrentList.Any(x => x.ID == item.ID))
+                    {
+                        var data = TorrentList.First(x => x.ID == item.ID);
+
+                        UpdateTorrentData(TorrentList.IndexOf(data), ind, item);
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => { TorrentList.Add(item); });
+                    }
                 }
-                else
+
+
+                //remove removed torrent
+                foreach (var item in TorrentList.ToList())
                 {
-                    Dispatcher.Invoke(() => { TorrentList.Add(item); });
+                    if (list.All(x => x.ID != item.ID))
+                    {
+                        var data = TorrentList.First(x => x.ID == item.ID);
+                        var ind = TorrentList.IndexOf(data);
+                        if (SelectedTorrent != null && SelectedTorrent.ID == data.ID) SelectedTorrent = null;
+                        Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
+
+                    }
                 }
             }
-
-
-            //remove removed torrent
-            foreach (var item in TorrentList.ToList())
-            {
-                if (list.All(x => x.ID != item.ID))
-                {
-                    var data = TorrentList.First(x => x.ID == item.ID);
-                    var ind = TorrentList.IndexOf(data);
-                    if (SelectedTorrent != null && SelectedTorrent.ID == data.ID) SelectedTorrent = null;
-                    Dispatcher.Invoke(() => { TorrentList.RemoveAt(ind); });
-
-                }
-            }
-
-
         }
         private void FilterTorrents(ref List<TorrentInfo> list)
         {
@@ -672,6 +674,9 @@ namespace Kebler.UI.ViewModels
         }
         #endregion
 
-
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

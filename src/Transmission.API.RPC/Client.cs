@@ -40,7 +40,7 @@ namespace Transmission.API.RPC
         /// <summary>
         /// miliseconds
         /// </summary>
-        public int timeOut = 5000;
+        public int timeOut = 20000;
 
         /// <summary>
         /// Initialize client
