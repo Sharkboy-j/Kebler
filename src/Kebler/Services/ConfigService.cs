@@ -5,17 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using log4net;
+using System.IO;
 
 namespace Kebler.Services
 {
     public class ConfigService
     {
-        private const string CONFIG_NAME = "settings.config";
+        private const string CONFIG_FILE_NAME = "settings.config";
         private static readonly ILog Log = LogManager.GetLogger(typeof(ConfigService));
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings ConfigurationData;
-
+        private static string CONFIG_NAME = Path.Combine(Data.GetDataPath().FullName, CONFIG_FILE_NAME);
 
         public static void Save()
         {

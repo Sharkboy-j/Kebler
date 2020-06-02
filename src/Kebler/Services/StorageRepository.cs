@@ -1,26 +1,30 @@
 ﻿using Kebler.Models;
 using LiteDB;
+using System;
+using System.IO;
 
 namespace Kebler.Services
 {
-    public static class StorageRepository
-    {
+	public static class StorageRepository
+	{
 
-        //TODO: Implement storage
-        public static LiteCollection<Server> GetServersList()
-        {
-            LiteCollection<Server> servers;
-            using (var db = new LiteDatabase(@"MyData.db"))
-            {
-                servers = db.GetCollection<Server>(nameof(GetServersList));
-            }
+		public static LiteCollection<Server> GetServersList()
+		{
+			var pth = Path.Combine(Data.GetDataPath().FullName, $"{nameof(Kebler)}.db");
+			
 
-            //TODO: Check null expression
-            return servers;
-        }
+			LiteCollection<Server> servers;
+			using (var db = new LiteDatabase(pth))
+			{
+				servers = db.GetCollection<Server>(nameof(GetServersList));
+			}
+
+			//TODO: Check null expression
+			return servers;
+		}
 
 
 
 
-    }
+	}
 }

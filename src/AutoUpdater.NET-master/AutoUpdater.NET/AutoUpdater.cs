@@ -356,6 +356,7 @@ namespace AutoUpdaterDotNET
             UpdateInfoEventArgs args;
             using (MyWebClient client = GetWebClient(BaseUri, BasicAuthXML))
             {
+                client.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
                 string xml = client.DownloadString(BaseUri);
 
                 if (ParseUpdateInfoEvent == null)
