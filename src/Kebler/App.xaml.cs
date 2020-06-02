@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Diagnostics;
 
 namespace Kebler
 {
@@ -155,7 +156,11 @@ namespace Kebler
 
 		private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
 		{
-			Log.Info($"Installed {args.InstalledVersion} | Current {args.CurrentVersion}");
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+			string version = fileVersionInfo.FileVersion;
+
+			Log.Info($"Installed {version} | Current {args.CurrentVersion}");
 		}
 
 		public static bool SendArgs(IntPtr targetHWnd, string args)
