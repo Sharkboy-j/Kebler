@@ -31,10 +31,8 @@ namespace Kebler
 		//private static Models.GlobalConfiguration Configuration;
 		private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
 		public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-		private static Configuration Conf;
 		public static UI.Windows.KeblerWindow KeblerControl;
 
-		Mutex myMutex;
 
 		private static CultureInfo Language
 		{

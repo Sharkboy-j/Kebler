@@ -12,9 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		..\version.xml = ..\version.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoUpdater.NET", "AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdater.NET.csproj", "{FB9E7E6B-B19F-4F37-A708-2996190CEF13}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{88F37B5F-322B-4CA4-A849-D2D097ACF165}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdater.NET", "AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdater.NET.csproj", "{FB9E7E6B-B19F-4F37-A708-2996190CEF13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,18 +60,6 @@ Global
 		{FB9E7E6B-B19F-4F37-A708-2996190CEF13}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
 		{FB9E7E6B-B19F-4F37-A708-2996190CEF13}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9E7E6B-B19F-4F37-A708-2996190CEF13}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug-NET35|Any CPU.ActiveCfg = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug-NET35|Any CPU.Build.0 = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug-NET40|Any CPU.ActiveCfg = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Debug-NET40|Any CPU.Build.0 = Debug|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release-NET35|Any CPU.ActiveCfg = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
-		{88F37B5F-322B-4CA4-A849-D2D097ACF165}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

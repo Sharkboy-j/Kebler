@@ -51,7 +51,6 @@ namespace Kebler.Theme.Default
         */
 
         private Window _main;
-        private MenuItem _topBarViewSortMenuItem;
         private List<MenuItem>  SortType = new List<MenuItem>();
         private List<MenuItem> SortVal = new List<MenuItem>();
 
