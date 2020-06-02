@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler", "Kebler\Kebler.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.API.RPC", "Transmission.API.RPC\Transmission.API.RPC.csproj", "{95644F0A-6B5A-441B-B26F-108317E55CA3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{D36BD614-4964-4897-A2AB-A7817DF79B5E}"
+	ProjectSection(SolutionItems) = preProject
+		..\version.xml = ..\version.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

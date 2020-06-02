@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <item>
-	<version>0.4.2.0</version>
-	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.4.2/Kebler-install.exe</url>
+	<version>0.4.3.0</version>
+	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.4.3/Kebler-install.exe</url>
 	<!--<changelog>https://github.com/ravibpatel/AutoUpdater.NET/releases</changelog>-->
 	<mandatory>true</mandatory>
 </item>

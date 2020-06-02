@@ -12,8 +12,8 @@
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-    <AssemblyVersion>0.4.2.0</AssemblyVersion>
-    <FileVersion>0.4.2.0</FileVersion>
+    <AssemblyVersion>0.4.3.0</AssemblyVersion>
+    <FileVersion>0.4.3.0</FileVersion>
     <Authors>https://github.com/JeremiSharkboy/</Authors>
     <Company>Kebler</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
