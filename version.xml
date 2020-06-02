@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <item>
-	<version>0.4.3.0</version>
+	<version>0.4.4.0</version>
 	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.4.3/Kebler-install.exe</url>
 	<!--<changelog>https://github.com/ravibpatel/AutoUpdater.NET/releases</changelog>-->
 	<mandatory>true</mandatory>
