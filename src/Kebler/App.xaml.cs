@@ -16,6 +16,7 @@ using log4net;
 using log4net.Config;
 using SharpConfig;
 using AutoUpdaterDotNET;
+using System.Windows.Threading;
 
 namespace Kebler
 {
@@ -90,14 +91,23 @@ namespace Kebler
 
 			Log.Info("AutoUpdater.Start");
 			AutoUpdater.ReportErrors = false;
-			AutoUpdater.DownloadPath = Environment.CurrentDirectory;
+			AutoUpdater.DownloadPath = System.IO.Path.GetTempPath();
 			AutoUpdater.ShowSkipButton = true;
 			AutoUpdater.ShowRemindLaterButton = true;
+			AutoUpdater.RunUpdateAsAdmin = true;
 
 			Dispatcher.Invoke(() =>
 			{
 				AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
 			});
+
+
+			DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(30)};
+			timer.Tick += delegate
+			{
+				AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
+			};
+			timer.Start();
 
 			//int hwnd = Win32.FindWindow(null, "Kebler");
 			//if (hwnd != 0)

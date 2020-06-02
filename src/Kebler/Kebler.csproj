@@ -42,7 +42,6 @@
     <None Remove="Theme\Icons\Kebler_darl2_512x512.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autoupdater.NET.Official" Version="1.6.0" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -53,6 +52,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Theme\Icons\Kebler.ico" />
     <EmbeddedResource Include="Theme\Icons\Kebler.svg" />
+    <ProjectReference Include="..\AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdater.NET.csproj" />
     <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
     <Resource Include="Theme\Icons\Kebler_16x16.png" />
     <Resource Include="Theme\Icons\Kebler_32x32.png" />
