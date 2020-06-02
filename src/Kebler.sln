@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.API.RPC", "Tra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{D36BD614-4964-4897-A2AB-A7817DF79B5E}"
 	ProjectSection(SolutionItems) = preProject
-		version.xml = version.xml
+		..\version.xml = ..\version.xml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdaterDotNET", "AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdaterDotNET.csproj", "{FB9E7E6B-B19F-4F37-A708-2996190CEF13}"
