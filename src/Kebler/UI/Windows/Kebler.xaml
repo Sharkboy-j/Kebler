@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Kebler.Models"
     xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
-    Title="{DynamicResource MainWindowTitle}"
+    Title="{Binding Title}"
     Width="900"
     Height="600"
     d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,

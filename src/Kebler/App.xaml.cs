@@ -163,24 +163,7 @@ namespace Kebler
 			Log.Info($"Installed {version} | Current {args.CurrentVersion}");
 		}
 
-		public static bool SendArgs(IntPtr targetHWnd, string args)
-		{
-			var cds = new Win32.CopyDataStruct();
-			try
-			{
-				cds.cbData = (args.Length + 1) * 2;
-				cds.lpData = Win32.LocalAlloc(0x40, cds.cbData);
-				Marshal.Copy(args.ToCharArray(), 0, cds.lpData, args.Length);
-				cds.dwData = (IntPtr)1;
-				Win32.SendMessage(targetHWnd, Win32.WM_COPYDATA, IntPtr.Zero, ref cds);
-			}
-			finally
-			{
-				cds.Dispose();
-			}
-
-			return true;
-		}
+	
 
 		#region Events
 		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-	<version>0.5.7.0</version>
-	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.5.7/Kebler-install.exe</url>
+	<version>0.6</version>
+	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.6/Kebler-install.exe</url>
 	<mandatory>false</mandatory>
 </item>

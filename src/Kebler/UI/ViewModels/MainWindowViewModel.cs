@@ -41,6 +41,8 @@ namespace Kebler.UI.ViewModels
         private Category.Categories _filterCategory = Category.Categories.All;
 
 
+
+
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Dispatcher Dispatcher => Application.Current.Dispatcher;
 
@@ -56,6 +58,16 @@ namespace Kebler.UI.ViewModels
 
         public string LongStatusText { get; set; }
         public string FilterText { get; set; }
+
+        public string Title
+        { 
+            get
+			{
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion}";
+            } 
+        }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
