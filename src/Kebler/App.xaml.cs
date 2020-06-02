@@ -89,8 +89,10 @@ namespace Kebler
 			XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
 			Log.Info("AutoUpdater.Start");
-			AutoUpdater.ReportErrors = true;
+			AutoUpdater.ReportErrors = false;
 			AutoUpdater.DownloadPath = Environment.CurrentDirectory;
+			AutoUpdater.ShowSkipButton = true;
+			AutoUpdater.ShowRemindLaterButton = true;
 
 			Dispatcher.Invoke(() =>
 			{
