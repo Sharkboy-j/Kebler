@@ -17,6 +17,9 @@ using log4net.Config;
 using SharpConfig;
 using AutoUpdaterDotNET;
 using System.Windows.Threading;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace Kebler
 {
@@ -80,14 +83,17 @@ namespace Kebler
 			return FindResource(name);
 		}
 
+
+
 		App()
 		{
-
 
 			var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
 			XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
 			Log.Info("AutoUpdater.Start");
+			AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
+
 			AutoUpdater.ReportErrors = false;
 			AutoUpdater.DownloadPath = System.IO.Path.GetTempPath();
 			AutoUpdater.ShowSkipButton = true;
@@ -100,7 +106,7 @@ namespace Kebler
 			});
 
 
-			DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(30)};
+			DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(30) };
 			timer.Tick += delegate
 			{
 				AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
@@ -145,6 +151,11 @@ namespace Kebler
 				Languages.Add(new CultureInfo(lang));
 			}
 
+		}
+
+		private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
+		{
+			Log.Info($"Installed {args.InstalledVersion} | Current {args.CurrentVersion}");
 		}
 
 		public static bool SendArgs(IntPtr targetHWnd, string args)

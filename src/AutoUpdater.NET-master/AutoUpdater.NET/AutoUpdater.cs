@@ -208,11 +208,13 @@ namespace AutoUpdaterDotNET
         /// <param name="args">An object containing the AppCast file received from server.</param>
         public delegate void ParseUpdateInfoHandler(ParseUpdateInfoEventArgs args);
 
+
+        public delegate void UpdateInfoEventArgsHandler(UpdateInfoEventArgs args);
         /// <summary>
         ///     An event that clients can use to be notified whenever the AppCast file needs parsing.
         /// </summary>
         public static event ParseUpdateInfoHandler ParseUpdateInfoEvent;
-
+        public static event UpdateInfoEventArgsHandler NotifyInfoArgsEvent;
         /// <summary>
         ///     Set if you want the default update form to have a different size.
         /// </summary>
@@ -361,6 +363,7 @@ namespace AutoUpdaterDotNET
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(UpdateInfoEventArgs));
                     XmlTextReader xmlTextReader = new XmlTextReader(new StringReader(xml)) {XmlResolver = null};
                     args = (UpdateInfoEventArgs) xmlSerializer.Deserialize(xmlTextReader);
+                    NotifyInfoArgsEvent(args);
                 }
                 else
                 {
