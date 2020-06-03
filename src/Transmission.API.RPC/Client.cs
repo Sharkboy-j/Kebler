@@ -181,7 +181,7 @@ namespace Transmission.API.RPC
         /// Add torrent (API: torrent-add)
         /// </summary>
         /// <returns>Torrent info (ID, Name and HashString)</returns>
-		public NewTorrentInfo TorrentAdd(NewTorrent torrent)
+		public TorrentAddResult TorrentAdd(NewTorrent torrent)
         {
             if (String.IsNullOrWhiteSpace(torrent.Metainfo) && String.IsNullOrWhiteSpace(torrent.Filename))
                 throw new Exception("Either \"filename\" or \"metainfo\" must be included.");
@@ -193,13 +193,13 @@ namespace Transmission.API.RPC
             if (jObject == null || jObject.First == null)
                 return null;
 
-            NewTorrentInfo result = null;
+            TorrentAddResult result = null;
             JToken value = null;
 
             if (jObject.TryGetValue("torrent-duplicate", out value))
-                result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
+                result = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString());
             else if (jObject.TryGetValue("torrent-added", out value))
-                result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
+                result = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString());
 
             return result;
         }
@@ -209,10 +209,10 @@ namespace Transmission.API.RPC
         /// </summary>
         /// <returns>Torrent info (ID, Name and HashString)</returns>
         /// <exception cref="Exception"
-        public async Task<AddResult> TorrentAddAsync(NewTorrent torrent)
+        public async Task<TorrentAddResult> TorrentAddAsync(NewTorrent torrent)
         {
 
-            if (String.IsNullOrWhiteSpace(torrent.Metainfo) && String.IsNullOrWhiteSpace(torrent.Filename))
+            if (string.IsNullOrWhiteSpace(torrent.Metainfo) && String.IsNullOrWhiteSpace(torrent.Filename))
                 throw new Exception("Either \"filename\" or \"metainfo\" must be included.");
 
             var request = new TransmissionRequest("torrent-add", torrent);
@@ -220,18 +220,22 @@ namespace Transmission.API.RPC
             var jObject = response?.Deserialize<JObject>();
 
             if (jObject == null || jObject.First == null)
-                return AddResult.ResponseNull;
+                return new TorrentAddResult(AddResult.ResponseNull);
 
-            NewTorrentInfo result = null;
-            JToken value = null;
-
-            if (jObject.TryGetValue("torrent-duplicate", out value))
-                return AddResult.Duplicate;
+            //TorrentAddResult
+            if (jObject.TryGetValue("torrent-duplicate", out var value))
+            {
+                return new TorrentAddResult(AddResult.Duplicate);
+            }
             // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
             else if (jObject.TryGetValue("torrent-added", out value))
-                // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
-                return AddResult.Added;
-            return AddResult.Error;
+            {
+                var result = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString());
+                result.Result = AddResult.Added;
+            }
+            // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
+            // return AddResult.Added;
+            return new TorrentAddResult(AddResult.Error);
         }
 
         /// <summary>
@@ -241,17 +245,17 @@ namespace Transmission.API.RPC
         public void TorrentSet(TorrentSettings settings)
         {
             var request = new TransmissionRequest("torrent-set", settings);
-            var response = SendRequest(request);
+            SendRequest(request);
         }
 
         /// <summary>
         /// Set torrent params (API: torrent-set)
         /// </summary>
         /// <param name="torrentSet">New torrent params</param>
-        public async void TorrentSetAsync(TorrentSettings settings)
+        public Task TorrentSetAsync(TorrentSettings settings)
         {
             var request = new TransmissionRequest("torrent-set", settings);
-            var response = await SendRequestAsync(request);
+            return SendRequestAsync(request);
         }
 
         /// <summary>

@@ -182,7 +182,7 @@ namespace Kebler
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
+			Language = ConfigService.Instanse.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.Instanse.Language);
 
 			KeblerControl = new UI.Windows.KeblerWindow();
 			KeblerControl.Show();
@@ -208,7 +208,7 @@ namespace Kebler
 
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-			Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
+			Language = ConfigService.Instanse.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.Instanse.Language);
 
 			KeblerControl = new UI.Windows.KeblerWindow();
 			KeblerControl.Show();

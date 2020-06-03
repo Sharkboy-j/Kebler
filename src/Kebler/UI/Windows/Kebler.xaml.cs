@@ -8,12 +8,12 @@ using System.Windows.Media;
 using Transmission.API.RPC.Entity;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using Kebler.UI.ViewModels;
 using System.Windows.Interop;
 using Kebler.Models;
 using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Microsoft.Win32;
+using Kebler.Services;
 
 namespace Kebler.UI.Windows
 {
@@ -55,8 +55,10 @@ namespace Kebler.UI.Windows
         {
             Vm.InitConnection();
         }
+
         public void AddTorrent()
         {
+
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "Image files (*.torrent)|*.torrent|All files (*.*)|*.*",
@@ -72,7 +74,16 @@ namespace Kebler.UI.Windows
         {
             foreach (var item in names)
             {
-                Vm.AddTorrent(item);
+                var dialog = new AddTorrentDialog(item, Vm._settings, ref Vm._transmissionClient);
+                if(ConfigService.Instanse.IsAddTorrentWindowShow)
+                {
+                    dialog.Add(null, null);
+                }
+                else
+                {
+                    if (!(bool)dialog.ShowDialog())
+                        return;
+                }
             }
         }
 

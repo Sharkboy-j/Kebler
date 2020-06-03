@@ -162,8 +162,7 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Bottom"
                                 FontSize="11"
-                                Text="{DynamicResource TopBarAddTorrentButtonContent}" />
-
+                                Text="Quick Add" />
                         </Grid>
 
                     </Button>
@@ -723,11 +722,6 @@
             <StatusBar Background="{DynamicResource BorderBackgroundBrush}">
 
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="225" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
                     <Label
                         Grid.Column="0"
                         Width="Auto"
