@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using Kebler.Services;
 using Kebler.Theme.Default;
@@ -40,7 +41,7 @@ namespace Kebler.UI.Controls
         {
             if (!(sender is MenuItem mi)) return;
 
-            ConfigService.ConfigurationData.SortVal = mi.Tag.ToString();
+            ConfigService.Instanse.SortVal = mi.Tag.ToString();
             ConfigService.Save();
             App.KeblerControl.UpdateSorting();
         }
@@ -51,11 +52,22 @@ namespace Kebler.UI.Controls
 
             int.TryParse(mi.Tag.ToString(), out var val);
 
-            ConfigService.ConfigurationData.SortType = val;
+            ConfigService.Instanse.SortType = val;
 
             ConfigService.Save();
 
             App.KeblerControl.UpdateSorting();
+        }
+
+        private void Report(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("cmd", $"/c start https://github.com/JeremiSharkboy/Kebler/issues") { CreateNoWindow = true });
+        }
+
+        private void About(object sender, RoutedEventArgs e)
+        {
+            var dd = new Windows.MessageBox(new About());
+            dd.ShowDialog();
         }
     }
 }

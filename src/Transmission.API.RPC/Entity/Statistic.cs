@@ -37,10 +37,10 @@ namespace Transmission.API.RPC.Entity
     {
         public event PropertyChangedEventHandler PropertyChanged;
         [JsonProperty("uploadedBytes")]
-        public double uploadedBytes{ get; set; }
+        public long uploadedBytes{ get; set; }
         
         [JsonProperty("downloadedBytes")]
-        public double DownloadedBytes{ get; set; }
+        public long DownloadedBytes{ get; set; }
 
         [JsonProperty("filesAdded")]
         public int FilesAdded{ get; set; }

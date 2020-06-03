@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Theme\Icons\Kebler.svg" />
+    <None Remove="Theme\Icons\KeblerVided.png" />
     <None Remove="Theme\Icons\Kebler_16x16.png" />
     <None Remove="Theme\Icons\Kebler_32x32.png" />
     <None Remove="Theme\Icons\Kebler_512x512.png" />
@@ -52,6 +53,7 @@
     <EmbeddedResource Include="Theme\Icons\Kebler.svg" />
     <ProjectReference Include="..\AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdaterDotNET.csproj" />
     <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
+    <Resource Include="Theme\Icons\KeblerVided.png" />
     <Resource Include="Theme\Icons\Kebler_16x16.png" />
     <Resource Include="Theme\Icons\Kebler_32x32.png" />
     <Resource Include="Theme\Icons\Kebler_512x512.png" />

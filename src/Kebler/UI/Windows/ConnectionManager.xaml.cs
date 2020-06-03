@@ -158,7 +158,7 @@ namespace Kebler.UI.Windows
             else
             {
                 Log.Error($"SaveError: {error}");
-                MessageBox.Show(error.ToString());
+                System.Windows.MessageBox.Show(error.ToString());
             }
 
         }
@@ -199,7 +199,7 @@ namespace Kebler.UI.Windows
             if (!result)
             {
                 //TODO: Add string 
-                MessageBox.Show("RemoveErrorContent");
+                System.Windows.MessageBox.Show("RemoveErrorContent");
             }
 
             SelectedServer = null;

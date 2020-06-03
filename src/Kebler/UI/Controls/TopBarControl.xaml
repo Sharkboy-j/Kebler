@@ -10,28 +10,23 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <Menu x:Name="TopBarMenu" Grid.Column="0">
+        <Menu Name="TopBarMenu" Grid.Column="0">
             <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Click="OpenConnectionManager"
                     Header="{DynamicResource TopBarCmButtonContent}"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
                 <MenuItem
-                    Click="ConnectFirst"
-                    Header="{DynamicResource TopBarConnectButtonContent}"
-                    Style="{DynamicResource PopUpTopBarMenuButton}" />
-                <Separator />
-                <MenuItem
                     Click="AddTorrent"
                     Header="{DynamicResource TopBarAddTorrentButtonContent}"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
             </MenuItem>
             <MenuItem
-                x:Name="TopBarViewSortMenuItem"
+                Name="TopBarViewSortMenuItem"
                 Header="{DynamicResource TopBarViewButtonContent}"
                 Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
-                    x:Name="HighSort"
+                    Name="HighSort"
                     default:MenuItemExtensions.GroupName="SortType"
                     Click="SortTypeMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortFromHighButtonContent}"
@@ -39,7 +34,7 @@
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="1" />
                 <MenuItem
-                    x:Name="LowSort"
+                    Name="LowSort"
                     default:MenuItemExtensions.GroupName="SortType"
                     Click="SortTypeMenuItem_Click"
                     Header="{DynamicResource TopBarViewSortFromLowButtonContent}"
@@ -48,7 +43,7 @@
                     Tag="0" />
 
 
-                <Separator />
+                <Separator Background="{StaticResource BorderBorderBrush}" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
                     Click="SortValMenuItem_Click"
@@ -79,24 +74,21 @@
                     Tag="AddedDate" />
             </MenuItem>
             <MenuItem
-                Header="{DynamicResource TopBarToolsButtonContent}"
-                IsEnabled="False"
+                Header="{DynamicResource TopBarInfoButtonContent}"
+                IsEnabled="True"
                 Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
-                    Header="{DynamicResource TopBarToolsPropertiesButtonContent}"
+                    Click="Report"
+                    Header="Report a problem"
                     IsCheckable="False"
-                    Style="{DynamicResource PopUpTopBarMenuButton}"
-                    Tag="RateDownload" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                <Separator Background="{StaticResource BorderBorderBrush}" />
                 <MenuItem
-                    Header="{DynamicResource TopBarToolsSettingsButtonContent}"
+                    Click="About"
+                    Header="About"
                     IsCheckable="False"
-                    Style="{DynamicResource PopUpTopBarMenuButton}"
-                    Tag="RateDownload" />
+                    Style="{DynamicResource PopUpTopBarMenuButton}" />
             </MenuItem>
-            <MenuItem
-                Header="{DynamicResource TopBarInfoButtonContent}"
-                IsEnabled="False"
-                Style="{DynamicResource TopBarMenuButton}" />
         </Menu>
     </Grid>
 </UserControl>
