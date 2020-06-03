@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Kebler.Models"
     xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
@@ -14,10 +15,14 @@
     MinHeight="600"
     d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,
                                      IsDesignTimeCreatable=True}"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     StateChanged="Window_StateChanged_1"
     Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+
     <Window.Resources>
         <DataTemplate x:Key="CategoryItemTemplate">
             <Grid Height="18">

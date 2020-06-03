@@ -14,6 +14,7 @@ using Kebler.Models;
 using MessageBox = System.Windows.MessageBox;
 using Microsoft.Win32;
 using Kebler.Services;
+using System.Windows.Input;
 
 namespace Kebler.UI.Windows
 {
@@ -35,8 +36,6 @@ namespace Kebler.UI.Windows
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
             DataContext = new MainWindowViewModel();
-
-
         }
 
 
@@ -208,5 +207,6 @@ namespace Kebler.UI.Windows
         {
             Vm.SetLocation();
         }
+
     }
 }

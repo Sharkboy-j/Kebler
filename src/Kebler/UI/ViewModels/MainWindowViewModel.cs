@@ -90,9 +90,18 @@ namespace Kebler.UI.ViewModels
 
         public MainWindowViewModel()
         {
+            App.Instance.LangChanged += Instance_LangChanged;
+
             Task.Factory.StartNew(InitConnection);
         }
 
+        private void Instance_LangChanged()
+        {
+            IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
+                               $"      {Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
+                               $"      {Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                               $"      {Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+        }
 
         public void InitConnection()
         {
@@ -205,11 +214,12 @@ namespace Kebler.UI.ViewModels
                         Debug.WriteLine("Start updating stats");
                         _stats = await UpdateStats();
                         Debug.WriteLine("Stats updated");
-
+                        Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
+                        Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
                         IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                $"      Uploaded: {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
-                                $"      Downloaded: {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                $"      Active Time: {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                                $"      {Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
+                                $"      {Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                $"      {Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
                         //sessionInfo = await UpdateSessionInfo();
                         _settings = await _transmissionClient.GetSessionSettingsAsync();

@@ -4,32 +4,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:default="clr-namespace:Kebler.Theme.Default"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="27"
     d:DesignWidth="800"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="HeaderMenu"
     mc:Ignorable="d">
     <Grid>
         <Menu Name="TopBarMenu" Grid.Column="0">
-            <MenuItem Header="{DynamicResource TopBarTorrentButtonContent}" Style="{DynamicResource TopBarMenuButton}">
+            <MenuItem Header="{lex:LocText MI_Torrent}" Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Click="OpenConnectionManager"
-                    Header="{DynamicResource TopBarCmButtonContent}"
+                    Header="{lex:LocText MI_CM}"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
+                <Separator Background="{StaticResource BorderBorderBrush}" />
                 <MenuItem
                     Click="AddTorrent"
-                    Header="{DynamicResource TopBarAddTorrentButtonContent}"
+                    Header="{lex:LocText MI_AddTorrent}"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
             </MenuItem>
             <MenuItem
                 Name="TopBarViewSortMenuItem"
-                Header="{DynamicResource TopBarViewButtonContent}"
+                Header="{lex:LocText MI_View}"
                 Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Name="HighSort"
                     default:MenuItemExtensions.GroupName="SortType"
                     Click="SortTypeMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortFromHighButtonContent}"
+                    Header="{lex:LocText MI_SortHigh}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="1" />
@@ -37,58 +42,71 @@
                     Name="LowSort"
                     default:MenuItemExtensions.GroupName="SortType"
                     Click="SortTypeMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortFromLowButtonContent}"
+                    Header="{lex:LocText MI_SortLow}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="0" />
-
-
                 <Separator Background="{StaticResource BorderBorderBrush}" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
                     Click="SortValMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortUploadedButtonContent}"
+                    Header="{lex:LocText MI_Sort_Uploaded}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="UploadedEver" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
                     Click="SortValMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortUploadSpeedButtonContent}"
+                    Header="{lex:LocText MI_Sort_UploadSpeed}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="RateUpload" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
                     Click="SortValMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortDownloadSpeedButtonContent}"
+                    Header="{lex:LocText MI_Sort_DownloadSpeed}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="RateDownload" />
                 <MenuItem
                     default:MenuItemExtensions.GroupName="SorlVal"
                     Click="SortValMenuItem_Click"
-                    Header="{DynamicResource TopBarViewSortDateAddedButtonContent}"
+                    Header="{lex:LocText MI_Sort_AddedDate}"
                     IsCheckable="True"
                     Style="{DynamicResource PopUpTopBarMenuButton}"
                     Tag="AddedDate" />
             </MenuItem>
             <MenuItem
-                Header="{DynamicResource TopBarInfoButtonContent}"
+                Header="{lex:LocText Mi_Info}"
                 IsEnabled="True"
                 Style="{DynamicResource TopBarMenuButton}">
                 <MenuItem
                     Click="Report"
-                    Header="Report a problem"
+                    Header="{lex:LocText MI_Report}"
                     IsCheckable="False"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
                 <Separator Background="{StaticResource BorderBorderBrush}" />
                 <MenuItem
                     Click="About"
-                    Header="About"
+                    Header="{lex:LocText MI_About}"
+                    IsCheckable="False"
+                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                <MenuItem
+                    Click="Check"
+                    Header="{lex:LocText MI_Check}"
+                    IsCheckable="False"
+                    Style="{DynamicResource PopUpTopBarMenuButton}" />
+                <MenuItem
+                    Click="Contact"
+                    Header="{lex:LocText MI_Contact}"
                     IsCheckable="False"
                     Style="{DynamicResource PopUpTopBarMenuButton}" />
             </MenuItem>
+            <MenuItem
+                Name="LangMenu"
+                Header="{lex:LocText MI_lang}"
+                IsEnabled="True"
+                Style="{DynamicResource TopBarMenuButton}" />
         </Menu>
     </Grid>
 </UserControl>
