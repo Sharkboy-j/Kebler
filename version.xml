@@ -3,5 +3,5 @@
 	<version>0.6.1</version>
 	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.6.1/Kebler-install.exe</url>
 	<mandatory>false</mandatory>
-  <changelog>https://github.com/JeremiSharkboy/Kebler/releases/tag/0.6.1</changelog>
+  	<changelog>https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/Release-info/0.6.1.info</changelog>
 </item>
