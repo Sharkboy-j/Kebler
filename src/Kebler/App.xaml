@@ -7,11 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/lang.en-US.xaml" />
-                <!--<ResourceDictionary Source="Resources/lang.ru-RU.xaml" />-->
-                <ResourceDictionary Source="Resources/Icons.xaml" />
-                <ResourceDictionary Source="Theme/Default/MainTheme.xaml" />
-                <ResourceDictionary Source="Theme/Default/FormatedStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Generic.Dark.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -27,10 +23,6 @@
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:IntToColorConverter x:Key="IntToColorConverter" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
-
-            <!--<conv:PieceToImage x:Key="PieceToImage" />-->
-
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

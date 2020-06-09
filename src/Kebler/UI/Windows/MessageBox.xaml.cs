@@ -15,25 +15,26 @@ namespace Kebler.UI.Windows
     /// <summary>
     /// Interaction logic for MessageBox.xaml
     /// </summary>
-    public partial class MessageBox : Window
+    partial class MessageBox
     {
         public MessageBox(UserControl ctr)
         {
             InitializeComponent();
-            Data.Content = ctr;
-            this.Width = ctr.Width;
-            this.Height = ctr.Height;
+            //Data.Content = ctr;
+            //this.Width = ctr.Width;
+            //this.Height = ctr.Height;
         }
 
         public MessageBox(string message, string title = "")
         {
             InitializeComponent();
-            var txt = new TextBlock();
-            txt.Text = message;
-            txt.TextAlignment = TextAlignment.Left;
-
+            //Data.Visibility = Visibility.Collapsed;
             this.Title = title;
-            Data.Content = txt;
+            TextBlock_Message.Text = message;
+
+            //this.Height = txt.ActualHeight;
+
+            //this.SizeToContent = SizeToContent.Manual;
         }
     }
 }

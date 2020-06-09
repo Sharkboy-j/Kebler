@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Kebler.Models;
 using Kebler.Services;
-using Kebler.Theme.Default;
 using Transmission.API.RPC.Entity;
 
 namespace Kebler.UI.Controls
@@ -34,25 +33,25 @@ namespace Kebler.UI.Controls
 
                 dd.IsChecked = Thread.CurrentThread.CurrentCulture == item;
 
-                LangMenu.Items.Add(dd);
+                //LangMenu.Items.Add(dd);
             }
         }
 
         private void Dd_Click(object sender, RoutedEventArgs e)
         {
-            foreach(var item in LangMenu.Items)
-            {
-                if (item is MenuItem itm)
-                {
-                    itm.IsChecked = false;
-                }
-            }
+            //foreach(var item in LangMenu.Items)
+            //{
+            //    if (item is MenuItem itm)
+            //    {
+            //        itm.IsChecked = false;
+            //    }
+            //}
 
-            if(sender is MenuItem mi)
-            {
-                LocalizationManager.CurrentCulture = (CultureInfo)mi.Tag;
-                mi.IsChecked = true;
-            }
+            //if(sender is MenuItem mi)
+            //{
+            //    LocalizationManager.CurrentCulture = (CultureInfo)mi.Tag;
+            //    mi.IsChecked = true;
+            //}
         }
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)

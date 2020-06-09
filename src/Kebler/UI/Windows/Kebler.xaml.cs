@@ -22,7 +22,7 @@ namespace Kebler.UI.Windows
     /// <summary>
     /// Interaction logic for Kebler.xaml
     /// </summary>
-    public partial class KeblerWindow : Window
+    public partial class KeblerWindow : CustomWindow
     {
 
         private MainWindowViewModel Vm => this.DataContext as MainWindowViewModel;
@@ -35,7 +35,9 @@ namespace Kebler.UI.Windows
             //disable hardware rendering
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
-            DataContext = new MainWindowViewModel();
+            // DataContext = new MainWindowViewModel();
+
+         
         }
 
 
@@ -98,10 +100,10 @@ namespace Kebler.UI.Windows
 
         private void TorrentsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (TorrentsDataGrid.SelectedValue is TorrentInfo tor)
-            {
-                Vm.SelectedTorrent = tor;
-            }
+            //if (TorrentsDataGrid.SelectedValue is TorrentInfo tor)
+            //{
+            //    Vm.SelectedTorrent = tor;
+            //}
         }
 
         private void RemoveTorrent_ItemClick(object sender, RoutedEventArgs e)
@@ -182,27 +184,27 @@ namespace Kebler.UI.Windows
 
         private void ListBox_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (CategoriesListBox.SelectedItem == null)
-                return;
+            //if (CategoriesListBox.SelectedItem == null)
+            //    return;
 
-            if (CategoriesListBox.SelectedItem is Category cat)
-            {
-                FilterTextBox.Text = $"{{p}}:{cat.FullPath}";
-            }
+            //if (CategoriesListBox.SelectedItem is Category cat)
+            //{
+            //    FilterTextBox.Text = $"{{p}}:{cat.FullPath}";
+            //}
         }
 
         private void Border_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            FilterTextBox.Clear();
-            CategoriesListBox.SelectedIndex = -1;
+            //FilterTextBox.Clear();
+            //CategoriesListBox.SelectedIndex = -1;
         }
 
         private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!IsLoaded)
-                return;
-            Vm.FilterText = FilterTextBox.Text;
-            Vm.UpdateSorting();
+            //if (!IsLoaded)
+            //    return;
+            //Vm.FilterText = FilterTextBox.Text;
+            //Vm.UpdateSorting();
 
         }
 
@@ -214,6 +216,12 @@ namespace Kebler.UI.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var sds = new MessageBox("dsf dfd ddf ghdfgdf gdfjb gjdfbgdfjb gdfbgdyfub gdfabgdhfjb gdhfjavgbdfav hjab vgdflb vlvg dvfagdhfjas vgldagdflas gdad", "tt");
+            sds.ShowDialog();
         }
     }
 }
