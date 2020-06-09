@@ -16,7 +16,7 @@ namespace Kebler.UI.Themes.Styles
     {
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            Window window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
+            var window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
             if (window != null) action(window);
         }
 
@@ -30,6 +30,10 @@ namespace Kebler.UI.Themes.Styles
 
     public partial class WindowST
     {
+        public WindowST()
+        {
+            InitializeComponent();
+        }
         #region sizing event handlers
 
         public  void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }
@@ -78,12 +82,16 @@ namespace Kebler.UI.Themes.Styles
 
         public void MaxButtonClick(object sender, RoutedEventArgs e)
         {
+            sender.ForWindowFromTemplate(w => w.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight);
+            sender.ForWindowFromTemplate(w => w.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth);
             sender.ForWindowFromTemplate(w => w.WindowState = (w.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized);
         }
 
         public  void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount > 1)
+            var mode = (((FrameworkElement)sender).TemplatedParent as Window).ResizeMode;
+
+            if (e.ClickCount > 1 && mode != ResizeMode.NoResize)
             {
                 MaxButtonClick(sender, e);
             }

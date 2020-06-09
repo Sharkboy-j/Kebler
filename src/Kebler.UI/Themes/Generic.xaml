@@ -5,6 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Brushes/Brushes.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Common.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Buttons.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Menu.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Window.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

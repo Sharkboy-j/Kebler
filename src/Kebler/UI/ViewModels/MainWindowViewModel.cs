@@ -171,11 +171,12 @@ namespace Kebler.UI.ViewModels
                     pass = await GetPassword();
                     if (string.IsNullOrEmpty(pass))
                     {
-                        await Application.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            var dd = new Windows.MessageBox(Resources.Windows.MW_PAsswordCantBeEmpty);
-                            dd.ShowDialog();
-                        });
+                        //await Application.Current.Dispatcher.InvokeAsync(() =>
+                        //{
+                        //    var dd = new Windows.MessageBox(Resources.Windows.MW_PAsswordCantBeEmpty);
+                        //    dd.Show(App.Current.MainWindow);
+                        //    //dd.ShowDialog(App.Current.MainWindow);
+                        //});
 
                         IsErrorOccuredWhileConnecting = true;
                         return;
@@ -428,8 +429,8 @@ namespace Kebler.UI.ViewModels
         private async Task<Statistic> UpdateStats()
         {
             return await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync, Resources.Windows.MW_StatusText_Stats);
-        }    
-        
+        }
+
         private async Task<SessionSettings> UpdateSettings()
         {
             return await ExecuteLongTask(_transmissionClient.GetSessionSettingsAsync, Resources.Windows.MW_StatusText_Settings);

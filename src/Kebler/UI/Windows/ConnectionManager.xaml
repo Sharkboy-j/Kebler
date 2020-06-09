@@ -1,16 +1,16 @@
-﻿<Window
+﻿<ui:CustomWindow
     x:Class="Kebler.UI.Windows.ConnectionManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
+        xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Kebler.Models"
-    Title="{DynamicResource ConnectionManagerTitle}"
+    Style="{StaticResource MainWindow}"
     Width="520"
     Height="370"
     ResizeMode="NoResize"
-    Style="{DynamicResource WindowStyle}"
     WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -325,4 +325,4 @@
 
 
     </Grid>
-</Window>
+</ui:CustomWindow>

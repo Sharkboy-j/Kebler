@@ -82,14 +82,11 @@
     </Style>
 
 
-    <Style x:Key="MainWindow" TargetType="{x:Type ui:CustomWindow}">
-        <Setter Property="AllowsTransparency" Value="True" />
+    <Style x:Key="MainWindow" TargetType="{x:Type Window}">
         <Setter Property="WindowStyle" Value="None" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-        <Setter Property="Background" Value="{DynamicResource Window.TitleBar.Background}" />
+        <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="Background" Value="{DynamicResource Window.BackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource Window.Foreground}" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -102,34 +99,23 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{DynamicResource Window.BorderBrush}"
                             BorderThickness="1">
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="7"
-                                    Direction="315"
-                                    Opacity="0.5"
-                                    ShadowDepth="2"
-                                    Color="Black" />
-                            </Border.Effect>
-                            <DockPanel
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Background="Transparent">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="27" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
                                 <Border
                                     Name="TitleBar"
-                                    Background="{TemplateBinding Control.Background}"
-                                    BorderBrush="{DynamicResource Window.BorderSeparatorBrush}"
-                                    BorderThickness="0,0,0,1"
-                                    DockPanel.Dock="Top"
+                                    Background="{TemplateBinding Background}"
                                     MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
                                     MouseMove="TitleBarMouseMove">
-                                    <Grid Height="26">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
-                                            <ColumnDefinition Width="45" />
-                                            <ColumnDefinition Width="45" />
-                                            <ColumnDefinition Width="45" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-
                                         <TextBlock
                                             Name="Caption"
                                             Grid.Column="0"
@@ -141,6 +127,7 @@
                                             FontSize="12"
                                             Opacity="0.66"
                                             Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
                                         <Button
                                             Name="MinButton"
                                             Grid.Column="1"
@@ -185,170 +172,90 @@
                                         </Button>
                                     </Grid>
                                 </Border>
-                                <ContentPresenter />
-                            </DockPanel>
+                                <ContentPresenter Grid.Row="1" />
+                                <Grid Name="Sizing" Grid.RowSpan="2">
+                                    <Rectangle
+                                        Grid.Row="0"
+                                        Height="2"
+                                        VerticalAlignment="Top"
+                                        Cursor="SizeNS"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeNorth" />
+                                    <Rectangle
+                                        Grid.Row="1"
+                                        Height="2"
+                                        VerticalAlignment="Bottom"
+                                        Cursor="SizeNS"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeSouth" />
+                                    <Rectangle
+                                        Grid.RowSpan="2"
+                                        Width="2"
+                                        HorizontalAlignment="Left"
+                                        Cursor="SizeWE"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeWest" />
+                                    <Rectangle
+                                        Grid.RowSpan="2"
+                                        Width="2"
+                                        HorizontalAlignment="Right"
+                                        Cursor="SizeWE"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeEast" />
+
+
+                                    <Rectangle
+                                        Width="5"
+                                        Height="5"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Cursor="SizeNWSE"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeNorthWest" />
+                                    <Rectangle
+                                        Width="5"
+                                        Height="5"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Cursor="SizeNESW"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeNorthEast" />
+                                    <Rectangle
+                                        Grid.Row="1"
+                                        Width="5"
+                                        Height="5"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Bottom"
+                                        Cursor="SizeNESW"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeSouthWest" />
+                                    <Rectangle
+                                        Grid.Row="1"
+                                        Width="5"
+                                        Height="5"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Cursor="SizeNWSE"
+                                        Fill="Transparent"
+                                        MouseDown="OnSizeSouthEast" />
+                                </Grid>
+                            </Grid>
                         </Border>
-                        <Line
-                            Name="lnSizeNorth"
-                            Cursor="SizeNS"
-                            MouseDown="OnSizeNorth"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="1"
-                            Y2="1" />
-                        <Line
-                            Name="lnSizeSouth"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNS"
-                            MouseDown="OnSizeSouth"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="{TemplateBinding ActualHeight}"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Line
-                            Name="lnSizeWest"
-                            Cursor="SizeWE"
-                            MouseDown="OnSizeWest"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="1"
-                            Y1="1"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Line
-                            Name="lnSizeEast"
-                            HorizontalAlignment="Right"
-                            Cursor="SizeWE"
-                            MouseDown="OnSizeEast"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="{TemplateBinding ActualWidth}"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="1"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Rectangle
-                            Name="rectSizeNorthWest"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNWSE"
-                            Fill="Transparent"
-                            MouseDown="OnSizeNorthWest" />
-                        <Rectangle
-                            Name="rectSizeNorthEast"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNESW"
-                            Fill="Transparent"
-                            MouseDown="OnSizeNorthEast" />
-                        <Rectangle
-                            Name="rectSizeSouthWest"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNESW"
-                            Fill="Transparent"
-                            MouseDown="OnSizeSouthWest" />
-                        <Rectangle
-                            Name="rectSizeSouthEast"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNWSE"
-                            Fill="Transparent"
-                            MouseDown="OnSizeSouthEast" />
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="ResizeMode" Value="NoResize">
+                            <Setter TargetName="Sizing" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="MinButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
                         <Trigger Property="WindowState" Value="Maximized">
-                            <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8" />
-                            <Setter TargetName="lnSizeNorth" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="lnSizeSouth" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="lnSizeWest" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="lnSizeEast" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="rectSizeNorthWest" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="rectSizeSouthWest" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="rectSizeSouthEast" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Sizing" Property="Visibility" Value="Collapsed" />
+
                             <Setter TargetName="PART_Border" Property="BorderThickness" Value="0" />
-                            <Setter TargetName="Main" Property="Margin" Value="7" />
+                            <Setter TargetName="Main" Property="Margin" Value="6" />
+                            <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8" />
                         </Trigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-    <Style x:Key="MessageWindow" TargetType="{x:Type Window}">
-        <Setter Property="WindowStyle" Value="None" />
-        <Setter Property="AllowsTransparency" Value="True" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-        <Setter Property="Background" Value="{DynamicResource Window.Dialog.Background}" />
-        <Setter Property="Foreground" Value="{DynamicResource Window.Foreground}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Window}">
-                    <Border
-                        Name="PART_Border"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{DynamicResource Window.BorderBrush}"
-                        BorderThickness="1">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="27" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Border
-                                Name="TitleBar"
-                                Background="{TemplateBinding Background}"
-                                MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
-                                MouseMove="TitleBarMouseMove">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        Name="Caption"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="5"
-                                        Margin="4,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="12"
-                                        Opacity="0.66"
-                                        Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <Button
-                                        Name="CloseButton"
-                                        Grid.Column="3"
-                                        Click="CloseButtonClick"
-                                        Style="{StaticResource WindowCloseButton}">
-                                        <Grid MaxWidth="9" MaxHeight="9">
-                                            <Path
-                                                Data="M0,0 L8,8 M0,8 L8,0"
-                                                Stretch="None"
-                                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                StrokeThickness="1.5" />
-                                        </Grid>
-                                    </Button>
-                                </Grid>
-                            </Border>
-                            <ContentPresenter Grid.Row="1" />
-                        </Grid>
-                    </Border>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

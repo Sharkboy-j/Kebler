@@ -18,11 +18,195 @@
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Closing="Window_Closing"
+    ResizeMode="CanResize"
     StateChanged="Window_StateChanged_1"
-    Style="{DynamicResource MainWindow}"
+    Style="{DynamicResource MainWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid >
-        <Button Margin="382,260,382,260" Click="Button_Click"></Button>
+    <ui:CustomWindow.Resources>
+        <Style
+            x:Key="MainWindowStyle"
+            BasedOn="{StaticResource MainWindow}"
+            TargetType="{x:Type ui:CustomWindow}">
+            <Setter Property="Background" Value="{DynamicResource Window.BackgroundBrush}" />
+
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Grid
+                            Name="Main"
+                            TextOptions.TextFormattingMode="Display"
+                            TextOptions.TextRenderingMode="ClearType">
+                            <Border
+                                Name="PART_Border"
+                                BorderBrush="{DynamicResource Window.BorderBrush}"
+                                BorderThickness="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="27" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Name="TitleBar"
+                                        Background="{DynamicResource Window.TitleBar.Background}"
+                                        BorderBrush="{DynamicResource Window.BorderSeparatorBrush}"
+                                        BorderThickness="0,0,0,1"
+                                        MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
+                                        MouseMove="TitleBarMouseMove">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Name="Caption"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="5"
+                                                Margin="4,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="12"
+                                                Opacity="0.66"
+                                                Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <controls:TopBarControl HorizontalAlignment="Left" />
+
+                                            <Button
+                                                Name="MinButton"
+                                                Grid.Column="1"
+                                                Click="MinButtonClick"
+                                                Style="{StaticResource WindowButton}">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        Data="M0,8 H8 M0,7 H8 M0,6 H8"
+                                                        RenderOptions.EdgeMode="Aliased"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1" />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                                Name="MaxButton"
+                                                Grid.Column="2"
+                                                Click="MaxButtonClick"
+                                                Style="{StaticResource WindowButton}">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        Name="PART_MaxButton_Path"
+                                                        Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
+                                                        RenderOptions.EdgeMode="Aliased"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1" />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                                Name="CloseButton"
+                                                Grid.Column="3"
+                                                Click="CloseButtonClick"
+                                                Style="{StaticResource WindowCloseButton}">
+                                                <Grid MaxWidth="9" MaxHeight="9">
+                                                    <Path
+                                                        Data="M0,0 L8,8 M0,8 L8,0"
+                                                        Stretch="None"
+                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                        StrokeThickness="1.5" />
+                                                </Grid>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                    <ContentPresenter Grid.Row="1" />
+                                    <Grid Name="Sizing" Grid.RowSpan="2">
+                                        <Rectangle
+                                            Grid.Row="0"
+                                            Height="2"
+                                            VerticalAlignment="Top"
+                                            Cursor="SizeNS"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeNorth" />
+                                        <Rectangle
+                                            Grid.Row="1"
+                                            Height="2"
+                                            VerticalAlignment="Bottom"
+                                            Cursor="SizeNS"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeSouth" />
+                                        <Rectangle
+                                            Grid.RowSpan="2"
+                                            Width="2"
+                                            HorizontalAlignment="Left"
+                                            Cursor="SizeWE"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeWest" />
+                                        <Rectangle
+                                            Grid.RowSpan="2"
+                                            Width="2"
+                                            HorizontalAlignment="Right"
+                                            Cursor="SizeWE"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeEast" />
+
+
+                                        <Rectangle
+                                            Width="5"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Cursor="SizeNWSE"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeNorthWest" />
+                                        <Rectangle
+                                            Width="5"
+                                            Height="5"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Cursor="SizeNESW"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeNorthEast" />
+                                        <Rectangle
+                                            Grid.Row="1"
+                                            Width="5"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Bottom"
+                                            Cursor="SizeNESW"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeSouthWest" />
+                                        <Rectangle
+                                            Grid.Row="1"
+                                            Width="5"
+                                            Height="5"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Cursor="SizeNWSE"
+                                            Fill="Transparent"
+                                            MouseDown="OnSizeSouthEast" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="ResizeMode" Value="NoResize">
+                                <Setter TargetName="Sizing" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="MinButton" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="WindowState" Value="Maximized">
+                                <Setter TargetName="Sizing" Property="Visibility" Value="Collapsed" />
+
+                                <Setter TargetName="PART_Border" Property="BorderThickness" Value="0" />
+                                <Setter TargetName="Main" Property="Margin" Value="6" />
+                                <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ui:CustomWindow.Resources>
+    <Grid Background="{StaticResource Window.BackgroundBrush}">
+        <Button Margin="382,260,382,260" Click="Button_Click" />
     </Grid>
 </ui:CustomWindow>

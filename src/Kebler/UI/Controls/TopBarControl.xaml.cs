@@ -18,7 +18,7 @@ namespace Kebler.UI.Controls
         public TopBarControl()
         {
             InitializeComponent();
-            foreach(var item in LocalizationManager.CultureList)
+            foreach (var item in LocalizationManager.CultureList)
             {
                 var dd = new MenuItem();
                 dd.Header = item.EnglishName;
@@ -28,30 +28,30 @@ namespace Kebler.UI.Controls
 
                 //ahhh fuck this shit. im too lasy for.. That is fucking easiest and fastes way. stfu!
                 //TODO: RMK
-                dd.Style = App.Instance.TryFindResource("PopUpTopBarMenuButton") as Style;
+                //dd.Style = App.Instance.TryFindResource("PopUpTopBarMenuButton") as Style;
 
 
                 dd.IsChecked = Thread.CurrentThread.CurrentCulture == item;
 
-                //LangMenu.Items.Add(dd);
+                LangMenu.Items.Add(dd);
             }
         }
 
         private void Dd_Click(object sender, RoutedEventArgs e)
         {
-            //foreach(var item in LangMenu.Items)
-            //{
-            //    if (item is MenuItem itm)
-            //    {
-            //        itm.IsChecked = false;
-            //    }
-            //}
+            foreach (var item in LangMenu.Items)
+            {
+                if (item is MenuItem itm)
+                {
+                    itm.IsChecked = false;
+                }
+            }
 
-            //if(sender is MenuItem mi)
-            //{
-            //    LocalizationManager.CurrentCulture = (CultureInfo)mi.Tag;
-            //    mi.IsChecked = true;
-            //}
+            if (sender is MenuItem mi)
+            {
+                LocalizationManager.CurrentCulture = (CultureInfo)mi.Tag;
+                mi.IsChecked = true;
+            }
         }
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)

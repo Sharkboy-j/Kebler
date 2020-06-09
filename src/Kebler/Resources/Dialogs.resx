@@ -130,4 +130,16 @@
   <data name="ATD_DontShowAddTorrentDialog" xml:space="preserve">
     <value>Don't show this dialog</value>
   </data>
+  <data name="BTNS_OK" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="BTNS_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BTNS_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="BTNS_No" xml:space="preserve">
+    <value>No</value>
+  </data>
 </root>

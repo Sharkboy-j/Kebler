@@ -4,13 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="240"
-    Height="348"
+    Height="280"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
-    lex:ResxLocalizationProvider.DefaultDictionary="HeaderMenu"
+    lex:ResxLocalizationProvider.DefaultDictionary="Windows"
     mc:Ignorable="d">
     <StackPanel Margin="0">
         <Image
@@ -19,9 +18,9 @@
             VerticalAlignment="Top"
             RenderOptions.BitmapScalingMode="HighQuality"
             RenderOptions.EdgeMode="Aliased"
-            Source="/Theme/Icons/KeblerVided.png" />
+            Source="/Kebler.UI;Component/Icons/KeblerVided.png" />
         <TextBlock
-            Margin="0,50,0,0"
+            Margin="0,30,0,0"
             VerticalAlignment="Center"
             FontSize="32"
             FontWeight="Normal"
@@ -42,7 +41,7 @@
             TextOptions.TextFormattingMode="Ideal"
             TextOptions.TextHintingMode="Animated"
             TextOptions.TextRenderingMode="ClearType">
-            <Run Text="{lex:LocTextLower About_Version}" />
+            <Run Text="{lex:LocText About_Version}" />
             <Run Text="{Binding Vers}" />
         </TextBlock>
         <TextBlock
@@ -63,7 +62,7 @@
         </TextBlock>
 
         <TextBlock
-            Margin="0,49,0,0"
+            Margin="0,30,0,0"
             VerticalAlignment="Center"
             FontSize="12"
             FontWeight="Normal"

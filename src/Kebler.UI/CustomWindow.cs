@@ -11,10 +11,17 @@ namespace Kebler.UI
 {
     public class CustomWindow : Window
     {
-    
+
+
         public CustomWindow()
         {
     
+        }
+
+        public bool? ShowDialog(Window opener)
+        {
+            this.Owner = opener;
+            return this.ShowDialog();
         }
 
         public Visibility HeaderVisibility

@@ -9,7 +9,6 @@
         B="237"
         G="172"
         R="59" />-->
-    <Color x:Key="WindowBorderBrushColor">#E8E6E6</Color>
     <Color x:Key="LabelColor">#E8E6E6</Color>
     <Color x:Key="SecondaryLabelColor">#CAC6C6</Color>
     <Color x:Key="AccentColor">#3E9FF8</Color>
@@ -81,15 +80,15 @@
     <Color x:Key="TextBox.Focus.BorderColor">#FF569DE5</Color>
     <Color x:Key="FilterPanel.SecondaryBackgroundColor">#292929</Color>
     <Color x:Key="FilterPanel.SecondaryBorderColor">#3B3B3B</Color>
-    <Color x:Key="ToolBar.BackgroundColor">#252525</Color>
+    <Color x:Key="ToolBar.BackgroundColor">#FF333333</Color>
     <Color x:Key="ToolBar.BorderColor">#464646</Color>
     <Color x:Key="ToolBar.ForegroundColor">#B2B2B2</Color>
-    <Color x:Key="Window.BackgroundColor">#2D2D30</Color>
+    <Color x:Key="Window.BackgroundColor">#252525</Color>
     <Color x:Key="Window.BorderColor">#3BACED</Color>
     <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
     <Color x:Key="Window.ButtonsRegionBackgroundColor">#333333</Color>
     <Color x:Key="Window.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.TitleBar.BackgroundColor">#FF333333</Color>
+    <Color x:Key="Window.TitleBar.BackgroundColor">#333333</Color>
     <Color x:Key="Window.Dialog.BackgroundColor">#FF2D2D30</Color>
     <Color x:Key="Window.Dialog.TitleBar.BackgroundColor">#2D2D30</Color>
     <Color x:Key="Window.Button.Static.ForegroundColor">#FFFFFF</Color>
@@ -145,7 +144,7 @@
     <Color x:Key="Button.Static.BackgroundColor">#454545</Color>
     <Color x:Key="Button.Static.BorderColor">#6A6A74</Color>
     <Color x:Key="Button.MouseOver.BackgroundColor">#54545C</Color>
-    <Color x:Key="Button.MouseOver.BorderColor">#6A6A75</Color>
+    <Color x:Key="Button.MouseOver.BorderColor">#236BD2</Color>
     <Color x:Key="Button.Pressed.BackgroundColor">#303030</Color>
     <Color x:Key="Button.Pressed.BorderColor">#454545</Color>
     <Color x:Key="Button.Disabled.BackgroundColor">#3C3C3C</Color>

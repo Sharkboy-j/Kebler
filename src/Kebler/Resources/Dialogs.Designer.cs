@@ -151,6 +151,42 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string BTNS_Cancel {
+            get {
+                return ResourceManager.GetString("BTNS_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string BTNS_No {
+            get {
+                return ResourceManager.GetString("BTNS_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        internal static string BTNS_OK {
+            get {
+                return ResourceManager.GetString("BTNS_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string BTNS_Yes {
+            get {
+                return ResourceManager.GetString("BTNS_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
         internal static string Title_AddTorrentDialog {

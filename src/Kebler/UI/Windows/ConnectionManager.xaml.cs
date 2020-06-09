@@ -23,7 +23,7 @@ namespace Kebler.UI.Windows
     /// Interaction logic for ConnectionManager.xaml
     /// </summary>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-    public partial class ConnectionManager : Window, INotifyPropertyChanged
+    public partial class ConnectionManager : INotifyPropertyChanged
     {
 
         #region Public props

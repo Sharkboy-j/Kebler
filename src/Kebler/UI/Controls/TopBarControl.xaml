@@ -6,13 +6,74 @@
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="27"
-    d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
+    Background="Transparent"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="HeaderMenu"
     mc:Ignorable="d">
-    <Grid>
-      
-    </Grid>
+    <Menu Background="Transparent" Name="TopBarMenu" IsMainMenu="True">
+        <MenuItem Header="{lex:LocText MI_Torrent}">
+            <MenuItem Click="OpenConnectionManager" Header="{lex:LocText MI_CM}" />
+            <Separator Background="Red" />
+            <MenuItem Click="AddTorrent" Header="{lex:LocText MI_AddTorrent}" />
+        </MenuItem>
+        <MenuItem Name="TopBarViewSortMenuItem" Header="{lex:LocText MI_View}">
+            <MenuItem
+                Name="HighSort"
+                Click="SortTypeMenuItem_Click"
+                Header="{lex:LocText MI_SortHigh}"
+                IsCheckable="True"
+                Tag="1" />
+            <MenuItem
+                Name="LowSort"
+                Click="SortTypeMenuItem_Click"
+                Header="{lex:LocText MI_SortLow}"
+                IsCheckable="True"
+                Tag="0" />
+            <Separator />
+            <MenuItem
+                Click="SortValMenuItem_Click"
+                Header="{lex:LocText MI_Sort_Uploaded}"
+                IsCheckable="True"
+                Tag="UploadedEver" />
+            <MenuItem
+                Click="SortValMenuItem_Click"
+                Header="{lex:LocText MI_Sort_UploadSpeed}"
+                IsCheckable="True"
+                Tag="RateUpload" />
+            <MenuItem
+                Click="SortValMenuItem_Click"
+                Header="{lex:LocText MI_Sort_DownloadSpeed}"
+                IsCheckable="True"
+                Tag="RateDownload" />
+            <MenuItem
+                Click="SortValMenuItem_Click"
+                Header="{lex:LocText MI_Sort_AddedDate}"
+                IsCheckable="True"
+                Tag="AddedDate" />
+        </MenuItem>
+        <MenuItem
+            Header="{lex:LocText Mi_Info}"
+            IsEnabled="True"
+            Style="{DynamicResource TopBarMenuButton}">
+            <MenuItem
+                Click="Report"
+                Header="{lex:LocText MI_Report}"
+                IsCheckable="False" />
+            <Separator />
+            <MenuItem
+                Click="About"
+                Header="{lex:LocText MI_About}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Check"
+                Header="{lex:LocText MI_Check}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Contact"
+                Header="{lex:LocText MI_Contact}"
+                IsCheckable="False" />
+        </MenuItem>
+        <MenuItem Name="LangMenu" Header="{lex:LocText MI_lang}" />
+    </Menu>
 </UserControl>
