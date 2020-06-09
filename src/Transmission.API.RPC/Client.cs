@@ -13,11 +13,17 @@ using Newtonsoft.Json.Linq;
 using Transmission.API.RPC.Common;
 using Transmission.API.RPC.Arguments;
 using static Transmission.API.RPC.Entity.Enums;
+using log4net;
+using System.Reflection;
 
 namespace Transmission.API.RPC
 {
     public class TransmissionClient
     {
+
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
         public string Host
         {
             get;
@@ -441,8 +447,10 @@ namespace Transmission.API.RPC
         /// <param name="path">The directory to query</param>
         public async Task<long> FreeSpaceAsync(string path)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("path", path);
+            var arguments = new Dictionary<string, object>
+            {
+                { "path", path }
+            };
 
             var request = new TransmissionRequest("free-space", arguments);
             var response = await SendRequestAsync(request);
@@ -465,10 +473,10 @@ namespace Transmission.API.RPC
         {
             var result = new TransmissionResponse();
 
-            request.Tag = ++CurrentTag;
-
             try
             {
+
+                request.Tag = ++CurrentTag;
 
                 var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
@@ -504,24 +512,43 @@ namespace Transmission.API.RPC
             {
                 if (ex.Status == WebExceptionStatus.Timeout)
                 {
+                    Log.Error(ex);
                     return null;
                 }
 
-                if (((HttpWebResponse)ex?.Response)?.StatusCode == HttpStatusCode.Conflict)
+
+                if (ex?.Response is HttpWebResponse res)
                 {
-                    if (ex.Response.Headers.Count > 0)
+                    if (res?.StatusCode == HttpStatusCode.Conflict)
                     {
-                        //If session id expiried, try get session id and send request
-                        SessionID = ex.Response.Headers["X-Transmission-Session-Id"];
+                        if (res.Headers.Count > 0)
+                        {
+                            //If session id expiried, try get session id and send request
+                            SessionID = res.Headers["X-Transmission-Session-Id"];
 
-                        if (SessionID == null)
-                            throw new Exception("Session ID Error");
+                            if (SessionID == null)
+                                throw new Exception("Session ID Error");
 
-                        result = await SendRequestAsync(request);
+                            result = await SendRequestAsync(request);
+                        }
+                    }
+                    else
+                    {
+                        Log.Error("return null");
+                        return null;
+
                     }
                 }
                 else
+                {
+                    Log.Error("return null");
                     return null;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
             }
 
             return result;
