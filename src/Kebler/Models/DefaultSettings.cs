@@ -12,6 +12,7 @@ namespace Kebler.Models
         public string SortVal { get; set; } = nameof(TorrentInfo.UploadedEver);
         public CultureInfo Language { get; set; }
         public bool IsAddTorrentWindowShow { get; set; }
+        public int UpdateTime { get; set; } = 1000;
 
     }
 }

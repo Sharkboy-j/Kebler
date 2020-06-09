@@ -128,6 +128,7 @@ namespace Kebler.UI.ViewModels
                 _cmWindow.ShowDialog();
             });
         }
+
         private async void TryConnect(Server server)
         {
             if (server == null) return;
@@ -141,6 +142,8 @@ namespace Kebler.UI.ViewModels
                 var pass = string.Empty;
                 if (server.AskForPassword)
                 {
+                    Log.Info("Manual ask password");
+
                     pass = await GetPassword();
                     if (string.IsNullOrEmpty(pass)) return;
 
@@ -149,8 +152,11 @@ namespace Kebler.UI.ViewModels
                 try
                 {
                     _transmissionClient = new TransmissionClient(server.FullUriPath, null, server.UserName, server.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(server.Password));
+                    Log.Info("Client created");
 
                     _sessionInfo = await UpdateSessionInfo();
+
+                    Log.Info($"Connected {_sessionInfo.Version}");
 
                     ConnectedServer = server;
                     StartWhileCycle();
@@ -192,6 +198,7 @@ namespace Kebler.UI.ViewModels
 
         private void StartWhileCycle()
         {
+            Log.Info("StartWhileCycle");
 
             if (_whileCycleTask != null)
                 _cancelTokenSource.Cancel();
@@ -199,8 +206,6 @@ namespace Kebler.UI.ViewModels
 
             _cancelTokenSource = new CancellationTokenSource();
             var token = _cancelTokenSource.Token;
-
-
 
             _whileCycleTask = new Task(async () =>
             {
@@ -211,9 +216,7 @@ namespace Kebler.UI.ViewModels
 
                         if (Application.Current?.Dispatcher != null && Application.Current.Dispatcher.HasShutdownStarted) return;
 
-                        Debug.WriteLine("Start updating stats");
                         _stats = await UpdateStats();
-                        Debug.WriteLine("Stats updated");
                         Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
                         Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
                         IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
@@ -228,9 +231,7 @@ namespace Kebler.UI.ViewModels
 
                         if (_settings.AlternativeSpeedEnabled != null)
                             IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
-                        Debug.WriteLine("Start updating torrents");
                         var newTorrentsDataList = await UpdateTorrentList();
-                        Debug.WriteLine("Torrents updated");
 
                         allTorrents = newTorrentsDataList.Torrents;
 
@@ -239,11 +240,16 @@ namespace Kebler.UI.ViewModels
                         UpdateCategories(newTorrentsDataList.Torrents.Select(x => x.DownloadDir).ToList());
                         UpdateSorting(newTorrentsDataList);
                         UpdateStatsInfo();
-                        await Task.Delay(1000, token);
+                        await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                     }
                 }
                 catch (TaskCanceledException)
                 {
+
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
                 }
             }, token);
             _whileCycleTask.Start();
@@ -274,8 +280,6 @@ namespace Kebler.UI.ViewModels
         {
             return list.Any(x => x.FolderName == item.FolderName);
         }
-
-
 
         public void UpdateSorting(TransmissionTorrents newTorrents = null)
         {
@@ -352,11 +356,11 @@ namespace Kebler.UI.ViewModels
         {
             return await ExecuteLongTask(_transmissionClient.TorrentGetAsync, "Getting torrents");
         }
+
         private async Task<Statistic> UpdateStats()
         {
             return await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync, "Updating stats");
         }
-
 
         private async Task<SessionInfo> UpdateSessionInfo()
         {
@@ -504,12 +508,14 @@ namespace Kebler.UI.ViewModels
         {
             while (true)
             {
-                Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                if (Dispatcher.HasShutdownStarted) return null;
+               // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
+                if (Dispatcher.HasShutdownStarted)
+                    return null;
+
                 var resp = await asyncTask();
                 if (resp == null)
                 {
-                    Debug.WriteLine($"w8ing for response");
+                   // Debug.WriteLine($"w8ing for response {nameof(asyncTask)}");
                     IsDoingStuff = true;
                     LongStatusText = longStatusText;
                     await Task.Delay(100);
@@ -518,7 +524,7 @@ namespace Kebler.UI.ViewModels
                 {
                     IsDoingStuff = false;
                     LongStatusText = string.Empty;
-                    Debug.WriteLine($"Response received");
+                   // Debug.WriteLine($"Response received {nameof(asyncTask)}");
                     return resp;
                 }
             }

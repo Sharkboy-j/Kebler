@@ -237,36 +237,61 @@ namespace Kebler.UI.Windows
             IsTesting = false;
         }
 
-        private Task<bool> TesConnection(string pass)
+        private async Task<bool> TesConnection(string pass)
         {
-            return Task.Factory.StartNew(() =>
+            Log.Info("Start TestConnection");
+            var type = SelectedServer.SSLEnabled ? "https://" : "http://";
+
+            if (!SelectedServer.RPCPath.StartsWith("/")) SelectedServer.RPCPath = $"/{SelectedServer.RPCPath}";
+            var host = $"{type}{SelectedServer.Host}:{SelectedServer.Port}{SelectedServer.RPCPath}";
+
+            if (!host.EndsWith("/")) host += "/";
+
+            try
             {
-                Log.Info("Start TestConnection");
-                var type = SelectedServer.SSLEnabled ? "https://" : "http://";
+                var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
 
-                if (!SelectedServer.RPCPath.StartsWith("/")) SelectedServer.RPCPath = $"/{SelectedServer.RPCPath}";
-                var host = $"{type}{SelectedServer.Host}:{SelectedServer.Port}{SelectedServer.RPCPath}";
-
-                if (!host.EndsWith("/")) host += "/";
-
-                try
-                {
-                    var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
-
-                    var sessionInfo = client.GetSessionInformation();
-
-                    
-                    //client.CloseSession();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message, ex);
-                    return false;
-                }
+                var sessionInfo = await client.GetSessionInformationAsync();
 
 
-                return true;
-            });
+                //client.CloseSession();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message, ex);
+                return false;
+            }
+
+
+            return true;
+            //return Task.Factory.StartNew(() =>
+            //{
+            //    Log.Info("Start TestConnection");
+            //    var type = SelectedServer.SSLEnabled ? "https://" : "http://";
+
+            //    if (!SelectedServer.RPCPath.StartsWith("/")) SelectedServer.RPCPath = $"/{SelectedServer.RPCPath}";
+            //    var host = $"{type}{SelectedServer.Host}:{SelectedServer.Port}{SelectedServer.RPCPath}";
+
+            //    if (!host.EndsWith("/")) host += "/";
+
+            //    try
+            //    {
+            //        var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
+
+            //        var sessionInfo = client.GetSessionInformationAsync().Result;
+
+
+            //        //client.CloseSession();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Log.Error(ex.Message, ex);
+            //        return false;
+            //    }
+
+
+            //    return true;
+            //});
         }
 
         private void SSL_Checked(object sender, RoutedEventArgs e)

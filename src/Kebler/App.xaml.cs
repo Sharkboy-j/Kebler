@@ -139,13 +139,6 @@ namespace Kebler
 
         #endregion
 
-
-        #region Actions
-
-
-
-        #endregion
-
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             KeblerControl = new UI.Windows.KeblerWindow();

@@ -43,6 +43,7 @@ namespace Kebler.Services
                     ConfigService.Save();
                     SetCurrentThreadCulture(CurrentCulture);
                     App.Instance.LangChangedNotify();
+                    Log.Info($"Lang changed {_currentCulture}");
                 }
                 catch(Exception ex)
                 {
