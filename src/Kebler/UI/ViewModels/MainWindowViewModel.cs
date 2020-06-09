@@ -30,7 +30,19 @@ namespace Kebler.UI.ViewModels
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private List<Server> _serversList;
+        private List<Server> _servers;
+        private List<Server> ServersList
+        {
+            get
+            {
+                if (_servers == null)
+                {
+                    _dbServers = StorageRepository.GetServersList();
+                    _servers = _dbServers.FindAll().ToList();
+                }
+                return _servers;
+            }
+        }
         private LiteCollection<Server> _dbServers;
         private Statistic _stats;
         private SessionInfo _sessionInfo;
@@ -39,9 +51,9 @@ namespace Kebler.UI.ViewModels
         private Task _whileCycleTask;
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
         private Category.Categories _filterCategory = Category.Categories.All;
-
-
-
+        private DateTimeOffset _longActionTimeStart;
+        private bool _isLongTaskRunning;
+        private Task _checkerTask;
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Dispatcher Dispatcher => Application.Current.Dispatcher;
@@ -49,7 +61,7 @@ namespace Kebler.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public bool IsConnected { get; set; }
         public bool IsConnecting { get; set; }
-        public Server ConnectedServer { get; set; }
+        public Server SelectedServer { get; set; }
         public bool IsSlowModeEnabled { get; set; }
 
         public bool IsDoingStuff { get; set; }
@@ -92,7 +104,7 @@ namespace Kebler.UI.ViewModels
         {
             App.Instance.LangChanged += Instance_LangChanged;
 
-            Task.Factory.StartNew(InitConnection);
+            Task.Factory.StartNew(InitConnectionNew);
         }
 
         private void Instance_LangChanged()
@@ -103,39 +115,51 @@ namespace Kebler.UI.ViewModels
                                $"      {Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
         }
 
-        public void InitConnection()
+        public void InitConnectionNew()
         {
             if (IsConnected) return;
 
-            GetAllServers();
-
-            if (_serversList.Count == 0)
+            if (ServersList.Count == 0)
             {
                 ShowConnectionManager();
             }
             else
             {
-                new Task(() => { TryConnect(_serversList.FirstOrDefault()); }).Start();
+                if (_checkerTask == null)
+                {
+                    _checkerTask = GetLongChecker();
+                    _checkerTask.Start();
+                }
+                new Task(() => { TryConnectNew(ServersList.FirstOrDefault()); }).Start();
+
             }
         }
 
 
-        public void ShowConnectionManager()
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _cmWindow = new ConnectionManager(ref _dbServers);
-                _cmWindow.ShowDialog();
-            });
-        }
 
-        private async void TryConnect(Server server)
+        //public void InitConnection2()
+        //{
+        //    if (IsConnected) return;
+
+        //    GetAllServers();
+
+        //    if (_serversList.Count == 0)
+        //    {
+        //        ShowConnectionManager();
+        //    }
+        //    else
+        //    {
+        //        new Task(() => { TryConnect(_serversList.FirstOrDefault()); }).Start();
+        //    }
+        //}
+
+        private async void TryConnectNew(Server server)
         {
             if (server == null) return;
 
-            Log.Info("Start Connection");
+            Log.Info("Try initialize connection");
             IsErrorOccuredWhileConnecting = false;
-            IsConnectedStatusText = "Connecting";
+            IsConnectedStatusText = Resources.Windows.MW_ConnectingText;
             try
             {
                 IsConnecting = true;
@@ -145,8 +169,17 @@ namespace Kebler.UI.ViewModels
                     Log.Info("Manual ask password");
 
                     pass = await GetPassword();
-                    if (string.IsNullOrEmpty(pass)) return;
+                    if (string.IsNullOrEmpty(pass))
+                    {
+                        await Application.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            var dd = new Windows.MessageBox(Resources.Windows.MW_PAsswordCantBeEmpty);
+                            dd.ShowDialog();
+                        });
 
+                        IsErrorOccuredWhileConnecting = true;
+                        return;
+                    }
                 }
 
                 try
@@ -154,13 +187,7 @@ namespace Kebler.UI.ViewModels
                     _transmissionClient = new TransmissionClient(server.FullUriPath, null, server.UserName, server.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(server.Password));
                     Log.Info("Client created");
 
-                    _sessionInfo = await UpdateSessionInfo();
-
-                    Log.Info($"Connected {_sessionInfo.Version}");
-
-                    ConnectedServer = server;
-                    StartWhileCycle();
-                    IsConnected = true;
+                    StartCycle(server);
                 }
                 catch (Exception ex)
                 {
@@ -174,32 +201,43 @@ namespace Kebler.UI.ViewModels
             {
                 IsConnecting = false;
             }
-
-
-
         }
-        private static async Task<string> GetPassword()
+
+        public Task Close()
         {
-            var pass = string.Empty;
-            await Application.Current.Dispatcher.InvokeAsync(() =>
+            return ExecuteLongTask(_transmissionClient.CloseSessionAsync, Resources.Windows.MW_StatusText_CloseSession);
+        }
+
+        private Task GetLongChecker()
+        {
+            return new Task(async () =>
             {
-                var dialog = new DialogPassword();
-                pass = dialog.ShowDialog() == true ? dialog.ResponseText : string.Empty;
+                while (true)
+                {
+                    if (Dispatcher.HasShutdownStarted)
+                    {
+                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
+                    }
+                    try
+                    {
+                        var date = DateTimeOffset.Now;
+                        var time = (date - _longActionTimeStart);
+                        if (time.TotalSeconds > 2 && _isLongTaskRunning)
+                        {
+                            IsDoingStuff = true;
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    await Task.Delay(1000);
+                }
             });
-            return pass;
         }
 
-        private void GetAllServers()
+        void StartCycle(Server server)
         {
-            _dbServers = StorageRepository.GetServersList();
-            _serversList = new List<Server>(_dbServers.FindAll() ?? new List<Server>());
-            _serversList.LogServers();
-        }
-
-        private void StartWhileCycle()
-        {
-            Log.Info("StartWhileCycle");
-
             if (_whileCycleTask != null)
                 _cancelTokenSource.Cancel();
             _whileCycleTask?.Dispose();
@@ -211,26 +249,36 @@ namespace Kebler.UI.ViewModels
             {
                 try
                 {
+                    _sessionInfo = await UpdateSessionInfo();
+                    SelectedServer = server;
+                    IsConnected = true;
+
+                    Log.Info($"Connected {_sessionInfo.Version}");
+
                     while (IsConnected && !token.IsCancellationRequested)
                     {
 
-                        if (Application.Current?.Dispatcher != null && Application.Current.Dispatcher.HasShutdownStarted) return;
+                        if (Application.Current?.Dispatcher != null && Application.Current.Dispatcher.HasShutdownStarted)
+                            return;
 
                         _stats = await UpdateStats();
+
                         Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
                         Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
+
                         IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
                                 $"      {Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
                                 $"      {Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
                                 $"      {Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
                         //sessionInfo = await UpdateSessionInfo();
-                        _settings = await _transmissionClient.GetSessionSettingsAsync();
+                        _settings = await UpdateSettings();
 
-                        if (_settings == null) continue;
 
-                        if (_settings.AlternativeSpeedEnabled != null)
+                        if (_settings?.AlternativeSpeedEnabled != null)
                             IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
+
+
                         var newTorrentsDataList = await UpdateTorrentList();
 
                         allTorrents = newTorrentsDataList.Torrents;
@@ -240,6 +288,7 @@ namespace Kebler.UI.ViewModels
                         UpdateCategories(newTorrentsDataList.Torrents.Select(x => x.DownloadDir).ToList());
                         UpdateSorting(newTorrentsDataList);
                         UpdateStatsInfo();
+
                         await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                     }
                 }
@@ -255,6 +304,25 @@ namespace Kebler.UI.ViewModels
             _whileCycleTask.Start();
         }
 
+        public void ShowConnectionManager()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _cmWindow = new ConnectionManager(ref _dbServers);
+                _cmWindow.ShowDialog();
+            });
+        }
+
+        private static async Task<string> GetPassword()
+        {
+            var pass = string.Empty;
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                var dialog = new DialogPassword();
+                pass = dialog.ShowDialog() == true ? dialog.ResponseText : string.Empty;
+            });
+            return pass;
+        }
 
         //TODO: add auto removing
         private void UpdateCategories(IEnumerable<string> dirrectories)
@@ -354,17 +422,22 @@ namespace Kebler.UI.ViewModels
         #region ServerActions
         private async Task<TransmissionTorrents> UpdateTorrentList()
         {
-            return await ExecuteLongTask(_transmissionClient.TorrentGetAsync, "Getting torrents");
+            return await ExecuteLongTask(_transmissionClient.TorrentGetAsync, Resources.Windows.MW_StatusText_Torrents);
         }
 
         private async Task<Statistic> UpdateStats()
         {
-            return await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync, "Updating stats");
+            return await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync, Resources.Windows.MW_StatusText_Stats);
+        }    
+        
+        private async Task<SessionSettings> UpdateSettings()
+        {
+            return await ExecuteLongTask(_transmissionClient.GetSessionSettingsAsync, Resources.Windows.MW_StatusText_Settings);
         }
 
         private async Task<SessionInfo> UpdateSessionInfo()
         {
-            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, "Connecting to session");
+            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, Resources.Windows.MW_StatusText_Session);
         }
 
         public void ChangeFilterType(Category.Categories cat)
@@ -506,28 +579,36 @@ namespace Kebler.UI.ViewModels
 
         private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
         {
-            while (true)
+            try
             {
-               // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                if (Dispatcher.HasShutdownStarted)
-                    return null;
+                _isLongTaskRunning = true;
+                _longActionTimeStart = DateTimeOffset.Now;
+                LongStatusText = longStatusText;
 
-                var resp = await asyncTask();
-                if (resp == null)
+                while (true)
                 {
-                   // Debug.WriteLine($"w8ing for response {nameof(asyncTask)}");
-                    IsDoingStuff = true;
-                    LongStatusText = longStatusText;
-                    await Task.Delay(100);
-                }
-                else
-                {
-                    IsDoingStuff = false;
-                    LongStatusText = string.Empty;
-                   // Debug.WriteLine($"Response received {nameof(asyncTask)}");
+                    // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
+                    if (Dispatcher.HasShutdownStarted)
+                    {
+                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
+                    }
+
+                    var resp = await asyncTask();
+                    if (resp == null)
+                    {
+                        await Task.Delay(100);
+                        continue;
+                    }
                     return resp;
                 }
             }
+            finally
+            {
+                IsDoingStuff = false;
+                LongStatusText = string.Empty;
+                _isLongTaskRunning = false;
+            }
+
         }
         #endregion
 
@@ -570,9 +651,6 @@ namespace Kebler.UI.ViewModels
                         Dispatcher.Invoke(() => { TorrentList.Add(item); });
                     }
                 }
-
-
-
 
             }
         }
@@ -643,7 +721,8 @@ namespace Kebler.UI.ViewModels
 
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
-            new Task(() => { TryConnect(_serversList.FirstOrDefault()); }).Start();
+            IsErrorOccuredWhileConnecting = false;
+            InitConnectionNew();
 
         }
         #endregion

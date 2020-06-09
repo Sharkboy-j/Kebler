@@ -24,5 +24,16 @@ namespace Kebler.UI.Windows
             this.Width = ctr.Width;
             this.Height = ctr.Height;
         }
+
+        public MessageBox(string message, string title = "")
+        {
+            InitializeComponent();
+            var txt = new TextBlock();
+            txt.Text = message;
+            txt.TextAlignment = TextAlignment.Left;
+
+            this.Title = title;
+            Data.Content = txt;
+        }
     }
 }

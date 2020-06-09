@@ -50,10 +50,13 @@ namespace Kebler.UI.Windows
         {
             Vm.ShowConnectionManager();
         }
+
         public void Connect()
         {
-            Vm.InitConnection();
+            Vm.InitConnectionNew();
         }
+
+
 
         public void AddTorrent()
         {
@@ -208,5 +211,9 @@ namespace Kebler.UI.Windows
             Vm.SetLocation();
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+           
+        }
     }
 }

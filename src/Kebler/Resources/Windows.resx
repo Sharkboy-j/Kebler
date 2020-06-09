@@ -109,4 +109,25 @@
   <data name="Stats_ActiveTime" xml:space="preserve">
     <value>Active Time:</value>
   </data>
+  <data name="MW_ConnectingText" xml:space="preserve">
+    <value>Connecting</value>
+  </data>
+  <data name="MW_PAsswordCantBeEmpty" xml:space="preserve">
+    <value>Password cant be empty</value>
+  </data>
+  <data name="MW_StatusText_Torrents" xml:space="preserve">
+    <value>Getting torrents</value>
+  </data>
+  <data name="MW_StatusText_Stats" xml:space="preserve">
+    <value>Updating stats</value>
+  </data>
+  <data name="MW_StatusText_Session" xml:space="preserve">
+    <value>Connecting to session</value>
+  </data>
+  <data name="MW_StatusText_CloseSession" xml:space="preserve">
+    <value>Closing session</value>
+  </data>
+  <data name="MW_StatusText_Settings" xml:space="preserve">
+    <value>Updateing settings</value>
+  </data>
 </root>

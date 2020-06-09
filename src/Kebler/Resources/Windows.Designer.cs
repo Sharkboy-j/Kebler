@@ -70,6 +70,69 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting.
+        /// </summary>
+        internal static string MW_ConnectingText {
+            get {
+                return ResourceManager.GetString("MW_ConnectingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password cant be empty.
+        /// </summary>
+        internal static string MW_PAsswordCantBeEmpty {
+            get {
+                return ResourceManager.GetString("MW_PAsswordCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closing session.
+        /// </summary>
+        internal static string MW_StatusText_CloseSession {
+            get {
+                return ResourceManager.GetString("MW_StatusText_CloseSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting to session.
+        /// </summary>
+        internal static string MW_StatusText_Session {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Session", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updateing settings.
+        /// </summary>
+        internal static string MW_StatusText_Settings {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating stats.
+        /// </summary>
+        internal static string MW_StatusText_Stats {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Stats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting torrents.
+        /// </summary>
+        internal static string MW_StatusText_Torrents {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Torrents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active Time:.
         /// </summary>
         internal static string Stats_ActiveTime {

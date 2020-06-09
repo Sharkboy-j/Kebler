@@ -512,9 +512,6 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!--<Trigger Property="Icon" Value="{x:Null}">
-                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-                        </Trigger>-->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
@@ -522,22 +519,6 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="borderOfText" Property="Background" Value="{DynamicResource TopBarPopUpButtonMouseOverBackground}" />
                         </Trigger>
-                        <!--<Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="templateRoot" Property="Background" Value="#3D26A0DA" />
-                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#FF26A0DA" />
-                        </Trigger>-->
-                        <!--<Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="#FF707070" />
-                            <Setter TargetName="Glyph" Property="Fill" Value="#FF707070" />
-                        </Trigger>-->
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsHighlighted" Value="True" />
-                                <Condition Property="IsEnabled" Value="False" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="templateRoot" Property="Background" Value="#0A000000" />
-                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#21000000" />
-                        </MultiTrigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -773,10 +754,6 @@
                         <Trigger Property="WindowState" Value="Normal">
                             <Setter TargetName="PART_Border" Property="BorderThickness" Value="1" />
                         </Trigger>
-
-                        <!--<Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource WindowBackgroundBrush}" />
-                        </Trigger>-->
                         <Trigger Property="ResizeMode" Value="NoResize">
                             <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="MinButton" Property="Visibility" Value="Collapsed" />
@@ -1435,19 +1412,6 @@
                         SnapsToDevicePixels="true"
                         TextOptions.TextFormattingMode="Display"
                         TextOptions.TextRenderingMode="ClearType">
-                        <!--<Border
-                            x:Name="mainBorder"
-                            Visibility="Collapsed"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="0,0,1,0">
-                            <Border
-                                x:Name="innerBorder"
-                                Background="{DynamicResource TabItemBorderBackgroundBrush}"
-                                BorderBrush="{StaticResource TabItemBorderBrush}"
-                                BorderThickness="0,0,1,0"
-                                Opacity="0" />
-                        </Border>-->
                         <Border
                             x:Name="selectionBorder"
                             Background="Transparent"
@@ -1465,40 +1429,6 @@
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Grid>
                     <ControlTemplate.Triggers>
-
-                        <!--<MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true" />
-                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter TargetName="mainBorder" Property="Background" Value="{StaticResource TabItem.MouseOver.Background}" />
-                            <Setter TargetName="mainBorder" Property="BorderBrush" Value="{StaticResource TabItem.MouseOver.Border}" />
-                            <Setter TargetName="innerBorder" Property="BorderThickness" Value="1,1,1,0" />
-                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="1,1,1,0" />
-                        </MultiDataTrigger>-->
-
-                        <!--<MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false" />
-                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter TargetName="contentPresenter" Property="Opacity" Value="0.56" />
-                        -->
-                        <!--<Setter TargetName="mainBorder" Property="Background" Value="{DynamicResource TabItemHeaderBackgroundInActiveBrush}" />-->
-                        <!--<Setter TargetName="innerBorder" Property="BorderThickness" Value="1,1,1,0" />
-                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="1,1,1,0" />-->
-                        <!--
-                        </MultiDataTrigger>-->
-
-                        <!--<MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
-                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter TargetName="innerBorder" Property="BorderThickness" Value="0,0,1,0" />
-                            <Setter TargetName="mainBorder" Property="BorderThickness" Value="0,0,1,0" />
-                        </MultiDataTrigger>-->
-
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
@@ -1549,33 +1479,14 @@
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="IsSelected" Value="False"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" TargetName="Bd" Value="#FFB9B9B9"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{x:Null}"/>
-                            <Setter Property="Foreground" Value="Black" />
-                        </MultiTrigger>-->
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="False" />
-                                <Condition Property="IsSelected" Value="False" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{x:Null}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{x:Null}" />
-                            <Setter Property="Foreground" Value="Black" />
-                        </MultiTrigger>-->
+
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ListBoxItemBackgroundSelectedBrush}" />
                         </MultiTrigger>
-                        <!--<Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Bd" Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                        </Trigger>-->
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -1811,56 +1722,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
-                    <!--<Grid
-                        x:Name="Bg"
-                        Width="15"
-                        Background="{StaticResource ScrollBarBackgroundBrush}"
-                        SnapsToDevicePixels="true">
-                        <Grid.RowDefinitions>
-                    -->
-                    <!--  ************ 3 rows instead of 5 ************  -->
-                    <!--
-                            <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
-                            <RowDefinition Height="0.00001*" />
-                            <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
-                        </Grid.RowDefinitions>
-                        <RepeatButton
-                            x:Name="VerticalSmallDecrease"
-                            Grid.Row="0"
-                            Height="16"
-                            Margin="1"
-                            Foreground="{TemplateBinding Foreground}"
-                            Interval="50"
-                            IsTabStop="False"
-                            Template="{StaticResource VerticalDecrementTemplate}" />
-                    -->
-                    <!--  ************ Thumb inside Track element called "PART_Track" ************  -->
-                    <!--
-                        <Track
-                            x:Name="PART_Track"
-                            Grid.Row="1"
-                            IsDirectionReversed="true"
-                            IsEnabled="{TemplateBinding IsMouseOver}">
-                            <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource VerticalScrollBarPageButton}" />
-                            </Track.DecreaseRepeatButton>
-                            <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource VerticalScrollBarPageButton}" />
-                            </Track.IncreaseRepeatButton>
-                            <Track.Thumb>
-                                <Thumb Style="{StaticResource ScrollBarThumb}" />
-                            </Track.Thumb>
-                        </Track>
-                        <RepeatButton
-                            x:Name="VerticalSmallIncrease"
-                            Grid.Row="2"
-                            Height="16"
-                            Margin="1"
-                            Foreground="{TemplateBinding Foreground}"
-                            Interval="50"
-                            IsTabStop="False"
-                            Template="{StaticResource VerticalIncrementTemplate}" />
-                    </Grid>-->
+
                     <Grid
                         x:Name="Bg"
                         Width="{TemplateBinding Width}"
