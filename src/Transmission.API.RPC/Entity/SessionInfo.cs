@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Transmission.API.RPC.Arguments;
+using static Transmission.API.RPC.Entity.Enums;
 
 namespace Transmission.API.RPC.Entity
 {
@@ -297,5 +298,6 @@ namespace Transmission.API.RPC.Entity
         /// </summary>
         [JsonProperty("version")]
         public string Version{ get; set; }
+
     }
 }

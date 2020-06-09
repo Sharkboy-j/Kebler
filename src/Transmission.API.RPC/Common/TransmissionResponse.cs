@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Transmission.API.RPC.Entity.Enums;
 
 namespace Transmission.API.RPC.Common
 {
@@ -17,5 +18,7 @@ namespace Transmission.API.RPC.Common
 		/// </summary>
 		[JsonProperty("result")]
 		public string Result;
+
+		public ErrorsResponse Error;
 	}
 }

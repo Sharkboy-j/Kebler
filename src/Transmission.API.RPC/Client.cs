@@ -46,7 +46,7 @@ namespace Transmission.API.RPC
         /// <summary>
         /// miliseconds
         /// </summary>
-        public int timeOut = 5000;
+        public int timeOut = 10000;
 
         /// <summary>
         /// Initialize client
@@ -512,10 +512,10 @@ namespace Transmission.API.RPC
             {
                 if (ex.Status == WebExceptionStatus.Timeout)
                 {
-                    Log.Error(ex);
-                    return null;
+                    //Log.Error(ex);
+                    result.Error = ErrorsResponse.TimeOut;
+                    return result;
                 }
-
 
                 if (ex?.Response is HttpWebResponse res)
                 {
@@ -534,16 +534,12 @@ namespace Transmission.API.RPC
                     }
                     else
                     {
-                        Log.Error("return null");
-                        return null;
-
+                        result.Error = ErrorsResponse.HttpStatusCodeConflict;
                     }
                 }
                 else
                 {
-                    Log.Error("return null");
-                    return null;
-
+                    result.Error = ErrorsResponse.IsNotHttpWebResponse;
                 }
             }
             catch (Exception ex)
