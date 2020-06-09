@@ -220,7 +220,7 @@ namespace Kebler.UI.Windows
 
         public void Connect()
         {
-            Vm.InitConnectionNew();
+            Vm.InitConnection();
         }
 
 

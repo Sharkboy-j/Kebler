@@ -7,11 +7,14 @@
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     lex:LocalizeDictionary.DesignCulture="en"
-    Background="Transparent"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="HeaderMenu"
+    Background="Transparent"
     mc:Ignorable="d">
-    <Menu Background="Transparent" Name="TopBarMenu" IsMainMenu="True">
+    <Menu
+        Name="TopBarMenu"
+        Background="Transparent"
+        IsMainMenu="True">
         <MenuItem Header="{lex:LocText MI_Torrent}">
             <MenuItem Click="OpenConnectionManager" Header="{lex:LocText MI_CM}" />
             <Separator Background="Red" />

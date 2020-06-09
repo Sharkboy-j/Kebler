@@ -89,7 +89,6 @@ namespace Kebler.UI.ViewModels
         public TorrentInfo SelectedTorrent { get; set; }
 
         public bool IsErrorOccuredWhileConnecting { get; set; }
-        public int TorrentDataGridSelectedIndex { get; set; } = 0;
 
 
         #region StatusBarProps
@@ -104,7 +103,7 @@ namespace Kebler.UI.ViewModels
         {
             App.Instance.LangChanged += Instance_LangChanged;
 
-            Task.Factory.StartNew(InitConnectionNew);
+            Task.Factory.StartNew(InitConnection);
         }
 
         private void Instance_LangChanged()
@@ -115,7 +114,7 @@ namespace Kebler.UI.ViewModels
                                $"      {Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
         }
 
-        public void InitConnectionNew()
+        public void InitConnection()
         {
             if (IsConnected) return;
 
@@ -130,30 +129,13 @@ namespace Kebler.UI.ViewModels
                     _checkerTask = GetLongChecker();
                     _checkerTask.Start();
                 }
-                new Task(() => { TryConnectNew(ServersList.FirstOrDefault()); }).Start();
+                new Task(() => { TryConnect(ServersList.FirstOrDefault()); }).Start();
 
             }
         }
 
-
-
-        //public void InitConnection2()
-        //{
-        //    if (IsConnected) return;
-
-        //    GetAllServers();
-
-        //    if (_serversList.Count == 0)
-        //    {
-        //        ShowConnectionManager();
-        //    }
-        //    else
-        //    {
-        //        new Task(() => { TryConnect(_serversList.FirstOrDefault()); }).Start();
-        //    }
-        //}
-
-        private async void TryConnectNew(Server server)
+        
+        private async void TryConnect(Server server)
         {
             if (server == null) return;
 
@@ -204,10 +186,6 @@ namespace Kebler.UI.ViewModels
             }
         }
 
-        public Task Close()
-        {
-            return ExecuteLongTask(_transmissionClient.CloseSessionAsync, Resources.Windows.MW_StatusText_CloseSession);
-        }
 
         private Task GetLongChecker()
         {
@@ -589,7 +567,7 @@ namespace Kebler.UI.ViewModels
                 while (true)
                 {
                     // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                    if (Dispatcher.HasShutdownStarted)
+                    if (Dispatcher==null || Dispatcher.HasShutdownStarted)
                     {
                         throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
                     }
@@ -723,7 +701,7 @@ namespace Kebler.UI.ViewModels
         private void RetryConnection_ButtonCLick(object sender, RoutedEventArgs e)
         {
             IsErrorOccuredWhileConnecting = false;
-            InitConnectionNew();
+            InitConnection();
 
         }
         #endregion
