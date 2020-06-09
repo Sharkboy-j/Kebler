@@ -1,4 +1,5 @@
 ﻿using Kebler.Models;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,6 +13,7 @@ namespace Kebler.Services
     public static class LocalizationManager
     {
         static List<CultureInfo> _cultureList;
+        static readonly ILog Log = LogManager.GetLogger(typeof(LocalizationManager));
 
         public static List<CultureInfo> CultureList
         {
@@ -34,11 +36,20 @@ namespace Kebler.Services
             get { return _currentCulture; }
             set
             {
-                _currentCulture = value;
-                ConfigService.Instanse.Language = _currentCulture;
-                ConfigService.Save();
-                SetCurrentThreadCulture(CurrentCulture);
-                App.Instance.LangChangedNotify();
+                try
+                {
+                    _currentCulture = value;
+                    ConfigService.Instanse.Language = _currentCulture;
+                    ConfigService.Save();
+                    SetCurrentThreadCulture(CurrentCulture);
+                    App.Instance.LangChangedNotify();
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(ex);
+
+                }
+             
             }
         }
         static CultureInfo _currentCulture;
@@ -47,16 +58,24 @@ namespace Kebler.Services
 
         public static void SetCurrentThreadCulture(CultureInfo culture = null)
         {
-            if (culture == null) culture = CurrentCulture;
+            try
+            {
+                if (culture == null) culture = CurrentCulture;
 
-            Thread.CurrentThread.CurrentUICulture = culture;
-            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culture.TwoLetterISOLanguageName);
+                Thread.CurrentThread.CurrentUICulture = culture;
+                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culture.TwoLetterISOLanguageName);
 
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-            LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-            LocalizeDictionary.Instance.Culture = culture;
+                LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
+                LocalizeDictionary.Instance.Culture = culture;
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex);
+            }
+           
 
 
         }
