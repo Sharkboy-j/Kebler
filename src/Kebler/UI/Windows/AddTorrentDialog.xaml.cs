@@ -27,9 +27,8 @@ namespace Kebler.UI.Windows
     /// <summary>
     /// Interaction logic for AddTorrentDialog.xaml
     /// </summary>
-    public partial class AddTorrentDialog : Window, INotifyPropertyChanged
+    public partial class AddTorrentDialog : UserControl, INotifyPropertyChanged
     {
-
 
         public AddTorrentDialog(string path, SessionSettings settings, ref TransmissionClient transmissionClient)
         {
@@ -71,9 +70,9 @@ namespace Kebler.UI.Windows
         private void Cancel(object sender, RoutedEventArgs e)
         {
             IsWorking = false;
-            DialogResult = false;
+            ((MessageBox)this.Parent).Result = false;
             cancellationTokenSource.Cancel();
-            this.Close();
+            ((MessageBox)this.Parent).Close();
         }
 
         private void Stop(object sender, RoutedEventArgs e)

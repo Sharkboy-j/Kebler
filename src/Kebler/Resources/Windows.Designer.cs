@@ -70,6 +70,168 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Always ask for password.
+        /// </summary>
+        internal static string CM_AskForPassword {
+            get {
+                return ResourceManager.GetString("CM_AskForPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization.
+        /// </summary>
+        internal static string CM_AuthSection {
+            get {
+                return ResourceManager.GetString("CM_AuthSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string CM_Cancel {
+            get {
+                return ResourceManager.GetString("CM_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Auth.
+        /// </summary>
+        internal static string CM_IsAuthEnabled {
+            get {
+                return ResourceManager.GetString("CM_IsAuthEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        internal static string CM_LanSection {
+            get {
+                return ResourceManager.GetString("CM_LanSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login:.
+        /// </summary>
+        internal static string CM_Login {
+            get {
+                return ResourceManager.GetString("CM_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        internal static string CM_Ok {
+            get {
+                return ResourceManager.GetString("CM_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password:.
+        /// </summary>
+        internal static string CM_PSWD {
+            get {
+                return ResourceManager.GetString("CM_PSWD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RPC Path:.
+        /// </summary>
+        internal static string CM_RPCPath {
+            get {
+                return ResourceManager.GetString("CM_RPCPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host:.
+        /// </summary>
+        internal static string CM_ServerHost {
+            get {
+                return ResourceManager.GetString("CM_ServerHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port:.
+        /// </summary>
+        internal static string CM_ServerPort {
+            get {
+                return ResourceManager.GetString("CM_ServerPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        internal static string CM_ServerTitle {
+            get {
+                return ResourceManager.GetString("CM_ServerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSL.
+        /// </summary>
+        internal static string CM_SSLEnabled {
+            get {
+                return ResourceManager.GetString("CM_SSLEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string CM_Tab_General {
+            get {
+                return ResourceManager.GetString("CM_Tab_General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        internal static string CM_TestConnection {
+            get {
+                return ResourceManager.GetString("CM_TestConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string CM_TestConnectionBad {
+            get {
+                return ResourceManager.GetString("CM_TestConnectionBad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        internal static string CM_TestConnectionGood {
+            get {
+                return ResourceManager.GetString("CM_TestConnectionGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection Manager.
+        /// </summary>
+        internal static string CM_Title {
+            get {
+                return ResourceManager.GetString("CM_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connecting.
         /// </summary>
         internal static string MW_ConnectingText {
@@ -158,5 +320,6 @@ namespace Kebler.Resources {
                 return ResourceManager.GetString("Stats_Uploaded", resourceCulture);
             }
         }
+      
     }
 }

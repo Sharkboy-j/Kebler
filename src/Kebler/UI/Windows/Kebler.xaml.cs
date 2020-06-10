@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using Kebler.UI.Windows.Dialogs;
 using System.Windows.Media;
 using Transmission.API.RPC.Entity;
 using System.Runtime.InteropServices;
@@ -241,19 +240,19 @@ namespace Kebler.UI.Windows
 
         private void OpenTorrent(string[] names)
         {
-            foreach (var item in names)
-            {
-                var dialog = new AddTorrentDialog(item, Vm._settings, ref Vm._transmissionClient);
-                if (ConfigService.Instanse.IsAddTorrentWindowShow)
-                {
-                    dialog.Add(null, null);
-                }
-                else
-                {
-                    if (!(bool)dialog.ShowDialog())
-                        return;
-                }
-            }
+            //foreach (var item in names)
+            //{
+            //    var dialog = new AddTorrentDialog(item, Vm._settings, ref Vm._transmissionClient);
+            //    if (ConfigService.Instanse.IsAddTorrentWindowShow)
+            //    {
+            //        dialog.Add(null, null);
+            //    }
+            //    else
+            //    {
+            //        if (!(bool)dialog.ShowDialog())
+            //            return;
+            //    }
+            //}
         }
 
 

@@ -2,7 +2,6 @@
 using Kebler.Services;
 using Kebler.Services.Converters;
 using Kebler.UI.Windows;
-using Kebler.UI.Windows.Dialogs;
 using LiteDB;
 using log4net;
 using System;
@@ -24,6 +23,7 @@ using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
 using Enums = Transmission.API.RPC.Entity.Enums;
 using System.Runtime.CompilerServices;
+using MessageBox = Kebler.UI.Windows.MessageBox;
 
 namespace Kebler.UI.ViewModels
 {
@@ -134,7 +134,7 @@ namespace Kebler.UI.ViewModels
             }
         }
 
-        
+
         private async void TryConnect(Server server)
         {
             if (server == null) return;
@@ -288,6 +288,7 @@ namespace Kebler.UI.ViewModels
             Application.Current.Dispatcher.Invoke(() =>
             {
                 _cmWindow = new ConnectionManager(ref _dbServers);
+                _cmWindow.Owner = Application.Current.MainWindow;
                 _cmWindow.ShowDialog();
             });
         }
@@ -297,8 +298,21 @@ namespace Kebler.UI.ViewModels
             var pass = string.Empty;
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                var dialog = new DialogPassword();
-                pass = dialog.ShowDialog() == true ? dialog.ResponseText : string.Empty;
+                var dialog = new MessageBox(true, "Enter password", true);
+                dialog.Owner = Application.Current.MainWindow;
+                try
+                {
+                    if (dialog.ShowDialog() == true)
+                    {
+                        pass = dialog.Value;
+                    }
+                }
+                finally
+                {
+
+                    dialog.Value = null;
+                    dialog = null;
+                }
             });
             return pass;
         }
@@ -432,26 +446,35 @@ namespace Kebler.UI.ViewModels
 
             var torrentInfo = SelectedTorrent;
 
-            var dialog = new DialogTextBox(torrentInfo.DownloadDir, "Please, enter new location.");
-
-            if ((bool)dialog.ShowDialog())
+            var dialog = new MessageBox(true, "Please, enter new location", false);
+            dialog.Owner = Application.Current.MainWindow;
+            try
             {
-                await Task.Factory.StartNew(async () =>
+                if (dialog.ShowDialog() == true)
                 {
-                    Log.Info($"Try set location {torrentInfo.Name}({torrentInfo.DownloadDir} => {dialog.Response})");
-
-                    var exitCondition = Enums.RemoveResult.Error;
-                    while (exitCondition != Enums.RemoveResult.Ok)
+                    await Task.Factory.StartNew(async () =>
                     {
-                        if (Dispatcher.HasShutdownStarted) return;
-                        _transmissionClient.TorrentSetLocationAsync(new[] { torrentInfo.ID }, dialog.Response, true);
+                        Log.Info($"Try set location {torrentInfo.Name}({torrentInfo.DownloadDir} => {dialog.Value})");
 
-                        await Task.Delay(500);
-                    }
-                    Log.Info($"Location set {torrentInfo.Name} true");
-                });
+                        var exitCondition = Enums.RemoveResult.Error;
+                        while (exitCondition != Enums.RemoveResult.Ok)
+                        {
+                            if (Dispatcher.HasShutdownStarted) return;
+                            _transmissionClient.TorrentSetLocationAsync(new[] { torrentInfo.ID }, dialog.Value, true);
 
+                            await Task.Delay(500);
+                        }
+                        Log.Info($"Location set {torrentInfo.Name} true");
+                    });
+                }
             }
+            finally
+            {
+
+                dialog.Value = null;
+                dialog = null;
+            }
+
 
 
 
@@ -462,29 +485,36 @@ namespace Kebler.UI.ViewModels
         {
             if (!IsConnected) return;
 
-            var dialog = new DialogBox("You are perform to remove %n torrents with data", "Please, confirm action.");
-            dialog.ShowDialog();
-            if (dialog.Response)
+            var dialog = new MessageBox("You are perform to remove %n torrents with data", "Please, confirm action", Models.Enums.MessageBoxDilogButtons.YesNo, true,true);
+            dialog.Owner = Application.Current.MainWindow;
+            try
             {
-
-                var torrentInfo = SelectedTorrent;
-
-                await Task.Factory.StartNew(async () =>
+                if (dialog.ShowDialog() == true)
                 {
-                    Log.Info($"Try remove {torrentInfo.Name}");
+                    var torrentInfo = SelectedTorrent;
 
-                    var exitCondition = Enums.RemoveResult.Error;
-                    while (exitCondition != Enums.RemoveResult.Ok)
+                    await Task.Factory.StartNew(async () =>
                     {
-                        if (Dispatcher.HasShutdownStarted) return;
+                        Log.Info($"Try remove {torrentInfo.Name}");
 
-                        exitCondition = await _transmissionClient.TorrentRemoveAsync(new[] { torrentInfo.ID }, removeData);
+                        var exitCondition = Enums.RemoveResult.Error;
+                        while (exitCondition != Enums.RemoveResult.Ok)
+                        {
+                            if (Dispatcher.HasShutdownStarted) return;
 
-                        await Task.Delay(500);
-                    }
-                    Log.Info($"Removed {torrentInfo.Name}");
-                });
+                            exitCondition = await _transmissionClient.TorrentRemoveAsync(new[] { torrentInfo.ID }, removeData);
+
+                            await Task.Delay(500);
+                        }
+                        Log.Info($"Removed {torrentInfo.Name}");
+                    });
+                }
             }
+            finally
+            {
+                dialog = null;
+            }
+
 
         }
         public void SlowMode()
@@ -567,7 +597,7 @@ namespace Kebler.UI.ViewModels
                 while (true)
                 {
                     // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                    if (Dispatcher==null || Dispatcher.HasShutdownStarted)
+                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
                     {
                         throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
                     }

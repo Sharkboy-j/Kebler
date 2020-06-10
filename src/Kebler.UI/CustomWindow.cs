@@ -15,52 +15,21 @@ namespace Kebler.UI
 
         public CustomWindow()
         {
-    
+
         }
 
-        public bool? ShowDialog(Window opener)
-        {
-            this.Owner = opener;
-            return this.ShowDialog();
-        }
+        public static readonly DependencyProperty ShowTopLineProperty = DependencyProperty.Register(nameof(ShowTopLine), typeof(bool), typeof(CustomWindow),
+           new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public Visibility HeaderVisibility
+        public bool ShowTopLine
         {
             get
             {
-                return (Visibility)GetValue(HeaderVisibilityProperty);
+                return (bool)GetValue(ShowTopLineProperty);
             }
             set
             {
-                SetValue(HeaderVisibilityProperty, value);
-            }
-        }
-
-        public static readonly DependencyProperty HeaderVisibilityProperty;
-        public static readonly DependencyProperty IsTitleVisibleProperty;
-        public static readonly DependencyProperty FullScreenProperty;
-
-        public bool IsTitleVisible
-        {
-            get
-            {
-                return (bool)GetValue(IsTitleVisibleProperty);
-            }
-            set
-            {
-                SetValue(IsTitleVisibleProperty, value);
-            }
-        }
-
-        public bool FullScreen
-        {
-            get
-            {
-                return (bool)GetValue(FullScreenProperty);
-            }
-            set
-            {
-                SetValue(FullScreenProperty, value);
+                SetValue(ShowTopLineProperty, value);
             }
         }
     }

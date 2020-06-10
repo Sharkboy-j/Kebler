@@ -22,7 +22,7 @@
         IsIndeterminate="True"
         LowestAlpha="50"
         OuterRadius=".4"
-        TickColor="{DynamicResource ContetnSnipColor}"
+        TickColor="White"
         TickCount="12"
         TickStyle="Round"
         TickWidth="1" />

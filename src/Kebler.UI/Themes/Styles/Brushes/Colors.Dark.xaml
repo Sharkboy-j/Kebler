@@ -54,7 +54,7 @@
     <Color x:Key="TabItem.MouseOver.BackgroundColor">#383838</Color>
     <Color x:Key="TabItem.MouseOver.BorderColor">#383838</Color>
     <Color x:Key="TabItem.Selected.BackgroundColor">#484848</Color>
-    <Color x:Key="TabItem.Selected.BorderColor">#424242</Color>
+    <Color x:Key="TabItem.Selected.BorderColor">#3E9FF8</Color>
     <Color x:Key="TabItem.Disabled.BackgroundColor">DarkGray</Color>
     <Color x:Key="TabItem.Disabled.BorderColor">DarkGray</Color>
     <Color x:Key="TabItem.Disabled.ForegroundColor">#878787</Color>
@@ -83,23 +83,6 @@
     <Color x:Key="ToolBar.BackgroundColor">#FF333333</Color>
     <Color x:Key="ToolBar.BorderColor">#464646</Color>
     <Color x:Key="ToolBar.ForegroundColor">#B2B2B2</Color>
-    <Color x:Key="Window.BackgroundColor">#252525</Color>
-    <Color x:Key="Window.BorderColor">#3BACED</Color>
-    <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
-    <Color x:Key="Window.ButtonsRegionBackgroundColor">#333333</Color>
-    <Color x:Key="Window.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.TitleBar.BackgroundColor">#333333</Color>
-    <Color x:Key="Window.Dialog.BackgroundColor">#FF2D2D30</Color>
-    <Color x:Key="Window.Dialog.TitleBar.BackgroundColor">#2D2D30</Color>
-    <Color x:Key="Window.Button.Static.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.Button.MouseOver.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.Button.Static.BackgroundColor">Transparent</Color>
-    <Color x:Key="Window.Button.MouseOver.BackgroundColor">#525252</Color>
-    <Color x:Key="Window.Button.Pressed.BackgroundColor">#3E3E40</Color>
-    <Color x:Key="Window.CloseButton.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.CloseButton.Static.BackgroundColor">Transparent</Color>
-    <Color x:Key="Window.CloseButton.MouseOver.BackgroundColor">#FFE81123</Color>
-    <Color x:Key="Window.CloseButton.Pressed.BackgroundColor">#F1707A</Color>
     <Color x:Key="ScrollViewer.BackgroundColor">#333333</Color>
     <Color x:Key="ScrollBar.ThumbColor">#686868</Color>
     <Color x:Key="ScrollBar.MouseOver.ThumbColor">#B6B6B6</Color>
@@ -253,5 +236,22 @@
     <Color x:Key="SliderThumb.Pressed.BorderColor">#7A7A74</Color>
     <Color x:Key="SliderThumb.Disabled.BackgroundColor">#3C3C3C</Color>
     <Color x:Key="SliderThumb.Disabled.BorderColor">#434346</Color>
-
+    <Color x:Key="Window.BackgroundColor">#252525</Color>
+    <Color x:Key="Window.BorderColor">#3BACED</Color>
+    <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
+    <Color x:Key="Window.ButtonsRegionBackgroundColor">#333333</Color>
+    <Color x:Key="Window.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.TitleBar.BackgroundColor">#333333</Color>
+    <Color x:Key="Window.TitleBar.ForegroundColor">White</Color>
+    <Color x:Key="Window.Dialog.BackgroundColor">#FF2D2D30</Color>
+    <Color x:Key="Window.Dialog.TitleBar.BackgroundColor">#2D2D30</Color>
+    <Color x:Key="Window.Button.Static.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.Button.MouseOver.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.Button.Static.BackgroundColor">Transparent</Color>
+    <Color x:Key="Window.Button.MouseOver.BackgroundColor">#525252</Color>
+    <Color x:Key="Window.Button.Pressed.BackgroundColor">#3E3E40</Color>
+    <Color x:Key="Window.CloseButton.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.CloseButton.Static.BackgroundColor">Transparent</Color>
+    <Color x:Key="Window.CloseButton.MouseOver.BackgroundColor">#FFE81123</Color>
+    <Color x:Key="Window.CloseButton.Pressed.BackgroundColor">#F1707A</Color>
 </ResourceDictionary>

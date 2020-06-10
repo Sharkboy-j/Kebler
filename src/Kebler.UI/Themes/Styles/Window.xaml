@@ -89,7 +89,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Window.Foreground}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Window}">
+                <ControlTemplate TargetType="{x:Type ui:CustomWindow}">
                     <Grid
                         Name="Main"
                         TextOptions.TextFormattingMode="Display"
@@ -107,6 +107,7 @@
                                 <Border
                                     Name="TitleBar"
                                     Background="{TemplateBinding Background}"
+                                    BorderBrush="{DynamicResource Window.BorderSeparatorBrush}"
                                     MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
                                     MouseMove="TitleBarMouseMove">
                                     <Grid>
@@ -120,12 +121,12 @@
                                             Name="Caption"
                                             Grid.Column="0"
                                             Grid.ColumnSpan="5"
-                                            Margin="4,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             FontFamily="Segoe UI"
                                             FontSize="12"
-                                            Opacity="0.66"
+                                            FontWeight="Normal"
+                                            Foreground="{DynamicResource Window.TitleBar.Foreground}"
                                             Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
                                         <Button
@@ -243,6 +244,9 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="ui:CustomWindow.ShowTopLine" Value="True">
+                            <Setter TargetName="TitleBar" Property="Border.BorderThickness" Value="0,0,0,1" />
+                        </Trigger>
                         <Trigger Property="ResizeMode" Value="NoResize">
                             <Setter TargetName="Sizing" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed" />
