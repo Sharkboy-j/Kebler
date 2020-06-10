@@ -63,10 +63,12 @@
                     Text="TEST"
                     TextAlignment="Left" />
                 <TextBox
+                    Visibility="Collapsed"
                     Name="DialogTextBox"
                     Height="25"
                     Margin="0,10,0,0" />
                 <PasswordBox
+                    Visibility="Collapsed"
                     Name="DialogPasswordBox"
                     Height="25"
                     Margin="0,10,0,0" />

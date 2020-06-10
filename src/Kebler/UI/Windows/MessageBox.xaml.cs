@@ -53,10 +53,12 @@ namespace Kebler.UI.Windows
         public MessageBox(string message, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok, bool showLogo = false, bool isDialog=false)
         {
             InitializeComponent();
-            this.Title = title;
+            //this.Title = title;
             this.isDialog = isDialog;
 
-            TextBlock_Message.Text = message;
+            //TextBlock_Message.Text = message;
+            AskDialogText.Text = message;
+
             if (showLogo)
                 Logo.Visibility = Visibility.Visible;
 

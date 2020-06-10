@@ -105,7 +105,7 @@
     <Color x:Key="TextBox.Focus.BorderColor">#FF569DE5</Color>
     <Color x:Key="FilterPanel.SecondaryBackgroundColor">#292929</Color>
     <Color x:Key="FilterPanel.SecondaryBorderColor">#3B3B3B</Color>
-    <Color x:Key="ToolBar.BackgroundColor">#FF333333</Color>
+    <Color x:Key="ToolBar.BackgroundColor">#292929</Color>
     <Color x:Key="ToolBar.BorderColor">#464646</Color>
     <Color x:Key="ToolBar.ForegroundColor">#B2B2B2</Color>
     <Color x:Key="ScrollViewer.BackgroundColor">#333333</Color>

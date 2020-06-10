@@ -289,17 +289,7 @@ namespace Kebler.UI.Windows
         }
 
 
-        private void Window_StateChanged_1(object sender, EventArgs e)
-        {
-            if (WindowState == WindowState.Minimized)
-            {
-                ShowInTaskbar = false;
-            }
-            else
-            {
-                ShowInTaskbar = true;
-            }
-        }
+
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -347,10 +337,6 @@ namespace Kebler.UI.Windows
             SetLocation();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -363,6 +349,8 @@ namespace Kebler.UI.Windows
     public partial class KeblerWindow
     {
         private List<Server> _servers;
+
+        public Server ConnectedServer { get; set; }
         private List<Server> ServersList
         {
             get
@@ -496,7 +484,7 @@ namespace Kebler.UI.Windows
                 {
                     _transmissionClient = new TransmissionClient(server.FullUriPath, null, server.UserName, server.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(server.Password));
                     Log.Info("Client created");
-
+                    ConnectedServer = server;
                     StartCycle(server);
                 }
                 catch (Exception ex)
@@ -810,7 +798,7 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var dialog = new MessageBox("You are perform to remove %n torrents with data", "Please, confirm action", Models.Enums.MessageBoxDilogButtons.YesNo, true, true);
+            var dialog = new MessageBox("You are perform to remove torrent", "Please, confirm action", Models.Enums.MessageBoxDilogButtons.YesNo, true, true);
             dialog.Owner = Application.Current.MainWindow;
             try
             {
@@ -820,7 +808,7 @@ namespace Kebler.UI.Windows
 
                     await Task.Factory.StartNew(async () =>
                     {
-                        Log.Info($"Try remove {torrentInfo.Name}");
+                        //Log.Info($"Try remove {torrentInfo.Name}");
 
                         var exitCondition = Enums.RemoveResult.Error;
                         while (exitCondition != Enums.RemoveResult.Ok)
@@ -831,7 +819,7 @@ namespace Kebler.UI.Windows
 
                             await Task.Delay(500);
                         }
-                        Log.Info($"Removed {torrentInfo.Name}");
+                        //Log.Info($"Removed {torrentInfo.Name}");
                     });
                 }
             }
@@ -1040,7 +1028,7 @@ namespace Kebler.UI.Windows
 
         public void Validate(ref TorrentInfo torrInf)
         {
-            if(torrInf.Status==1|| torrInf.Status==2)
+            if (torrInf.Status == 1 || torrInf.Status == 2)
             {
                 torrInf.PercentDone = torrInf.RecheckProgress;
             }

@@ -68,5 +68,77 @@ namespace Kebler.Resources {
                 return ResourceManager.GetString("Kebler", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Torrent.
+        /// </summary>
+        internal static string QA_AddTorrent {
+            get {
+                return ResourceManager.GetString("QA_AddTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause.
+        /// </summary>
+        internal static string QA_Pause {
+            get {
+                return ResourceManager.GetString("QA_Pause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause All.
+        /// </summary>
+        internal static string QA_PauseAll {
+            get {
+                return ResourceManager.GetString("QA_PauseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string QA_Remove {
+            get {
+                return ResourceManager.GetString("QA_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Data.
+        /// </summary>
+        internal static string QA_RemoveData {
+            get {
+                return ResourceManager.GetString("QA_RemoveData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        internal static string QA_Resume {
+            get {
+                return ResourceManager.GetString("QA_Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume All.
+        /// </summary>
+        internal static string QA_ResumeAll {
+            get {
+                return ResourceManager.GetString("QA_ResumeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slow Mode.
+        /// </summary>
+        internal static string QA_Slow {
+            get {
+                return ResourceManager.GetString("QA_Slow", resourceCulture);
+            }
+        }
     }
 }

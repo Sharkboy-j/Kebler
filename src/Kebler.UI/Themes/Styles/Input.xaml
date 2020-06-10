@@ -126,4 +126,13 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="ToolBarButtonTitle" TargetType="{x:Type TextBlock}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource ToolBarForeground}" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+    </Style>
 </ResourceDictionary>

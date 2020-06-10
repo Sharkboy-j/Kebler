@@ -6,18 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:Kebler.Models"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
-    xmlns:vms="clr-namespace:Kebler.UI.ViewModels"
     Title="{Binding Title}"
     Width="900"
     Height="600"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-    Closing="Window_Closing"
     ResizeMode="CanResize"
-    StateChanged="Window_StateChanged_1"
     Style="{DynamicResource MainWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -205,45 +201,264 @@
             </Setter>
         </Style>
     </ui:CustomWindow.Resources>
-    <Grid Background="{StaticResource Window.BackgroundBrush}">
-        <DataGrid
-            Name="TorrentsDataGrid"
-            Grid.Row="0"
-            Grid.RowSpan="3"
-            Grid.Column="2"
-            x:FieldModifier="public"
-            ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-            SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
-            SelectionChanged="TorrentsDataGrid_SelectionChanged"
-            Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Name, Mode=TwoWay}"
-                    Header="Name" />
-                <DataGridTemplateColumn Header="Status">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <controls:TagBorder
-                                Height="20"
-                                Percent="{Binding PercentDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Status="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Upload speed" />
-                <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Download speed" />
-                <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=TwoWay}" Header="Uploaded" />
-            </DataGrid.Columns>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Click="PauseTorrent_ItemClick" Header="Pause" />
-                    <MenuItem Click="RemoveTorrent_ItemClick" Header="Remove Torrent" />
-                    <MenuItem Click="RemoveTorrentData_ItemClick" Header="Remove Torrent And Data" />
-                    <MenuItem Click="SetLocation_OnClick" Header="Set Location" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
+
+        <Border
+            Grid.Row="0"
+            Background="{DynamicResource ToolBarBackgroundBrush}"
+            BorderBrush="{DynamicResource ToolBarBorderBrush}"
+            BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <ui:ToolBarButton
+                        Title="{lex:LocText QA_AddTorrent}"
+                        Click="AddTorrentButtonClick"
+                        Data="{StaticResource Icon.Open}"
+                        PathHeight="17"
+                        PathWidth="20"
+                        Style="{StaticResource ToolBarButton}" />
+
+                    <Grid Width="30" />
+                    <ui:ToolBarButton
+                        Title="{lex:LocText QA_ResumeAll}"
+                        Margin="0,2"
+                        Click="StartAll_Button_CLick"
+                        Data="{StaticResource Icon.Resume}"
+                        PathHeight="16"
+                        PathWidth="16"
+                        Style="{StaticResource ToolBarButton}" />
+                    <ui:ToolBarButton
+                        Title="{lex:LocText QA_PauseAll}"
+                        Margin="0,2"
+                        Click="PauseAll_ButtonClick"
+                        Data="{StaticResource Icon.Pause}"
+                        PathHeight="16"
+                        PathWidth="16"
+                        Style="{StaticResource ToolBarButton}" />
+
+                    <ui:ToolBarButton
+                        Title="{lex:LocText QA_Slow}"
+                        Margin="0,2"
+                        Click="ButtonBase_OnClick"
+                        Data="{StaticResource Icon.Pause}"
+                        PathHeight="16"
+                        PathWidth="16"
+                        Style="{StaticResource ToolBarButton}" />
+                    <!--<Button
+
+
+
+                    <Button
+                        Margin="0,3,0,3"
+                        Padding="0"
+                        BorderThickness="0"
+                        Click="ButtonBase_OnClick">
+                        <Grid Height="37">
+
+                            <Image
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Source="{Binding IsSlowModeEnabled, Converter={StaticResource BoolToSlowImageConveter}}"
+                                Stretch="Fill" />
+                            <TextBlock
+                                Margin="4,0,4,2"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                FontSize="11" />
+
+                        </Grid>
+
+                    </Button>-->
+
+                </StackPanel>
+                <Border
+                    Grid.Column="1"
+                    Background="{DynamicResource StatusBar.Background}"
+                    BorderBrush="{DynamicResource ToolBarBorderBrush}"
+                    BorderThickness="1,0,1,0">
+                    <Grid>
+                        <Grid Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*" />
+                                <RowDefinition Height="6*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel
+                                Grid.Row="0"
+                                Margin="0,3,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Label
+                                    Padding="0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="{Binding ConnectedServer.Title,UpdateSourceTrigger=PropertyChanged}"
+                                    Foreground="White" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Grid Visibility="{Binding IsDoingStuffReverse, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding DownloadSpeed}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding UploadSpeed}" />
+                                </Grid>
+                                <controls:LoadingRing
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,0.5,3,0"
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
+                                <Label
+                                    Padding="0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="{Binding LongStatusText}"
+                                    Foreground="White"
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
+                            </StackPanel>
+                        </Grid>
+
+
+
+                    </Grid>
+                </Border>
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="150" />
+
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                        <ui:ToolBarButton
+                            Title="{lex:LocText QA_Resume}"
+                            Click="StartSelected_ButtonClick"
+                            Data="{StaticResource Icon.Resume}"
+                            PathHeight="16"
+                            PathWidth="16"
+                            Style="{StaticResource ToolBarButton}" />
+
+                        <ui:ToolBarButton
+                            Title="{lex:LocText QA_Pause}"
+                            Click="PauseSelected_ButtonClick"
+                            Data="{StaticResource Icon.Pause}"
+                            PathHeight="16"
+                            PathWidth="16"
+                            Style="{StaticResource ToolBarButton}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+
+                        <ui:ToolBarButton
+                            Title="{lex:LocText QA_Remove}"
+                            Click="RemoveTorrent_ButtonClick"
+                            Data="{StaticResource Icon.Remove}"
+                            PathHeight="18"
+                            PathWidth="16"
+                            Style="{StaticResource ToolBarButton}" />
+
+                        <ui:ToolBarButton
+                            Title="{lex:LocText QA_RemoveData}"
+                            Click="RemoveTorrentWithData_ButtonClick"
+                            Data="{StaticResource Icon.RemoveData}"
+                            PathHeight="18"
+                            PathWidth="16"
+                            Style="{StaticResource ToolBarButton}" />
+
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" MinWidth="100" />
+                <!--  splitter column  -->
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ListBox BorderThickness="0,0,0,0" />
+            <DataGrid
+                Name="TorrentsDataGrid"
+                Grid.Column="2"
+                x:FieldModifier="public"
+                CanUserResizeColumns="True"
+                ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
+                SelectionChanged="TorrentsDataGrid_SelectionChanged"
+                Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Name, Mode=TwoWay}"
+                        Header="Name" />
+                    <DataGridTemplateColumn Header="Status">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <controls:TagBorder
+                                    Height="20"
+                                    Percent="{Binding PercentDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Status="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Upload speed" />
+                    <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Download speed" />
+                    <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=TwoWay}" Header="Uploaded" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="PauseTorrent_ItemClick" Header="Pause" />
+                        <MenuItem Click="RemoveTorrent_ItemClick" Header="Remove Torrent" />
+                        <MenuItem Click="RemoveTorrentData_ItemClick" Header="Remove Torrent And Data" />
+                        <MenuItem Click="SetLocation_OnClick" Header="Set Location" />
+
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+            <GridSplitter Grid.Column="1" Style="{DynamicResource VerticalGridSplitter}" />
+
+        </Grid>
     </Grid>
 </ui:CustomWindow>

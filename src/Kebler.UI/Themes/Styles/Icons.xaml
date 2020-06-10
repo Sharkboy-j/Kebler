@@ -84,6 +84,7 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
     <DrawingImage x:Key="Icon.Search">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
