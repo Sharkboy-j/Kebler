@@ -345,6 +345,8 @@ namespace Transmission.API.RPC.Entity
         /// </summary>
         public const string WEB_SEEDS_SENDING_TO_US = "webseedsSendingToUs";
 
+        public const string RECHECK = "recheckProgress";
+
         public static string[] ALL_FIELDS
         {
             get
@@ -419,6 +421,7 @@ namespace Transmission.API.RPC.Entity
                     WANTED,
                     WEB_SEEDS,
                     WEB_SEEDS_SENDING_TO_US,
+                    RECHECK
                     #endregion
                 };
             }

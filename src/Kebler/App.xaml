@@ -17,11 +17,13 @@
             <conv:BytesToUserFriendlyString x:Key="BytesToUserFriendlyString" />
             <conv:SolidColorToBrushConverter x:Key="SolidColorToBrushConverter" />
             <conv:SolidColorToWidthConverter x:Key="SolidColorToWidthConverter" />
+            <conv:IntToIconConverter x:Key="IntToIconConverter" />
+            <conv:IntToColorFillConverter x:Key="IntToColorFillConverter" />
+            <conv:IntToColorStrokeConverter x:Key="IntToColorStrokeConverter" />
 
 
             <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
-            <conv:IntToColorConverter x:Key="IntToColorConverter" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>

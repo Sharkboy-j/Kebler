@@ -145,4 +145,79 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
+    <DrawingImage x:Key="Icon.Upload">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="White" Geometry="F1 M32,32z M0,0z M9.05,10.05A1,1,0,0,0,10.47,10.05L15.07,5.45 15.07,29A1,1,0,0,0,17.07,29L17.07,5.48 21.64,10.05A1,1,0,0,0,23.05,8.64L16.69,2.27A0.9,0.9,0,0,0,15.42,2.27L9.05,8.64A1,1,0,0,0,9.05,10.05z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="Icon.Download">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="White" Geometry="F1 M32,32z M0,0z M23.05,22A1,1,0,0,0,21.64,22L17,26.56 17,3A1,1,0,1,0,15,3L15,26.53 10.47,22A1,1,0,0,0,9.05,22A1,1,0,0,0,9.05,23.41L15.42,29.78A0.9,0.9,0,0,0,16.69,29.78L23.05,23.41A1,1,0,0,0,23.05,22z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="Icon.WTF">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="White" Geometry="F1 M24,24z M0,0z M12,1A11,11,0,1,0,23,12A11,11,0,0,0,12,1z M12,21A9,9,0,1,1,21,12A9,9,0,0,1,12,21z" />
+                    <GeometryDrawing Brush="White" Geometry="F1 M24,24z M0,0z M12,9A1,1,0,0,0,11,10L11,18A1,1,0,0,0,13,18L13,10A1,1,0,0,0,12,9z" />
+                    <GeometryDrawing Brush="White" Geometry="F1 M24,24z M0,0z M12,5A1,1,0,0,0,11,6L11,7A1,1,0,0,0,13,7L13,6A1,1,0,0,0,12,5z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="Icon.Stopped">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V48 H48 V0 H0 Z">
+                <GeometryDrawing Brush="White" Geometry="F1 M48,48z M0,0z M12,38L20,38 20,10 12,10 12,38z M28,10L28,38 36,38 36,10 28,10z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="Icon.Error">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="White" Geometry="F1 M32,32z M0,0z M29.68,25.6L18.68,3.68A3,3,0,0,0,13.24,3.68L2.32,25.6A3,3,0,0,0,5,30L27,30A3,3,0,0,0,29.72,25.6z M27.84,27.51A1,1,0,0,1,27,28L5,28A1,1,0,0,1,4.12,27.51A1,1,0,0,1,4.12,26.51L15.12,4.58 15.12,4.58A1,1,0,0,1,16.98,4.58L27.98,26.51A1,1,0,0,1,27.84,27.51z" />
+                    <GeometryDrawing Brush="White">
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry
+                                RadiusX="0"
+                                RadiusY="0"
+                                Rect="15,11,2,9" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing Brush="White">
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry
+                                Center="16,24"
+                                RadiusX="2"
+                                RadiusY="2" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="Icon.Check">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="White" Geometry="F1 M32,32z M0,0z M3.42,13.47L1.16,9.08A1,1,0,1,1,2.94,8.16L4.12,10.46A13.18,13.18,0,0,1,28.68,12.37A1,1,0,0,1,26.76,12.92A11.18,11.18,0,0,0,5.88,11.41L9.16,10.27A1,1,0,1,1,9.82,12.16L4.63,14A1.25,1.25,0,0,1,4.31,14A1,1,0,0,1,3.42,13.47z M30.84,22.89L28.59,18.45A1,1,0,0,0,27.36,18L22.18,19.82A1,1,0,0,0,22.84,21.71L26.13,20.56A11.15,11.15,0,0,1,5.24,19A1,1,0,0,0,3.32,19.54A13.14,13.14,0,0,0,27.88,21.47L29.06,23.78A1,1,0,0,0,29.95,24.33A1,1,0,0,0,30.4,24.22A1,1,0,0,0,30.84,22.89z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

@@ -211,7 +211,7 @@ namespace Kebler.UI.Windows
             ConnectStatusResult = result
                 ? Kebler.Resources.Windows.CM_TestConnectionGood
                 : Kebler.Resources.Windows.CM_TestConnectionBad;
-
+            
             ConnectStatusColor = (result
                 ? new SolidColorBrush() { Color = Colors.Green }
                 : new SolidColorBrush() { Color = Colors.Red });

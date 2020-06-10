@@ -11,6 +11,24 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
     <SolidColorBrush x:Key="BackgroundBrush.Dark" Color="{DynamicResource BackgroundColor.Dark}" />
     <SolidColorBrush x:Key="MouseOver.BackgroundBrush" Color="{DynamicResource MouseOver.BackgroundColor}" />
+
+    <SolidColorBrush x:Key="DataGrid.Header.BorderBrush" Color="{DynamicResource DataGrid.Header.BorderColor}" />
+    <SolidColorBrush x:Key="DataGrid.Header.BackgroundBrush" Color="{DynamicResource DataGrid.Header.BackgroundColor}" />
+    <SolidColorBrush x:Key="DataGrid.Header.ForegroundBrush" Color="{DynamicResource DataGrid.Header.ForegroundColor}" />
+    <SolidColorBrush x:Key="DataGrid.Row.ForegroundBrush" Color="{DynamicResource DataGrid.Row.ForegroundColor}" />
+    <SolidColorBrush x:Key="DataGrid.BackgroundBrush" Color="{DynamicResource DataGrid.BackgroundColor}" />
+    <SolidColorBrush x:Key="DataGrid.Selected.BackgroundBrush" Color="{DynamicResource DataGrid.Selected.BackgroundColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.UploadingStrokeBrush" Color="{DynamicResource DataGrid.Tag.UploadingStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.UploadingFillBrush" Color="{DynamicResource DataGrid.Tag.UploadingFillColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.DownloadingStrokeBrush" Color="{DynamicResource DataGrid.Tag.DownloadingStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.DownloadingFillBrush" Color="{DynamicResource DataGrid.Tag.DownloadingFillColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.StoppedStrokeBrush" Color="{DynamicResource DataGrid.Tag.StoppedStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.StoppedFillBrush" Color="{DynamicResource DataGrid.Tag.StoppedFillColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.ErrorStrokeBrush" Color="{DynamicResource DataGrid.Tag.ErrorStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.ErrorFillBrush" Color="{DynamicResource DataGrid.Tag.ErrorFillColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.CheckingStrokeBrush" Color="{DynamicResource DataGrid.Tag.CheckingStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.CheckingFillBrush" Color="{DynamicResource DataGrid.Tag.CheckingFillColor}" />
+
     <SolidColorBrush x:Key="Disabled.ForegroundBrush" Color="{DynamicResource Disabled.ForegroundColor}" />
     <SolidColorBrush x:Key="BusyIndicatorBrush" Color="{DynamicResource BusyIndicatorColor}" />
     <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />

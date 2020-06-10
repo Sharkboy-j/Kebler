@@ -46,6 +46,8 @@ namespace Kebler.UI.Windows
             }
             Data.Visibility = Visibility.Collapsed;
             ShowButtons(buttons);
+            if (showLogo)
+                Logo.Visibility = Visibility.Visible;
         }
 
         public MessageBox(string message, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok, bool showLogo = false, bool isDialog=false)

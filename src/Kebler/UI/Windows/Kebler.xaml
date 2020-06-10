@@ -12,8 +12,6 @@
     Title="{Binding Title}"
     Width="900"
     Height="600"
-    MinWidth="800"
-    MinHeight="600"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
@@ -207,5 +205,45 @@
             </Setter>
         </Style>
     </ui:CustomWindow.Resources>
-    <Grid Background="{StaticResource Window.BackgroundBrush}"/>
+    <Grid Background="{StaticResource Window.BackgroundBrush}">
+        <DataGrid
+            Name="TorrentsDataGrid"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="2"
+            x:FieldModifier="public"
+            ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
+            SelectionChanged="TorrentsDataGrid_SelectionChanged"
+            Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Name, Mode=TwoWay}"
+                    Header="Name" />
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:TagBorder
+                                Height="20"
+                                Percent="{Binding PercentDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Status="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Upload speed" />
+                <DataGridTextColumn Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" Header="Download speed" />
+                <DataGridTextColumn Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=TwoWay}" Header="Uploaded" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="PauseTorrent_ItemClick" Header="Pause" />
+                    <MenuItem Click="RemoveTorrent_ItemClick" Header="Remove Torrent" />
+                    <MenuItem Click="RemoveTorrentData_ItemClick" Header="Remove Torrent And Data" />
+                    <MenuItem Click="SetLocation_OnClick" Header="Set Location" />
+
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
 </ui:CustomWindow>

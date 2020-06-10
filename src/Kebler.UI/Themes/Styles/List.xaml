@@ -286,7 +286,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                     <Border
-                        x:Name="Bd"
+                        Name="Bd"
                         Padding="{TemplateBinding Control.Padding}"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
@@ -451,7 +451,7 @@
                                 </Grid.RowDefinitions>
                                 <Border Grid.RowSpan="2" Padding="{TemplateBinding Control.Padding}">
                                     <ContentPresenter
-                                        x:Name="HeaderContent"
+                                        Name="HeaderContent"
                                         Margin="0,0,0,1"
                                         HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                         VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"

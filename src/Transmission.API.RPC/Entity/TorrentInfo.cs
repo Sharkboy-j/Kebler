@@ -192,7 +192,7 @@ namespace Transmission.API.RPC.Entity
         public TransmissionTorrentTrackers[] Trackers { get; set; }
 
         [JsonProperty("trackerStats")]
-        TransmissionTorrentTrackerStats[] TrackerStats { get; set; }
+        public TransmissionTorrentTrackerStats[] TrackerStats { get; set; }
 
         [JsonProperty("totalSize")]
         public long TotalSize { get; set; }

@@ -33,6 +33,31 @@
     <Color x:Key="Disabled.BorderColor">#FFBCBCBC</Color>
     <Color x:Key="BusyIndicatorColor">#E8E6E6</Color>
     <Color x:Key="DropShadowColor">Black</Color>
+
+    <Color x:Key="DataGrid.Header.BorderColor">#464646</Color>
+    <Color x:Key="DataGrid.Header.BackgroundColor">Transparent</Color>
+    <Color x:Key="DataGrid.Header.ForegroundColor">White</Color>
+    <Color x:Key="DataGrid.Row.ForegroundColor">#E8E6E6</Color>
+    <Color x:Key="DataGrid.BackgroundColor">#212224</Color>
+    <Color x:Key="DataGrid.Selected.BackgroundColor">#236BD2</Color>
+    <Color x:Key="DataGrid.Tag.UploadingStrokeColor">#FF008000</Color>
+    <Color x:Key="DataGrid.Tag.UploadingFillColor">#FF004F00</Color>
+
+    <Color x:Key="DataGrid.Tag.StoppedStrokeColor">#E0FF9502</Color>
+    <Color x:Key="DataGrid.Tag.StoppedFillColor">#40FF9502</Color>
+
+    <Color x:Key="DataGrid.Tag.DownloadingStrokeColor">#B01CADF8</Color>
+    <Color x:Key="DataGrid.Tag.DownloadingFillColor">#401CADF8</Color>
+
+    <Color x:Key="DataGrid.Tag.ErrorStrokeColor">#B0FF3B30</Color>
+    <Color x:Key="DataGrid.Tag.ErrorFillColor">#40FF3B30</Color>
+
+    <Color x:Key="DataGrid.Tag.CheckingStrokeColor">#B0CB73E1</Color>
+    <Color x:Key="DataGrid.Tag.CheckingFillColor">#40CB73E1</Color>
+
+
+
+
     <Color x:Key="Diff.Added.ForegroundColor">#2F8E39</Color>
     <Color x:Key="Diff.Removed.ForegroundColor">#DA3D3D</Color>
     <Color x:Key="Diff.AddedColor">#38563C</Color>
