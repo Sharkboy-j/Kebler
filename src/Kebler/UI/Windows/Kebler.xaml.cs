@@ -595,7 +595,7 @@ namespace Kebler.UI.Windows
                         UpdateSorting(newTorrentsDataList);
                         UpdateStatsInfo();
 
-                        await Task.Delay(ConfigService.Instanse.UpdateTime, token);
+                        await Task.Delay(5000, token);
                     }
                 }
                 catch (TaskCanceledException)
