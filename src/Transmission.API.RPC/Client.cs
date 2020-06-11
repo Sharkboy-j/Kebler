@@ -29,11 +29,13 @@ namespace Transmission.API.RPC
             get;
             private set;
         }
+
         public string SessionID
         {
             get;
             private set;
         }
+
         public int CurrentTag
         {
             get;
