@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Icons.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Brushes/Colors.Dark.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Generic.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

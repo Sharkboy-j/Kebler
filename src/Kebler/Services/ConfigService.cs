@@ -104,8 +104,6 @@ namespace Kebler.Services
 
                 foreach (var setting in section)
                 {
-                    text += "  " + Environment.NewLine;
-
                     if (setting.IsArray)
                         text += $"[Array, {setting.ArraySize} elements] ";
 

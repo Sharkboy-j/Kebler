@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Media;
+using static Kebler.Models.Enums;
 
 namespace Kebler.Models
 {
@@ -33,10 +34,7 @@ namespace Kebler.Models
         public string FolderName => dirInfo?.Name;
         public string FullPath => nativePath;
 
-        public enum Categories : byte
-        {
-            All, Downloading, Active, Stopped, Ended, Error,Inactive
-        }
+      
         public string Title { get; set; }
         public Categories Tag { get; set; }
 

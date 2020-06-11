@@ -27,9 +27,8 @@ namespace Kebler.UI.Windows
     /// <summary>
     /// Interaction logic for AddTorrentDialog.xaml
     /// </summary>
-    public partial class AddTorrentDialog : Window, INotifyPropertyChanged
+    public partial class AddTorrentDialog : CustomWindow, INotifyPropertyChanged
     {
-
 
         public AddTorrentDialog(string path, SessionSettings settings, ref TransmissionClient transmissionClient)
         {
@@ -40,7 +39,6 @@ namespace Kebler.UI.Windows
             this.settings = settings;
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-            this.PeerLimit = (int)settings.PeerLimitPerTorrent;
             IsAutoStart = true;
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
@@ -49,7 +47,8 @@ namespace Kebler.UI.Windows
                 IsWorking = false;
                 IsAddTorrentWindowShow = ConfigService.Instanse.IsAddTorrentWindowShow;
             }
-           
+            Result.Visibility = Visibility.Collapsed;
+            PeerLimit = ConfigService.Instanse.TorrentPeerLimit;
         }
 
         private void ChangePath(object sender, RoutedEventArgs e)
@@ -63,6 +62,8 @@ namespace Kebler.UI.Windows
 
             if (openFileDialog.ShowDialog() != true) return;
 
+            torrent = new FileInfo(openFileDialog.FileName);
+            TorrentPath = torrent.FullName;
         }
 
 
@@ -73,7 +74,7 @@ namespace Kebler.UI.Windows
             IsWorking = false;
             DialogResult = false;
             cancellationTokenSource.Cancel();
-            this.Close();
+            Close();
         }
 
         private void Stop(object sender, RoutedEventArgs e)
@@ -84,6 +85,7 @@ namespace Kebler.UI.Windows
 
         public void Add(object sender, RoutedEventArgs e)
         {
+            Result.Visibility = Visibility.Collapsed;
             IsWorking = true;
             Task.Factory.StartNew(async () =>
             {
@@ -91,7 +93,7 @@ namespace Kebler.UI.Windows
                     throw new Exception("Torrent file not found");
 
 
-                var filebytes = await File.ReadAllBytesAsync(TorrentPath,cancellationToken);
+                var filebytes = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
 
                 var encodedData = Convert.ToBase64String(filebytes);
                 //string decodedString = Encoding.UTF8.GetString(filebytes);
@@ -114,22 +116,36 @@ namespace Kebler.UI.Windows
                     try
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                        var info = await _transmissionClient.TorrentAddAsync(torrent);
+                        TorrentResult = await _transmissionClient.TorrentAddAsync(torrent);
 
-                        switch (info.Result)
+                        switch (TorrentResult.Result)
                         {
-                            case Enums.AddResult.Error:
                             case Enums.AddResult.Duplicate:
-                            case Enums.AddResult.Added:
                                 {
-                                    Debug.WriteLine($"Torrent {torrent.Filename} added as {info}");
-                                    Log.Info($"Torrent {torrent.Filename} added as {info}");
-                                    IsWorking = false;
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        Result.Content = Kebler.Resources.Dialogs.ATD_TorrentExist;
+                                        Result.Visibility = Visibility.Visible;
+                                    });
                                     return;
                                 }
+                            case Enums.AddResult.Added:
+                                {
+                                    Log.Info($"Torrent {torrent.Filename} added as {TorrentResult.Name}");
+                                    IsWorking = false;
+
+                                    ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
+                                    ConfigService.Save();
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        DialogResult = true;
+                                        Close();
+                                    });
+                                    return;
+                                }
+                            case Enums.AddResult.Error:
                             case Enums.AddResult.ResponseNull:
                                 {
-                                    Debug.WriteLine($"Adding torrent result Null {torrent.Filename}");
                                     Log.Info($"Adding torrent result Null {torrent.Filename}");
                                     await Task.Delay(100);
                                     continue;
@@ -148,7 +164,6 @@ namespace Kebler.UI.Windows
                     finally
                     {
                         IsWorking = false;
-                        cancellationTokenSource.Dispose();
                     }
                 }
             }, cancellationToken);
@@ -160,21 +175,15 @@ namespace Kebler.UI.Windows
             ConfigService.Save();
         }
 
-       
+
     }
-
-
-
-
-
-
-
 
     public partial class AddTorrentDialog
     {
         FileInfo torrent;
         SessionSettings settings;
         TransmissionClient _transmissionClient;
+        public TorrentAddResult TorrentResult;
 
 
         public event PropertyChangedEventHandler PropertyChanged;

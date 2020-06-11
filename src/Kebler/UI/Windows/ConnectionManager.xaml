@@ -1,17 +1,20 @@
-﻿<Window
+﻿<ui:CustomWindow
     x:Class="Kebler.UI.Windows.ConnectionManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Kebler.UI.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:Kebler.Models"
-    Title="{DynamicResource ConnectionManagerTitle}"
+    xmlns:controls1="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
+    Title="{lex:LocText CM_Title}"
     Width="520"
-    Height="370"
+    Height="450"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="Windows"
+    Closing="CustomWindow_Closing"
     ResizeMode="NoResize"
-    Style="{DynamicResource WindowStyle}"
-    WindowStartupLocation="CenterScreen">
+    Style="{StaticResource MainWindow}"
+    WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -23,259 +26,245 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical">
-                <Image Width="150" Source="../../Theme/Icons/Kebler_dark_512x512.png" />
+                <Image Width="150" Source="/Kebler.UI;Component/Icons/Kebler_dark_512x512.png" />
                 <Label
                     Width="Auto"
                     Margin="0,5,0,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Content="{DynamicResource NoSelectedServerContent}"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="{DynamicResource LabelSnipForegroundActiveBrush}" />
+                    FontWeight="Bold" />
             </StackPanel>
 
         </Grid>
         <TabControl
-            x:Name="SelectedServerTab"
+            Name="SelectedServerTab"
             Grid.Column="1"
             IsEnabled="{Binding IsSelectedServerTabEnabled}"
             SelectedIndex="0"
             TabStripPlacement="Top"
             Visibility="{Binding SelectedServer, Converter={StaticResource ObjectToVisibilityConverter}}">
-            <TabItem Header="{DynamicResource GeneralTabTitle}">
-                <Grid x:Name="SelectedServerGrid">
+            <TabItem Header="{lex:LocText CM_Tab_General}">
+                <Grid Background="#FF2D2D30" Grid.IsSharedSizeScope="True">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="12" />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                    </Grid.RowDefinitions>
 
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                            </Grid.RowDefinitions>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Orientation="Vertical">
+
+                        <TextBlock
+                            FontSize="15"
+                            Text="{lex:LocText CM_LanSection}"
+                            TextAlignment="Left" />
+                        <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Label
-                                Width="Auto"
-                                Padding="0"
-                                VerticalContentAlignment="Center"
-                                Content="{DynamicResource ServerTitleLblContent}"
-                                Focusable="False" />
-
-                            <Label
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Padding="0"
-                                VerticalContentAlignment="Center"
-                                Content="{DynamicResource RemoteHostLblContent}"
-                                Focusable="False" />
-                            <Label
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Width="Auto"
-                                Padding="0"
-                                VerticalContentAlignment="Center"
-                                Content="{DynamicResource RemotPortLblContent}"
-                                Focusable="False" />
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Column="1"
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_ServerTitle}" />
                             <TextBox
                                 Grid.Row="0"
-                                Grid.Column="1"
-                                Margin="5,5,10,5"
+                                Grid.Column="3"
                                 HorizontalContentAlignment="Left"
                                 VerticalContentAlignment="Center"
                                 Text="{Binding SelectedServer.Title}" />
-                            <TextBox
+
+                            <TextBlock
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Margin="5,5,10,5"
-                                Padding="0"
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_ServerHost}" />
+                            <TextBox
+                                Grid.Row="2"
+                                Grid.Column="3"
                                 HorizontalContentAlignment="Left"
                                 VerticalContentAlignment="Center"
+                                IsReadOnly="False"
                                 Text="{Binding SelectedServer.Host}" />
+
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_ServerPort}" />
                             <TextBox
-                                Grid.Row="3"
+                                Grid.Row="4"
+                                Grid.Column="3"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                IsReadOnly="False"
+                                Text="{Binding SelectedServer.Port}" />
+
+
+                            <TextBlock
+                                Grid.Row="6"
                                 Grid.Column="1"
-                                Width="71"
-                                Margin="5,5,0,5"
-                                HorizontalAlignment="Left"
-                                Text="{Binding SelectedServer.Port}"
-                                TextWrapping="Wrap" />
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_RPCPath}" />
+
+                            <TextBox
+                                Grid.Row="6"
+                                Grid.Column="3"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                IsReadOnly="False"
+                                Text="{Binding SelectedServer.RPCPath}" />
+
                             <CheckBox
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Width="68"
-                                Margin="81,9,0,5"
+                                Grid.Row="8"
+                                Grid.Column="3"
+                                Grid.ColumnSpan="3"
+                                Height="25"
                                 HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                VerticalContentAlignment="Center"
                                 Checked="SSL_Checked"
-                                Content="{DynamicResource IsNeedSllbtnContent}"
+                                Content="{lex:LocText CM_SSLEnabled}"
+                                FontSize="13"
+                                Foreground="White"
                                 IsChecked="{Binding SelectedServer.SSLEnabled}"
                                 Unchecked="SSL_Uncheked" />
-
                         </Grid>
-                        <Grid Margin="0,15,10,0">
-                            <GroupBox Focusable="False" IsEnabled="{Binding IsChecked, ElementName=AuthEnebled}">
-                                <Grid Margin="0,10,0,0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30" />
-                                        <RowDefinition Height="30" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Padding="0"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Content="{DynamicResource UserLblContent}"
-                                        Focusable="False" />
-                                    <Label
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Padding="0"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Content="{DynamicResource PswdLblContent}"
-                                        Focusable="False"
-                                        IsEnabled="{Binding IsChecked, ElementName=AskPass, Converter={StaticResource ReverseBoolToBoolConverter}}" />
-                                    <TextBox
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="5,5,9.6,5.4"
-                                        Padding="0"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Text="{Binding SelectedServer.UserName}" />
-                                    <Grid
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="0,0,10,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <PasswordBox
-                                            x:Name="ServerPasswordBox"
-                                            Margin="5,5,0,5"
-                                            Padding="0"
-                                            HorizontalContentAlignment="Left"
-                                            VerticalContentAlignment="Center"
-                                            IsEnabled="{Binding IsChecked, ElementName=AskPass, Converter={StaticResource ReverseBoolToBoolConverter}}" />
-                                        <CheckBox
-                                            x:Name="AskPass"
-                                            Grid.Column="1"
-                                            Margin="5,0,0,0"
-                                            HorizontalContentAlignment="Left"
-                                            VerticalContentAlignment="Center"
-                                            Content="{DynamicResource AlwaysAskPassword}"
-                                            IsChecked="{Binding SelectedServer.AskForPassword, FallbackValue=False}" />
-                                    </Grid>
-                                </Grid>
-
-                            </GroupBox>
-                            <Grid
-                                Width="Auto"
-                                Margin="7,-6,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Background="{StaticResource WindowBackgroundActiveBrush}">
-                                <CheckBox
-                                    x:Name="AuthEnebled"
-                                    Margin="3,0,3,0"
-                                    Content="{DynamicResource IsNeedAuthLblContent}"
-                                    IsChecked="{Binding SelectedServer.AuthEnabled, FallbackValue=False}"
-                                    IsEnabled="{Binding IsSelectedServerTabEnabled}" />
-                            </Grid>
-                        </Grid>
-                        <Grid Margin="0,15,10,0">
-                            <GroupBox Header="{DynamicResource OtherSettingsGroupHeader}">
-                                <Grid Margin="0,0,0,0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Padding="0"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Content="{DynamicResource RpcPathLabelContent}" />
-
-                                    <TextBox
-                                        Grid.Column="1"
-                                        Margin="5,5,10,5"
-                                        Padding="0"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Focusable="True"
-                                        Text="{Binding SelectedServer.RPCPath}" />
-
-                                </Grid>
-                            </GroupBox>
-                        </Grid>
-                        <Grid
-                            Width="352"
-                            Height="26"
-                            Margin="0,10,0,0"
-                            HorizontalAlignment="Left">
-
-                            <Button
-                                Width="70"
-                                Margin="0,0,10,0"
-                                HorizontalAlignment="Right"
-                                Click="SaveServer_ButtonClick"
-                                CommandParameter="{Binding SelectedServer}"
-                                Content="{DynamicResource SaveServerContent}"
-                                IsDefault="True" />
-                            <Button
-                                Width="70"
-                                Margin="0,0,85,0"
-                                HorizontalAlignment="Right"
-                                Click="CloseServer_ButtonClick"
-                                CommandParameter="{Binding SelectedServer}"
-                                Content="{DynamicResource CloseServerContent}" />
-
-                            <Button
-                                Width="Auto"
-                                Padding="3,0,3,0"
-                                HorizontalAlignment="Left"
-                                Click="TestConnection_ButtonClick"
-                                CommandParameter="{Binding SelectedServer}"
-                                Content="{DynamicResource TestConnectionButtonContent}" />
-                            <Label
-                                Width="Auto"
-                                Margin="98,0,0,0"
-                                HorizontalAlignment="Left"
-                                Content="{Binding ConnectStatusResult, FallbackValue='Status Text'}"
-                                Foreground="{Binding ConnectStatusColor}"
-                                Visibility="{Binding IsTesting, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
-                            <controls:LoadingRing
-                                Margin="98,0,0,0"
-                                HorizontalAlignment="Left"
+                        <Separator />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontSize="15"
+                            Text="{lex:LocText CM_AuthSection}"
+                            TextAlignment="Left" />
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="0" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <CheckBox
+                                Name="AuthEnabled"
+                                Grid.Column="3"
                                 VerticalAlignment="Center"
-                                Visibility="{Binding IsTesting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
+                                Content="{lex:LocText CM_IsAuthEnabled}"
+                                IsChecked="{Binding SelectedServer.AuthEnabled, FallbackValue=False}"
+                                IsEnabled="{Binding IsSelectedServerTabEnabled}" />
 
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}"
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_Login}" />
+                            <TextBox
+                                Grid.Row="2"
+                                Grid.Column="3"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}"
+                                Text="{Binding SelectedServer.UserName}" />
+
+                            <CheckBox
+                                Name="AskPass"
+                                Grid.Row="4"
+                                Grid.Column="3"
+                                VerticalContentAlignment="Center"
+                                Content="{lex:LocText CM_AskForPassword}"
+                                IsChecked="{Binding SelectedServer.AskForPassword, FallbackValue=False}"
+                                IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}" />
+
+                            <TextBlock
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}"
+                                Style="{DynamicResource CMTextBox}"
+                                Text="{lex:LocText CM_PSWD}" />
+                            <Grid
+                                Grid.Row="6"
+                                Grid.Column="3"
+                                IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}">
+                                <PasswordBox Name="ServerPasswordBox" IsEnabled="{Binding IsChecked, ElementName=AskPass, Converter={StaticResource ReverseBoolToBoolConverter}}" />
+                            </Grid>
                         </Grid>
                     </StackPanel>
 
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            HorizontalAlignment="Left"
+                            Click="TestConnection_ButtonClick"
+                            CommandParameter="{Binding SelectedServer}"
+                            Content="{lex:LocText CM_TestConnection}"
+                            IsEnabled="{Binding IsTesting, Converter={StaticResource ReverseBoolToBoolConverter}}" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Background="Transparent"
+                            Content="{Binding ConnectStatusResult, FallbackValue='Status Text'}"
+                            Foreground="{Binding ConnectStatusColor}"
+                            Visibility="{Binding IsTesting, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+                        <controls1:LoadingRing
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            Focusable="False"
+                            Visibility="{Binding IsTesting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
+                        <Button
+                            Grid.Column="2"
+                            Click="CloseServer_ButtonClick"
+                            CommandParameter="{Binding SelectedServer}"
+                            Content="{lex:LocText CM_Cancel}" />
+                        <Button
+                            Grid.Column="3"
+                            Click="SaveServer_ButtonClick"
+                            CommandParameter="{Binding SelectedServer}"
+                            Content="{lex:LocText CM_Ok}"
+                            IsDefault="True" />
 
 
 
 
-
+                    </Grid>
                 </Grid>
-            </TabItem>
-            <TabItem Header="{DynamicResource ProxyTabTitle}" IsEnabled="True">
-                <Grid />
             </TabItem>
         </TabControl>
 
@@ -289,31 +278,31 @@
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
                 <ListBox
-                    x:Name="ServersListBox"
-                    Margin="0,-1,0,0"
-                    Padding="-1,0,-1,0"
-                    BorderBrush="{DynamicResource BorderBorderBrush}"
-                    BorderThickness="0,1,1,0"
+                    Name="ServersListBox"
+                    BorderBrush="{DynamicResource Window.BorderSeparatorBrush}"
+                    BorderThickness="0,0,1,0"
+                    DisplayMemberPath="Title"
                     SelectedIndex="1"
                     SelectionChanged="ServersListBox_SelectedItemChanged" />
 
                 <Border
                     Grid.Row="1"
-                    Background="{DynamicResource WindowBackgroundBrush}"
+                    Background="{DynamicResource Window.BackgroundBrush}"
+                    BorderBrush="{DynamicResource Window.BorderSeparatorBrush}"
                     BorderThickness="0,1,1,0">
                     <StackPanel Orientation="Horizontal">
                         <Button
-                            Width="25"
+                            Width="30"
                             Height="25"
                             Margin="1,0,0,0"
                             Click="AddNewServer_ButtonClick"
-                            Content="{DynamicResource AddBtnContent}" />
+                            Content="+" />
                         <Button
-                            Width="25"
+                            Width="30"
                             Height="25"
                             Margin="1,0,0,0"
                             Click="RemoveServer_ButtonClicked"
-                            Content="{DynamicResource RemoveBtnContent}"
+                            Content="-"
                             IsEnabled="{Binding SelectedServer, Converter={StaticResource ObjectToBoolConverter}}" />
                     </StackPanel>
                 </Border>
@@ -325,4 +314,4 @@
 
 
     </Grid>
-</Window>
+</ui:CustomWindow>

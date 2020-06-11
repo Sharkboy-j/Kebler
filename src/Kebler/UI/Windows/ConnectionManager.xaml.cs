@@ -1,6 +1,5 @@
 ﻿using Kebler.Models;
 using Kebler.Services;
-using Kebler.UI.Windows.Dialogs;
 using LiteDB;
 using log4net;
 using System;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +23,7 @@ namespace Kebler.UI.Windows
     /// Interaction logic for ConnectionManager.xaml
     /// </summary>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-    public partial class ConnectionManager : Window, INotifyPropertyChanged
+    public partial class ConnectionManager : INotifyPropertyChanged
     {
 
         #region Public props
@@ -40,21 +40,10 @@ namespace Kebler.UI.Windows
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private LiteCollection<Server> DbServersList;
-
-
-        //public ConnectionManager()
-        //{
-        //    Log.Info("Open ConnectionManager");
-
-        //    InitializeComponent();
-        //    this.DataContext = this;
-
-        //    GetServers();
-        //}
+        private TransmissionClient _client;
 
         public ConnectionManager(ref LiteCollection<Server> dbServersList)
         {
-            Closing += ConnectionManager_Closing;
             Log.Info("Open ConnectionManager");
 
             InitializeComponent();
@@ -64,19 +53,7 @@ namespace Kebler.UI.Windows
             GetServers();
         }
 
-        private void ConnectionManager_Closing(object sender, CancelEventArgs e)
-        {
 
-            if (ServerList.Count != 0)
-            {
-                //MessageBox.Show(Application.Current.FindResource("ThereAreNoAnyServersWhenCloseCm")?.ToString());
-                //e.Cancel = true;
-                //return;
-                App.KeblerControl.Connect();
-            }
-
-            
-        }
 
 
         //TODO: Add background loading
@@ -111,12 +88,7 @@ namespace Kebler.UI.Windows
         }
 
 
-        //private void LogServers()
-        //{
-           
-        //}
 
-        //TODO: add background 
         private void AddNewServer_ButtonClick(object sender, RoutedEventArgs e)
         {
             var id = ServerList.Count == 0 ? 1 : ServerList[ServerList.Count - 1].Id + 1;
@@ -181,7 +153,7 @@ namespace Kebler.UI.Windows
         private void CloseServer_ButtonClick(object sender, RoutedEventArgs e)
         {
             SelectedServer = null;
-
+            ServersListBox.SelectedIndex = -1;
         }
 
 
@@ -192,7 +164,7 @@ namespace Kebler.UI.Windows
 
             Log.Info($"Try remove server: {SelectedServer}");
 
-   
+
 
             var result = StorageRepository.GetServersList().Delete(SelectedServer.Id);
             Log.Info($"RemoveResult: {result}");
@@ -212,14 +184,24 @@ namespace Kebler.UI.Windows
             string pass = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new DialogPassword();
-                if (dialog.ShowDialog() == true)
+                var dialog = new MessageBox(true,"Enter password",true, string.Empty);
+                dialog.Owner = this;
+                try
                 {
-                    pass = dialog.ResponseText;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        pass = dialog.Value;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-                else
+                finally
                 {
-                    return;
+
+                    dialog.Value = null;
+                    dialog = null;
                 }
             }
 
@@ -227,12 +209,12 @@ namespace Kebler.UI.Windows
             IsTesting = true;
             var result = await TesConnection(pass);
             ConnectStatusResult = result
-                ? Application.Current.FindResource("TestConnectionGood")?.ToString()
-                : Application.Current.FindResource("TestConnectionBad")?.ToString();
-
+                ? Kebler.Resources.Windows.CM_TestConnectionGood
+                : Kebler.Resources.Windows.CM_TestConnectionBad;
+            
             ConnectStatusColor = (result
-                ? Application.Current.FindResource("SuccessBrush")
-                : Application.Current.FindResource("ErrorBrush")) as SolidColorBrush;
+                ? new SolidColorBrush() { Color = Colors.Green }
+                : new SolidColorBrush() { Color = Colors.Red });
 
             IsTesting = false;
         }
@@ -240,58 +222,35 @@ namespace Kebler.UI.Windows
         private async Task<bool> TesConnection(string pass)
         {
             Log.Info("Start TestConnection");
-            var type = SelectedServer.SSLEnabled ? "https://" : "http://";
+            var scheme = SelectedServer.SSLEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
 
-            if (!SelectedServer.RPCPath.StartsWith("/")) SelectedServer.RPCPath = $"/{SelectedServer.RPCPath}";
-            var host = $"{type}{SelectedServer.Host}:{SelectedServer.Port}{SelectedServer.RPCPath}";
-
-            if (!host.EndsWith("/")) host += "/";
+            var uri = new UriBuilder(scheme, SelectedServer.Host, SelectedServer.Port, SelectedServer.RPCPath);
 
             try
             {
-                var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
+                var user = (bool)AuthEnabled.IsChecked ? SelectedServer.UserName : null;
+                var pswd = (bool)AuthEnabled.IsChecked ? pass ?? ServerPasswordBox.Password : null;
 
-                var sessionInfo = await client.GetSessionInformationAsync();
+                var _client = new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
 
+                var sessionInfo = await _client.GetSessionInformationAsync();
+                if (sessionInfo == null)
+                    throw new Exception("Error while testing");
 
-                //client.CloseSession();
+                await _client.CloseSessionAsync();
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message, ex);
                 return false;
             }
+            finally
+            {
+                _client = null;
+            }
 
 
             return true;
-            //return Task.Factory.StartNew(() =>
-            //{
-            //    Log.Info("Start TestConnection");
-            //    var type = SelectedServer.SSLEnabled ? "https://" : "http://";
-
-            //    if (!SelectedServer.RPCPath.StartsWith("/")) SelectedServer.RPCPath = $"/{SelectedServer.RPCPath}";
-            //    var host = $"{type}{SelectedServer.Host}:{SelectedServer.Port}{SelectedServer.RPCPath}";
-
-            //    if (!host.EndsWith("/")) host += "/";
-
-            //    try
-            //    {
-            //        var client = new TransmissionClient(host, null, SelectedServer.UserName, pass ?? ServerPasswordBox.Password);
-
-            //        var sessionInfo = client.GetSessionInformationAsync().Result;
-
-
-            //        //client.CloseSession();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Log.Error(ex.Message, ex);
-            //        return false;
-            //    }
-
-
-            //    return true;
-            //});
         }
 
         private void SSL_Checked(object sender, RoutedEventArgs e)
@@ -304,6 +263,20 @@ namespace Kebler.UI.Windows
         {
             if (SelectedServer != null)
                 SelectedServer.SSLEnabled = false;
+        }
+
+        private void CustomWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (_client != null)
+            {
+                _client = null;
+            }
+
+            if (ServerList.Count != 0)
+            {
+                App.KeblerControl.Connect();
+            }
+
         }
     }
 }

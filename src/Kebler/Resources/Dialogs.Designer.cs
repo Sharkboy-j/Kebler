@@ -133,6 +133,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Torrent file exists.
+        /// </summary>
+        internal static string ATD_TorrentExist {
+            get {
+                return ResourceManager.GetString("ATD_TorrentExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Torrent File Path:.
         /// </summary>
         internal static string ATD_TorrentFilePath {
@@ -147,6 +156,87 @@ namespace Kebler.Resources {
         internal static string ATD_UploadLimit {
             get {
                 return ResourceManager.GetString("ATD_UploadLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string BTNS_Cancel {
+            get {
+                return ResourceManager.GetString("BTNS_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string BTNS_No {
+            get {
+                return ResourceManager.GetString("BTNS_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        internal static string BTNS_OK {
+            get {
+                return ResourceManager.GetString("BTNS_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string BTNS_Yes {
+            get {
+                return ResourceManager.GetString("BTNS_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while applying settings. Some preferences may be not applied correctly.
+        /// </summary>
+        internal static string ConfigApllyError {
+            get {
+                return ResourceManager.GetString("ConfigApllyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection lost. Reconnect and try again.
+        /// </summary>
+        internal static string ConnectionLost {
+            get {
+                return ResourceManager.GetString("ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove with data.
+        /// </summary>
+        internal static string RMT_RemoveWithData {
+            get {
+                return ResourceManager.GetString("RMT_RemoveWithData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove all this torrents?.
+        /// </summary>
+        internal static string RMT_Title {
+            get {
+                return ResourceManager.GetString("RMT_Title", resourceCulture);
             }
         }
         

@@ -29,11 +29,13 @@ namespace Transmission.API.RPC
             get;
             private set;
         }
+
         public string SessionID
         {
             get;
             private set;
         }
+
         public int CurrentTag
         {
             get;
@@ -197,19 +199,16 @@ namespace Transmission.API.RPC
             if (jObject == null || jObject.First == null)
                 return new TorrentAddResult(AddResult.ResponseNull);
 
-            //TorrentAddResult
             if (jObject.TryGetValue("torrent-duplicate", out var value))
             {
                 return new TorrentAddResult(AddResult.Duplicate);
             }
-            // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
             else if (jObject.TryGetValue("torrent-added", out value))
             {
                 var result = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString());
                 result.Result = AddResult.Added;
+                return result;
             }
-            // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
-            // return AddResult.Added;
             return new TorrentAddResult(AddResult.Error);
         }
 

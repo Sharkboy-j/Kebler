@@ -17,14 +17,37 @@ namespace Transmission.API.RPC.Entity
 
         public AddResult Result { get; set; }
 
-        [JsonProperty("id")]
-        public int Id { get; set; }
 
+
+
+        /// <summary>
+		/// Torrent ID
+		/// </summary>
+		[JsonProperty("id")]
+        public int ID { get; set; }
+
+        /// <summary>
+        /// Torrent name
+        /// </summary>
         [JsonProperty("name")]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
+        /// <summary>
+        /// Torrent Hash
+        /// </summary>
         [JsonProperty("hashString")]
-        public int Hash { get; set; }
+        public string HashString { get; set; }
+
+
+
+        //[JsonProperty("id")]
+        //public int Id { get; set; }
+
+        //[JsonProperty("name")]
+        //public int Name { get; set; }
+
+        //[JsonProperty("hashString")]
+        //public string Hash { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
