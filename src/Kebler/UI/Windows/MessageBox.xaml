@@ -51,8 +51,12 @@
                 Grid.Column="3"
                 Width="Auto"
                 MaxWidth="500"
-                VerticalAlignment="Stretch"
+                VerticalAlignment="Center"
+                FontSize="13"
                 TextAlignment="Left"
+                TextOptions.TextFormattingMode="Ideal"
+                TextOptions.TextHintingMode="Animated"
+                TextOptions.TextRenderingMode="ClearType"
                 TextWrapping="Wrap" />
             <StackPanel Grid.Column="3">
                 <TextBlock
@@ -72,7 +76,7 @@
                     Margin="0,10,0,0"
                     Visibility="Collapsed" />
             </StackPanel>
-
+            <ContentControl Name="Data" Grid.Column="3" />
         </Grid>
         <Grid Grid.Row="1" MinHeight="49">
             <StackPanel
@@ -109,6 +113,6 @@
                     Visibility="Collapsed" />
             </StackPanel>
         </Grid>
-        <ContentControl Name="Data" Grid.RowSpan="2" />
+
     </Grid>
 </ui:CustomWindow>

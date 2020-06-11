@@ -196,6 +196,51 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred while applying settings. Some preferences may be not applied correctly.
+        /// </summary>
+        internal static string ConfigApllyError {
+            get {
+                return ResourceManager.GetString("ConfigApllyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection lost. Reconnect and try again.
+        /// </summary>
+        internal static string ConnectionLost {
+            get {
+                return ResourceManager.GetString("ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove with data.
+        /// </summary>
+        internal static string RMT_RemoveWithData {
+            get {
+                return ResourceManager.GetString("RMT_RemoveWithData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove all this torrents?.
+        /// </summary>
+        internal static string RMT_Title {
+            get {
+                return ResourceManager.GetString("RMT_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
         internal static string Title_AddTorrentDialog {

@@ -11,21 +11,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Kebler.UI.Controls
+namespace Kebler.UI.Dialogs
 {
     /// <summary>
-    /// Interaction logic for CategoryControl.xaml
+    /// Interaction logic for RemoveTorrentDialog.xaml
     /// </summary>
-    public partial class CategoryControl : UserControl
+    public partial class RemoveTorrentDialog : UserControl
     {
-        public CategoryControl()
+        public bool WithData => (bool)RemoveWithDataCheckBox.IsChecked;
+        public RemoveTorrentDialog(string[] names,bool witData = false)
         {
             InitializeComponent();
-        }
-
-        private void CategoryControl_OnPreviewMouseMove(object sender, MouseEventArgs e)
-        {
-           // this.Background = (Brush)ColorConverter.ConvertFromString("#FFDFD991");
+            Container.ItemsSource = names;
+            RemoveWithDataCheckBox.IsChecked = witData;
         }
     }
 }

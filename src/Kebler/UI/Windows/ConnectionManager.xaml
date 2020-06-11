@@ -2,8 +2,7 @@
     x:Class="Kebler.UI.Windows.ConnectionManager"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Kebler.UI.Controls"
-    xmlns:helpers="clr-namespace:Kebler.Services.Helpers"
+    xmlns:controls1="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     Title="{lex:LocText CM_Title}"
@@ -242,7 +241,7 @@
                             Content="{Binding ConnectStatusResult, FallbackValue='Status Text'}"
                             Foreground="{Binding ConnectStatusColor}"
                             Visibility="{Binding IsTesting, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
-                        <controls:LoadingRing
+                        <controls1:LoadingRing
                             Grid.Column="1"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"

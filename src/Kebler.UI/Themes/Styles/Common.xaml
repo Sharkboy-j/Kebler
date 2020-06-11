@@ -26,9 +26,9 @@
 
     <Style TargetType="{x:Type Label}">
         <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
-        <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Fixed" />
         <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
     </Style>
 
     <Style TargetType="{x:Type CheckBox}">

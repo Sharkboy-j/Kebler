@@ -32,6 +32,7 @@ using Transmission.API.RPC.Arguments;
 using Enums = Transmission.API.RPC.Entity.Enums;
 using System.Runtime.CompilerServices;
 using MessageBox = Kebler.UI.Windows.MessageBox;
+using Kebler.UI.Dialogs;
 
 namespace Kebler.UI.Windows
 {
@@ -40,10 +41,11 @@ namespace Kebler.UI.Windows
 
         public KeblerWindow()
         {
+           
+
             InitializeComponent();
 
-            //disable hardware rendering
-            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            ApplyConfig();
 
             DataContext = this;
 
@@ -61,13 +63,49 @@ namespace Kebler.UI.Windows
 
             CategoriesListBox.SelectedIndex = 0;
             Init_HK();
-      
+
+
         }
 
         private void Init_HK()
         {
             new HotKey(Key.C, KeyModifier.Shift | KeyModifier.Ctrl, ShowConnectionManager);
             new HotKey(Key.N, KeyModifier.Ctrl, AddTorrent);
+        }
+
+        private void ApplyConfig()
+        {
+            try
+            {
+                this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+                this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
+                CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
+                Width = ConfigService.Instanse.MainWindowWidth;
+                Height = ConfigService.Instanse.MainWindowHeight;
+                WindowState = ConfigService.Instanse.MainWindowState;
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+
+                if (!string.IsNullOrEmpty(ConfigService.Instanse.ColumnSizes))
+                {
+                    var splited = ConfigService.Instanse.ColumnSizes.Split(',');
+                    for (int i = 1; i < splited.Length; i++)
+                    {
+                        TorrentsDataGrid.Columns[i].Width = Convert.ToDouble(splited[i]);
+                    }
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+
+                var msg = new MessageBox(Kebler.Resources.Dialogs.ConfigApllyError, Kebler.Resources.Dialogs.Error, Models.Enums.MessageBoxDilogButtons.Ok, true);
+                msg.ShowDialog();
+            }
+
+
         }
 
         public void Connect()
@@ -199,36 +237,37 @@ namespace Kebler.UI.Windows
 
         public async void RemoveTorrent(bool removeData = false)
         {
-            if (!IsConnected) return;
 
-            var dialog = new MessageBox("You are perform to remove torrent", "Please, confirm action", Models.Enums.MessageBoxDilogButtons.YesNo, true, true);
-            dialog.Owner = Application.Current.MainWindow;
-            try
+            var obj = new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), removeData);
+            var dialog = new MessageBox(obj, true, string.Empty, Models.Enums.MessageBoxDilogButtons.OkCancel, true);
+            dialog.Owner = this;
+
+
+            if ((bool)dialog.ShowDialog())
             {
-                if (dialog.ShowDialog() == true)
+                if (!IsConnected)
+                    new MessageBox(Kebler.Resources.Dialogs.ConnectionLost, Kebler.Resources.Dialogs.Error, Models.Enums.MessageBoxDilogButtons.Ok, true).Show();
+
+
+                await Task.Factory.StartNew(async () =>
                 {
-
-                    await Task.Factory.StartNew(async () =>
+                    while (true)
                     {
+                        if (Dispatcher.HasShutdownStarted)
+                            return;
 
-                        var exitCondition = Enums.RemoveResult.Error;
-                        while (exitCondition != Enums.RemoveResult.Ok)
-                        {
-                            if (Dispatcher.HasShutdownStarted) return;
+                        var exitCondition = await _transmissionClient.TorrentRemoveAsync(SelectedTorrents.Select(x => x.ID).ToArray(), obj.WithData);
 
-                            exitCondition = await _transmissionClient.TorrentRemoveAsync(SelectedTorrents.Select(x => x.ID).ToArray(), removeData);
-
+                        if (exitCondition == Enums.RemoveResult.Ok)
+                            break;
+                        else
                             await Task.Delay(500);
-                        }
-                    });
-                }
-            }
-            finally
-            {
-                dialog = null;
+                    }
+                });
             }
 
-
+            obj = null;
+            dialog = null;
         }
 
         private void SlowMode_Click(object sender, RoutedEventArgs e)
@@ -284,6 +323,29 @@ namespace Kebler.UI.Windows
             }
         }
 
+        private void Vertical_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            ConfigService.Instanse.CategoriesWidth = CategoriesColumn.ActualWidth;
+            ConfigService.Save();
+        }
+
+        private void ClosingW(object sender, CancelEventArgs e)
+        {
+            var size = new StringBuilder();
+            foreach (DataGridColumn column in TorrentsDataGrid.Columns)
+            {
+                size.Append($"{column.ActualWidth},");
+            }
+            
+
+            ConfigService.Instanse.MainWindowHeight = this.ActualHeight;
+            ConfigService.Instanse.MainWindowWidth = this.ActualWidth;
+            ConfigService.Instanse.MainWindowState = this.WindowState;
+            ConfigService.Instanse.ColumnSizes = size.ToString().TrimEnd(',');
+
+            ConfigService.Save();
+
+        }
     }
 
 
@@ -376,18 +438,23 @@ namespace Kebler.UI.Windows
             {
                 while (true)
                 {
-                    if (Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
                     try
                     {
+                        if (Dispatcher.HasShutdownStarted)
+                        {
+                            throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
+                        }
+
                         var date = DateTimeOffset.Now;
                         var time = (date - _longActionTimeStart);
                         if (time.TotalSeconds > 2 && _isLongTaskRunning)
                         {
                             IsDoingStuff = true;
                         }
+                    }
+                    catch(TaskCanceledException)
+                    {
+                        return;
                     }
                     catch
                     {

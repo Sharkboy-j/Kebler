@@ -40,8 +40,8 @@
     <Color x:Key="DataGrid.Row.ForegroundColor">#E8E6E6</Color>
     <Color x:Key="DataGrid.BackgroundColor">#212224</Color>
     <Color x:Key="DataGrid.Selected.BackgroundColor">#236BD2</Color>
-    <Color x:Key="DataGrid.Tag.UploadingStrokeColor">#FF008000</Color>
-    <Color x:Key="DataGrid.Tag.UploadingFillColor">#FF004F00</Color>
+    <Color x:Key="DataGrid.Tag.UploadingStrokeColor">#B064DA38</Color>
+    <Color x:Key="DataGrid.Tag.UploadingFillColor">#4064DA38</Color>
 
     <Color x:Key="DataGrid.Tag.StoppedStrokeColor">#E0FF9502</Color>
     <Color x:Key="DataGrid.Tag.StoppedFillColor">#40FF9502</Color>
@@ -116,7 +116,7 @@
     <Color x:Key="ScrollBar.MouseOver.GlyphColor">#B6B6B6</Color>
     <Color x:Key="ScrollBar.Pressed.GlyphColor">#A6A6A6</Color>
     <Color x:Key="ScrollBar.Disabled.GlyphColor">#CFCFCF</Color>
-    <Color x:Key="ListBox.Static.BackgroundColor">#212224</Color>
+    <Color x:Key="ListBox.Static.BackgroundColor">#303030</Color>
     <Color x:Key="ListBox.Static.BorderColor">#525252</Color>
     <Color x:Key="ListBox.Disabled.BackgroundColor">DarkGray</Color>
     <Color x:Key="ListBox.Disabled.BorderColor">DarkGray</Color>

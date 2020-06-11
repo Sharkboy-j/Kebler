@@ -58,26 +58,16 @@ namespace Kebler.UI.Windows
             this.isDialog = isDialog;
             MinWidth = 350;
 
-            //TextBlock_Message.Text = message;
-            AskDialogText.Text = message;
+            TextBlock_Message.Text = message;
+            TextBlock_Message.Visibility = Visibility.Visible;
+            AskDialogText.Visibility = Visibility.Collapsed;
+            //AskDialogText.Text = message;
 
             if (showLogo)
                 Logo.Visibility = Visibility.Visible;
 
             ShowButtons(buttons);
             Data.Visibility = Visibility.Collapsed;
-        }
-
-        public MessageBox(UserControl obj, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
-        {
-            InitializeComponent();
-            this.Title = title;
-            if (showLogo)
-                Logo.Visibility = Visibility.Visible;
-            AskDialogText.Visibility = Visibility.Collapsed;
-
-            ShowButtons(buttons);
-            Data.Content = obj;
         }
 
         private void ShowButtons(MessageBoxDilogButtons buttons)
@@ -128,16 +118,27 @@ namespace Kebler.UI.Windows
             Close();
         }
 
-        public void Show(Window owner)
+
+
+
+
+
+
+        public MessageBox(UserControl obj,bool isDialog=true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
         {
-            this.Owner = owner;
-            base.ShowDialog();
+            InitializeComponent();
+            this.Title = title;
+            this.isDialog = isDialog;
+            if (showLogo)
+                Logo.Visibility = Visibility.Visible;
+            AskDialogText.Visibility = Visibility.Collapsed;
+
+            ShowButtons(buttons);
+            Data.Content = obj;
+            MaxWidth = obj.MaxWidth;
+            Height = obj.Height;
+            Width = obj.Width;
         }
 
-        public void ShowDialog(Window owner)
-        {
-            this.Owner = owner;
-            base.ShowDialog();
-        }
     }
 }

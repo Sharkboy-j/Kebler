@@ -99,7 +99,8 @@ namespace Kebler.UI.Controls
         private void About(object sender, RoutedEventArgs e)
         {
             var dd = new Windows.MessageBox(new About());
-            dd.ShowDialog(Application.Current.MainWindow);
+            dd.Owner = App.Instance.MainWindow;
+            dd.ShowDialog();
         }
 
         private void Check(object sender, RoutedEventArgs e)
