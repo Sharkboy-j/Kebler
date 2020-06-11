@@ -61,6 +61,69 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        internal static string Cat_Active {
+            get {
+                return ResourceManager.GetString("Cat_Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string Cat_AllTorrents {
+            get {
+                return ResourceManager.GetString("Cat_AllTorrents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading.
+        /// </summary>
+        internal static string Cat_Downloading {
+            get {
+                return ResourceManager.GetString("Cat_Downloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        internal static string Cat_Ended {
+            get {
+                return ResourceManager.GetString("Cat_Ended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Cat_Error {
+            get {
+                return ResourceManager.GetString("Cat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inactive.
+        /// </summary>
+        internal static string Cat_InActive {
+            get {
+                return ResourceManager.GetString("Cat_InActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped.
+        /// </summary>
+        internal static string Cat_Stopped {
+            get {
+                return ResourceManager.GetString("Cat_Stopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kebler.
         /// </summary>
         internal static string Kebler {

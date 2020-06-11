@@ -144,4 +144,25 @@
   <data name="QA_Slow" xml:space="preserve">
     <value>Slow Mode</value>
   </data>
+  <data name="Cat_AllTorrents" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Cat_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="Cat_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Cat_InActive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="Cat_Ended" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Cat_Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="Cat_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>

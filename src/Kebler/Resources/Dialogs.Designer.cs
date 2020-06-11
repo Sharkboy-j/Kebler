@@ -133,6 +133,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Torrent file exists.
+        /// </summary>
+        internal static string ATD_TorrentExist {
+            get {
+                return ResourceManager.GetString("ATD_TorrentExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Torrent File Path:.
         /// </summary>
         internal static string ATD_TorrentFilePath {

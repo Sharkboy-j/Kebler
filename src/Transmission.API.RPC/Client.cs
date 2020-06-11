@@ -207,6 +207,7 @@ namespace Transmission.API.RPC
             {
                 var result = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString());
                 result.Result = AddResult.Added;
+                return result;
             }
             // result = JsonConvert.DeserializeObject<NewTorrentInfo>(value.ToString());
             // return AddResult.Added;

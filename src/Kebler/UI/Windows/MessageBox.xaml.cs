@@ -30,6 +30,7 @@ namespace Kebler.UI.Windows
             this.isDialog = isDialog;
             InitializeComponent();
             this.Title = title;
+            MinWidth = 350;
             TextBlock_Message.Visibility = Visibility.Collapsed;
             AskDialogText.Text = question;
             if (isPassword)
@@ -55,6 +56,7 @@ namespace Kebler.UI.Windows
             InitializeComponent();
             //this.Title = title;
             this.isDialog = isDialog;
+            MinWidth = 350;
 
             //TextBlock_Message.Text = message;
             AskDialogText.Text = message;
@@ -72,6 +74,7 @@ namespace Kebler.UI.Windows
             this.Title = title;
             if (showLogo)
                 Logo.Visibility = Visibility.Visible;
+            AskDialogText.Visibility = Visibility.Collapsed;
 
             ShowButtons(buttons);
             Data.Content = obj;

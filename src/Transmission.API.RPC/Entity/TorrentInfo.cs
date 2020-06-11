@@ -185,6 +185,15 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("startDate")]
         public int StartDate { get; set; }
 
+        /// <summary>
+        /// <para>0: 'stopped'</para> 
+        /// <para>1: 'check pending'</para> 
+        /// <para>2: 'checking'</para> 
+        /// <para>3: 'download pending'</para> 
+        /// <para>4: 'downloading'</para> 
+        /// <para>5: 'seed pending'</para> 
+        /// <para>6: 'seeding' </para> 
+        /// </summary>
         [JsonProperty("Status")]
         public int Status { get; set; }
 

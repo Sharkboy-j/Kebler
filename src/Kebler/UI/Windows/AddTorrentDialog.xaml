@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<ui:CustomWindow
     x:Class="Kebler.UI.Windows.AddTorrentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,13 +7,22 @@
     xmlns:helpers="clr-namespace:Kebler.Services.Helpers"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     Width="700"
     Height="290"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
-    mc:Ignorable="d">
-    <Grid Background="#FF2D2D30">
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ShowTopLine="False"
+    Style="{StaticResource MainWindow}"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="None">
+    <Grid Background="{DynamicResource Window.BackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
@@ -69,7 +78,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="40" />
                     </Grid.ColumnDefinitions>
                     <TextBox
                         Grid.Row="0"
@@ -81,12 +90,13 @@
                         Grid.Column="4"
                         Width="25"
                         Height="25"
+                        Margin="0"
+                        Padding="0"
                         Click="ChangePath">
                         <Button.Content>
                             <Path
                                 Width="16"
                                 Height="16"
-                                Margin="0,2,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Data="{StaticResource Icon.Folder}"
@@ -233,11 +243,10 @@
                     Content="{lex:LocText ATD_StartTorrent}"
                     FontSize="13"
                     Foreground="White"
-                    IsChecked="{Binding IsAutoStart}"
-                    Style="{StaticResource LeftToRightChackBox}" />
+                    IsChecked="{Binding IsAutoStart}" />
             </Grid>
 
-            <Grid Height="25" Margin="0,20,0,0">
+            <Grid Height="30" Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
@@ -250,6 +259,11 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
+                <Label
+                    Name="Result"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    Foreground="#FFCF0000" />
                 <Button
                     Grid.Column="1"
                     Padding="10,0,10,0"
@@ -280,7 +294,6 @@
             Grid.Column="1"
             Grid.ColumnSpan="3"
             Height="25"
-            Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             VerticalContentAlignment="Center"
@@ -291,4 +304,4 @@
             IsEnabled="False"
             Unchecked="ChangeVisibilityWindow" />
     </Grid>
-</UserControl>
+</ui:CustomWindow>

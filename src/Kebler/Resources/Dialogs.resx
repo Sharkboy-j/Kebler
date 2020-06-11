@@ -142,4 +142,7 @@
   <data name="BTNS_No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="ATD_TorrentExist" xml:space="preserve">
+    <value>Torrent file exists</value>
+  </data>
 </root>

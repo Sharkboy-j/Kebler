@@ -56,7 +56,7 @@ namespace Kebler.UI.Controls
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)
         {
-            App.KeblerControl.OpenConnectionManager();
+            App.KeblerControl.ShowConnectionManager();
         }
 
         private void ConnectFirst(object sender, RoutedEventArgs e)

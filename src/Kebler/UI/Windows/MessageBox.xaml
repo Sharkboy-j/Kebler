@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
-    MinWidth="350"
     MinHeight="155"
     MaxWidth="470"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -63,15 +62,15 @@
                     Text="TEST"
                     TextAlignment="Left" />
                 <TextBox
-                    Visibility="Collapsed"
                     Name="DialogTextBox"
                     Height="25"
-                    Margin="0,10,0,0" />
+                    Margin="0,10,0,0"
+                    Visibility="Collapsed" />
                 <PasswordBox
-                    Visibility="Collapsed"
                     Name="DialogPasswordBox"
                     Height="25"
-                    Margin="0,10,0,0" />
+                    Margin="0,10,0,0"
+                    Visibility="Collapsed" />
             </StackPanel>
 
         </Grid>

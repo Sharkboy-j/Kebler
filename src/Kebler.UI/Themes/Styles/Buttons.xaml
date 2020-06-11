@@ -92,7 +92,18 @@
                                 <RowDefinition />
                                 <RowDefinition Height="2" />
                             </Grid.RowDefinitions>
+                            <Image
+                                Name="img"
+                                Grid.Row="1"
+                                Width="{TemplateBinding controls:ToolBarButton.PathWidth}"
+                                Height="{TemplateBinding controls:ToolBarButton.PathHeight}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Source="{TemplateBinding controls:ToolBarButton.ImageSource}"
+                                Stretch="Fill"
+                                Visibility="Visible" />
                             <Path
+                                Name="path"
                                 Grid.Row="1"
                                 Width="{TemplateBinding controls:ToolBarButton.PathWidth}"
                                 Height="{TemplateBinding controls:ToolBarButton.PathHeight}"
@@ -102,7 +113,8 @@
                                 Fill="{TemplateBinding Foreground}"
                                 Focusable="false"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                Stretch="Fill" />
+                                Stretch="Fill"
+                                Visibility="Collapsed" />
                             <TextBlock
                                 Grid.Row="2"
                                 Margin="0,2,0,0"
@@ -112,6 +124,10 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="controls:ToolBarButton.ImageSource" Value="{x:Null}">
+                            <Setter TargetName="path" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="img" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource ToolBarButton.MouseOver.Background}" />
                             <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ToolBarButton.MouseOver.Border}" />

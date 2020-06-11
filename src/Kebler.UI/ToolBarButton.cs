@@ -68,5 +68,22 @@ namespace Kebler.UI
                 SetValue(PathHeightProperty, value);
             }
         }
+
+
+
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register(nameof(ImageSource), typeof(ImageSource), typeof(ToolBarButton),
+            new FrameworkPropertyMetadata(default(ImageSource), FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        public ImageSource ImageSource
+        {
+            get
+            {
+                return (ImageSource)GetValue(ImageSourceProperty);
+            }
+            set
+            {
+                SetValue(ImageSourceProperty, value);
+            }
+        }
     }
 }

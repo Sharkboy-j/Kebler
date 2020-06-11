@@ -16,45 +16,17 @@
         Background="Transparent"
         IsMainMenu="True">
         <MenuItem Header="{lex:LocText MI_Torrent}">
-            <MenuItem Click="OpenConnectionManager" Header="{lex:LocText MI_CM}" />
-            <Separator Background="Red" />
-            <MenuItem Click="AddTorrent" Header="{lex:LocText MI_AddTorrent}" />
-        </MenuItem>
-        <MenuItem Name="TopBarViewSortMenuItem" Header="{lex:LocText MI_View}">
             <MenuItem
-                Name="HighSort"
-                Click="SortTypeMenuItem_Click"
-                Header="{lex:LocText MI_SortHigh}"
-                IsCheckable="True"
-                Tag="1" />
-            <MenuItem
-                Name="LowSort"
-                Click="SortTypeMenuItem_Click"
-                Header="{lex:LocText MI_SortLow}"
-                IsCheckable="True"
-                Tag="0" />
+                Click="OpenConnectionManager"
+                Header="{lex:LocText MI_CM}"
+                InputGestureText="Ctrl+Shift+C" />
             <Separator />
             <MenuItem
-                Click="SortValMenuItem_Click"
-                Header="{lex:LocText MI_Sort_Uploaded}"
-                IsCheckable="True"
-                Tag="UploadedEver" />
-            <MenuItem
-                Click="SortValMenuItem_Click"
-                Header="{lex:LocText MI_Sort_UploadSpeed}"
-                IsCheckable="True"
-                Tag="RateUpload" />
-            <MenuItem
-                Click="SortValMenuItem_Click"
-                Header="{lex:LocText MI_Sort_DownloadSpeed}"
-                IsCheckable="True"
-                Tag="RateDownload" />
-            <MenuItem
-                Click="SortValMenuItem_Click"
-                Header="{lex:LocText MI_Sort_AddedDate}"
-                IsCheckable="True"
-                Tag="AddedDate" />
+                Click="AddTorrent"
+                Header="{lex:LocText MI_AddTorrent}"
+                InputGestureText="Ctrl+N" />
         </MenuItem>
+        <MenuItem Name="LangMenu" Header="{lex:LocText MI_lang}" />
         <MenuItem
             Header="{lex:LocText Mi_Info}"
             IsEnabled="True"
@@ -77,6 +49,5 @@
                 Header="{lex:LocText MI_Contact}"
                 IsCheckable="False" />
         </MenuItem>
-        <MenuItem Name="LangMenu" Header="{lex:LocText MI_lang}" />
     </Menu>
 </UserControl>
