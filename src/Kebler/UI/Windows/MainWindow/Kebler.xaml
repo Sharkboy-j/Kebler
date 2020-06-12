@@ -424,6 +424,7 @@
                 Name="TorrentsDataGrid"
                 Grid.Column="2"
                 x:FieldModifier="public"
+                AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                 SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
@@ -431,17 +432,21 @@
                 SelectionMode="Extended"
                 Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding Name, Mode=TwoWay}"
-                        Header="Name" />
-                    <DataGridTemplateColumn Width="Auto" Header="Status">
+                  
+                    <DataGridTemplateColumn Width="*" Header="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="78" Header="Status">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <controls:TagBorder
+                                    Percent="{Binding PercentDone}"
                                     Height="20"
-                                    Percent="{Binding PercentDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Status="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Status="{Binding Status}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
