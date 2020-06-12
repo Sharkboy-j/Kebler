@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
+using Transmission.API.RPC.Response;
 
 namespace Kebler.UI.Windows
 {
@@ -118,38 +119,40 @@ namespace Kebler.UI.Windows
                         cancellationToken.ThrowIfCancellationRequested();
                         TorrentResult = await _transmissionClient.TorrentAddAsync(torrent);
 
-                        switch (TorrentResult.Result)
+                        if (TorrentResult.Result == Enums.ReponseResult.Ok)
                         {
-                            case Enums.AddResult.Duplicate:
-                                {
-                                    Dispatcher.Invoke(() =>
+                            switch (TorrentResult.Value.Status)
+                            {
+                                case Enums.AddTorrentStatus.Added:
                                     {
-                                        Result.Content = Kebler.Resources.Dialogs.ATD_TorrentExist;
-                                        Result.Visibility = Visibility.Visible;
-                                    });
-                                    return;
-                                }
-                            case Enums.AddResult.Added:
-                                {
-                                    Log.Info($"Torrent {torrent.Filename} added as {TorrentResult.Name}");
-                                    IsWorking = false;
+                                        Log.Info($"Torrent {torrent.Filename} added as {TorrentResult.Value.Name}");
+                                        IsWorking = false;
 
-                                    ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
-                                    ConfigService.Save();
-                                    Dispatcher.Invoke(() =>
+                                        ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
+                                        ConfigService.Save();
+                                        Dispatcher.Invoke(() =>
+                                        {
+                                            DialogResult = true;
+                                            Close();
+                                        });
+                                        return;
+                                    }
+                                case Enums.AddTorrentStatus.Duplicate:
                                     {
-                                        DialogResult = true;
-                                        Close();
-                                    });
-                                    return;
-                                }
-                            case Enums.AddResult.Error:
-                            case Enums.AddResult.ResponseNull:
-                                {
-                                    Log.Info($"Adding torrent result Null {torrent.Filename}");
-                                    await Task.Delay(100);
-                                    continue;
-                                }
+                                        Dispatcher.Invoke(() =>
+                                        {
+                                            Result.Content = Kebler.Resources.Dialogs.ATD_TorrentExist;
+                                            Result.Visibility = Visibility.Visible;
+                                        });
+                                        return;
+                                    }
+                            }
+                        }
+                        else
+                        {
+                            Log.Info($"Adding torrent result '{TorrentResult.Value.Status}' {torrent.Filename}");
+                            await Task.Delay(100);
+                            continue;
                         }
                     }
                     catch (OperationCanceledException)
@@ -183,7 +186,7 @@ namespace Kebler.UI.Windows
         FileInfo torrent;
         SessionSettings settings;
         TransmissionClient _transmissionClient;
-        public TorrentAddResult TorrentResult;
+        public AddTorrentResponse TorrentResult;
 
 
         public event PropertyChangedEventHandler PropertyChanged;

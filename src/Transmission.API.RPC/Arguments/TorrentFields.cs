@@ -323,7 +323,7 @@ namespace Transmission.API.RPC.Entity
         /// <summary>
         /// uploadLimited
         /// </summary>
-        public const string UPLOAD_LIMITED = "uploadedEver";
+        public const string UPLOAD_LIMITED = "uploadLimited";
 
         /// <summary>
         /// uploadRatio

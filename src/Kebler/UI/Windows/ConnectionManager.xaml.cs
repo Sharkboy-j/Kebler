@@ -237,7 +237,7 @@ namespace Kebler.UI.Windows
                 if (sessionInfo == null)
                     throw new Exception("Error while testing");
 
-                await _client.CloseSessionAsync();
+                _client.CloseSessionAsync();
             }
             catch (Exception ex)
             {

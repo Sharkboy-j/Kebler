@@ -28,6 +28,8 @@
     <SolidColorBrush x:Key="DataGrid.Tag.ErrorFillBrush" Color="{DynamicResource DataGrid.Tag.ErrorFillColor}" />
     <SolidColorBrush x:Key="DataGrid.Tag.CheckingStrokeBrush" Color="{DynamicResource DataGrid.Tag.CheckingStrokeColor}" />
     <SolidColorBrush x:Key="DataGrid.Tag.CheckingFillBrush" Color="{DynamicResource DataGrid.Tag.CheckingFillColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.CheckPendingStrokeBrush" Color="{DynamicResource DataGrid.Tag.CheckPendingStrokeColor}" />
+    <SolidColorBrush x:Key="DataGrid.Tag.CheckPendingFillBrush" Color="{DynamicResource DataGrid.Tag.CheckPendingFillColor}" />
 
     <SolidColorBrush x:Key="Disabled.ForegroundBrush" Color="{DynamicResource Disabled.ForegroundColor}" />
     <SolidColorBrush x:Key="BusyIndicatorBrush" Color="{DynamicResource BusyIndicatorColor}" />

@@ -76,7 +76,10 @@ namespace Kebler.UI.Windows
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
 
-        private TorrentInfo[] allTorrents = new TorrentInfo[0];
+        private TransmissionTorrents allTorrents = new TransmissionTorrents();
+        private string[] WorkingParams;
+
+
         public SessionSettings _settings;
         public TorrentInfo[] SelectedTorrents { get; set; }
 

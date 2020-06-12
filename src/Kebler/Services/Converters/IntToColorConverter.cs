@@ -30,6 +30,7 @@ namespace Kebler.Services.Converters
                 case -1:
                     return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorStrokeBrush");
                 case 1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingStrokeBrush");
                 case 2:
                     return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingStrokeBrush");
                 case 0:
@@ -64,6 +65,7 @@ namespace Kebler.Services.Converters
                 case -1:
                     return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorFillBrush");
                 case 1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingFillBrush");
                 case 2:
                     return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingFillBrush");
                 case 0:

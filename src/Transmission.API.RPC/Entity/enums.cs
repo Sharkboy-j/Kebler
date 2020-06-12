@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Transmission.API.RPC.Entity
+﻿namespace Transmission.API.RPC.Entity
 {
     public class Enums
     {
-        public enum AddResult { Added, Duplicate, Error, ResponseNull};
+        public enum AddTorrentStatus { Added, Duplicate, UnknownError, ResponseNull};
         public enum RemoveResult { Ok, Error};
-        public enum ErrorsResponse { TimeOut, HttpStatusCodeConflict, IsNotHttpWebResponse, Ok };
+        public enum ErrorsResponse { TimeOut, HttpStatusCodeConflict, IsNotHttpWebResponse, None,SessionIdError};
+        public enum ReponseResult { Ok, NotOk };
     }
 }

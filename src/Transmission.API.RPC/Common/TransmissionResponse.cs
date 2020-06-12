@@ -19,6 +19,6 @@ namespace Transmission.API.RPC.Common
 		[JsonProperty("result")]
 		public string Result;
 
-		public ErrorsResponse Error;
+		public ErrorsResponse Error = ErrorsResponse.None;
 	}
 }

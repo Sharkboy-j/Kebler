@@ -1,24 +1,14 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel;
-using static Transmission.API.RPC.Entity.Enums;
-
-namespace Transmission.API.RPC.Entity
+﻿namespace Transmission.API.RPC.Entity
 {
+    using Newtonsoft.Json;
+    using System.ComponentModel;
+
     public class TorrentAddResult : INotifyPropertyChanged
     {
-        public TorrentAddResult()
+        public TorrentAddResult(Enums.AddTorrentStatus status)
         {
+            Status = status;
         }
-
-        public TorrentAddResult(AddResult result)
-        {
-            Result = result;
-        }
-
-        public AddResult Result { get; set; }
-
-
-
 
         /// <summary>
 		/// Torrent ID
@@ -38,16 +28,7 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("hashString")]
         public string HashString { get; set; }
 
-
-
-        //[JsonProperty("id")]
-        //public int Id { get; set; }
-
-        //[JsonProperty("name")]
-        //public int Name { get; set; }
-
-        //[JsonProperty("hashString")]
-        //public string Hash { get; set; }
+        public Enums.AddTorrentStatus Status;
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

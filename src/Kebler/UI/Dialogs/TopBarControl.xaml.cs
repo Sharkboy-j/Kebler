@@ -71,24 +71,24 @@ namespace Kebler.UI.Controls
 
         private void SortValMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is MenuItem mi)) return;
+            //if (!(sender is MenuItem mi)) return;
 
-            ConfigService.Instanse.SortVal = mi.Tag.ToString();
-            ConfigService.Save();
-            App.KeblerControl.UpdateSorting();
+            //ConfigService.Instanse.SortVal = mi.Tag.ToString();
+            //ConfigService.Save();
+            //App.KeblerControl.UpdateSorting();
         }
 
         private void SortTypeMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is MenuItem mi)) return;
+            //if (!(sender is MenuItem mi)) return;
 
-            int.TryParse(mi.Tag.ToString(), out var val);
+            //int.TryParse(mi.Tag.ToString(), out var val);
 
-            ConfigService.Instanse.SortType = val;
+            //ConfigService.Instanse.SortType = val;
 
-            ConfigService.Save();
+            //ConfigService.Save();
 
-            App.KeblerControl.UpdateSorting();
+            //App.KeblerControl.UpdateSorting();
         }
 
         private void Report(object sender, RoutedEventArgs e)

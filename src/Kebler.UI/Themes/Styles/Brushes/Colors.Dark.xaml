@@ -55,6 +55,9 @@
     <Color x:Key="DataGrid.Tag.CheckingStrokeColor">#B0CB73E1</Color>
     <Color x:Key="DataGrid.Tag.CheckingFillColor">#40CB73E1</Color>
 
+    <Color x:Key="DataGrid.Tag.CheckPendingStrokeColor">#FFB4B3F1</Color>
+    <Color x:Key="DataGrid.Tag.CheckPendingFillColor">#33B4B3F1</Color>
+
 
 
 
