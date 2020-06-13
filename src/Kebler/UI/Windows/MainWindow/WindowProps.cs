@@ -14,6 +14,7 @@ using log4net;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
+using Transmission.API.RPC.Response;
 using Enums = Kebler.Models.Enums;
 
 namespace Kebler.UI.Windows
@@ -21,20 +22,38 @@ namespace Kebler.UI.Windows
     public partial class KeblerWindow
     {
         private List<Server> _servers;
+        private HotKey[] RegisteredKeys;
+        private object syncObjKeys = new object();
 
-        public Server ConnectedServer { get; set; }
-        private List<Server> ServersList
+        private Server _connectedServer;
+        public Server ConnectedServer
+        {
+            get => _connectedServer;
+            set
+            {
+                _connectedServer = value;
+                App.ChangeConnectedServer(_connectedServer);
+            }
+        }
+
+        public List<Server> ServersList
         {
             get
             {
                 if (_servers == null)
                 {
-                    _dbServers = StorageRepository.GetServersList();
-                    _servers = _dbServers.FindAll().ToList();
+                    UpdateServers();
                 }
                 return _servers;
             }
         }
+
+        public void UpdateServers()
+        {
+            _dbServers = StorageRepository.GetServersList();
+            _servers = _dbServers.FindAll().ToList();
+        }
+
         private LiteCollection<Server> _dbServers;
         private Statistic _stats;
         private SessionInfo _sessionInfo;
@@ -66,13 +85,20 @@ namespace Kebler.UI.Windows
         {
             get
             {
+#if DEBUG
+                return "Kebler [DEBUG]";
+#else
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return $"{nameof(Kebler)} {fileVersionInfo.FileVersion}";
+#endif
             }
         }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
+        private object _syncTorrentList = new object();
+
+
         public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
 
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
@@ -85,11 +111,11 @@ namespace Kebler.UI.Windows
         public bool IsErrorOccuredWhileConnecting { get; set; }
 
 
-        #region StatusBarProps
+#region StatusBarProps
         public string IsConnectedStatusText { get; set; } = string.Empty;
         public string DownloadSpeed { get; set; } = string.Empty;
         public string UploadSpeed { get; set; } = string.Empty;
-        #endregion
+#endregion
 
     }
 }

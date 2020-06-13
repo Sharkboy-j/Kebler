@@ -15,16 +15,19 @@
         Name="TopBarMenu"
         Background="Transparent"
         IsMainMenu="True">
-        <MenuItem Header="{lex:LocText MI_Torrent}">
+        <MenuItem Header="{lex:LocText MI_Kebler}">
             <MenuItem
                 Click="OpenConnectionManager"
                 Header="{lex:LocText MI_CM}"
                 InputGestureText="Ctrl+Shift+C" />
-            <Separator />
+            <MenuItem Name="ServersMenu" Header="{lex:LocText MI_Servers}" />
+        </MenuItem>
+        <MenuItem Header="{lex:LocText MI_Torrent}">
             <MenuItem
                 Click="AddTorrent"
                 Header="{lex:LocText MI_AddTorrent}"
-                InputGestureText="Ctrl+N" />
+                InputGestureText="Ctrl+N"
+                IsEnabled="{Binding IsConnected}" />
         </MenuItem>
         <MenuItem Name="LangMenu" Header="{lex:LocText MI_lang}" />
         <MenuItem

@@ -5,6 +5,10 @@ namespace Kebler.Models
 {
     public class Server
     {
+        public Server()
+        {
+
+        }
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
 
@@ -29,6 +33,7 @@ namespace Kebler.Models
         {
             return JsonConvert.SerializeObject(this,Formatting.Indented);
         }
+
         [BsonIgnore,JsonIgnore]
         public string FullUriPath
         {
@@ -41,6 +46,15 @@ namespace Kebler.Models
                 if (!uri.EndsWith("/")) uri += "/";
                 return uri;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj != null && obj is Server srv)
+            {
+                return srv.Id == Id;
+            }
+            return false;
         }
     }
 }

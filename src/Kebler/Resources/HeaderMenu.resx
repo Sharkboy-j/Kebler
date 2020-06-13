@@ -145,4 +145,10 @@
   <data name="MI_AddTorrent" xml:space="preserve">
     <value>Add Torrent</value>
   </data>
+  <data name="MI_Kebler" xml:space="preserve">
+    <value>Kebler</value>
+  </data>
+  <data name="MI_Servers" xml:space="preserve">
+    <value>Servers</value>
+  </data>
 </root>

@@ -189,12 +189,16 @@ namespace Transmission.API.RPC
         /// Get information of current session (API: session-get)
         /// </summary>
         /// <returns>Session information</returns>
-        public async Task<SessionInfo> GetSessionInformationAsync()
+        public async Task<TransmissionInfoResponse<SessionInfo>> GetSessionInformationAsync()
         {
             var request = new TransmissionRequest("session-get");
             var response = await SendRequestAsync(request);
             var result = response.Deserialize<SessionInfo>();
-            return result;
+            var answ = new TransmissionInfoResponse<SessionInfo>(result)
+            {
+                Error = response.Error, StatusError = response.StatusError
+            };
+            return answ;
         }
 
         #endregion
@@ -542,7 +546,7 @@ namespace Transmission.API.RPC
 
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request)
         {
-            TransmissionResponse result = new TransmissionResponse();
+            var result = new TransmissionResponse();
 
             request.Tag = ++CurrentTag;
 
@@ -561,14 +565,14 @@ namespace Transmission.API.RPC
                 if (_needAuthorization)
                     webRequest.Headers["Authorization"] = _authorization;
 
-                using (Stream dataStream = await webRequest.GetRequestStreamAsync())
+                await using (var dataStream = await webRequest.GetRequestStreamAsync())
                 {
                     await dataStream.WriteAsync(byteArray, 0, byteArray.Length);
                 }
 
                 //Send request and prepare response
                 using var webResponse = await webRequest.GetResponseAsync();
-                using Stream responseStream = webResponse.GetResponseStream();
+                await using var responseStream = webResponse.GetResponseStream();
                 var reader = new StreamReader(responseStream, Encoding.UTF8);
                 var responseString = await reader.ReadToEndAsync();
                 result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
@@ -577,30 +581,43 @@ namespace Transmission.API.RPC
                 {
                     throw new Exception(result.Result);
                 }
+
                 result.Error = ErrorsResponse.None;
             }
             catch (WebException ex)
             {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
+                if (ex.Response is HttpWebResponse wr)
                 {
-                    if (ex.Response.Headers.Count > 0)
+                    if (wr.StatusCode == HttpStatusCode.Conflict)
                     {
-                        //If session id expiried, try get session id and send request
-                        SessionID = ex.Response.Headers["X-Transmission-Session-Id"];
-
-                        if (SessionID == null)
+                        if (ex.Response.Headers.Count > 0)
                         {
-                            result.Error = ErrorsResponse.SessionIdError;
-                            return result;
-                        }
+                            //If session id expiried, try get session id and send request
+                            SessionID = ex.Response.Headers["X-Transmission-Session-Id"];
 
+                            if (SessionID == null)
+                                throw new Exception("Session ID Error");
+
+                            result = SendRequest(request);
+                        }
+                    }
+                    else
+                    {
+                        Log.Error(wr);
+                        return result;
                     }
                 }
                 else
                 {
-                    result.Error = ErrorsResponse.IsNotHttpWebResponse;
+                    result.Error = ErrorsResponse.WebException;
+                    result.StatusError = ex.Status;
+                    Log.Error(ex);
                     return result;
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
             }
 
             return result;

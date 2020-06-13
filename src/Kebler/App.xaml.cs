@@ -8,6 +8,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using AutoUpdaterDotNET;
+using Kebler.Models;
 using Kebler.Services;
 using Kebler.UI.Windows;
 using log4net;
@@ -27,8 +28,25 @@ namespace Kebler
         public static KeblerWindow KeblerControl;
         public static App Instance;
 
+        public delegate void ConnectionToServerInitialisedHandler(Server srv);
+        public static event ConnectionToServerInitialisedHandler ConnectionChanged;
+        public delegate void ServerListChangedHandler();
+        public static event ServerListChangedHandler ServerListChanged;
+
+
+
         public delegate void Langhandler();
         public event Langhandler LangChanged;
+
+        public static void ChangeConnectedServer(Server srv)
+        {
+            ConnectionChanged?.Invoke(srv);
+        }
+
+        public static void InvokeServerListChanged()
+        {
+            ServerListChanged?.Invoke();
+        }
 
         public void LangChangedNotify()
         {

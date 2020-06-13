@@ -84,13 +84,14 @@ namespace Kebler.UI.Windows
                 ServersListBox.SelectedIndex = 0;
             }
 
+
         }
 
 
 
         private void AddNewServer_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var id = ServerList.Count == 0 ? 1 : ServerList[ServerList.Count - 1].Id + 1;
+            var id = ServerList.Count == 0 ? 1 : ServerList[^1].Id + 1;
 
             var server = new Server { Id = id, Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
 
@@ -99,6 +100,8 @@ namespace Kebler.UI.Windows
             Log.Info($"Add new Server {server}");
             //var result = DbServersList.(x => x.Title);
             GetServers(server.Id);
+            App.InvokeServerListChanged();
+
         }
 
         private void ServersListBox_SelectedItemChanged(object sender, SelectionChangedEventArgs e)
@@ -131,6 +134,7 @@ namespace Kebler.UI.Windows
                 Log.Error($"SaveError: {error}");
                 System.Windows.MessageBox.Show(error.ToString());
             }
+            App.InvokeServerListChanged();
 
         }
 
@@ -161,9 +165,8 @@ namespace Kebler.UI.Windows
         {
             if (SelectedServer == null) return;
 
+
             Log.Info($"Try remove server: {SelectedServer}");
-
-
 
             var result = StorageRepository.GetServersList().Delete(SelectedServer.Id);
             Log.Info($"RemoveResult: {result}");
@@ -172,9 +175,17 @@ namespace Kebler.UI.Windows
                 //TODO: Add string 
                 System.Windows.MessageBox.Show("RemoveErrorContent");
             }
+            var ind = ServersListBox.SelectedIndex -= 1;
+
+            if (App.KeblerControl.SelectedServer.Id == SelectedServer.Id)
+            {
+                App.KeblerControl.Disconnect();
+            }
 
             SelectedServer = null;
             GetServers();
+            App.InvokeServerListChanged();
+            ServersListBox.SelectedIndex = ind;
         }
 
         private async void TestConnection_ButtonClick(object sender, RoutedEventArgs e)
@@ -273,7 +284,7 @@ namespace Kebler.UI.Windows
 
             if (ServerList.Count != 0)
             {
-                App.KeblerControl.Connect();
+                App.KeblerControl.InitConnection();
             }
 
         }

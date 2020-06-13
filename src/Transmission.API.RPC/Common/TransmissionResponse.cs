@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net;
 using static Transmission.API.RPC.Entity.Enums;
 
 namespace Transmission.API.RPC.Common
@@ -15,5 +16,7 @@ namespace Transmission.API.RPC.Common
 		public string Result;
 
 		public ErrorsResponse Error = ErrorsResponse.None;
-	}
+
+        public WebExceptionStatus StatusError = WebExceptionStatus.Success;
+    }
 }

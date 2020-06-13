@@ -165,4 +165,7 @@
   <data name="MI_AddTorrent" xml:space="preserve">
     <value>Добавить Торрент</value>
   </data>
+  <data name="MI_Kebler" xml:space="preserve">
+    <value>Kebler</value>
+  </data>
 </root>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -12,40 +13,38 @@ namespace Kebler.Services
         private static Dictionary<int, HotKey> _dictHotKeyToCalBackProc;
 
         [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, UInt32 fsModifiers, UInt32 vlc);
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vlc);
 
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        public const int WmHotKey = 0x0312;
 
+        private const int WM_HOT_KEY = 0x0312;
         private bool _disposed;
-        private Key n;
-        private KeyModifier ctrl;
-        private Action addTorrent;
+        private readonly Key _key;
+        private readonly KeyModifier _modifire;
+        private readonly Action _action;
+        private readonly IntPtr _hWnd;
+        private  int _id;
 
-        public Key Key { get; private set; }
-        public KeyModifier KeyModifiers { get; private set; }
-        public Action Action { get; private set; }
-        public int Id { get; set; }
 
-        // ******************************************************************
-        public HotKey(Key k, KeyModifier keyModifiers, Action action, bool register = true)
+        public HotKey(Key key, KeyModifier keyModifiers, Action action, IntPtr wnd, bool register = true)
         {
-            Key = k;
-            KeyModifiers = keyModifiers;
-            Action = action;
+            _hWnd = wnd;
+            _key = key;
+            _modifire = keyModifiers;
+            _action = action;
             if (register)
             {
                 Register();
             }
         }
-        // ******************************************************************
+
         public bool Register()
         {
-            int virtualKeyCode = KeyInterop.VirtualKeyFromKey(Key);
-            Id = virtualKeyCode + ((int)KeyModifiers * 0x10000);
-            bool result = RegisterHotKey(IntPtr.Zero, Id, (UInt32)KeyModifiers, (UInt32)virtualKeyCode);
+            var virtualKeyCode = KeyInterop.VirtualKeyFromKey(_key);
+            _id = virtualKeyCode + ((int)_modifire * 0x10000);
+            var result = RegisterHotKey(_hWnd, _id, (uint)_modifire, (uint)virtualKeyCode);
 
             if (_dictHotKeyToCalBackProc == null)
             {
@@ -53,86 +52,50 @@ namespace Kebler.Services
                 ComponentDispatcher.ThreadFilterMessage += ComponentDispatcherThreadFilterMessage;
             }
 
-            _dictHotKeyToCalBackProc.Add(Id, this);
+            _dictHotKeyToCalBackProc.Add(_id, this);
 
-            Debug.Print(result + ", " + Id + ", " + virtualKeyCode);
+            //Debug.Print(result + ", " + _id + ", " + virtualKeyCode);
             return result;
         }
 
-        // ******************************************************************
         public void Unregister()
         {
-            HotKey hotKey;
-            if (_dictHotKeyToCalBackProc.TryGetValue(Id, out hotKey))
-            {
-                UnregisterHotKey(IntPtr.Zero, Id);
-            }
+            if (!_dictHotKeyToCalBackProc.TryGetValue(_id, out _)) return;
+
+            UnregisterHotKey(_hWnd, _id);
+            _dictHotKeyToCalBackProc.Remove(_id);
         }
 
-        // ******************************************************************
         private static void ComponentDispatcherThreadFilterMessage(ref MSG msg, ref bool handled)
         {
-            if (!handled)
-            {
-                if (msg.message == WmHotKey)
-                {
-                    HotKey hotKey;
+            if (handled) return;
+            if (msg.message != WM_HOT_KEY) return;
 
-                    if (_dictHotKeyToCalBackProc.TryGetValue((int)msg.wParam, out hotKey))
-                    {
-                        if (hotKey.Action != null)
-                        {
-                            hotKey.Action.Invoke();
-                        }
-                        handled = true;
-                    }
-                }
-            }
+            if (!_dictHotKeyToCalBackProc.TryGetValue((int) msg.wParam, out var hotKey)) return;
+
+            hotKey._action?.Invoke();
+            handled = true;
         }
 
-        // ******************************************************************
-        // Implement IDisposable.
-        // Do not make this method virtual.
-        // A derived class should not be able to override this method.
+     
         public void Dispose()
         {
             Dispose(true);
-            // This object will be cleaned up by the Dispose method.
-            // Therefore, you should call GC.SupressFinalize to
-            // take this object off the finalization queue
-            // and prevent finalization code for this object
-            // from executing a second time.
             GC.SuppressFinalize(this);
         }
 
-        // ******************************************************************
-        // Dispose(bool disposing) executes in two distinct scenarios.
-        // If disposing equals true, the method has been called directly
-        // or indirectly by a user's code. Managed and unmanaged resources
-        // can be _disposed.
-        // If disposing equals false, the method has been called by the
-        // runtime from inside the finalizer and you should not reference
-        // other objects. Only unmanaged resources can be _disposed.
+       
         protected virtual void Dispose(bool disposing)
         {
-            // Check to see if Dispose has already been called.
-            if (!_disposed)
+            if (_disposed) return;
+            if (disposing)
             {
-                // If disposing equals true, dispose all managed
-                // and unmanaged resources.
-                if (disposing)
-                {
-                    // Dispose managed resources.
-                    Unregister();
-                }
-
-                // Note disposing has been done.
-                _disposed = true;
+                Unregister();
             }
+            _disposed = true;
         }
     }
 
-    // ******************************************************************
     [Flags]
     public enum KeyModifier
     {

@@ -16,7 +16,9 @@
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    Activated="KeblerWindow_OnActivated"
     Closing="ClosingW"
+    Deactivated="KeblerWindow_OnDeactivated"
     ResizeMode="CanResize"
     Style="{DynamicResource MainWindowStyle}"
     WindowStartupLocation="CenterScreen"
@@ -205,7 +207,7 @@
             </Setter>
         </Style>
     </ui:CustomWindow.Resources>
-    <Grid>
+    <Grid Background="{DynamicResource DataGrid.BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -217,7 +219,8 @@
             Grid.Row="0"
             Background="{DynamicResource ToolBarBackgroundBrush}"
             BorderBrush="{DynamicResource ToolBarBorderBrush}"
-            BorderThickness="0,0,0,1">
+            BorderThickness="0,0,0,1"
+            IsEnabled="{Binding IsConnected}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -430,9 +433,9 @@
                 SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
                 SelectionChanged="TorrentsDataGrid_SelectionChanged"
                 SelectionMode="Extended"
-                Visibility="{Binding IsConnected, FallbackValue=false, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding IsConnected, FallbackValue=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
                 <DataGrid.Columns>
-                  
+
                     <DataGridTemplateColumn Width="*" Header="Name">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -444,9 +447,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <controls:TagBorder
-                                    Percent="{Binding PercentDone}"
                                     Height="20"
-                                    Status="{Binding Status}" />
+                                    Percent="{Binding PercentDone, UpdateSourceTrigger=PropertyChanged}"
+                                    Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -473,6 +476,23 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
+            <StackPanel
+                Grid.Column="2"
+                Height="Auto"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical"
+                Visibility="{Binding IsConnected, Converter={StaticResource ReverseBoolToVisibilityConverter}}">
+                <Image Width="150" Source="/Kebler.UI;component/Icons/Kebler_dark_512x512.png" />
+                <controls1:LoadingRing Margin="0,5,0,0" Visibility="{Binding IsConnecting, FallbackValue=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <Button
+                    Width="70"
+                    Margin="0,10,0,0"
+                    Click="RetryConnection_ButtonCLick"
+                    Content="{lex:LocText RetryConnection}"
+                    IsDefault="True"
+                    Visibility="{Binding IsErrorOccuredWhileConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=false}" />
+            </StackPanel>
             <GridSplitter
                 Grid.Column="1"
                 DragCompleted="Vertical_DragCompleted"

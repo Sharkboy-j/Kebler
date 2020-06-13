@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Kebler.Models;
 using Kebler.Services;
 using MessageBox = Kebler.UI.Windows.MessageBox;
 
@@ -17,26 +18,70 @@ namespace Kebler.UI.Controls
         public TopBarControl()
         {
             InitializeComponent();
+
+            App.ConnectionChanged += App_ConnectionChanged;
+            App.ServerListChanged += UpdateServerList; 
             foreach (var item in LocalizationManager.CultureList)
             {
-                var dd = new MenuItem();
-                dd.Header = item.EnglishName;
-                dd.Tag = item;
-                dd.Click += Dd_Click;
+                var dd = new MenuItem { Header = item.EnglishName, Tag = item };
+                dd.Click += langChanged;
                 dd.IsCheckable = true;
-
-                //ahhh fuck this shit. im too lasy for.. That is fucking easiest and fastes way. stfu!
-                //TODO: RMK
-                //dd.Style = App.Instance.TryFindResource("PopUpTopBarMenuButton") as Style;
-
-
-                dd.IsChecked = Thread.CurrentThread.CurrentCulture == item;
-
+                dd.IsChecked = Equals(Thread.CurrentThread.CurrentCulture, item);
                 LangMenu.Items.Add(dd);
+            }
+
+            UpdateServerList();
+
+        }
+
+        public void UpdateServerList()
+        {
+            App.KeblerControl.UpdateServers();
+
+            ServersMenu.Items.Clear();
+            foreach (var item in App.KeblerControl.ServersList)
+            {
+                var dd = new MenuItem { Header = item.Title, Tag = item };
+                dd.Click += ServerMenuItemCkicked;
+                dd.IsCheckable = true;
+                dd.IsChecked = item.Equals(App.KeblerControl.SelectedServer);
+                ServersMenu.Items.Add(dd);
             }
         }
 
-        private void Dd_Click(object sender, RoutedEventArgs e)
+
+        private void App_ConnectionChanged(Server srv)
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (srv == null)
+                {
+                    foreach (MenuItem mi in ServersMenu.Items)
+                    {
+                        mi.IsChecked = false;
+                    }
+                }
+                else
+                {
+                    foreach (MenuItem mi in ServersMenu.Items)
+                    {
+                        mi.IsChecked = ((Server)mi.Tag).Equals(srv);
+                    }
+                }
+            });
+        }
+
+
+        private void ServerMenuItemCkicked(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is MenuItem ss)) return;
+
+            App.KeblerControl.SelectedServer = ss.Tag as Server;
+            App.KeblerControl.ReconnectToNewServer();
+        }
+
+
+        private void langChanged(object sender, RoutedEventArgs e)
         {
             foreach (var item in LangMenu.Items)
             {
@@ -60,7 +105,7 @@ namespace Kebler.UI.Controls
 
         private void ConnectFirst(object sender, RoutedEventArgs e)
         {
-            App.KeblerControl.Connect();
+            App.KeblerControl.InitConnection();
         }
 
         private void AddTorrent(object sender, RoutedEventArgs e)
