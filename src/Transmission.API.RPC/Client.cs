@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Transmission.API.RPC.Entity;
-using Newtonsoft.Json.Linq;
-using Transmission.API.RPC.Common;
-using Transmission.API.RPC.Arguments;
-using static Transmission.API.RPC.Entity.Enums;
 using log4net;
-using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Transmission.API.RPC.Arguments;
+using Transmission.API.RPC.Common;
+using Transmission.API.RPC.Entity;
 using Transmission.API.RPC.Response;
+using static Transmission.API.RPC.Entity.Enums;
 
 namespace Transmission.API.RPC
 {
@@ -69,16 +66,16 @@ namespace Transmission.API.RPC
         /// <param name="password">Password</param>
         public TransmissionClient(string url, string sessionID = null, string login = null, string password = null)
         {
-            this.Url = url;
-            this.SessionID = sessionID;
+            Url = url;
+            SessionID = sessionID;
 
             if (!String.IsNullOrWhiteSpace(login))
             {
                 var authBytes = Encoding.UTF8.GetBytes(login + ":" + password);
                 var encoded = Convert.ToBase64String(authBytes);
 
-                this._authorization = "Basic " + encoded;
-                this._needAuthorization = true;
+                _authorization = "Basic " + encoded;
+                _needAuthorization = true;
             }
         }
 
@@ -466,7 +463,7 @@ namespace Transmission.API.RPC
         public async Task<RenameTorrentInfo> TorrentRenamePathAsync(int id, string path, string name)
         {
             var arguments = new Dictionary<string, object>();
-            arguments.Add("ids", new int[] { id });
+            arguments.Add("ids", new[] { id });
             arguments.Add("path", path);
             arguments.Add("name", name);
 

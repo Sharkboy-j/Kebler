@@ -1,21 +1,20 @@
-﻿using Kebler.Models;
-using Kebler.Services;
-using LiteDB;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using Kebler.Models;
+using Kebler.Services;
+using LiteDB;
+using log4net;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
+using Enums = Kebler.Models.Enums;
 
 namespace Kebler.UI.Windows
 {
@@ -46,7 +45,7 @@ namespace Kebler.UI.Windows
         private DateTimeOffset _longActionTimeStart;
         private bool _isLongTaskRunning;
         private Task _checkerTask;
-        private Kebler.Models.Enums.Categories _filterCategory;
+        private Enums.Categories _filterCategory;
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

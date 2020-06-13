@@ -3,9 +3,8 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using Kebler.Models;
 using Kebler.Services;
-using Transmission.API.RPC.Entity;
+using MessageBox = Kebler.UI.Windows.MessageBox;
 
 namespace Kebler.UI.Controls
 {
@@ -93,12 +92,12 @@ namespace Kebler.UI.Controls
 
         private void Report(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start https://github.com/JeremiSharkboy/Kebler/issues") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/JeremiSharkboy/Kebler/issues") { CreateNoWindow = true });
         }
 
         private void About(object sender, RoutedEventArgs e)
         {
-            var dd = new Windows.MessageBox(new About());
+            var dd = new MessageBox(new About());
             dd.Owner = App.Instance.MainWindow;
             dd.ShowDialog();
         }
@@ -110,7 +109,7 @@ namespace Kebler.UI.Controls
 
         private void Contact(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start https://t.me/jeremiSharkboy") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", "/c start https://t.me/jeremiSharkboy") { CreateNoWindow = true });
         }
     }
 }

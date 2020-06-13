@@ -1,26 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Kebler.Models;
+using System.Windows.Threading;
+using AutoUpdaterDotNET;
 using Kebler.Services;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;
-using SharpConfig;
-using AutoUpdaterDotNET;
-using System.Windows.Threading;
-using Newtonsoft.Json;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Diagnostics;
 
 namespace Kebler
 {
@@ -33,7 +24,7 @@ namespace Kebler
         public static event EventHandler LanguageChanged;
 
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        public static UI.Windows.KeblerWindow KeblerControl;
+        public static KeblerWindow KeblerControl;
         public static App Instance;
 
         public delegate void Langhandler();
@@ -55,7 +46,7 @@ namespace Kebler
             AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
 
             AutoUpdater.ReportErrors = report;
-            AutoUpdater.DownloadPath = System.IO.Path.GetTempPath();
+            AutoUpdater.DownloadPath = Path.GetTempPath();
             AutoUpdater.ShowSkipButton = true;
             AutoUpdater.ShowRemindLaterButton = true;
             AutoUpdater.RunUpdateAsAdmin = true;
@@ -121,7 +112,7 @@ namespace Kebler
 
         }
 
-        private static void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private static void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Log.Error(e.Exception);
             e.Handled = true;
@@ -131,7 +122,7 @@ namespace Kebler
         protected override void OnStartup(StartupEventArgs e)
         {
 
-            KeblerControl = new UI.Windows.KeblerWindow();
+            KeblerControl = new KeblerWindow();
             KeblerControl.Show();
 
             base.OnStartup(e);
@@ -141,7 +132,7 @@ namespace Kebler
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            KeblerControl = new UI.Windows.KeblerWindow();
+            KeblerControl = new KeblerWindow();
             KeblerControl.Show();
 
             base.OnStartup(e);

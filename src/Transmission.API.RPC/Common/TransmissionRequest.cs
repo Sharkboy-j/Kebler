@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Transmission.API.RPC.Common
 {
@@ -20,19 +16,19 @@ namespace Transmission.API.RPC.Common
 
         public TransmissionRequest(string method)
         {
-            this.Method = method;
+            Method = method;
         }
 
 		public TransmissionRequest(string method, ArgumentsBase arguments)
 		{
-			this.Method = method;
-			this.Arguments = arguments.Data;
+			Method = method;
+			Arguments = arguments.Data;
 		}
 
         public TransmissionRequest(string method, Dictionary<string, object> arguments)
         {
-            this.Method = method;
-            this.Arguments = arguments;
+            Method = method;
+            Arguments = arguments;
         }
 	}
 }

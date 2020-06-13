@@ -1,13 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Transmission.API.RPC.Arguments;
-using static Transmission.API.RPC.Entity.Enums;
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Transmission.API.RPC.Entity
 {

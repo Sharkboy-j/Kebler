@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -19,7 +20,7 @@ namespace AutoUpdaterDotNET
             UseLatestIE();
             buttonSkip.Visible = AutoUpdater.ShowSkipButton;
             buttonRemindLater.Visible = AutoUpdater.ShowRemindLaterButton;
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateForm));
+            var resources = new ComponentResourceManager(typeof(UpdateForm));
             Text = string.Format(resources.GetString("$this.Text", CultureInfo.CurrentCulture),
                 AutoUpdater.AppTitle, _args.CurrentVersion);
             labelUpdate.Text = string.Format(resources.GetString("labelUpdate.Text", CultureInfo.CurrentCulture),

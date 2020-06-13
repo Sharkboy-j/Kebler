@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace AutoUpdaterDotNET
 {
@@ -7,7 +8,7 @@ namespace AutoUpdaterDotNET
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -122,14 +123,14 @@ namespace AutoUpdaterDotNET
 
         #endregion
 
-        private System.Windows.Forms.Button buttonRemindLater;
-        private System.Windows.Forms.Button buttonUpdate;
-        private System.Windows.Forms.Button buttonSkip;
-        private System.Windows.Forms.WebBrowser webBrowser;
-        private System.Windows.Forms.Label labelUpdate;
-        private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.Label labelReleaseNotes;
-        private System.Windows.Forms.PictureBox pictureBoxIcon;
+        private Button buttonRemindLater;
+        private Button buttonUpdate;
+        private Button buttonSkip;
+        private WebBrowser webBrowser;
+        private Label labelUpdate;
+        private Label labelDescription;
+        private Label labelReleaseNotes;
+        private PictureBox pictureBoxIcon;
 
     }
 }

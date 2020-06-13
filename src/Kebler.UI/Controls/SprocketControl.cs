@@ -4,6 +4,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Kebler.UI.Controls

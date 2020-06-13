@@ -1,11 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
-using Transmission.API.RPC.Entity;
-
-namespace Kebler.Services.Converters
+﻿namespace Kebler.Services.Converters
 {
     //public class PieceToImage: IValueConverter
     //{

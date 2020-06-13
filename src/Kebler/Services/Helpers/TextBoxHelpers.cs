@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -326,7 +324,7 @@ namespace Kebler.Services.Helpers
 
         // Using a DependencyProperty as the backing store for IsNumeric.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsSerialProperty =
-            DependencyProperty.RegisterAttached("IsSerial", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, new PropertyChangedCallback((s, e) =>
+            DependencyProperty.RegisterAttached("IsSerial", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, (s, e) =>
             {
                 TextBox targetTextbox = s as TextBox;
                 if (targetTextbox != null)
@@ -342,13 +340,13 @@ namespace Kebler.Services.Helpers
                         targetTextbox.PreviewKeyDown += targetTextbox_PreviewKeyDown;
                     }
                 }
-            })));
+            }));
 
         static void targetTextbox_PreviewTextInputSerial(object sender, TextCompositionEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(e.Text))
             {
-                Char newChar = e.Text.ToUpper().ToString()[0];
+                Char newChar = e.Text.ToUpper()[0];
                 e.Handled = !Allowed_Char(newChar);
             }
             else
@@ -381,7 +379,7 @@ namespace Kebler.Services.Helpers
         {
             obj.SetValue(IsRuLattersProperty, value);
         }
-        public static readonly DependencyProperty IsRuLattersProperty = DependencyProperty.RegisterAttached("IsRuLatters", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, new PropertyChangedCallback((s, e) =>
+        public static readonly DependencyProperty IsRuLattersProperty = DependencyProperty.RegisterAttached("IsRuLatters", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, (s, e) =>
         {
             TextBox textBoxRuLatters = s as TextBox;
             if (textBoxRuLatters != null)
@@ -397,13 +395,13 @@ namespace Kebler.Services.Helpers
                     //textBoxRuLatters.PreviewKeyDown += TextBoxRuLatters_PreviewKeyDown;
                 }
             }
-        })));
+        }));
 
         private static void TextBoxRuLatters_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(e.Text))
             {
-                Char newChar = e.Text.ToString()[0];
+                Char newChar = e.Text[0];
                 e.Handled = !DisableEn_Char(newChar);
             }
             else
@@ -532,7 +530,7 @@ namespace Kebler.Services.Helpers
         /// Массив запрещённых символов
         /// </summary>
         public static readonly DependencyProperty IgnoreCharProperty =
-            DependencyProperty.RegisterAttached("IgnoreChar", typeof(string), typeof(TextBoxHelpers), new PropertyMetadata(string.Empty, new PropertyChangedCallback((s, e) =>
+            DependencyProperty.RegisterAttached("IgnoreChar", typeof(string), typeof(TextBoxHelpers), new PropertyMetadata(string.Empty, (s, e) =>
             {
                 TextBox targetTextbox = s as TextBox;
                 if (targetTextbox != null)
@@ -548,14 +546,14 @@ namespace Kebler.Services.Helpers
                         if (((string)e.NewValue).Contains(' ')) targetTextbox.PreviewKeyDown += targetTextbox_PreviewKeyDown;
                     }
                 }
-            })));
+            }));
 
         static void targetTextbox_PreviewTextInputIgnoreChar(object sender, TextCompositionEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Text))
             {
                 string ignore = GetIgnoreChar((TextBox)sender);
-                char newChar = e.Text.ToString()[0];
+                char newChar = e.Text[0];
                 e.Handled = ignore.Contains(newChar);
             }
             else

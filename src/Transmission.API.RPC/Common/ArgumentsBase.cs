@@ -16,13 +16,13 @@ namespace Transmission.API.RPC.Common
 
         private void SetValue(string name, object value)
         {
-            if (this.Data.ContainsKey(name)) Data[name] = value;
+            if (Data.ContainsKey(name)) Data[name] = value;
             else Data.Add(name, value);
         }
 
         internal T GetValue<T>(string name)
         {
-            return this.Data.ContainsKey(name) ? (T)Data[name] : default(T);
+            return Data.ContainsKey(name) ? (T)Data[name] : default;
         }
     }
 }

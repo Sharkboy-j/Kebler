@@ -1,37 +1,7 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Media;
-using Transmission.API.RPC.Entity;
 using System.Runtime.InteropServices;
-using System.Windows.Controls;
-using System.Windows.Interop;
-using Kebler.Models;
-using Microsoft.Win32;
-using Kebler.Services;
+using System.Windows;
 using System.Windows.Input;
-using Kebler.UI.Controls;
-using Kebler.Services.Converters;
-using Kebler.UI.Windows;
-using LiteDB;
-using log4net;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using Newtonsoft.Json;
-using Transmission.API.RPC;
-using Transmission.API.RPC.Arguments;
-using Enums = Transmission.API.RPC.Entity.Enums;
-using System.Runtime.CompilerServices;
-using MessageBox = Kebler.UI.Windows.MessageBox;
 
 namespace Kebler.UI.Windows
 {
@@ -51,7 +21,7 @@ namespace Kebler.UI.Windows
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                if (this.WindowState == WindowState.Normal)
+                if (WindowState == WindowState.Normal)
                     DragSize(this.GetWindowHandle(), action);
             }
         }
@@ -60,7 +30,7 @@ namespace Kebler.UI.Windows
         {
             if (e.ClickCount > 1)
             {
-                this.Close();
+                Close();
             }
             else
             {
@@ -75,26 +45,26 @@ namespace Kebler.UI.Windows
 
         public void MinButtonClick(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
 
         public void MaxButtonClick(object sender, RoutedEventArgs e)
         {
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-            this.WindowState = (this.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized;
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            WindowState = (WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized;
         }
 
         public void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
-            if (e.ClickCount > 1 && this.ResizeMode != ResizeMode.NoResize)
+            if (e.ClickCount > 1 && ResizeMode != ResizeMode.NoResize)
             {
                 MaxButtonClick(sender, e);
             }
             else if (e.LeftButton == MouseButtonState.Pressed)
             {
-                this.DragMove();
+                DragMove();
             }
         }
 
@@ -103,18 +73,18 @@ namespace Kebler.UI.Windows
             if (e.LeftButton == MouseButtonState.Pressed)
             {
 
-                if (this.WindowState == WindowState.Maximized)
+                if (WindowState == WindowState.Maximized)
                 {
-                    this.BeginInit();
+                    BeginInit();
                     double adjustment = 40.0;
                     var mouse1 = e.MouseDevice.GetPosition(this);
-                    var width1 = Math.Max(this.ActualWidth - 2 * adjustment, adjustment);
-                    this.WindowState = WindowState.Normal;
-                    var width2 = Math.Max(this.ActualWidth - 2 * adjustment, adjustment);
-                    this.Left = (mouse1.X - adjustment) * (1 - width2 / width1);
-                    this.Top = -7;
-                    this.EndInit();
-                    this.DragMove();
+                    var width1 = Math.Max(ActualWidth - 2 * adjustment, adjustment);
+                    WindowState = WindowState.Normal;
+                    var width2 = Math.Max(ActualWidth - 2 * adjustment, adjustment);
+                    Left = (mouse1.X - adjustment) * (1 - width2 / width1);
+                    Top = -7;
+                    EndInit();
+                    DragMove();
                 }
 
             }

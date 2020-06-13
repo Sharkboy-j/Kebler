@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -58,14 +59,14 @@ namespace Kebler.Services
         public static string UnSecureString(SecureString input)
         {
             string returnValue;
-            var ptr = System.Runtime.InteropServices.Marshal.SecureStringToBSTR(input);
+            var ptr = Marshal.SecureStringToBSTR(input);
             try
             {
-                returnValue = System.Runtime.InteropServices.Marshal.PtrToStringBSTR(ptr);
+                returnValue = Marshal.PtrToStringBSTR(ptr);
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ZeroFreeBSTR(ptr);
+                Marshal.ZeroFreeBSTR(ptr);
             }
 
             return returnValue;

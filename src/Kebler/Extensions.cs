@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Windows;
 using System.Windows.Interop;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace Kebler
 {
@@ -40,11 +39,11 @@ namespace Kebler
 
         private static Expression<Func<T, object>> ToLambda<T>(string propertyName)
         {
-            var parameter = System.Linq.Expressions.Expression.Parameter(typeof(T));
-            var property = System.Linq.Expressions.Expression.Property(parameter, propertyName);
-            var propAsObject = System.Linq.Expressions.Expression.Convert(property, typeof(object));
+            var parameter = Expression.Parameter(typeof(T));
+            var property = Expression.Property(parameter, propertyName);
+            var propAsObject = Expression.Convert(property, typeof(object));
 
-            return System.Linq.Expressions.Expression.Lambda<Func<T, object>>(propAsObject, parameter);
+            return Expression.Lambda<Func<T, object>>(propAsObject, parameter);
         }
     }
 }

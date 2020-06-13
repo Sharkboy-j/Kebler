@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Transmission.API.RPC.Entity
+﻿namespace Transmission.API.RPC.Entity
 {
     public sealed class TorrentFields
     {
@@ -351,7 +345,7 @@ namespace Transmission.API.RPC.Entity
         {
             get
             {
-                return new string[] 
+                return new[] 
                 {
                     #region ALL FIELDS
                     ACTIVITY_DATE,

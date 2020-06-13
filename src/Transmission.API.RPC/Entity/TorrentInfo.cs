@@ -1,40 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Diagnostics;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Transmission.API.RPC.Entity
 {
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public sealed class SetIgnoreAttribute : Attribute
-    {
-        public SetIgnoreAttribute()
-        {
-
-        }
-    }
-
-
     /// <summary>
     /// Torrent information
     /// </summary>
     public class TorrentInfo : INotifyPropertyChanged, IComparable
     {
-        /// <summary>
-        /// The torrent's unique Id.
-        /// </summary>
-        ///
-        ///
-        /// 
-        [JsonIgnore]
-        public TorrentInfo Self => this;
+
 
         [JsonProperty(TorrentFields.ID)]
         [SetIgnore]
@@ -250,13 +227,13 @@ namespace Transmission.API.RPC.Entity
 
         public override string ToString()
         {
-            return $"{this.Name}";
+            return $"{Name}";
         }
 
         public void Set(string propertyName, object value)
         {
             Type myType = typeof(TorrentInfo);
-            var drt = this.RateUpload;
+            var drt = RateUpload;
             PropertyInfo myPropInfo = myType.GetProperty(propertyName);
             myPropInfo?.SetValue(this, value, null);
 
@@ -272,9 +249,9 @@ namespace Transmission.API.RPC.Entity
 
         public override bool Equals(object obj)
         {
-            if (obj!=null && obj is TorrentInfo torrentInfo)
+            if (obj != null && obj is TorrentInfo torrentInfo)
             {
-                return torrentInfo.ID == this.ID &&
+                return torrentInfo.ID == ID &&
                     torrentInfo.HashString == HashString;
             }
             return false;
@@ -284,7 +261,7 @@ namespace Transmission.API.RPC.Entity
         {
             unchecked
             {
-                int hashCode = ID.GetHashCode();
+                var hashCode = ID.GetHashCode();
                 hashCode = (hashCode * 397) ^ hashCode;
                 return hashCode;
             }
@@ -292,8 +269,34 @@ namespace Transmission.API.RPC.Entity
 
         public int CompareTo(object obj)
         {
-            return this.Status.CompareTo(((TorrentInfo)obj).Status);
+            return Status.CompareTo(((TorrentInfo)obj).Status);
         }
+
+
+        //~TorrentInfo()
+        //{
+        //    Comment = null;
+        //    Creator = null;
+        //    DownloadDir = null;
+        //    DownloadedEver = null;
+        //    DownloadLimit = null;
+        //    DownloadLimited = null;
+        //    ErrorString = null;
+        //    Files = null;
+        //    FileStats = null;
+        //    HashString = null;
+        //    MagnetLink = null;
+        //    Name = null;
+        //    Peers = null;
+        //    PeersFrom = null;
+        //    Pieces = null;
+        //    Trackers = null;
+        //    TrackerStats = null;
+        //    TorrentFile = null;
+        //    Webseeds = null;
+        //    PropertyChanged = null;
+        //}
+
     }
 
     public class TransmissionTorrentFiles : INotifyPropertyChanged
@@ -307,6 +310,12 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("name")]
         public string Name { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //~TransmissionTorrentFiles()
+        //{
+        //    Name = null;
+        //    PropertyChanged = null;
+        //}
     }
 
     public class TransmissionTorrentFileStats : INotifyPropertyChanged
@@ -320,6 +329,11 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("priority")]
         public int Priority { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //~TransmissionTorrentFileStats()
+        //{
+        //    PropertyChanged = null;
+        //}
     }
 
     public class TransmissionTorrentPeers : INotifyPropertyChanged
@@ -370,7 +384,13 @@ namespace Transmission.API.RPC.Entity
         public int RateToPeer { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
-
+        //~TransmissionTorrentPeers()
+        //{
+        //    Address = null;
+        //    ClientName = null;
+        //    FlagStr = null;
+        //    PropertyChanged = null;
+        //}
     }
 
     public class TransmissionTorrentPeersFrom : INotifyPropertyChanged
@@ -393,6 +413,11 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("fromTracker")]
         public int FromTracker { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //~TransmissionTorrentPeersFrom()
+        //{
+        //    PropertyChanged = null;
+        //}
     }
 
     public class TransmissionTorrentTrackers : INotifyPropertyChanged
@@ -409,6 +434,13 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("tier")]
         public int Tier { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //~TransmissionTorrentTrackers()
+        //{
+        //    announce = null;
+        //    Scrape = null;
+        //    PropertyChanged = null;
+        //}
     }
 
     public class TransmissionTorrentTrackerStats : INotifyPropertyChanged
@@ -492,13 +524,22 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("seederCount")]
         public int SeederCount { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //~TransmissionTorrentTrackerStats()
+        //{
+        //    announce = null;
+        //    Host = null;
+        //    LastAnnounceResult = null;
+        //    Scrape = null;
+        //    PropertyChanged = null;
+        //}
     }
 
     //TODO: Separate "remove" and "active" torrents in "torrentsGet"
     /// <summary>
     /// Contains arrays of torrents and removed torrents
     /// </summary>
-    public class TransmissionTorrents : ICloneable,INotifyPropertyChanged
+    public class TransmissionTorrents : ICloneable, INotifyPropertyChanged
     {
         /// <summary>
         /// Array of torrents
@@ -515,7 +556,15 @@ namespace Transmission.API.RPC.Entity
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
+
+        //~TransmissionTorrents()
+        //{
+        //    Torrents = null;
+        //    Removed = null;
+        //    PropertyChanged = null;
+        //    Debug.WriteLine("Finalise TransmissionTorrents");
+        //}
     }
 }

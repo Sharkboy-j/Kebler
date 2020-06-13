@@ -1,11 +1,8 @@
-﻿using Kebler.Models;
-using LiteDB;
-using SharpConfig;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using log4net;
+﻿using System;
 using System.IO;
+using Kebler.Models;
+using log4net;
+using SharpConfig;
 
 namespace Kebler.Services
 {
@@ -69,7 +66,7 @@ namespace Kebler.Services
                 Log.Info("Configuration exists");
                 return true;
             }
-            catch (System.IO.FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 Log.Info("Configuration file not found");
                 return false;

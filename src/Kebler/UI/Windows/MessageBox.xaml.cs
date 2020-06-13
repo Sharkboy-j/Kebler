@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Kebler.Models.Enums;
 
 namespace Kebler.UI.Windows
@@ -29,7 +20,7 @@ namespace Kebler.UI.Windows
             this.isPassword = isPassword;
             this.isDialog = isDialog;
             InitializeComponent();
-            this.Title = title;
+            Title = title;
             MinWidth = 350;
             TextBlock_Message.Visibility = Visibility.Collapsed;
             AskDialogText.Text = question;
@@ -127,7 +118,7 @@ namespace Kebler.UI.Windows
         public MessageBox(UserControl obj,bool isDialog=true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
         {
             InitializeComponent();
-            this.Title = title;
+            Title = title;
             this.isDialog = isDialog;
             if (showLogo)
                 Logo.Visibility = Visibility.Visible;

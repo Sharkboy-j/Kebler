@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using AutoUpdaterDotNET.Properties;
+using Timer = System.Timers.Timer;
 
 namespace AutoUpdaterDotNET
 {
@@ -62,7 +63,7 @@ namespace AutoUpdaterDotNET
     /// </summary>
     public static class AutoUpdater
     {
-        private static System.Timers.Timer _remindLaterTimer;
+        private static Timer _remindLaterTimer;
 
         internal static bool IsWinFormsApplication;
 
@@ -356,7 +357,7 @@ namespace AutoUpdaterDotNET
             UpdateInfoEventArgs args;
             using (MyWebClient client = GetWebClient(BaseUri, BasicAuthXML))
             {
-                client.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                 string xml = client.DownloadString(BaseUri);
 
                 if (ParseUpdateInfoEvent == null)
@@ -580,7 +581,7 @@ namespace AutoUpdaterDotNET
 
         internal static string GetUserAgent()
         {
-            return string.IsNullOrEmpty(HttpUserAgent) ? $"AutoUpdater.NET" : HttpUserAgent;
+            return string.IsNullOrEmpty(HttpUserAgent) ? "AutoUpdater.NET" : HttpUserAgent;
         }
 
         internal static void SetTimer(DateTime remindLater)
@@ -589,7 +590,7 @@ namespace AutoUpdaterDotNET
 
             var context = SynchronizationContext.Current;
 
-            _remindLaterTimer = new System.Timers.Timer
+            _remindLaterTimer = new Timer
             {
                 Interval = (int) timeSpan.TotalMilliseconds,
                 AutoReset = false

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Mime;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -23,7 +19,7 @@ namespace Kebler.Services
 
         public const int WmHotKey = 0x0312;
 
-        private bool _disposed = false;
+        private bool _disposed;
         private Key n;
         private KeyModifier ctrl;
         private Action addTorrent;
@@ -54,12 +50,12 @@ namespace Kebler.Services
             if (_dictHotKeyToCalBackProc == null)
             {
                 _dictHotKeyToCalBackProc = new Dictionary<int, HotKey>();
-                ComponentDispatcher.ThreadFilterMessage += new ThreadMessageEventHandler(ComponentDispatcherThreadFilterMessage);
+                ComponentDispatcher.ThreadFilterMessage += ComponentDispatcherThreadFilterMessage;
             }
 
             _dictHotKeyToCalBackProc.Add(Id, this);
 
-            Debug.Print(result.ToString() + ", " + Id + ", " + virtualKeyCode);
+            Debug.Print(result + ", " + Id + ", " + virtualKeyCode);
             return result;
         }
 
@@ -120,7 +116,7 @@ namespace Kebler.Services
         protected virtual void Dispose(bool disposing)
         {
             // Check to see if Dispose has already been called.
-            if (!this._disposed)
+            if (!_disposed)
             {
                 // If disposing equals true, dispose all managed
                 // and unmanaged resources.

@@ -1,23 +1,13 @@
-﻿using Kebler.Services;
-using log4net;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Kebler.Services;
+using log4net;
+using Microsoft.Win32;
 using Transmission.API.RPC;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
@@ -44,7 +34,7 @@ namespace Kebler.UI.Windows
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
                 InitializeComponent();
-                this.DataContext = this;
+                DataContext = this;
                 IsWorking = false;
                 IsAddTorrentWindowShow = ConfigService.Instanse.IsAddTorrentWindowShow;
             }
@@ -103,7 +93,7 @@ namespace Kebler.UI.Windows
                     Metainfo = encodedData,
                     Paused = !IsAutoStart,
                     DownloadDirectory = DownlaodDir ?? settings.DownloadDirectory,
-                    PeerLimit = this.PeerLimit,
+                    PeerLimit = PeerLimit
                 };
 
 
@@ -152,7 +142,6 @@ namespace Kebler.UI.Windows
                         {
                             Log.Info($"Adding torrent result '{TorrentResult.Value.Status}' {torrent.Filename}");
                             await Task.Delay(100);
-                            continue;
                         }
                     }
                     catch (OperationCanceledException)

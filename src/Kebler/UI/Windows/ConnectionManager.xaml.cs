@@ -1,18 +1,17 @@
-﻿using Kebler.Models;
-using Kebler.Services;
-using LiteDB;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Kebler.Models;
+using Kebler.Services;
+using LiteDB;
+using log4net;
 using Transmission.API.RPC;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -93,7 +92,7 @@ namespace Kebler.UI.Windows
         {
             var id = ServerList.Count == 0 ? 1 : ServerList[ServerList.Count - 1].Id + 1;
 
-            var server = new Server() { Id = id, Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
+            var server = new Server { Id = id, Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
 
 
             DbServersList.Insert(server);
@@ -213,8 +212,8 @@ namespace Kebler.UI.Windows
                 : Kebler.Resources.Windows.CM_TestConnectionBad;
             
             ConnectStatusColor = (result
-                ? new SolidColorBrush() { Color = Colors.Green }
-                : new SolidColorBrush() { Color = Colors.Red });
+                ? new SolidColorBrush { Color = Colors.Green }
+                : new SolidColorBrush { Color = Colors.Red });
 
             IsTesting = false;
         }

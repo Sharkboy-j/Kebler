@@ -1,11 +1,14 @@
-﻿namespace AutoUpdaterDotNET
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace AutoUpdaterDotNET
 {
     partial class RemindLaterForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -134,13 +137,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelTitle;
-        private System.Windows.Forms.PictureBox pictureBoxIcon;
-        private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.RadioButton radioButtonYes;
-        private System.Windows.Forms.RadioButton radioButtonNo;
-        private System.Windows.Forms.ComboBox comboBoxRemindLater;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private Label labelTitle;
+        private PictureBox pictureBoxIcon;
+        private Label labelDescription;
+        private RadioButton radioButtonYes;
+        private RadioButton radioButtonNo;
+        private ComboBox comboBoxRemindLater;
+        private Button buttonOK;
+        private TableLayoutPanel tableLayoutPanel;
     }
 }

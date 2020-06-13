@@ -1,8 +1,8 @@
-﻿namespace Transmission.API.RPC.Entity
-{
-    using Newtonsoft.Json;
-    using System.ComponentModel;
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
 
+namespace Transmission.API.RPC.Entity
+{
     public class TorrentAddResult : INotifyPropertyChanged
     {
         public TorrentAddResult(Enums.AddTorrentStatus status)

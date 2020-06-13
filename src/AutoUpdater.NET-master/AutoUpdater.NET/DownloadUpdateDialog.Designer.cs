@@ -1,11 +1,14 @@
-﻿namespace AutoUpdaterDotNET
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace AutoUpdaterDotNET
 {
     partial class DownloadUpdateDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -80,9 +83,9 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBoxIcon;
-        private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label labelInformation;
-        private System.Windows.Forms.Label labelSize;
+        private PictureBox pictureBoxIcon;
+        private ProgressBar progressBar;
+        private Label labelInformation;
+        private Label labelSize;
     }
 }
