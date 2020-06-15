@@ -196,7 +196,7 @@ namespace Transmission.API.RPC
             var result = response.Deserialize<SessionInfo>();
             var answ = new TransmissionInfoResponse<SessionInfo>(result)
             {
-                Error = response.Error, StatusError = response.StatusError
+                Error = response.Error, StatusError = response.StatusError,Exception=response.Exception
             };
             return answ;
         }
@@ -611,6 +611,7 @@ namespace Transmission.API.RPC
                 {
                     result.Error = ErrorsResponse.WebException;
                     result.StatusError = ex.Status;
+                    result.Exception =ex ;
                     Log.Error(ex);
                     return result;
                 }

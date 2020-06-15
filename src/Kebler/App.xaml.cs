@@ -107,10 +107,27 @@ namespace Kebler
             {
                 LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
             }
-
+            SetEnv();
 
         }
 
+        private void SetEnv()
+        {
+
+            {
+#if DEBUG
+                var glb = Environment.GetEnvironmentVariable(nameof(Kebler)+ "_DEBUG", EnvironmentVariableTarget.User);
+                if (glb == null)
+                    Environment.SetEnvironmentVariable(nameof(Kebler)+"_DEBUG", System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+#else
+                var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+                if (glb == null)
+                    Environment.SetEnvironmentVariable(nameof(Kebler), System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+
+#endif
+            }
+
+        }
         private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();

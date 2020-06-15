@@ -510,13 +510,13 @@ namespace Kebler.UI.Windows
 
                 Dispatcher.Invoke(() =>
                 {
-                    var column = TorrentsDataGrid.Columns[1];
+                    var column = TorrentsDataGrid.Columns.Last();
 
                     // Clear current sort descriptions
                     TorrentsDataGrid.Items.SortDescriptions.Clear();
 
                     // Add the new sort description
-                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Ascending));
+                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
 
                     // Apply sort
                     foreach (var col in TorrentsDataGrid.Columns)
@@ -752,7 +752,7 @@ namespace Kebler.UI.Windows
                             var msg = info.StatusError switch
                             {
                                 System.Net.WebExceptionStatus.NameResolutionFailure => $"{Kebler.Resources.Dialogs.EX_Host} '{SelectedServer.Host}'",
-                                _ => info.StatusError.ToString()
+                                _ => $"{info.StatusError} {Environment.NewLine} {info.Exception?.Message}"
                             };
 
                             var dialog = new MessageBox(msg, Kebler.Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true) { Owner = this };

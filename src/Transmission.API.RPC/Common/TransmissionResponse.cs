@@ -17,6 +17,7 @@ namespace Transmission.API.RPC.Common
 
 		public ErrorsResponse Error = ErrorsResponse.None;
 
-        public WebExceptionStatus StatusError = WebExceptionStatus.Success;
-    }
+		public WebExceptionStatus StatusError = WebExceptionStatus.Success;
+		public WebException Exception;
+	}
 }
