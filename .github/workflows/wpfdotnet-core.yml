@@ -58,7 +58,7 @@ jobs:
     env:
       Solution_Dir: src/
       Solution_Name: src/Kebler.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
     - name: Checkout
@@ -78,7 +78,7 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test
+      run: dotnet test $env:Test_Project_Path
 
     # Restore the WPF application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the WPF application
