@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Kebler.Models.Torrent;
 using NUnit.Framework;
-using Transmission.API.RPC.Entity;
 
 namespace Kebler.Test
 {

@@ -77,8 +77,8 @@ jobs:
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
     # Execute all unit tests in the solution
-    #- name: Execute unit tests
-   # run: dotnet test
+    - name: Execute unit tests
+      run: dotnet test
 
     # Restore the WPF application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the WPF application
