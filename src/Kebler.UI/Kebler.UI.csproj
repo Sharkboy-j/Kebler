@@ -5,6 +5,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Icons\Kebler.ico" />
     <None Remove="Icons\Kebler.svg" />
@@ -20,6 +28,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Icons\Kebler.ico" />
     <EmbeddedResource Include="Icons\Kebler.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

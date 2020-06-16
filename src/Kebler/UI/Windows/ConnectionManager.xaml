@@ -233,7 +233,8 @@
                             Click="TestConnection_ButtonClick"
                             CommandParameter="{Binding SelectedServer}"
                             Content="{lex:LocText CM_TestConnection}"
-                            IsEnabled="{Binding IsTesting, Converter={StaticResource ReverseBoolToBoolConverter}}" />
+                            IsEnabled="False" />
+                        <!--  IsEnabled="{Binding IsTesting, Converter={StaticResource ReverseBoolToBoolConverter}}"  -->
                         <Label
                             Grid.Column="1"
                             HorizontalAlignment="Left"

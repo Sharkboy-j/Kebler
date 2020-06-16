@@ -15,7 +15,6 @@
         <Border.Effect>
             <DropShadowEffect
                 BlurRadius="5"
-                
                 Direction="305"
                 ShadowDepth="0" />
         </Border.Effect>
@@ -35,7 +34,7 @@
                 Padding="10,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Background="{Binding Status, ElementName=Tagg, Converter={StaticResource IntToColorFillConverter}, UpdateSourceTrigger=PropertyChanged,FallbackValue='~'}"
+                Background="{Binding Status, ElementName=Tagg, Converter={StaticResource IntToColorFillConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue='~'}"
                 FontSize="12"
                 FontWeight="Normal"
                 Text="{Binding Percent, ElementName=Tagg, Converter={StaticResource PercentToUserFriendlyConvertor}, UpdateSourceTrigger=PropertyChanged}"

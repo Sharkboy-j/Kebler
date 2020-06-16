@@ -5,11 +5,6 @@ namespace Transmission.API.RPC.Entity
 {
     public class TorrentAddResult : INotifyPropertyChanged
     {
-        public TorrentAddResult(Enums.AddTorrentStatus status)
-        {
-            Status = status;
-        }
-
         /// <summary>
 		/// Torrent ID
 		/// </summary>
@@ -28,7 +23,7 @@ namespace Transmission.API.RPC.Entity
         [JsonProperty("hashString")]
         public string HashString { get; set; }
 
-        public Enums.AddTorrentStatus Status;
+        public Enums.AddTorrentStatus Status = Enums.AddTorrentStatus.UnknownError;
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

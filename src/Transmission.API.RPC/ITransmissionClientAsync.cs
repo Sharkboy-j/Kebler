@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Kebler.Models.Torrent;
 using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
 

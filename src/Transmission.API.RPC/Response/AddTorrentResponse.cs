@@ -5,9 +5,9 @@ namespace Transmission.API.RPC.Response
 {
     public sealed class AddTorrentResponse : EntityBase<TorrentAddResult>
     {
-        public AddTorrentResponse(Enums.ReponseResult  result)
+        public AddTorrentResponse(Enums.ReponseResult val)
         {
-            Result = result;
+            Result = val;
         }
     }
 

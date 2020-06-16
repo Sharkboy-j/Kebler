@@ -129,8 +129,8 @@
         <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch" />
         <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch" />
         <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="FrameworkElement.Margin" Value="0,-2,0,-2" />
-        <Setter Property="FrameworkElement.Height" Value="5" />
+        <Setter Property="FrameworkElement.Margin" Value="0,-3,0,-3" />
+        <Setter Property="FrameworkElement.Height" Value="7" />
         <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
         <Setter Property="Control.Template">
             <Setter.Value>

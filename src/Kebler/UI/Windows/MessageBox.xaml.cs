@@ -111,11 +111,7 @@ namespace Kebler.UI.Windows
 
 
 
-
-
-
-
-        public MessageBox(UserControl obj,bool isDialog=true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
+        public MessageBox(FrameworkElement obj,bool isDialog=true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
         {
             InitializeComponent();
             Title = title;
@@ -130,6 +126,5 @@ namespace Kebler.UI.Windows
             Height = obj.Height;
             Width = obj.Width;
         }
-
     }
 }

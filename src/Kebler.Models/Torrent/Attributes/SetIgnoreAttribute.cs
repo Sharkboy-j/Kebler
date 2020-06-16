@@ -1,6 +1,7 @@
-﻿using System;
+﻿
+using System;
 
-namespace Transmission.API.RPC.Entity
+namespace Kebler.Models.Torrent.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public sealed class SetIgnoreAttribute : Attribute

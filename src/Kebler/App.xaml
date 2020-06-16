@@ -20,6 +20,7 @@
             <conv:IntToIconConverter x:Key="IntToIconConverter" />
             <conv:IntToColorFillConverter x:Key="IntToColorFillConverter" />
             <conv:IntToColorStrokeConverter x:Key="IntToColorStrokeConverter" />
+            <conv:PieceToImage x:Key="PieceToImage" />
 
 
             <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />

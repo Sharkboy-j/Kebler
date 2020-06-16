@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdaterDotNET", "AutoUp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.UI", "Kebler.UI\Kebler.UI.csproj", "{60A962B5-6B74-40AF-A4E9-EE5126D41AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Test", "Kebler.Test\Kebler.Test.csproj", "{55BCAADE-3D54-469A-AD2D-9BCC7B191996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Test", "Kebler.Test\Kebler.Test.csproj", "{55BCAADE-3D54-469A-AD2D-9BCC7B191996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Models", "Kebler.Models\Kebler.Models.csproj", "{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +90,18 @@ Global
 		{55BCAADE-3D54-469A-AD2D-9BCC7B191996}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
 		{55BCAADE-3D54-469A-AD2D-9BCC7B191996}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
 		{55BCAADE-3D54-469A-AD2D-9BCC7B191996}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug-NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug-NET35|Any CPU.Build.0 = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug-NET40|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Debug-NET40|Any CPU.Build.0 = Debug|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release-NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

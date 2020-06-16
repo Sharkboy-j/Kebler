@@ -4,7 +4,9 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Kebler.Models.Torrent;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -163,6 +165,18 @@ namespace Transmission.API.RPC
             var response = await SendRequestAsync(request);
         }
 
+
+        /// <summary>
+        /// Set information to current session (API: session-set)
+        /// </summary>
+        public async Task<SessionSettings> GetSessionSettingsAsync(CancellationToken token)
+        {
+            var request = new TransmissionRequest("session-get");
+            var response = await SendRequestAsync(request, token);
+            var result = response?.Deserialize<SessionSettings>();
+            return result;
+        }
+
         /// <summary>
         /// Set information to current session (API: session-set)
         /// </summary>
@@ -194,9 +208,12 @@ namespace Transmission.API.RPC
             var request = new TransmissionRequest("session-get");
             var response = await SendRequestAsync(request);
             var result = response.Deserialize<SessionInfo>();
+
             var answ = new TransmissionInfoResponse<SessionInfo>(result)
             {
-                Error = response.Error, StatusError = response.StatusError,Exception=response.Exception
+                HttpWebResponse = response.HttpWebResponse,
+                CustomException = response.CustomException,
+                WebException = response.WebException
             };
             return answ;
         }
@@ -209,34 +226,38 @@ namespace Transmission.API.RPC
         /// Add torrent (API: torrent-add)
         /// </summary>
         /// <returns>Torrent info (ID, Name and HashString)</returns>
-        public async Task<AddTorrentResponse> TorrentAddAsync(NewTorrent torrent)
+        public async Task<AddTorrentResponse> TorrentAddAsync(NewTorrent torrent, CancellationToken token)
         {
-            if (string.IsNullOrWhiteSpace(torrent.Metainfo) && String.IsNullOrWhiteSpace(torrent.Filename))
+            if (string.IsNullOrWhiteSpace(torrent.Metainfo) && string.IsNullOrWhiteSpace(torrent.Filename))
                 throw new Exception("Either \"filename\" or \"metainfo\" must be included.");
 
             var request = new TransmissionRequest("torrent-add", torrent);
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
             var jObject = response.Deserialize<JObject>();
 
-            AddTorrentResponse result = new AddTorrentResponse(ReponseResult.NotOk);
+            var result = new AddTorrentResponse(ReponseResult.NotOk);
 
 
-            if (jObject == null || jObject.First == null)
+            if (jObject?.First == null)
                 return result;
 
-            JToken value;
-            if (jObject.TryGetValue("torrent-duplicate", out value))
+            if (jObject.TryGetValue("torrent-duplicate", out var value))
             {
                 result = new AddTorrentResponse(ReponseResult.Ok)
                 {
                     Value = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString())
                 };
+                result.Value.Status = AddTorrentStatus.Duplicate;
             }
             else if (jObject.TryGetValue("torrent-added", out value))
+            {
                 result = new AddTorrentResponse(ReponseResult.Ok)
                 {
                     Value = JsonConvert.DeserializeObject<TorrentAddResult>(value.ToString())
                 };
+                result.Value.Status = AddTorrentStatus.Added;
+            }
+
 
             return result;
         }
@@ -297,7 +318,7 @@ namespace Transmission.API.RPC
         /// </summary>
         /// <param name="ids">Torrents id</param>
         /// <param name="deleteData">Remove data</param>
-        public async Task<RemoveResult> TorrentRemoveAsync(int[] ids, bool deleteData = false)
+        public async Task<RemoveResult> TorrentRemoveAsync(int[] ids, CancellationToken token, bool deleteData = false)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -306,8 +327,14 @@ namespace Transmission.API.RPC
             };
 
             var request = new TransmissionRequest("torrent-remove", arguments);
-            var response = await SendRequestAsync(request);
-            return response.Error == ErrorsResponse.None ? RemoveResult.Ok : RemoveResult.Error;
+            var response = await SendRequestAsync(request, token);
+
+            var resp = response.WebException == null && response.HttpWebResponse == null &&
+                       response.CustomException == null
+                ? RemoveResult.Ok
+                : RemoveResult.Error;
+
+            return resp;
         }
 
         #region Torrent Start
@@ -447,15 +474,12 @@ namespace Transmission.API.RPC
         /// <param name="ids">Torrent ids</param>
         /// <param name="location">The new torrent location</param>
         /// <param name="move">Move from previous location</param>
-        public async void TorrentSetLocationAsync(int[] ids, string location, bool move)
+        public async Task<TransmissionResponse> TorrentSetLocationAsync(int[] ids, string location, bool move, CancellationToken token)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("ids", ids);
-            arguments.Add("location", location);
-            arguments.Add("move", move);
-
+            var arguments = new Dictionary<string, object> { { "ids", ids }, { "location", location }, { "move", move } };
             var request = new TransmissionRequest("torrent-set-location", arguments);
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
+            return response;
         }
 
         /// <summary>
@@ -544,6 +568,86 @@ namespace Transmission.API.RPC
 
         #endregion
 
+        private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request, CancellationToken token)
+        {
+            var result = new TransmissionResponse();
+
+            request.Tag = ++CurrentTag;
+
+            try
+            {
+
+                var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
+
+                //Prepare http web request
+                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
+
+                webRequest.ContentType = "application/json-rpc";
+                webRequest.Headers["X-Transmission-Session-Id"] = SessionID;
+                webRequest.Method = "POST";
+
+                if (_needAuthorization)
+                    webRequest.Headers["Authorization"] = _authorization;
+
+                await using (var dataStream = await webRequest.GetRequestStreamAsync())
+                {
+                    await dataStream.WriteAsync(byteArray, 0, byteArray.Length, token);
+                }
+
+                //Send request and prepare response
+                using var webResponse = await webRequest.GetResponseAsync();
+                await using var responseStream = webResponse.GetResponseStream();
+                if (responseStream == null)
+                {
+                    result.CustomException = new Exception("Stream resonse is null");
+                    Log.Error(result.WebException);
+                    return result;
+                }
+
+                var reader = new StreamReader(responseStream, Encoding.UTF8);
+                var responseString = await reader.ReadToEndAsync();
+                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
+
+                if (result.Result != "success")
+                {
+                    throw new Exception(result.Result);
+                }
+            }
+            catch (WebException ex)
+            {
+                result.WebException = ex;
+                if (ex.Response is HttpWebResponse wr)
+                {
+                    result.HttpWebResponse = wr;
+
+                    if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
+                    {
+                        if (ex.Response.Headers.Count > 0)
+                        {
+                            //If session id expiried, try get session id and send request
+                            SessionID = ex.Response.Headers["X-Transmission-Session-Id"];
+
+                            if (SessionID == null)
+                            {
+                                result.CustomException = new Exception("Session ID Error");
+                                return result;
+                            }
+                            result = SendRequest(request);
+                        }
+                    }
+                }
+
+                Log.Error(ex);
+            }
+            catch (Exception ex)
+            {
+                result.CustomException = ex;
+                Log.Error(ex);
+            }
+
+            return result;
+        }
+
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request)
         {
             var result = new TransmissionResponse();
@@ -553,10 +657,10 @@ namespace Transmission.API.RPC
             try
             {
 
-                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
+                var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
                 //Prepare http web request
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(Url);
+                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
 
                 webRequest.ContentType = "application/json-rpc";
                 webRequest.Headers["X-Transmission-Session-Id"] = SessionID;
@@ -573,6 +677,13 @@ namespace Transmission.API.RPC
                 //Send request and prepare response
                 using var webResponse = await webRequest.GetResponseAsync();
                 await using var responseStream = webResponse.GetResponseStream();
+                if (responseStream == null)
+                {
+                    result.CustomException = new Exception("Stream resonse is null");
+                    Log.Error(result.WebException);
+                    return result;
+                }
+
                 var reader = new StreamReader(responseStream, Encoding.UTF8);
                 var responseString = await reader.ReadToEndAsync();
                 result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
@@ -581,14 +692,15 @@ namespace Transmission.API.RPC
                 {
                     throw new Exception(result.Result);
                 }
-
-                result.Error = ErrorsResponse.None;
             }
             catch (WebException ex)
             {
+                result.WebException = ex;
                 if (ex.Response is HttpWebResponse wr)
                 {
-                    if (wr.StatusCode == HttpStatusCode.Conflict)
+                    result.HttpWebResponse = wr;
+
+                    if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
                     {
                         if (ex.Response.Headers.Count > 0)
                         {
@@ -596,28 +708,23 @@ namespace Transmission.API.RPC
                             SessionID = ex.Response.Headers["X-Transmission-Session-Id"];
 
                             if (SessionID == null)
-                                throw new Exception("Session ID Error");
-
+                            {
+                                result.CustomException = new Exception("Session ID Error");
+                                return result;
+                            }
                             result = SendRequest(request);
                         }
-                    }
-                    else
-                    {
-                        Log.Error(wr);
-                        return result;
                     }
                 }
                 else
                 {
-                    result.Error = ErrorsResponse.WebException;
-                    result.StatusError = ex.Status;
-                    result.Exception =ex ;
                     Log.Error(ex);
-                    return result;
                 }
+
             }
             catch (Exception ex)
             {
+                result.CustomException = ex;
                 Log.Error(ex);
             }
 

@@ -99,6 +99,7 @@
                         SnapsToDevicePixels="true">
                         <ScrollViewer Padding="{TemplateBinding Control.Padding}" Focusable="false">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
@@ -374,6 +375,47 @@
                         SnapsToDevicePixels="true">
                         <ScrollViewer Padding="{TemplateBinding Control.Padding}" Focusable="false">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                            <ScrollViewer.Style>
+                                <Style>
+                                    <Setter Property="ScrollViewer.OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="ScrollViewer.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <ScrollContentPresenter Grid.Column="0" />
+                                                    <ScrollBar
+                                                        Name="PART_VerticalScrollBar"
+                                                        Grid.Row="0"
+                                                        Grid.Column="1"
+                                                        Maximum="{TemplateBinding ScrollableHeight}"
+                                                        Style="{DynamicResource VerticalScrollBarStyle}"
+                                                        ViewportSize="{TemplateBinding ViewportHeight}"
+                                                        Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                        Value="{TemplateBinding VerticalOffset}" />
+                                                    <ScrollBar
+                                                        Name="PART_HorizontalScrollBar"
+                                                        Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Maximum="{TemplateBinding ScrollableWidth}"
+                                                        Orientation="Horizontal"
+                                                        Style="{DynamicResource HorizontalScrollBarStyle}"
+                                                        ViewportSize="{TemplateBinding ViewportWidth}"
+                                                        Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                        Value="{TemplateBinding HorizontalOffset}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ScrollViewer.Style>
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
@@ -427,6 +469,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="{x:Type GridViewColumnHeader}">
         <Setter Property="Control.HorizontalContentAlignment" Value="Left" />
         <Setter Property="Control.VerticalContentAlignment" Value="Center" />

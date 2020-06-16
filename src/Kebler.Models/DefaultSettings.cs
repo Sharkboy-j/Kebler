@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
-using Transmission.API.RPC.Entity;
+using Kebler.Models.Torrent;
 
 namespace Kebler.Models
 {
@@ -8,7 +8,7 @@ namespace Kebler.Models
     {
         public int SortType { get; set; } = 0;
         public string SortVal { get; set; } = nameof(TorrentInfo.UploadedEver);
-        public CultureInfo Language { get; set; }
+        public CultureInfo Language { get; set; } = new CultureInfo("en");
         public bool IsAddTorrentWindowShow { get; set; }
         public int UpdateTime { get; set; } = 5000;
         public int TorrentPeerLimit { get; set; } = 25;
@@ -19,4 +19,5 @@ namespace Kebler.Models
         public string ColumnSizes { get; set; } = string.Empty;
 
     }
+    
 }

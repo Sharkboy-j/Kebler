@@ -61,6 +61,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string ATD_Add {
+            get {
+                return ResourceManager.GetString("ATD_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string ATD_Cancel {
@@ -111,6 +120,15 @@ namespace Kebler.Resources {
         internal static string ATD_PeerLimit {
             get {
                 return ResourceManager.GetString("ATD_PeerLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieving Settings From Server.
+        /// </summary>
+        internal static string ATD_RetrievingSettings {
+            get {
+                return ResourceManager.GetString("ATD_RetrievingSettings", resourceCulture);
             }
         }
         
@@ -255,6 +273,24 @@ namespace Kebler.Resources {
         internal static string RMT_Title {
             get {
                 return ResourceManager.GetString("RMT_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new location for %d torrents.
+        /// </summary>
+        internal static string SetLocForMany {
+            get {
+                return ResourceManager.GetString("SetLocForMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new location.
+        /// </summary>
+        internal static string SetLocOnce {
+            get {
+                return ResourceManager.GetString("SetLocOnce", resourceCulture);
             }
         }
         

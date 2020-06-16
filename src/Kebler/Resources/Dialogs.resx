@@ -166,4 +166,16 @@
   <data name="EX_Host" xml:space="preserve">
     <value>Host name unknown</value>
   </data>
+  <data name="SetLocForMany" xml:space="preserve">
+    <value>Enter new location for %d torrents</value>
+  </data>
+  <data name="SetLocOnce" xml:space="preserve">
+    <value>Enter new location</value>
+  </data>
+  <data name="ATD_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ATD_RetrievingSettings" xml:space="preserve">
+    <value>Retrieving Settings From Server</value>
+  </data>
 </root>

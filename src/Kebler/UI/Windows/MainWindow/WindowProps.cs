@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Models;
+using Kebler.Models.Torrent;
 using Kebler.Services;
 using LiteDB;
 using log4net;
@@ -96,12 +97,13 @@ namespace Kebler.UI.Windows
         }
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
+        private TransmissionTorrents allTorrents = new TransmissionTorrents();
+
         private object _syncTorrentList = new object();
 
 
-        public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
+        public ObservableCollection<FolderCategory> Categories { get; set; } = new ObservableCollection<FolderCategory>();
 
-        private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private string[] WorkingParams;
 
 

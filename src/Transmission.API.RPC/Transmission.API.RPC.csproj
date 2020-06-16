@@ -14,4 +14,8 @@
     <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
+  </ItemGroup>
+
 </Project>

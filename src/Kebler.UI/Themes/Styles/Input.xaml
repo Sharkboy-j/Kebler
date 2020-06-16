@@ -72,6 +72,60 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="FilterTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource TextBox.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Static.Border}" />
+        <Setter Property="Padding" Value="3,0,0,0" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+        <Setter Property="TextBoxBase.CaretBrush" Value="{DynamicResource ForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border
+                        Name="border"
+                        Background="{TemplateBinding Control.Background}"
+                        BorderBrush="{TemplateBinding Control.BorderBrush}"
+                        BorderThickness="{TemplateBinding Control.BorderThickness}"
+                        SnapsToDevicePixels="true">
+                        <TextBlock
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Text="{TemplateBinding Text}"
+                            TextTrimming="CharacterEllipsis" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                            <Setter TargetName="border" Property="UIElement.Opacity" Value="0.56" />
+                        </Trigger>
+                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource TextBox.MouseOver.Border}" />
+                        </Trigger>
+                        <Trigger Property="UIElement.IsKeyboardFocused" Value="true">
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource TextBox.Focus.Border}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="TextBoxBase.IsInactiveSelectionHighlightEnabled" Value="true" />
+                    <Condition Property="TextBoxBase.IsSelectionActive" Value="false" />
+                </MultiTrigger.Conditions>
+                <Setter Property="TextBoxBase.SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type PasswordBox}">
         <Setter Property="PasswordChar" Value="●" />
         <Setter Property="Background" Value="{DynamicResource TextBox.Static.Background}" />

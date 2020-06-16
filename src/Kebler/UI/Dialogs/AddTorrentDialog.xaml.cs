@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Kebler.Annotations;
 using Kebler.Services;
 using log4net;
 using Microsoft.Win32;
@@ -13,21 +14,19 @@ using Transmission.API.RPC.Arguments;
 using Transmission.API.RPC.Entity;
 using Transmission.API.RPC.Response;
 
-namespace Kebler.UI.Windows
+namespace Kebler.UI.Dialogs
 {
     /// <summary>
     /// Interaction logic for AddTorrentDialog.xaml
     /// </summary>
-    public partial class AddTorrentDialog : CustomWindow, INotifyPropertyChanged
+    public partial class AddTorrentDialog : INotifyPropertyChanged
     {
 
-        public AddTorrentDialog(string path, SessionSettings settings, ref TransmissionClient transmissionClient)
+        public AddTorrentDialog(string path, ref TransmissionClient transmissionClient)
         {
-            torrent = new FileInfo(path);
-            TorrentPath = torrent.FullName;
-            DownlaodDir = settings.DownloadDirectory;
+            _torrentFileInfo = new FileInfo(path);
+            TorrentPath = _torrentFileInfo.FullName;
             _transmissionClient = transmissionClient;
-            this.settings = settings;
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
             IsAutoStart = true;
@@ -40,21 +39,30 @@ namespace Kebler.UI.Windows
             }
             Result.Visibility = Visibility.Collapsed;
             PeerLimit = ConfigService.Instanse.TorrentPeerLimit;
+
+            Loaded += AddTorrentDialog_Loaded;
+        }
+
+        private async void AddTorrentDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.settings = await _transmissionClient.GetSessionSettingsAsync(cancellationToken);
+            DownlaodDir = settings.DownloadDirectory;
+            LoadingSettingsGrid.Visibility = Visibility.Collapsed;
         }
 
         private void ChangePath(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "Image files (*.torrent)|*.torrent|All files (*.*)|*.*",
+                Filter = "Image files (*.torrentFileInfo)|*.torrentFileInfo|All files (*.*)|*.*",
                 Multiselect = false,
-                InitialDirectory = torrent.DirectoryName
+                InitialDirectory = _torrentFileInfo.DirectoryName
             };
 
             if (openFileDialog.ShowDialog() != true) return;
 
-            torrent = new FileInfo(openFileDialog.FileName);
-            TorrentPath = torrent.FullName;
+            _torrentFileInfo = new FileInfo(openFileDialog.FileName);
+            TorrentPath = _torrentFileInfo.FullName;
         }
 
 
@@ -88,7 +96,7 @@ namespace Kebler.UI.Windows
 
                 var encodedData = Convert.ToBase64String(filebytes);
                 //string decodedString = Encoding.UTF8.GetString(filebytes);
-                var torrent = new NewTorrent
+                var newTorrent = new NewTorrent
                 {
                     Metainfo = encodedData,
                     Paused = !IsAutoStart,
@@ -97,9 +105,9 @@ namespace Kebler.UI.Windows
                 };
 
 
-                //Debug.WriteLine($"Start Adding torrent {path}");
+                //Debug.WriteLine($"Start Adding torrentFileInfo {path}");
 
-                Log.Info($"Start adding torrent {torrent.Filename}");
+                Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
 
                 while (true)
                 {
@@ -107,15 +115,16 @@ namespace Kebler.UI.Windows
                     try
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                        TorrentResult = await _transmissionClient.TorrentAddAsync(torrent);
+                        TorrentResult = await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
 
                         if (TorrentResult.Result == Enums.ReponseResult.Ok)
                         {
+
                             switch (TorrentResult.Value.Status)
                             {
                                 case Enums.AddTorrentStatus.Added:
                                     {
-                                        Log.Info($"Torrent {torrent.Filename} added as {TorrentResult.Value.Name}");
+                                        Log.Info($"Torrent {newTorrent.Filename} added as {TorrentResult.Value.Name}");
                                         IsWorking = false;
 
                                         ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
@@ -129,6 +138,8 @@ namespace Kebler.UI.Windows
                                     }
                                 case Enums.AddTorrentStatus.Duplicate:
                                     {
+                                        Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' {TorrentResult.Value.Name}");
+
                                         Dispatcher.Invoke(() =>
                                         {
                                             Result.Content = Kebler.Resources.Dialogs.ATD_TorrentExist;
@@ -137,11 +148,12 @@ namespace Kebler.UI.Windows
                                         return;
                                     }
                             }
+
                         }
                         else
                         {
-                            Log.Info($"Adding torrent result '{TorrentResult.Value.Status}' {torrent.Filename}");
-                            await Task.Delay(100);
+                            Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' {newTorrent.Filename}");
+                            await Task.Delay(100, cancellationToken);
                         }
                     }
                     catch (OperationCanceledException)
@@ -167,12 +179,19 @@ namespace Kebler.UI.Windows
             ConfigService.Save();
         }
 
+        public new void Show()
+        {
+            throw new Exception("Use ShowDialog instead of Show()");
+        }
+
 
     }
 
     public partial class AddTorrentDialog
     {
-        FileInfo torrent;
+        [NotNull]
+        FileInfo _torrentFileInfo;
+
         SessionSettings settings;
         TransmissionClient _transmissionClient;
         public AddTorrentResponse TorrentResult;
