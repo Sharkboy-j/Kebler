@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler\Kebler.csproj" />
-    <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
   </ItemGroup>
 
 </Project>
