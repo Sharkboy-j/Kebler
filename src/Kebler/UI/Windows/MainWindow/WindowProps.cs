@@ -87,8 +87,8 @@ namespace Kebler.UI.Windows
 #if DEBUG
                 return "Kebler [DEBUG]";
 #else
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                var assembly = Assembly.GetExecutingAssembly();
+                System.Diagnostics.FileVersionInfo fileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 return $"{nameof(Kebler)} {fileVersionInfo.FileVersion}";
 #endif
             }
