@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Transmission.API.RPC.Common
+namespace Kebler.Models.Torrent.Common
 {
     public abstract class CommunicateBase
     {

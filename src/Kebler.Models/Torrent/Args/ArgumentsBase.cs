@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Transmission.API.RPC.Common
+namespace Kebler.Models.Torrent.Args
 {
-    /// <summary>
-    /// Absract class for arguments
-    /// </summary>
     public abstract class ArgumentsBase
     {
         internal Dictionary<string, object> Data = new Dictionary<string, object>();
 
         internal object this[string name]
         {
-            set { SetValue(name, value); }
+            set => SetValue(name, value);
         }
 
         private void SetValue(string name, object value)

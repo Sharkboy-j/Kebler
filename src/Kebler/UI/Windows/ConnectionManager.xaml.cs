@@ -10,9 +10,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Kebler.Models;
 using Kebler.Services;
+using Kebler.TransmissionCore;
 using LiteDB;
 using log4net;
-using Transmission.API.RPC;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -38,7 +38,7 @@ namespace Kebler.UI.Windows
         #endregion
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        private LiteCollection<Server> DbServersList;
+        private readonly LiteCollection<Server> _dbServersList;
         private TransmissionClient _client;
 
         public ConnectionManager(ref LiteCollection<Server> dbServersList)
@@ -46,7 +46,7 @@ namespace Kebler.UI.Windows
             Log.Info("Open ConnectionManager");
 
             InitializeComponent();
-            DbServersList = dbServersList;
+            _dbServersList = dbServersList;
             DataContext = this;
 
             GetServers();
@@ -58,7 +58,7 @@ namespace Kebler.UI.Windows
         //TODO: Add background loading
         private void GetServers(int selectedId = -1)
         {
-            var items = DbServersList?.FindAll() ?? new List<Server>();
+            var items = _dbServersList?.FindAll() ?? new List<Server>();
 
             ServerList = new ObservableCollection<Server>(items);
             //LogServers();
@@ -93,10 +93,10 @@ namespace Kebler.UI.Windows
         {
             var id = ServerList.Count == 0 ? 1 : ServerList[^1].Id + 1;
 
-            var server = new Server { Id = id, Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
+            var server = new Server(id) { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
 
 
-            DbServersList.Insert(server);
+            _dbServersList.Insert(server);
             Log.Info($"Add new Server {server}");
             //var result = DbServersList.(x => x.Title);
             GetServers(server.Id);
@@ -125,7 +125,7 @@ namespace Kebler.UI.Windows
             {
                 SelectedServer.Password = SelectedServer.AskForPassword ? string.Empty : SecureStorage.EncryptString(ServerPasswordBox.Password);
 
-                var res = DbServersList.Upsert(SelectedServer);
+                var res = _dbServersList.Upsert(SelectedServer);
                 Log.Info($"UpsertResult: {res}, Error: {error}");
                 GetServers(SelectedServer.Id);
             }
@@ -232,9 +232,9 @@ namespace Kebler.UI.Windows
         private async Task<bool> TesConnection(string pass)
         {
             Log.Info("Start TestConnection");
-            var scheme = SelectedServer.SSLEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
+            var scheme = SelectedServer.SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
 
-            var uri = new UriBuilder(scheme, SelectedServer.Host, SelectedServer.Port, SelectedServer.RPCPath);
+            var uri = new UriBuilder(scheme, SelectedServer.Host, SelectedServer.Port, SelectedServer.RpcPath);
 
             try
             {
@@ -247,7 +247,7 @@ namespace Kebler.UI.Windows
                 if (sessionInfo == null)
                     throw new Exception("Error while testing");
 
-                _client.CloseSessionAsync();
+                await _client.CloseSessionAsync();
             }
             catch (Exception ex)
             {
@@ -266,13 +266,13 @@ namespace Kebler.UI.Windows
         private void SSL_Checked(object sender, RoutedEventArgs e)
         {
             if (SelectedServer != null)
-                SelectedServer.SSLEnabled = true;
+                SelectedServer.SslEnabled = true;
         }
 
         private void SSL_Uncheked(object sender, RoutedEventArgs e)
         {
             if (SelectedServer != null)
-                SelectedServer.SSLEnabled = false;
+                SelectedServer.SslEnabled = false;
         }
 
         private void CustomWindow_Closing(object sender, CancelEventArgs e)

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Kebler.Models.Torrent.Args;
 using Newtonsoft.Json;
 
-namespace Transmission.API.RPC.Common
+namespace Kebler.Models.Torrent.Common
 {
 	/// <summary>
 	/// Transmission request 

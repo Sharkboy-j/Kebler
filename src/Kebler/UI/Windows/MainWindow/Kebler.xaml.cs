@@ -16,18 +16,18 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using Kebler.Models;
 using Kebler.Models.Torrent;
+using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Attributes;
+using Kebler.Models.Torrent.Common;
+using Kebler.Models.Torrent.Entity;
+using Kebler.Models.Torrent.Response;
 using Kebler.Resources;
 using Kebler.Services;
 using Kebler.Services.Converters;
+using Kebler.TransmissionCore;
 using Kebler.UI.Dialogs;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using Transmission.API.RPC;
-using Transmission.API.RPC.Arguments;
-using Transmission.API.RPC.Common;
-using Transmission.API.RPC.Entity;
-using Transmission.API.RPC.Response;
 using Enums = Kebler.Models.Enums;
 
 namespace Kebler.UI.Windows
@@ -59,12 +59,12 @@ namespace Kebler.UI.Windows
             CategoriesListBox.SelectedIndex = 0;
         }
 
-        private void KeblerWindow_OnActivated(object? sender, EventArgs e)
+        private void KeblerWindow_OnActivated(object sender, EventArgs e)
         {
             Init_HK();
         }
 
-        private void KeblerWindow_OnDeactivated(object? sender, EventArgs e)
+        private void KeblerWindow_OnDeactivated(object sender, EventArgs e)
         {
             UnregisterHotKeys();
         }
@@ -201,11 +201,10 @@ namespace Kebler.UI.Windows
                 if (!(bool)dialog.ShowDialog())
                     return;
 
-                if (dialog.TorrentResult.Value.Status != Transmission.API.RPC.Entity.Enums.AddTorrentStatus.Added) continue;
+                if (dialog.TorrentResult.Value.Status != Enums.AddTorrentStatus.Added) continue;
 
-                TorrentList.Add(new TorrentInfo
+                TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
                 {
-                    ID = dialog.TorrentResult.Value.ID,
                     Name = dialog.TorrentResult.Value.Name,
                     HashString = dialog.TorrentResult.Value.HashString
                 });
@@ -233,14 +232,14 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            _transmissionClient.TorrentStopAsync(SelectedTorrents.Select(x => x.ID).ToArray());
+            _transmissionClient.TorrentStopAsync(SelectedTorrents.Select(x => x.Id).ToArray());
         }
 
         private async void StartAll_Button_CLick(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
 
-            var torrentIds = TorrentList.Select(x => x.ID).ToArray();
+            var torrentIds = TorrentList.Select(x => x.Id).ToArray();
             await Task.Factory.StartNew(() =>
             {
                 Log.Info("Try start all torrents");
@@ -260,8 +259,8 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var torrentIds = TorrentList.Select(x => x.ID).ToArray();
-            await Task.Factory.StartNew(async () =>
+            var torrentIds = TorrentList.Select(x => x.Id).ToArray();
+            await Task.Factory.StartNew(() =>
             {
                 Log.Info("Try pause all torrents");
 
@@ -277,7 +276,7 @@ namespace Kebler.UI.Windows
 
             Task.Factory.StartNew(() =>
             {
-                _transmissionClient.TorrentStartAsync(SelectedTorrents.Select(x => x.ID).ToArray());
+                _transmissionClient.TorrentStartAsync(SelectedTorrents.Select(x => x.Id).ToArray());
             });
         }
 
@@ -293,20 +292,20 @@ namespace Kebler.UI.Windows
 
         public void RemoveTorrent(bool removeData = false)
         {
-            var toRemove = SelectedTorrents.Select(x => x.ID).ToArray();
+            var toRemove = SelectedTorrents.Select(x => x.Id).ToArray();
             var dialog = new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove, ref _transmissionClient, removeData) { Owner = this };
             if ((bool)dialog.ShowDialog())
             {
-                if (dialog.Result == Transmission.API.RPC.Entity.Enums.RemoveResult.Ok)
+                if (dialog.Result == Enums.RemoveResult.Ok)
                 {
                     lock (_syncTorrentList)
                     {
                         foreach (var rm in toRemove)
                         {
-                            var itm = TorrentList.First(x => x.ID == rm);
+                            var itm = TorrentList.First(x => x.Id == rm);
                             TorrentList.Remove(itm);
 
-                            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.ID == rm).ToArray();
+                            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
                         }
                         if (allTorrents.Clone() is TransmissionTorrents data)
                         {
@@ -364,7 +363,7 @@ namespace Kebler.UI.Windows
                     while (true)
                     {
                         if (Dispatcher.HasShutdownStarted) return;
-                        var resp = await _transmissionClient.TorrentSetLocationAsync(SelectedTorrents.Select(x => x.ID).ToArray(), dialog.Value, true, _cancelTokenSource.Token);
+                        var resp = await _transmissionClient.TorrentSetLocationAsync(SelectedTorrents.Select(x => x.Id).ToArray(), dialog.Value, true, _cancelTokenSource.Token);
 
                         if (CheckResponse(resp))
                             break;
@@ -516,7 +515,7 @@ namespace Kebler.UI.Windows
 
                     foreach (var item in TorrentList)
                     {
-                        UpdateTorrentData(TorrentList.IndexOf(item), data.Torrents.First(x => x.ID == item.ID));
+                        UpdateTorrentData(TorrentList.IndexOf(item), data.Torrents.First(x => x.Id == item.Id));
                     }
 
                     //add
@@ -635,7 +634,7 @@ namespace Kebler.UI.Windows
         private void Instance_LangChanged()
         {
             IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                               $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
+                               $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
                                $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
                                $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
         }
@@ -805,7 +804,11 @@ namespace Kebler.UI.Windows
                 }
                 finally
                 {
-                    _transmissionClient.CloseSessionAsync();
+                    if (IsConnected)
+                    {
+                        await _transmissionClient.CloseSessionAsync();
+                    }
+                 
                     allTorrents = null;
                     TorrentList = new System.Collections.ObjectModel.ObservableCollection<TorrentInfo>();
                     IsConnected = false;
@@ -876,12 +879,12 @@ namespace Kebler.UI.Windows
             Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
 
             IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                    $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.uploadedBytes)}" +
+                    $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
                     $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
                     $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
-            var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.downloadSpeed);
-            var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.uploadSpeed);
+            var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
+            var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
 
             var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
             var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;

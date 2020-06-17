@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using Newtonsoft.Json;
 
-namespace Transmission.API.RPC.Entity
+namespace Kebler.Models.Torrent.Entity
 {
 	/// <summary>
-    /// Rename torrent result information
-    /// </summary>
+	/// Rename torrent result information
+	/// </summary>
 	public class RenameTorrentInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

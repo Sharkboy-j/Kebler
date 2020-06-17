@@ -61,15 +61,15 @@ namespace AutoUpdaterDotNET
             {
                 try
                 {
-                    using (RegistryKey registryKey =
+                    using var registryKey =
                         Registry.CurrentUser.OpenSubKey(
                             @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
-                            true))
-                    {
-                        registryKey?.SetValue(Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName),
+                            true);
+                    var processModule = Process.GetCurrentProcess().MainModule;
+                    if (processModule != null)
+                        registryKey?.SetValue(Path.GetFileName(processModule.FileName),
                             ieValue,
                             RegistryValueKind.DWord);
-                    }
                 }
                 catch (Exception)
                 {
@@ -132,24 +132,22 @@ namespace AutoUpdaterDotNET
         {
             if (AutoUpdater.LetUserSelectRemindLater)
             {
-                using (var remindLaterForm = new RemindLaterForm())
-                {
-                    var dialogResult = remindLaterForm.ShowDialog();
+                using var remindLaterForm = new RemindLaterForm();
+                var dialogResult = remindLaterForm.ShowDialog();
 
-                    if (dialogResult.Equals(DialogResult.OK))
-                    {
-                        AutoUpdater.RemindLaterTimeSpan = remindLaterForm.RemindLaterFormat;
-                        AutoUpdater.RemindLaterAt = remindLaterForm.RemindLaterAt;
-                    }
-                    else if (dialogResult.Equals(DialogResult.Abort))
-                    {
-                        ButtonUpdateClick(sender, e);
-                        return;
-                    }
-                    else
-                    {
-                        return;
-                    }
+                if (dialogResult.Equals(DialogResult.OK))
+                {
+                    AutoUpdater.RemindLaterTimeSpan = remindLaterForm.RemindLaterFormat;
+                    AutoUpdater.RemindLaterAt = remindLaterForm.RemindLaterAt;
+                }
+                else if (dialogResult.Equals(DialogResult.Abort))
+                {
+                    ButtonUpdateClick(sender, e);
+                    return;
+                }
+                else
+                {
+                    return;
                 }
             }
 

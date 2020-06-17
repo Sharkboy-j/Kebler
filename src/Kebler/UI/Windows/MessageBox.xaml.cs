@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using static Kebler.Models.Enums;
 
 namespace Kebler.UI.Windows

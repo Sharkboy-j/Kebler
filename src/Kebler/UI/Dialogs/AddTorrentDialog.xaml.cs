@@ -2,17 +2,17 @@
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Kebler.Annotations;
+using Kebler.Models;
+using Kebler.Models.Torrent.Args;
+using Kebler.Models.Torrent.Response;
 using Kebler.Services;
+using Kebler.TransmissionCore;
 using log4net;
 using Microsoft.Win32;
-using Transmission.API.RPC;
-using Transmission.API.RPC.Arguments;
-using Transmission.API.RPC.Entity;
-using Transmission.API.RPC.Response;
 
 namespace Kebler.UI.Dialogs
 {
@@ -189,7 +189,6 @@ namespace Kebler.UI.Dialogs
 
     public partial class AddTorrentDialog
     {
-        [NotNull]
         FileInfo _torrentFileInfo;
 
         SessionSettings settings;
@@ -210,5 +209,10 @@ namespace Kebler.UI.Dialogs
         public int PeerLimit { get; set; }
         public int UploadLimit { get; set; }
         public bool IsAutoStart { get; set; }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

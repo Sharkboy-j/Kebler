@@ -1,7 +1,7 @@
-﻿using Transmission.API.RPC.Common;
-using Transmission.API.RPC.Entity;
+﻿using Kebler.Models.Torrent.Common;
+using Kebler.Models.Torrent.Entity;
 
-namespace Transmission.API.RPC.Response
+namespace Kebler.Models.Torrent.Response
 {
     public sealed class AddTorrentResponse : EntityBase<TorrentAddResult>
     {

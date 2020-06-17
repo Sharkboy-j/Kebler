@@ -1,4 +1,4 @@
-﻿namespace Transmission.API.RPC.Entity
+﻿namespace Kebler.Models.Torrent.Entity
 {
     public class EntityBase<T>
     {

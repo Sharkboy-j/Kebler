@@ -22,8 +22,6 @@ namespace Kebler
     /// </summary>
     public partial class App
     {
-        public static event EventHandler LanguageChanged;
-
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
         public static KeblerWindow KeblerControl;
         public static App Instance;

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <NoWarn>0067</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>

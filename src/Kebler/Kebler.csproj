@@ -35,6 +35,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -45,8 +48,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdaterDotNET.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
+    <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
     <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
-    <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PublishReadyToRunExclude Include="Transmission.API.RPC.dll" />

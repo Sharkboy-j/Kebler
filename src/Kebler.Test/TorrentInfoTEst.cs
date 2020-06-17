@@ -10,8 +10,8 @@ namespace Kebler.Test
         [Test]
         public void TorrentEquals_true()
         {
-            var first = new TorrentInfo { ID = 32 };
-            var second = new TorrentInfo { ID = 32 };
+            var first = new TorrentInfo(32);
+            var second = new TorrentInfo(32);
 
             var result = first.Equals(second);
             Assert.IsTrue(result);
@@ -21,8 +21,8 @@ namespace Kebler.Test
         [Test]
         public void TorrentEquals_false()
         {
-            var first = new TorrentInfo { ID = 32 };
-            var second = new TorrentInfo { ID = 17 };
+            var first = new TorrentInfo(32);
+            var second = new TorrentInfo(32);
 
             var result = first.Equals(second);
             Assert.IsFalse(result);
@@ -39,7 +39,7 @@ namespace Kebler.Test
             var other = tors.Except(remove).ToArray();
 
             Assert.IsTrue(other.Count() == 1);
-            Assert.IsTrue(other[0].ID == 2);
+            Assert.IsTrue(other[0].Id == 2);
             Assert.IsTrue(other[0].HashString == "sadasdasdas");
             Assert.Pass();
         }
@@ -49,9 +49,9 @@ namespace Kebler.Test
         {
             var torrents = new List<TorrentInfo>
             {
-                new TorrentInfo { ID = 1, HashString = "wsvgbh", Name = "First" },
-                new TorrentInfo { ID = 2, HashString = "sadasdasdas", Name = "Second" },
-                new TorrentInfo { ID = 3, HashString = "asdasdasd", Name = "Third" }
+                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First" },
+                new TorrentInfo(2) {HashString = "sadasdasdas", Name = "Second" },
+                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third" }
             };
             return torrents;
         }
@@ -60,8 +60,8 @@ namespace Kebler.Test
         {
             var torrents = new List<TorrentInfo>
             {
-                new TorrentInfo { ID = 1, HashString = "wsvgbh", Name = "First" },
-                new TorrentInfo { ID = 3, HashString = "asdasdasd", Name = "Third" }
+                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First" },
+                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third" }
             };
             return torrents;
         }

@@ -7,9 +7,13 @@ namespace Kebler.Models
     {
         public Server()
         {
-
         }
-        public int Id { get; set; }
+        public Server(int id)
+        {
+            Id = id;
+        }
+
+        public int Id { get; }
         public string Title { get; set; } = string.Empty;
 
         public string Host { get; set; } = string.Empty;
@@ -20,13 +24,11 @@ namespace Kebler.Models
         [JsonIgnore]
         public string Password { get; set; } = string.Empty;
 
-        //public bool IsDefault { get; set; } = false;
-
         public bool AuthEnabled { get; set; } = false;
         public bool AskForPassword { get; set; } = false;
-        public bool SSLEnabled { get; set; } = false;
+        public bool SslEnabled { get; set; } = true;
 
-        public string RPCPath { get; set; } = @"/transmission/rpc";
+        public string RpcPath { get; set; } = @"/transmission/rpc";
 
         [BsonIgnore]
         public override string ToString()
@@ -39,10 +41,10 @@ namespace Kebler.Models
         {
             get
             {
-                var type = SSLEnabled ? "https://" : "http://";
+                var type = SslEnabled ? "https://" : "http://";
 
-                if (!RPCPath.StartsWith("/")) RPCPath = $"/{RPCPath}";
-                var uri = $"{type}{Host}:{Port}{RPCPath}";
+                if (!RpcPath.StartsWith("/")) RpcPath = $"/{RpcPath}";
+                var uri = $"{type}{Host}:{Port}{RpcPath}";
                 if (!uri.EndsWith("/")) uri += "/";
                 return uri;
             }
@@ -55,6 +57,16 @@ namespace Kebler.Models
                 return srv.Id == Id;
             }
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ hashCode;
+                return hashCode;
+            }
         }
     }
 }

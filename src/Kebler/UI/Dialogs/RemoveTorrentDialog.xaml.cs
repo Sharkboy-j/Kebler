@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using Kebler.Models;
+using Kebler.TransmissionCore;
 using log4net;
-using Transmission.API.RPC;
-using Transmission.API.RPC.Entity;
 
 namespace Kebler.UI.Dialogs
 {

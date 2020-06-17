@@ -9,7 +9,7 @@ namespace Kebler.UI.Controls
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class About : UserControl, INotifyPropertyChanged
+    public partial class About : INotifyPropertyChanged
     {
         public About()
         {

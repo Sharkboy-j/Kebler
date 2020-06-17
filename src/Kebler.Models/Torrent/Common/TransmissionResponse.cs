@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
-using static Transmission.API.RPC.Entity.Enums;
 using System;
 
-namespace Transmission.API.RPC.Common
+namespace Kebler.Models.Torrent.Common
 {
 	/// <summary>
 	/// Transmission response 

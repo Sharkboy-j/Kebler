@@ -8,11 +8,14 @@ namespace Kebler.Models.Torrent
 {
     public class TorrentInfo : INotifyPropertyChanged, IComparable
     {
-
+        public TorrentInfo(int id)
+        {
+            Id = id;
+        }
 
         [JsonProperty(TorrentFields.ID)]
         [SetIgnore]
-        public int ID { get; set; }
+        public int Id { get; }
 
         [JsonProperty(TorrentFields.ADDED_DATE)]
         [SetIgnore]
@@ -209,7 +212,7 @@ namespace Kebler.Models.Torrent
         public bool UploadLimited { get; set; }
 
         [JsonProperty(TorrentFields.UPLOAD_RATIO)]
-        public double uploadRatio { get; set; }
+        public double UploadRatio { get; set; }
 
         [JsonProperty(TorrentFields.WANTED)]
         public bool[] Wanted { get; set; }
@@ -229,17 +232,16 @@ namespace Kebler.Models.Torrent
 
         public void Set(string propertyName, object value)
         {
-            Type myType = typeof(TorrentInfo);
-            var drt = RateUpload;
-            PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+            var myType = typeof(TorrentInfo);
+            var myPropInfo = myType.GetProperty(propertyName);
             myPropInfo?.SetValue(this, value, null);
 
         }
         public object Get(string propertyName)
         {
 
-            Type myType = typeof(TorrentInfo);
-            PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+            var myType = typeof(TorrentInfo);
+            var myPropInfo = myType.GetProperty(propertyName);
             return myPropInfo?.GetValue(this, null);
         }
 
@@ -248,7 +250,7 @@ namespace Kebler.Models.Torrent
         {
             if (obj != null && obj is TorrentInfo torrentInfo)
             {
-                return torrentInfo.ID == ID &&
+                return torrentInfo.Id == Id &&
                     torrentInfo.HashString == HashString;
             }
             return false;
@@ -258,7 +260,7 @@ namespace Kebler.Models.Torrent
         {
             unchecked
             {
-                var hashCode = ID.GetHashCode();
+                var hashCode = Id.GetHashCode();
                 hashCode = (hashCode * 397) ^ hashCode;
                 return hashCode;
             }

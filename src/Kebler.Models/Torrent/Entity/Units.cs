@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Newtonsoft.Json;
 
-namespace Transmission.API.RPC.Entity
+namespace Kebler.Models.Torrent.Entity
 {
     public class Units : INotifyPropertyChanged
     {
