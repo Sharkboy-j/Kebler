@@ -110,8 +110,9 @@ namespace Kebler.UI.Windows
 
         public bool IsErrorOccuredWhileConnecting { get; set; }
 
+        public MoreInfoModel MoreInfo { get; set; } = new MoreInfoModel();
 
-#region StatusBarProps
+        #region StatusBarProps
         public string IsConnectedStatusText { get; set; } = string.Empty;
         public string DownloadSpeed { get; set; } = string.Empty;
         public string UploadSpeed { get; set; } = string.Empty;

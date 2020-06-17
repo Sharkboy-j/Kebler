@@ -115,6 +115,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Files:.
+        /// </summary>
+        internal static string ATD_Files {
+            get {
+                return ResourceManager.GetString("ATD_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peer Limit:.
         /// </summary>
         internal static string ATD_PeerLimit {

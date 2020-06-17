@@ -290,7 +290,7 @@ namespace Kebler.TransmissionCore
         /// <param name="fields">Fields of torrents</param>
         /// <param name="ids">IDs of torrents (null or empty for get all torrents)</param>
         /// <returns>Torrents info</returns>
-        public async Task<TransmissionTorrents> TorrentGetAsync(string[] fields, params int[] ids)
+        public async Task<TransmissionTorrents> TorrentGetAsyncWithID(string[] fields, params int[] ids)
         {
             var arguments = new Dictionary<string, object> { { "fields", fields } };
 

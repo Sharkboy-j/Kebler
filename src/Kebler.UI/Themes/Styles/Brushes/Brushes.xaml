@@ -1,16 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="LabelBrush" Color="{DynamicResource LabelColor}" />
-    <SolidColorBrush x:Key="WindowBorderBrush" Color="{DynamicResource WindowBorderBrushColor}" />
-    <SolidColorBrush x:Key="SecondaryLabelBrush" Color="{DynamicResource SecondaryLabelColor}" />
-    <SolidColorBrush x:Key="ForegroundBrush.WindowsInfo" Color="{DynamicResource ForegroundColor}" />
-    <SolidColorBrush x:Key="ForegroundBrush" Color="{DynamicResource ForegroundColor}" />
-    <SolidColorBrush x:Key="ForegroundBrush.Light" Color="{DynamicResource ForegroundColor.Light}" />
-    <SolidColorBrush x:Key="ForegroundBrush.DimGray" Color="{DynamicResource ForegroundColor.DimGray}" />
-    <SolidColorBrush x:Key="ForegroundBrush.Gray" Color="{DynamicResource ForegroundColor.Gray}" />
+
     <SolidColorBrush x:Key="BorderBrush" Color="{DynamicResource BorderColor}" />
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
     <SolidColorBrush x:Key="BackgroundBrush.Dark" Color="{DynamicResource BackgroundColor.Dark}" />
-    <SolidColorBrush x:Key="MouseOver.BackgroundBrush" Color="{DynamicResource MouseOver.BackgroundColor}" />
 
     <SolidColorBrush x:Key="DataGrid.Header.BorderBrush" Color="{DynamicResource DataGrid.Header.BorderColor}" />
     <SolidColorBrush x:Key="DataGrid.Header.BackgroundBrush" Color="{DynamicResource DataGrid.Header.BackgroundColor}" />
@@ -32,6 +24,39 @@
     <SolidColorBrush x:Key="DataGrid.Tag.CheckPendingFillBrush" Color="{DynamicResource DataGrid.Tag.CheckPendingFillColor}" />
 
     <SolidColorBrush x:Key="Disabled.ForegroundBrush" Color="{DynamicResource Disabled.ForegroundColor}" />
+
+
+    <SolidColorBrush x:Key="ForegroundBrush.WindowsInfo" Color="{DynamicResource ForegroundColor}" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{DynamicResource ForegroundColor}" />
+    <SolidColorBrush x:Key="ForegroundBrush.Light" Color="{DynamicResource ForegroundColor.Light}" />
+    <SolidColorBrush x:Key="ForegroundBrush.DimGray" Color="{DynamicResource ForegroundColor.DimGray}" />
+    <SolidColorBrush x:Key="ForegroundBrush.Gray" Color="{DynamicResource ForegroundColor.Gray}" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <SolidColorBrush x:Key="LabelBrush" Color="{DynamicResource LabelColor}" />
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="{DynamicResource WindowBorderBrushColor}" />
+    <SolidColorBrush x:Key="SecondaryLabelBrush" Color="{DynamicResource SecondaryLabelColor}" />
+    <SolidColorBrush x:Key="MouseOver.BackgroundBrush" Color="{DynamicResource MouseOver.BackgroundColor}" />
     <SolidColorBrush x:Key="BusyIndicatorBrush" Color="{DynamicResource BusyIndicatorColor}" />
     <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
     <SolidColorBrush x:Key="AccentSecondaryBrush" Color="{DynamicResource AccentSecondaryColor}" />

@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
+    <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

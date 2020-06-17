@@ -416,8 +416,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="0" />
-                <RowDefinition Height="0" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="100" />
             </Grid.RowDefinitions>
             <Grid Background="{DynamicResource ListBox.Static.Background}" RowSpan="3">
                 <Grid.RowDefinitions>
@@ -575,13 +575,13 @@
             </StackPanel>
 
 
-            <!--<Grid
+            <Grid
                 Background="{DynamicResource ListBox.Static.Background}"
                 Column="2"
-                DataContext="{Binding ElementName=TorrentsDataGrid, Path=SelectedValue}"
+                DataContext="{Binding MoreInfo}"
                 Row="2">
-                <controls1:TorrentMoreInfo />
-            </Grid>-->
+                <controls1:TorrentMoreInfo Name="MoreInfoControl" />
+            </Grid>
 
 
             <GridSplitter
@@ -591,10 +591,10 @@
                 DragCompleted="Vertical_DragCompleted"
                 Style="{DynamicResource VerticalGridSplitter}" />
 
-            <!--<GridSplitter
+            <GridSplitter
                 Grid.Row="1"
                 Grid.Column="2"
-                Style="{DynamicResource HorizontalGridSplitter}" />-->
+                Style="{DynamicResource HorizontalGridSplitter}" />
 
         </Grid>
 

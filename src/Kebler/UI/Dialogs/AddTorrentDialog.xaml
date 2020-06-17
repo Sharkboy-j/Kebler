@@ -9,19 +9,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     Width="700"
-    Height="280"
+    Height="530"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     ShowTopLine="False"
+    Closing="AddTorrentDialog_OnClosing"
     Style="{StaticResource MainWindow}"
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
+
     <Grid>
         <Grid Background="{DynamicResource Window.BackgroundBrush}">
             <Grid.ColumnDefinitions>
@@ -37,7 +39,7 @@
                 <RowDefinition Height="10" />
             </Grid.RowDefinitions>
             <Image
-                x:Name="Logo"
+                Name="Logo"
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="60"
@@ -51,7 +53,7 @@
                     VerticalAlignment="Center"
                     FontSize="15"
                     FontWeight="Normal"
-                    Foreground="White"
+                    Foreground="{DynamicResource ForegroundBrush}"
                     Text="{lex:LocText Title_AddTorrentDialog}"
                     TextAlignment="Left"
                     TextOptions.TextFormattingMode="Ideal"
@@ -71,6 +73,8 @@
                         <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="200" />
                     </Grid.RowDefinitions>
                     <TextBlock
                         Grid.Column="0"
@@ -80,13 +84,13 @@
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="Normal"
-                        Foreground="White"
+                        Foreground="{DynamicResource ForegroundBrush}"
                         Text="{lex:LocText ATD_TorrentFilePath}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
                         TextOptions.TextRenderingMode="ClearType" />
-                    <Grid Grid.Column="2">
+                    <Grid Column="2" Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="5" />
@@ -97,9 +101,10 @@
                             HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
                             IsReadOnly="True"
-                            Text="{Binding TorrentPath}" />
+                            Text="{Binding TorrentPath}"
+                            TextChanged="TextBoxBase_OnTextChanged" />
                         <Button
-                            Grid.Column="4"
+                            Grid.Column="2"
                             Width="25"
                             Height="25"
                             Margin="0"
@@ -119,16 +124,18 @@
 
                     <Separator
                         Grid.Row="1"
+                        Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Margin="0,2,0,2" />
 
                     <TextBlock
                         Grid.Row="2"
+                        Grid.Column="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="Normal"
-                        Foreground="White"
+                        Foreground="{DynamicResource ForegroundBrush}"
                         Text="{lex:LocText ATD_DownloadDIr}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
@@ -152,7 +159,7 @@
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="Normal"
-                        Foreground="White"
+                        Foreground="{DynamicResource ForegroundBrush}"
                         Text="{lex:LocText ATD_Connection}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
@@ -168,7 +175,7 @@
                             VerticalAlignment="Center"
                             FontSize="13"
                             FontWeight="Normal"
-                            Foreground="White"
+                            Foreground="{DynamicResource ForegroundBrush}"
                             Text="{lex:LocText ATD_PeerLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
@@ -189,7 +196,7 @@
                             VerticalAlignment="Center"
                             FontSize="13"
                             FontWeight="Normal"
-                            Foreground="#FF999999"
+                            Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
                             Text="{lex:LocText ATD_UploadLimit}"
                             TextAlignment="Left"
@@ -212,7 +219,7 @@
                             VerticalAlignment="Center"
                             FontSize="13"
                             FontWeight="Normal"
-                            Foreground="#FF999999"
+                            Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
                             Text="{lex:LocText ATD_DownloadLimit}"
                             TextAlignment="Left"
@@ -236,16 +243,42 @@
                     <CheckBox
                         Grid.Row="6"
                         Grid.Column="2"
-                        Grid.ColumnSpan="3"
                         Height="25"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         VerticalContentAlignment="Center"
                         Content="{lex:LocText ATD_StartTorrent}"
                         FontSize="13"
-                        Foreground="White"
+                        Foreground="{DynamicResource ForegroundBrush}"
                         IsChecked="{Binding IsAutoStart}" />
+
+                    <Separator
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="0,2,0,2" />
+
+                    <TextBlock
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        Margin="28,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        FontSize="13"
+                        FontWeight="Normal"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="{lex:LocText ATD_Files}"
+                        TextAlignment="Left"
+                        TextOptions.TextFormattingMode="Ideal"
+                        TextOptions.TextHintingMode="Animated"
+                        TextOptions.TextRenderingMode="ClearType" />
+
+                    <controls1:FilesTreeView
+                        Grid.Row="8"
+                        Grid.Column="2"
+                        DataContext="{Binding}" />
                 </Grid>
+
 
                 <Grid Height="30" Margin="0,20,0,0">
                     <Grid.ColumnDefinitions>
@@ -257,7 +290,7 @@
                     <CheckBox
                         Height="25"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"
+                        VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         Checked="ChangeVisibilityWindow"
                         Content="{lex:LocText ATD_DontShowAddTorrentDialog}"
@@ -316,7 +349,7 @@
                     VerticalAlignment="Center"
                     FontSize="15"
                     FontWeight="Normal"
-                    Foreground="White"
+                    Foreground="{DynamicResource ForegroundBrush}"
                     Text="{lex:LocText ATD_RetrievingSettings}"
                     TextAlignment="Center"
                     TextOptions.TextFormattingMode="Ideal"
@@ -325,10 +358,7 @@
                     Margin="10,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
-
             </StackPanel>
-
-
         </Grid>
     </Grid>
 

@@ -178,4 +178,7 @@
   <data name="ATD_RetrievingSettings" xml:space="preserve">
     <value>Retrieving Settings From Server</value>
   </data>
+  <data name="ATD_Files" xml:space="preserve">
+    <value>Files:</value>
+  </data>
 </root>

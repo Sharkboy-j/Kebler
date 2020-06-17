@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Kebler.Models;
 using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Response;
@@ -41,22 +45,27 @@ namespace Kebler.UI.Dialogs
             PeerLimit = ConfigService.Instanse.TorrentPeerLimit;
 
             Loaded += AddTorrentDialog_Loaded;
+
         }
 
         private async void AddTorrentDialog_Loaded(object sender, RoutedEventArgs e)
         {
             this.settings = await _transmissionClient.GetSessionSettingsAsync(cancellationToken);
             DownlaodDir = settings.DownloadDirectory;
+            var files = await LoadTree();
+            Files = files;
+
             LoadingSettingsGrid.Visibility = Visibility.Collapsed;
+
         }
 
         private void ChangePath(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "Image files (*.torrentFileInfo)|*.torrentFileInfo|All files (*.*)|*.*",
+                Filter = "Torrent files (*.torrent)|*.torrent|All files (*.*)|*.*",
                 Multiselect = false,
-                InitialDirectory = _torrentFileInfo.DirectoryName
+                InitialDirectory = _torrentFileInfo.DirectoryName ?? throw new InvalidOperationException()
             };
 
             if (openFileDialog.ShowDialog() != true) return;
@@ -82,6 +91,78 @@ namespace Kebler.UI.Dialogs
             cancellationTokenSource.Cancel();
         }
 
+        private async void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+            var files = await LoadTree();
+            Files = files;
+
+            LoadingSettingsGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private Task<List<TorrentPath>> LoadTree()
+        {
+            LoadingSettingsGrid.Visibility = Visibility.Visible;
+
+            var task = Task.Run(async delegate
+            {
+                var filebytes = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
+
+                TorrentParser.TryParse(filebytes, out var parsedTorrent);
+                return CreateTree(parsedTorrent);
+            }, cancellationToken);
+            return task;
+        }
+
+
+
+        private static List<TorrentPath> CreateTree(TorrentParser torrent)
+        {
+            var root = new TorrentPath(torrent.Name);
+
+
+
+            var count = 0;
+            foreach (var file in torrent.Files)
+            {
+                CreateNodes(ref root, Path.Combine(file.Path, file.Name), count);
+                count++;
+            }
+
+            root.Initialize();
+            return new List<TorrentPath> { root };
+        }
+
+
+        private static void CreateNodes(ref TorrentPath root, string file, int index)
+        {
+            var dirs = file.Split('\\');
+
+            var last = root;
+            foreach (var s in dirs)
+            {
+                if (last.Children.All(x => x.Name != s))
+                {
+                    //if not found children
+                    var pth = new TorrentPath(s);
+                    last.Children.Add(pth);
+                    last = pth;
+                }
+                else
+                {
+                    last = last.Children.First(p => p.Name == s);
+                }
+            }
+            last.Index = index;
+        }
+
+
+
+
+
+
+
         public void Add(object sender, RoutedEventArgs e)
         {
             Result.Visibility = Visibility.Collapsed;
@@ -93,6 +174,7 @@ namespace Kebler.UI.Dialogs
 
 
                 var filebytes = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
+
 
                 var encodedData = Convert.ToBase64String(filebytes);
                 //string decodedString = Encoding.UTF8.GetString(filebytes);
@@ -184,13 +266,18 @@ namespace Kebler.UI.Dialogs
             throw new Exception("Use ShowDialog instead of Show()");
         }
 
-
+        private void AddTorrentDialog_OnClosing(object sender, CancelEventArgs e)
+        {
+            Files = null;
+            cancellationTokenSource?.Cancel();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
     }
 
     public partial class AddTorrentDialog
     {
         FileInfo _torrentFileInfo;
-
         SessionSettings settings;
         TransmissionClient _transmissionClient;
         public AddTorrentResponse TorrentResult;
@@ -209,10 +296,14 @@ namespace Kebler.UI.Dialogs
         public int PeerLimit { get; set; }
         public int UploadLimit { get; set; }
         public bool IsAutoStart { get; set; }
+        public List<TorrentPath> Files { get; set; }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+        
     }
 }

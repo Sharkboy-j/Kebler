@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Kebler.Models;
+using Kebler.Models.Torrent;
+using Kebler.UI.Annotations;
 
 namespace Kebler.UI.Controls
 {
     /// <summary>
     /// Interaction logic for TorrentMoreInfo.xaml
     /// </summary>
-    public partial class TorrentMoreInfo : UserControl
+    public partial class TorrentMoreInfo
     {
         public TorrentMoreInfo()
         {
             InitializeComponent();
         }
+
+
+
     }
 }

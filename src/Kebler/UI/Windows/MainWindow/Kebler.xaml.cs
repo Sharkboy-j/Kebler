@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -39,7 +40,7 @@ namespace Kebler.UI.Windows
 
 
             InitializeComponent();
-
+            MoreInfoControl.TreeView.DisableBorders();
             ApplyConfig();
 
             DataContext = this;
@@ -112,14 +113,15 @@ namespace Kebler.UI.Windows
                 TorrentFields.STATUS,
                 TorrentFields.TRACKER_STATS,
                 TorrentFields.DOWNLOAD_DIR,
+                TorrentFields.FILES,
 
                 //TODO: REMOVE 
-                //TorrentFields.PIECE_COUNT,
-                //TorrentFields.PIECES
+                TorrentFields.PIECE_COUNT,
+                TorrentFields.PIECES
             };
             try
             {
-                
+
                 MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
                 MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
@@ -224,7 +226,100 @@ namespace Kebler.UI.Windows
         private void TorrentsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToArray();
+            Update(SelectedTorrents.Select(x=>x.Id).ToArray());
+
         }
+
+
+
+        public async void Update(int[] id)
+        {
+
+            if (id.Length > 1)
+            {
+                MoreInfo.IsMore = true;
+                MoreInfo.Clear();
+                MoreInfo.SelectedCount = id.Length;
+                return;
+            }
+            MoreInfo.IsMore = false;
+            MoreInfo.Loading = true;
+            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, id);
+            MoreInfo.Selected = answ.Torrents.FirstOrDefault();
+            MoreInfo.Files = await LoadTree(MoreInfo.Selected);
+            MoreInfo.Loading = false;
+
+        }
+
+
+
+        private Task<List<TorrentPath>> LoadTree(TorrentInfo tr)
+        {
+            var task = Task.Run(() => CreateTree(tr));
+            return task;
+        }
+
+
+        private static List<TorrentPath> CreateTree(TorrentInfo torrent)
+        {
+            foreach (var itm in torrent.Files)
+            {
+                itm.Name = itm.Name.Replace(torrent.Name, string.Empty).TrimStart('/', '\\');
+            }
+            var root = new TorrentPath(torrent.Name);
+            
+            var count = 0;
+            foreach (var file in torrent.Files)
+            {
+                CreateNodes(ref root, Path.Combine(file.Name), count);
+                count++;
+            }
+
+            root.Initialize();
+            return new List<TorrentPath> { root };
+        }
+
+
+        private static void CreateNodes(ref TorrentPath root, string file, int index)
+        {
+            file = file.Replace('/', '\\');
+            var dirs = file.Split('\\');
+
+            var last = root;
+            foreach (var s in dirs)
+            {
+                if(string.IsNullOrEmpty(s))
+                    continue;
+
+                if (last.Children.All(x => x.Name != s))
+                {
+                    //if not found children
+                    var pth = new TorrentPath(s);
+                    last.Children.Add(pth);
+                    last = pth;
+                }
+                else
+                {
+                    last = last.Children.First(p => p.Name == s);
+                }
+            }
+            last.Index = index;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -311,7 +406,7 @@ namespace Kebler.UI.Windows
                         {
                             ProcessTorrentData(data);
                         }
-                      
+
                     }
 
                 }
@@ -484,7 +579,7 @@ namespace Kebler.UI.Windows
                         break;
                 }
 
-                if(!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
+                if (!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
                 {
                     var splited = FilterText.Split("{p}:");
                     var filterKey = splited[^1];
@@ -771,8 +866,6 @@ namespace Kebler.UI.Windows
                             allTorrents = await ExecuteLongTask(_transmissionClient.TorrentGetAsync,
                                 Kebler.Resources.Windows.MW_StatusText_Torrents, WorkingParams);
 
-
-
                             ParseSettings();
                             ParseStats();
 
@@ -808,7 +901,7 @@ namespace Kebler.UI.Windows
                     {
                         await _transmissionClient.CloseSessionAsync();
                     }
-                 
+
                     allTorrents = null;
                     TorrentList = new System.Collections.ObjectModel.ObservableCollection<TorrentInfo>();
                     IsConnected = false;
@@ -1116,7 +1209,6 @@ namespace Kebler.UI.Windows
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
 
 
     }

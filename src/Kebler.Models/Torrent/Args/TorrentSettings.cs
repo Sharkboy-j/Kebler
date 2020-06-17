@@ -146,6 +146,18 @@
             set => this["trackerRemove"] = value;
         }
 
+        public int[] FilesWanted
+        {
+            get => GetValue<int[]>("files-wanted");
+            set => this["files-wanted"] = value;
+        }
+
+        public int[] FilesUnwanted
+        {
+            get => GetValue<int[]>("files-unwanted");
+            set => this["files-unwanted"] = value;
+        }
+
         //TODO: Add Props
         //"files-wanted"        | array      indices of file(s) to download
         //public [] FilesWanted;

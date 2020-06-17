@@ -27,13 +27,7 @@
                 VerticalAlignment="Center"
                 Orientation="Vertical">
                 <Image Width="150" Source="/Kebler.UI;Component/Icons/Kebler_dark_512x512.png" />
-                <Label
-                    Width="Auto"
-                    Margin="0,5,0,0"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    FontSize="18"
-                    FontWeight="Bold" />
+
             </StackPanel>
 
         </Grid>
