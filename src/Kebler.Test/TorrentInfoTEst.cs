@@ -22,7 +22,7 @@ namespace Kebler.Test
         public void TorrentEquals_false()
         {
             var first = new TorrentInfo(32);
-            var second = new TorrentInfo(32);
+            var second = new TorrentInfo(17);
 
             var result = first.Equals(second);
             Assert.IsFalse(result);
