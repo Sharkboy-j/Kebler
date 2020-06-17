@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
-    <ProjectReference Include="..\Kebler\Kebler.csproj" />
   </ItemGroup>
 
 </Project>

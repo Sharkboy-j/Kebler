@@ -49,9 +49,6 @@
     <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PublishReadyToRunExclude Include="Transmission.API.RPC.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Resources\Dialogs.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
