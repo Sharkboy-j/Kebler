@@ -19,7 +19,7 @@
                 </Grid.ColumnDefinitions>
                 <CheckBox
                     VerticalAlignment="Center"
-                    Click="ButtonBase_OnClick"
+                    Click="FolderCheck_Click"
                     Focusable="False"
                     IsChecked="{Binding IsChecked}"
                     Tag="{Binding}" />
@@ -75,5 +75,6 @@
         BorderThickness="{Binding Border}"
         ItemTemplate="{StaticResource ListViewTemplate}"
         RootItem="{Binding Files}"
+        PreviewKeyDown="Trree_PreviewKeyDown"
         Style="{StaticResource FileListMultiselectionTreeViewDefaultStyle}" />
 </UserControl>

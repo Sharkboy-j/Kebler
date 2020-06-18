@@ -152,10 +152,12 @@ namespace Kebler.Models.Tree
         }
 
         public int Level => ParentItem?.Level + 1 ?? 0;
-
+        public uint IndexPattern;
         public virtual bool IsFocusable => true;
 
         public string Title { get; set; }
+
+
 
         public MultiselectionTreeViewItemCollection Children => _children ??= new MultiselectionTreeViewItemCollection(this);
 

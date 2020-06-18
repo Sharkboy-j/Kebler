@@ -13,14 +13,14 @@ namespace Kebler.Models.Torrent
     public class TorrentInfo : INotifyPropertyChanged, IComparable
     {
         [JsonConstructor]
-        public TorrentInfo(int id)
+        public TorrentInfo(uint id)
         {
             Id = id;
         }
 
         [JsonProperty(TorrentFields.ID)]
         [SetIgnore]
-        public int Id { get; }
+        public uint Id { get; }
 
         [JsonProperty(TorrentFields.ADDED_DATE)]
         [SetIgnore]
@@ -330,6 +330,7 @@ namespace Kebler.Models.Torrent
         private long _totalValues;
         private readonly Dictionary<string, TransmissionValue> _root;
 
+        [JsonIgnore]
         public Dictionary<string, TransmissionValue> Info => _root["info"].Value as Dictionary<string, TransmissionValue>;
 
         public static bool TryParse(byte[] bytes, out TorrentInfo torrentParser)

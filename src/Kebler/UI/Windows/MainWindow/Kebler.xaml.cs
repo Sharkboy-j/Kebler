@@ -201,7 +201,7 @@ namespace Kebler.UI.Windows
         {
             foreach (var item in names)
             {
-                var dialog = new AddTorrentDialog(item, ref _transmissionClient) { Owner = this };
+                var dialog = new AddTorrentDialog(item, _transmissionClient) { Owner = this };
 
                 if (!(bool)dialog.ShowDialog())
                     return;
@@ -213,7 +213,7 @@ namespace Kebler.UI.Windows
                     Name = dialog.TorrentResult.Value.Name,
                     HashString = dialog.TorrentResult.Value.HashString
                 });
-
+                dialog = null;
                 OnPropertyChanged(nameof(TorrentList));
             }
         }
@@ -238,17 +238,18 @@ namespace Kebler.UI.Windows
 
 
 
-        public async Task Update(int[] id)
+        public async Task Update(uint[] id)
         {
 
 
-            if (id.Length > 1)
+            if (id.Length != 1)
             {
                 MoreInfo.IsMore = true;
                 MoreInfo.Clear();
                 MoreInfo.SelectedCount = id.Length;
                 return;
             }
+            selectedIDs = id;
 
             MoreInfo.IsMore = false;
             MoreInfo.Loading = true;
@@ -267,7 +268,26 @@ namespace Kebler.UI.Windows
             MoreInfo.Loading = false;
         }
 
-       
+        private uint[] selectedIDs;
+
+        private async void FileTreeViewControl_OnFileStatusUpdate(uint[] wanted, uint[] unwanted, bool status)
+        {
+            var settings = new TorrentSettings
+            {
+                IDs = selectedIDs,
+                FilesWanted = wanted.Count() > 0 ? wanted : null,
+                FilesUnwanted = unwanted.Count() > 0 ? unwanted : null
+            };
+
+            if (wanted.Length > 0)
+                Log.Info("wanted " + string.Join(", ", wanted));
+
+            if (unwanted.Length > 0)
+                Log.Info("unwanted " + string.Join(", ", unwanted));
+
+            await _transmissionClient.TorrentSetAsync(settings);
+        }
+
 
 
 
@@ -796,7 +816,7 @@ namespace Kebler.UI.Windows
         {
             _cancelTokenSource = new CancellationTokenSource();
             var token = _cancelTokenSource.Token;
-
+            MoreInfoControl.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
             _whileCycleTask = new Task(async () =>
             {
                 try
@@ -870,6 +890,7 @@ namespace Kebler.UI.Windows
 
             _whileCycleTask.Start();
         }
+
 
 
         private bool CheckResponse(TransmissionResponse resp)
@@ -983,7 +1004,6 @@ namespace Kebler.UI.Windows
         private void UpdateCategories(List<FolderCategory> dirrectories)
         {
             if (dirrectories == null) return;
-            Debug.WriteLine("Update Cats");
             var dirs = dirrectories.Distinct().ToList();
 
             var cats = new List<FolderCategory>();

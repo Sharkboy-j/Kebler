@@ -68,18 +68,18 @@
         /// <summary>
         /// Indices of file(s) to download
         /// </summary>
-        public int[] FilesWanted
+        public uint[] FilesWanted
         {
-            get => GetValue<int[]>("metainfo");
+            get => GetValue<uint[]>("metainfo");
             set => this["files-wanted"] = value;
         }
 
         /// <summary>
         /// Indices of file(s) to download
         /// </summary>
-        public int[] FilesUnwanted
+        public uint[] FilesUnwanted
         {
-            get => GetValue<int[]>("metainfo");
+            get => GetValue<uint[]>("metainfo");
             set => this["files-unwanted"] = value;
         }
 

@@ -41,9 +41,9 @@
         /// <summary>
         /// Torrent id array
         /// </summary>
-        public int[] IDs
+        public uint[] IDs
         {
-            get => GetValue<int[]>("ids");
+            get => GetValue<uint[]>("ids");
             set => this["ids"] = value;
         }
 
@@ -146,15 +146,15 @@
             set => this["trackerRemove"] = value;
         }
 
-        public int[] FilesWanted
+        public uint[] FilesWanted
         {
-            get => GetValue<int[]>("files-wanted");
+            get => GetValue<uint[]>("files-wanted");
             set => this["files-wanted"] = value;
         }
 
-        public int[] FilesUnwanted
+        public uint[] FilesUnwanted
         {
-            get => GetValue<int[]>("files-unwanted");
+            get => GetValue<uint[]>("files-unwanted");
             set => this["files-unwanted"] = value;
         }
 

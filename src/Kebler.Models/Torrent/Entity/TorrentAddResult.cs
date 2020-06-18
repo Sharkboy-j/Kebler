@@ -9,7 +9,7 @@ namespace Kebler.Models.Torrent.Entity
 		/// Torrent ID
 		/// </summary>
 		[JsonProperty("id")]
-        public int ID { get; set; }
+        public uint ID { get; set; }
 
         /// <summary>
         /// Torrent name

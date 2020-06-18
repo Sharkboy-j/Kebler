@@ -18,7 +18,7 @@ namespace Kebler.UI.Dialogs
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly CancellationToken _cancellationToken;
         private static readonly ILog Log = LogManager.GetLogger(typeof(RemoveTorrentDialog));
-        private readonly int[] _toRemove;
+        private readonly uint[] _toRemove;
         private readonly TransmissionClient _transmissionClient;
         public Enums.RemoveResult Result;
         public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool)RemoveWithDataCheckBox.IsChecked;
@@ -27,7 +27,7 @@ namespace Kebler.UI.Dialogs
         public bool IsWorking { get; set; }
 
 
-        public RemoveTorrentDialog(IEnumerable<string> names,int[] toRm, ref TransmissionClient transmissionClient, bool witData = false)
+        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient transmissionClient, bool witData = false)
         {
             InitializeComponent();
             Container.ItemsSource = names;
@@ -41,7 +41,7 @@ namespace Kebler.UI.Dialogs
             DataContext = this;
         }
 
-  
+
 
 
         private void Cancel(object sender, RoutedEventArgs e)

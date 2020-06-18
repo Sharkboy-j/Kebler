@@ -290,7 +290,7 @@ namespace Kebler.TransmissionCore
         /// <param name="fields">Fields of torrents</param>
         /// <param name="ids">IDs of torrents (null or empty for get all torrents)</param>
         /// <returns>Torrents info</returns>
-        public async Task<TransmissionTorrents> TorrentGetAsyncWithID(string[] fields, params int[] ids)
+        public async Task<TransmissionTorrents> TorrentGetAsyncWithID(string[] fields, params uint[] ids)
         {
             var arguments = new Dictionary<string, object> { { "fields", fields } };
 
@@ -310,7 +310,7 @@ namespace Kebler.TransmissionCore
         /// </summary>
         /// <param name="ids">Torrents id</param>
         /// <param name="deleteData">Remove data</param>
-        public async Task<Enums.RemoveResult> TorrentRemoveAsync(int[] ids, CancellationToken token, bool deleteData = false)
+        public async Task<Enums.RemoveResult> TorrentRemoveAsync(uint[] ids, CancellationToken token, bool deleteData = false)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -335,7 +335,7 @@ namespace Kebler.TransmissionCore
         /// Start torrents (API: torrent-start)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStartAsync(int[] ids)
+        public Task TorrentStartAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request);
@@ -381,7 +381,7 @@ namespace Kebler.TransmissionCore
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStopAsync(int[] ids)
+        public Task TorrentStopAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request);
@@ -466,7 +466,7 @@ namespace Kebler.TransmissionCore
         /// <param name="ids">Torrent ids</param>
         /// <param name="location">The new torrent location</param>
         /// <param name="move">Move from previous location</param>
-        public async Task<TransmissionResponse> TorrentSetLocationAsync(int[] ids, string location, bool move, CancellationToken token)
+        public async Task<TransmissionResponse> TorrentSetLocationAsync(uint[] ids, string location, bool move, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "ids", ids }, { "location", location }, { "move", move } };
             var request = new TransmissionRequest("torrent-set-location", arguments);

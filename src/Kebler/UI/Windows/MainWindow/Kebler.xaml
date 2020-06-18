@@ -580,7 +580,7 @@
                 Column="2"
                 DataContext="{Binding MoreInfo}"
                 Row="2">
-                <controls1:TorrentMoreInfo DataContext="{Binding}" />
+                <controls1:TorrentMoreInfo Name="MoreInfoControl" DataContext="{Binding}" />
             </Grid>
 
 
