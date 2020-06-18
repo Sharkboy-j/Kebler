@@ -22,7 +22,6 @@ namespace Kebler.Models.Tree
         public MultiselectionTreeViewItem ParentItem { get; private set; }
 
 
-
         public bool IsExpanded
         {
             get => _isExpanded;
@@ -84,6 +83,7 @@ namespace Kebler.Models.Tree
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
             }
         }
+
         public bool? IsChecked
         {
             get
@@ -109,10 +109,8 @@ namespace Kebler.Models.Tree
                         _isChecked = null;
                     return null;
                 }
-                else
-                {
-                    return _isChecked;
-                }
+                return _isChecked;
+
             }
             set
             {
@@ -131,10 +129,10 @@ namespace Kebler.Models.Tree
             }
         }
 
-        public void NotifyParent()
+        protected void NotifyParent()
         {
             var prnt = ParentItem;
-            while (prnt!=null)
+            while (prnt != null)
             {
                 prnt.RaisePropertyChanged(nameof(IsChecked));
                 prnt = prnt.ParentItem;
@@ -313,7 +311,7 @@ namespace Kebler.Models.Tree
 
         private void UpdateIsVisible(bool parentIsVisibleAndExpanded, bool updateFlattener)
         {
-            bool flag = parentIsVisibleAndExpanded && !IsHidden;
+            var flag = parentIsVisibleAndExpanded && !IsHidden;
             if (IsVisible == flag)
                 return;
             IsVisible = flag;
