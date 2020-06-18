@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable once MemberCanBePrivate.Global
-namespace Kebler.UI.Controls
+namespace Kebler.UI.CSControls
 {
     public class WaterBox : TextBox
     {

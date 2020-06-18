@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Kebler.UI.Controls
+namespace Kebler.UI.CSControls
 {
     internal class SprocketControl : Control, IDisposable
     {

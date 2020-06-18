@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Kebler.Models;
-using Kebler.Models.Torrent;
-using Kebler.UI.Annotations;
+﻿using Kebler.Models.Tree;
 
 namespace Kebler.UI.Controls
 {
@@ -22,7 +12,11 @@ namespace Kebler.UI.Controls
             InitializeComponent();
         }
 
-
-
+        public void Update(MultiselectionTreeViewItem items)
+        {
+            var ddd = new MultiselectionTreeViewItem() { IsExpanded = true };
+            ddd.Children.Add(items);
+            TreeView.RootItem = ddd;
+        }
     }
 }

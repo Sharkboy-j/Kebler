@@ -22,6 +22,7 @@ using Kebler.Models.Torrent.Attributes;
 using Kebler.Models.Torrent.Common;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Models.Torrent.Response;
+using Kebler.Models.Tree;
 using Kebler.Resources;
 using Kebler.Services;
 using Kebler.Services.Converters;
@@ -40,7 +41,6 @@ namespace Kebler.UI.Windows
 
 
             InitializeComponent();
-            MoreInfoControl.TreeView.DisableBorders();
             ApplyConfig();
 
             DataContext = this;
@@ -225,49 +225,56 @@ namespace Kebler.UI.Windows
 
         private void TorrentsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!IsLoaded)
+                return;
+
             SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToArray();
-            Update(SelectedTorrents.Select(x=>x.Id).ToArray());
+            Update(SelectedTorrents.Select(x => x.Id).ToArray());
 
         }
 
 
 
-        public async void Update(int[] id)
+        public async Task Update(int[] id)
         {
 
-            if (id.Length > 1)
-            {
-                MoreInfo.IsMore = true;
-                MoreInfo.Clear();
-                MoreInfo.SelectedCount = id.Length;
-                return;
-            }
-            MoreInfo.IsMore = false;
-            MoreInfo.Loading = true;
+
+            //if (id.Length > 1)
+            //{
+            //    MoreInfo.IsMore = true;
+            //    MoreInfo.Clear();
+            //    MoreInfo.SelectedCount = id.Length;
+            //    return;
+            //}
+
+
+            //MoreInfo.IsMore = false;
+            //MoreInfo.Loading = true;
             var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, id);
             MoreInfo.Selected = answ.Torrents.FirstOrDefault();
-            MoreInfo.Files = await LoadTree(MoreInfo.Selected);
-            MoreInfo.Loading = false;
-
+            //MoreInfo.Files = 
+            //MoreInfo.Loading = false;
+            var items = LoadTree(MoreInfo.Selected);
+            MoreInfoControl.Update(items);
         }
 
 
 
-        private Task<List<TorrentPath>> LoadTree(TorrentInfo tr)
+        private MultiselectionTreeViewItem LoadTree(TorrentInfo tr)
         {
-            var task = Task.Run(() => CreateTree(tr));
-            return task;
+            return CreateTree(tr);
         }
 
 
-        private static List<TorrentPath> CreateTree(TorrentInfo torrent)
+        private static MultiselectionTreeViewItem CreateTree(TorrentInfo torrent)
         {
+
+            var root = new MultiselectionTreeViewItem { Title = torrent.Name };
             foreach (var itm in torrent.Files)
             {
                 itm.Name = itm.Name.Replace(torrent.Name, string.Empty).TrimStart('/', '\\');
             }
-            var root = new TorrentPath(torrent.Name);
-            
+
             var count = 0;
             foreach (var file in torrent.Files)
             {
@@ -275,12 +282,11 @@ namespace Kebler.UI.Windows
                 count++;
             }
 
-            root.Initialize();
-            return new List<TorrentPath> { root };
+            return root;
         }
 
 
-        private static void CreateNodes(ref TorrentPath root, string file, int index)
+        private static void CreateNodes(ref MultiselectionTreeViewItem root, string file, int index)
         {
             file = file.Replace('/', '\\');
             var dirs = file.Split('\\');
@@ -288,22 +294,22 @@ namespace Kebler.UI.Windows
             var last = root;
             foreach (var s in dirs)
             {
-                if(string.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                     continue;
 
-                if (last.Children.All(x => x.Name != s))
+                if (last.Children.All(x => x.Title != s))
                 {
                     //if not found children
-                    var pth = new TorrentPath(s);
+                    var pth = new MultiselectionTreeViewItem{Title = s, IsExpanded = true };
                     last.Children.Add(pth);
                     last = pth;
                 }
                 else
                 {
-                    last = last.Children.First(p => p.Name == s);
+                    last = last.Children.First(p => p.Title == s);
                 }
             }
-            last.Index = index;
+            //last.Index = index;
         }
 
 

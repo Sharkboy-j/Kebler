@@ -273,10 +273,7 @@
                         TextOptions.TextHintingMode="Animated"
                         TextOptions.TextRenderingMode="ClearType" />
 
-                    <controls1:FilesTreeView
-                        Grid.Row="8"
-                        Grid.Column="2"
-                        DataContext="{Binding}" />
+                  
                 </Grid>
 
 

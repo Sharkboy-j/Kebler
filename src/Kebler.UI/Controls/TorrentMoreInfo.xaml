@@ -6,13 +6,67 @@
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muliTreeView="clr-namespace:Kebler.UI.CSControls.MuliTreeView"
     d:DesignHeight="450"
     d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ListViewTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="18" />
+                    <ColumnDefinition Width="18" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    Focusable="False"
+                    IsChecked="{Binding IsChecked}"
+                    Tag="{Binding}" />
+                <Path
+                    Grid.Column="1"
+                    Width="18"
+                    Height="17"
+                    Margin="0,0,3,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Data="{DynamicResource Icon.Dir}"
+                    Fill="{DynamicResource ForegroundBrush.DimGray}"
+                    Stretch="Fill"
+                    Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <Path
+                    Grid.Column="1"
+                    Width="18"
+                    Height="17"
+                    Margin="0,0,3,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Data="{DynamicResource Icon.File}"
+                    Fill="#FF157EFB"
+                    Stretch="Fill"
+                    Visibility="{Binding HasChildren, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    Text="{Binding Title}"
+                    TextTrimming="CharacterEllipsis" />
+                <Grid.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                                <Setter Property="Grid.Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
+
         <TabControl>
             <TabItem Header="General">
                 <Grid>
@@ -42,10 +96,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Files">
-                <local:FilesTreeView
+                <muliTreeView:FileListTreeView
                     x:Name="TreeView"
+                    Margin="-2"
                     x:FieldModifier="public"
-                    DataContext="{Binding}" />
+                    ItemTemplate="{StaticResource ListViewTemplate}"
+                    Style="{StaticResource FileListMultiselectionTreeViewDefaultStyle}"
+                    TextSearch.TextPath="Title" />
             </TabItem>
         </TabControl>
 
