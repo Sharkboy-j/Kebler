@@ -13,6 +13,7 @@ namespace Kebler.Models
         public int UpdateTime { get; set; } = 5000;
         public int TorrentPeerLimit { get; set; } = 25;
         public double CategoriesWidth { get; set; } = 150;
+        public double MoreInfoHeight { get; set; } = 202;
         public double MainWindowWidth { get; set; } = 600;
         public double MainWindowHeight { get; set; } = 800;
         public WindowState MainWindowState { get; set; } = WindowState.Normal;

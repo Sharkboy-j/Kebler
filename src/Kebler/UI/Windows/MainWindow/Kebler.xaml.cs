@@ -126,6 +126,7 @@ namespace Kebler.UI.Windows
                 MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
                 CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
+                MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
                 Width = ConfigService.Instanse.MainWindowWidth;
                 Height = ConfigService.Instanse.MainWindowHeight;
                 WindowState = (System.Windows.WindowState)ConfigService.Instanse.MainWindowState;
@@ -151,10 +152,12 @@ namespace Kebler.UI.Windows
             }
         }
 
-        private void Vertical_DragCompleted(object sender, DragCompletedEventArgs e)
+        private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
             ConfigService.Instanse.CategoriesWidth = CategoriesColumn.ActualWidth;
+            ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
             ConfigService.Save();
+
         }
 
         private void ClosingW(object sender, CancelEventArgs e)

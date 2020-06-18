@@ -44,7 +44,15 @@
                     Data="{DynamicResource Icon.File}"
                     Fill="#FF157EFB"
                     Stretch="Fill"
-                    Visibility="{Binding HasChildren, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+                    Visibility="{Binding HasChildren, Converter={StaticResource ReverseBoolToVisibilityConverter}}">
+                    <Path.Effect>
+                        <DropShadowEffect
+                            BlurRadius="5"
+                            RenderingBias="Quality"
+                            Direction="0"
+                            ShadowDepth="0" />
+                    </Path.Effect>
+                </Path>
 
                 <TextBlock
                     Grid.Column="2"

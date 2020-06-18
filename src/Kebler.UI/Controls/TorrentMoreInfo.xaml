@@ -48,7 +48,7 @@
                 </Grid>
             </TabItem>-->
             <TabItem Header="Files">
-                <local:FilesTreeView  DataContext="{Binding FilesTree}" />
+                <local:FilesTreeView DataContext="{Binding FilesTree}" />
             </TabItem>
         </TabControl>
 

@@ -72,6 +72,7 @@ namespace Kebler.UI.Windows
         public bool IsConnecting { get; set; }
         public Server SelectedServer { get; set; }
         public bool IsSlowModeEnabled { get; set; }
+        public int TorrentDataGridSelectedIndex { get; set; } = 1;
 
         public bool IsDoingStuff { get; set; }
         // ReSharper disable once UnusedMember.Global

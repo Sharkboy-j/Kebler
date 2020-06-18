@@ -417,7 +417,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="1" />
-                <RowDefinition Height="100" />
+                <RowDefinition Name="MoreInfoColumn" MinHeight="202" />
             </Grid.RowDefinitions>
             <Grid Background="{DynamicResource ListBox.Static.Background}" RowSpan="3">
                 <Grid.RowDefinitions>
@@ -588,12 +588,13 @@
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Grid.Column="1"
-                DragCompleted="Vertical_DragCompleted"
+                DragCompleted="DragCompleted"
                 Style="{DynamicResource VerticalGridSplitter}" />
 
             <GridSplitter
                 Grid.Row="1"
                 Grid.Column="2"
+                DragCompleted="DragCompleted"
                 Style="{DynamicResource HorizontalGridSplitter}" />
 
         </Grid>
