@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Kebler.Models.Torrent;
 
 namespace Kebler.Services
 {
@@ -47,7 +48,7 @@ namespace Kebler.Services
 
         public string ShaHash { get; }
         public byte[] ByteHash { get; private set; }
-        public TransmissionFile[] Files { get; private set; }
+        public TransmissionTorrentFiles[] Files { get; private set; }
         public long Size { get; private set; }
         public long PieceLength => Info.FindNumber("piece length");
         public Dictionary<string, TransmissionValue> Info => _root["info"].Value as Dictionary<string, TransmissionValue>;
@@ -129,12 +130,12 @@ namespace Kebler.Services
         }
 
         #region PRC
-        private TransmissionFile[] GetFiles()
+        private TransmissionTorrentFiles[] GetFiles()
         {
-            var tFiles = new List<TransmissionFile>();
+            var tFiles = new List<TransmissionTorrentFiles>();
             if (!Info.ContainsKey("files"))
             {
-                tFiles.Add(new TransmissionFile((long)Info["length"].Value, 1, Pieces.Length / 20, (string)Info["name"].Value));
+                tFiles.Add(new TransmissionTorrentFiles((long)Info["length"].Value, (string)Info["name"].Value));
                 Size = (long)Info["length"].Value;
             }
             else
@@ -147,7 +148,7 @@ namespace Kebler.Services
                     var pieceLength = (int)(citem / PieceLength) + 1;
                     citem = citem + (long)strs["length"].Value;
                     var num = (int)(citem / PieceLength) + 2 - pieceLength;
-                    tFiles.Add(new TransmissionFile((long)strs["length"].Value, pieceLength, num, ((List<TransmissionValue>)strs["path"].Value).Select(c => c.Value as string).ToArray()));
+                    tFiles.Add(new TransmissionTorrentFiles((long)strs["length"].Value, ((List<TransmissionValue>)strs["path"].Value).Select(c => c.Value as string).ToArray()));
                 }
                 Size = citem;
             }
@@ -262,40 +263,40 @@ namespace Kebler.Services
     }
 
     #region Types
-    public class TransmissionFile
-    {
-        public int FirstPiece { get; }
+    //public class TransmissionFile
+    //{
+    //    public int FirstPiece { get; }
 
-        public long Length { get; }
+    //    public long Length { get; }
 
-        public string Name { get; }
+    //    public string Name { get; }
 
-        public string Path { get; }
+    //    public string Path { get; }
 
-        public FileInfo Info { get; }
+    //    public FileInfo Info { get; }
 
-        public long PieceLength { get; }
+    //    public long PieceLength { get; }
 
 
-        public TransmissionFile(long size, int pStart, int pLen, params string[] fullPath)
-        {
-            Length = size < 0 ? 0 : size;
-            FirstPiece = pStart;
-            PieceLength = pLen;
-            Path = System.IO.Path.Combine(fullPath);
-            Info = new FileInfo(Path);
+    //    public TransmissionFile(long size, int pStart, int pLen, params string[] fullPath)
+    //    {
+    //        Length = size < 0 ? 0 : size;
+    //        FirstPiece = pStart;
+    //        PieceLength = pLen;
+    //        Path = System.IO.Path.Combine(fullPath);
+    //        Info = new FileInfo(Path);
 
-            var num = Path.LastIndexOf("\\", StringComparison.Ordinal);
-            if (num <= 0)
-            {
-                Name = Path;
-                Path = "";
-                return;
-            }
-            Name = Path.Substring(num + 1);
-            Path = Path.Substring(0, num);
-        }
-    }
+    //        var num = Path.LastIndexOf("\\", StringComparison.Ordinal);
+    //        if (num <= 0)
+    //        {
+    //            Name = Path;
+    //            Path = "";
+    //            return;
+    //        }
+    //        Name = Path.Substring(num + 1);
+    //        Path = Path.Substring(0, num);
+    //    }
+    //}
 
     public class TransmissionValue
     {

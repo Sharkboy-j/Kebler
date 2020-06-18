@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Kebler.Models;
+using Kebler.Models.PsevdoVM;
+using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Response;
 using Kebler.Services;
@@ -45,15 +47,14 @@ namespace Kebler.UI.Dialogs
             PeerLimit = ConfigService.Instanse.TorrentPeerLimit;
 
             Loaded += AddTorrentDialog_Loaded;
-
+            FilesTree.Border = new Thickness(1);
         }
 
         private async void AddTorrentDialog_Loaded(object sender, RoutedEventArgs e)
         {
             this.settings = await _transmissionClient.GetSessionSettingsAsync(cancellationToken);
             DownlaodDir = settings.DownloadDirectory;
-            var files = await LoadTree();
-            Files = files;
+            await LoadTree();
 
             LoadingSettingsGrid.Visibility = Visibility.Collapsed;
 
@@ -95,66 +96,19 @@ namespace Kebler.UI.Dialogs
         {
             if (!IsLoaded)
                 return;
-            var files = await LoadTree();
-            Files = files;
+            await LoadTree();
 
             LoadingSettingsGrid.Visibility = Visibility.Collapsed;
         }
 
-        private Task<List<TorrentPath>> LoadTree()
+        private async Task LoadTree()
         {
             LoadingSettingsGrid.Visibility = Visibility.Visible;
 
-            var task = Task.Run(async delegate
-            {
-                var filebytes = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
+            var filebytes = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
+            TorrentInfo.TryParse(filebytes, out var parsedTorrent);
 
-                TorrentParser.TryParse(filebytes, out var parsedTorrent);
-                return CreateTree(parsedTorrent);
-            }, cancellationToken);
-            return task;
-        }
-
-
-
-        private static List<TorrentPath> CreateTree(TorrentParser torrent)
-        {
-            var root = new TorrentPath(torrent.Name);
-
-
-
-            var count = 0;
-            foreach (var file in torrent.Files)
-            {
-                CreateNodes(ref root, Path.Combine(file.Path, file.Name), count);
-                count++;
-            }
-
-            root.Initialize();
-            return new List<TorrentPath> { root };
-        }
-
-
-        private static void CreateNodes(ref TorrentPath root, string file, int index)
-        {
-            var dirs = file.Split('\\');
-
-            var last = root;
-            foreach (var s in dirs)
-            {
-                if (last.Children.All(x => x.Name != s))
-                {
-                    //if not found children
-                    var pth = new TorrentPath(s);
-                    last.Children.Add(pth);
-                    last = pth;
-                }
-                else
-                {
-                    last = last.Children.First(p => p.Name == s);
-                }
-            }
-            last.Index = index;
+            FilesTree.UpdateFilesTree(ref parsedTorrent);
         }
 
 
@@ -268,7 +222,7 @@ namespace Kebler.UI.Dialogs
 
         private void AddTorrentDialog_OnClosing(object sender, CancelEventArgs e)
         {
-            Files = null;
+            FilesTree = null;
             cancellationTokenSource?.Cancel();
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -296,7 +250,8 @@ namespace Kebler.UI.Dialogs
         public int PeerLimit { get; set; }
         public int UploadLimit { get; set; }
         public bool IsAutoStart { get; set; }
-        public List<TorrentPath> Files { get; set; }
+
+        public FilesTreeViewModel FilesTree { get; private set; } = new FilesTreeViewModel();
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

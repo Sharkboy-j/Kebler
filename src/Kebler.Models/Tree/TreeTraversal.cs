@@ -15,7 +15,7 @@ namespace Kebler.Models.Tree
 
         public static IEnumerable<T> PreOrder<T>(IEnumerable<T> input, Func<T, IEnumerable<T>> recursion)
         {
-            Stack<IEnumerator<T>> stack = new Stack<IEnumerator<T>>();
+            var stack = new Stack<IEnumerator<T>>();
             try
             {
                 stack.Push(input.GetEnumerator());
@@ -23,12 +23,11 @@ namespace Kebler.Models.Tree
                 {
                     while (stack.Peek().MoveNext())
                     {
-                        T element = stack.Peek().Current;
+                        var element = stack.Peek().Current;
                         yield return element;
-                        IEnumerable<T> objs = recursion(element);
+                        var objs = recursion(element);
                         if (objs != null)
                             stack.Push(objs.GetEnumerator());
-                        element = default(T);
                     }
                     stack.Pop().Dispose();
                 }

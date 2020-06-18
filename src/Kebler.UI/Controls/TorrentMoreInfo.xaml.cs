@@ -11,12 +11,5 @@ namespace Kebler.UI.Controls
         {
             InitializeComponent();
         }
-
-        public void Update(MultiselectionTreeViewItem items)
-        {
-            var ddd = new MultiselectionTreeViewItem() { IsExpanded = true };
-            ddd.Children.Add(items);
-            TreeView.RootItem = ddd;
-        }
     }
 }

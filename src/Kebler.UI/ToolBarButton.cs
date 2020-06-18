@@ -11,14 +11,8 @@ namespace Kebler.UI
 
         public string Title
         {
-            get
-            {
-                return (string)GetValue(TitleProperty);
-            }
-            set
-            {
-                SetValue(TitleProperty, value);
-            }
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(nameof(Data), typeof(Geometry), typeof(ToolBarButton),
@@ -26,14 +20,8 @@ namespace Kebler.UI
 
         public Geometry Data
         {
-            get
-            {
-                return (Geometry)GetValue(DataProperty);
-            }
-            set
-            {
-                SetValue(DataProperty, value);
-            }
+            get => (Geometry)GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
         }
 
         public static readonly DependencyProperty PathWidthProperty = DependencyProperty.Register(nameof(PathWidth), typeof(double), typeof(ToolBarButton),
@@ -41,14 +29,8 @@ namespace Kebler.UI
 
         public double PathWidth
         {
-            get
-            {
-                return (double)GetValue(PathWidthProperty);
-            }
-            set
-            {
-                SetValue(PathWidthProperty, value);
-            }
+            get => (double)GetValue(PathWidthProperty);
+            set => SetValue(PathWidthProperty, value);
         }
 
         public static readonly DependencyProperty PathHeightProperty = DependencyProperty.Register(nameof(PathHeight), typeof(double), typeof(ToolBarButton),
@@ -56,14 +38,8 @@ namespace Kebler.UI
 
         public double PathHeight
         {
-            get
-            {
-                return (double)GetValue(PathHeightProperty);
-            }
-            set
-            {
-                SetValue(PathHeightProperty, value);
-            }
+            get => (double)GetValue(PathHeightProperty);
+            set => SetValue(PathHeightProperty, value);
         }
 
 
@@ -73,14 +49,8 @@ namespace Kebler.UI
 
         public ImageSource ImageSource
         {
-            get
-            {
-                return (ImageSource)GetValue(ImageSourceProperty);
-            }
-            set
-            {
-                SetValue(ImageSourceProperty, value);
-            }
+            get => (ImageSource)GetValue(ImageSourceProperty);
+            set => SetValue(ImageSourceProperty, value);
         }
     }
 }

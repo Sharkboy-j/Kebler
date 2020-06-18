@@ -12,7 +12,6 @@
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/List.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/DataGrid.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Scroll.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Tree.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Check.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/MultiTree.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Window.xaml" />

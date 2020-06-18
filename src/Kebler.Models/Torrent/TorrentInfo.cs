@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using Kebler.Models.Torrent.Attributes;
 using Newtonsoft.Json;
 
@@ -8,6 +12,7 @@ namespace Kebler.Models.Torrent
 {
     public class TorrentInfo : INotifyPropertyChanged, IComparable
     {
+        [JsonConstructor]
         public TorrentInfo(int id)
         {
             Id = id;
@@ -272,32 +277,244 @@ namespace Kebler.Models.Torrent
         }
 
 
-        //~TorrentInfo()
-        //{
-        //    Comment = null;
-        //    Creator = null;
-        //    DownloadDir = null;
-        //    DownloadedEver = null;
-        //    DownloadLimit = null;
-        //    DownloadLimited = null;
-        //    ErrorString = null;
-        //    Files = null;
-        //    FileStats = null;
-        //    HashString = null;
-        //    MagnetLink = null;
-        //    Name = null;
-        //    Peers = null;
-        //    PeersFrom = null;
-        //    Pieces = null;
-        //    Trackers = null;
-        //    TrackerStats = null;
-        //    TorrentFile = null;
-        //    Webseeds = null;
-        //    PropertyChanged = null;
-        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region parser
+
+        public class TransmissionValue
+        {
+            public object Value { get; }
+
+            public DataType Type { get; }
+
+            public TransmissionValue(DataType dType, object dValue)
+            {
+                Type = dType;
+                Value = dValue;
+            }
+        }
+
+        public enum DataType
+        {
+            String,
+            Int,
+            List,
+            Dictionary,
+            Byte
+        }
+
+        private readonly BinaryReader _reader;
+        private long _infoStart;
+        private long _infoEnd;
+        private long _totalValues;
+        private readonly Dictionary<string, TransmissionValue> _root;
+
+        public Dictionary<string, TransmissionValue> Info => _root["info"].Value as Dictionary<string, TransmissionValue>;
+
+        public static bool TryParse(byte[] bytes, out TorrentInfo torrentParser)
+        {
+            try
+            {
+                torrentParser = new TorrentInfo(bytes);
+                return true;
+            }
+            catch (Exception)
+            {
+                torrentParser = null;
+                return false;
+            }
+        }
+
+        public TorrentInfo(byte[] data)
+        {
+            using (_reader = new BinaryReader(new MemoryStream(data), Encoding.UTF8))
+            {
+                if (_reader.ReadChar() != 'd')
+                {
+                    throw new Exception("Torrent File Error");
+                }
+                _root = parseDict();
+                //var ShaHash = GetShaHash();
+                Files = GetFiles();
+                Name = Info.FindText("name");
+            }
+        }
+
+        private Dictionary<string, TransmissionValue> parseDict()
+        {
+            var strs = new Dictionary<string, TransmissionValue>();
+            while (_reader.PeekChar() != 101)
+            {
+                var str = parseString();
+                if (str == "info")
+                {
+                    _infoStart = _reader.BaseStream.Position;
+                }
+                if (str != "pieces")
+                {
+                    var tVal = ProcessVal();
+                    strs.Add(str, tVal);
+                }
+                else
+                {
+                    strs.Add(str, parseByte());
+                }
+                if (str != "info")
+                {
+                    continue;
+                }
+                _infoEnd = _reader.BaseStream.Position - _infoStart;
+            }
+            _reader.Read();
+            return strs;
+        }
+
+
+        private TransmissionValue parseByte()
+        {
+            var str = new StringBuilder();
+            do
+            {
+                str.Append(char.ConvertFromUtf32(_reader.Read()));
+            } while (char.ConvertFromUtf32(_reader.PeekChar()) != ":");
+
+            _reader.Read();
+            return new TransmissionValue(DataType.Byte, _reader.ReadBytes(int.Parse(str.ToString())));
+        }
+
+
+        private TransmissionValue ProcessVal()
+        {
+            _totalValues++;
+            var str = char.ConvertFromUtf32(_reader.PeekChar());
+            if (str == "d")
+            {
+                _reader.Read();
+                return new TransmissionValue(DataType.Dictionary, parseDict());
+            }
+            if (str == "l")
+            {
+                _reader.Read();
+                return new TransmissionValue(DataType.List, parseList());
+            }
+            if (str == "i")
+            {
+                _reader.Read();
+                return new TransmissionValue(DataType.Int, parseNum());
+            }
+            return new TransmissionValue(DataType.String, parseString());
+        }
+
+
+        private List<TransmissionValue> parseList()
+        {
+            var tVals = new List<TransmissionValue>();
+            while (char.ConvertFromUtf32(_reader.PeekChar()) != "e")
+            {
+                tVals.Add(ProcessVal());
+            }
+            _reader.Read();
+            return tVals;
+        }
+
+        private long parseNum()
+        {
+            var str = new StringBuilder();
+            do
+            {
+                str = str.Append(char.ConvertFromUtf32(_reader.Read()));
+            }
+            while (char.ConvertFromUtf32(_reader.PeekChar()) != "e");
+            _reader.Read();
+            return long.Parse(str.ToString());
+        }
+
+        private string parseString()
+        {
+            var str = new StringBuilder();
+            do
+            {
+                str.Append(char.ConvertFromUtf32(_reader.Read()));
+            }
+            while (char.ConvertFromUtf32(_reader.PeekChar()) != ":");
+            _reader.Read();
+            var numArray = _reader.ReadBytes(int.Parse(str.ToString()));
+            return Encoding.UTF8.GetString(numArray);
+        }
+
+        private TransmissionTorrentFiles[] GetFiles()
+        {
+            var tFiles = new List<TransmissionTorrentFiles>();
+            if (!Info.ContainsKey("files"))
+            {
+                tFiles.Add(new TransmissionTorrentFiles((long)Info["length"].Value, (string)Info["name"].Value));
+                TotalSize = (long)Info["length"].Value;
+            }
+            else
+            {
+                long citem = 0;
+                var v = (List<TransmissionValue>)Info["files"].Value;
+                foreach (var tVal in v)
+                {
+                    var PieceLengthval = Info.FindNumber("piece length");
+                    var strs = (Dictionary<string, TransmissionValue>)tVal.Value;
+                    var pieceLength = (int)(citem / PieceLengthval) + 1;
+                    citem = citem + (long)strs["length"].Value;
+                    var num = (int)(citem / PieceLengthval) + 2 - pieceLength;
+                    tFiles.Add(new TransmissionTorrentFiles((long)strs["length"].Value, ((List<TransmissionValue>)strs["path"].Value).Select(c => c.Value as string).ToArray()));
+                }
+                TotalSize = citem;
+            }
+            return tFiles.Where(c => !c.Name.StartsWith("_____padding_file")).ToArray();
+        }
+        #endregion
+
 
     }
 
+    internal static class TorrentExt
+    {
+        internal static T Find<T>(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
+        {
+            if (!dictToSearch.ContainsKey(key))
+            {
+                return default(T);
+            }
+            return (T)dictToSearch[key].Value;
+        }
+
+        internal static long FindNumber(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
+        {
+            return dictToSearch.Find<long>(key);
+        }
+
+        internal static string FindText(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
+        {
+            return dictToSearch.Find<string>(key);
+        }
+    }
 
     //TODO: Separate "remove" and "active" torrents in "torrentsGet"
 }
+

@@ -13,10 +13,10 @@
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
+    Closing="AddTorrentDialog_OnClosing"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     ShowTopLine="False"
-    Closing="AddTorrentDialog_OnClosing"
     Style="{StaticResource MainWindow}"
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType"
@@ -272,8 +272,12 @@
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
                         TextOptions.TextRenderingMode="ClearType" />
+                    <controls1:FilesTreeView
+                        Grid.Row="8"
+                        Grid.Column="2"
+                        DataContext="{Binding FilesTree}" />
 
-                  
+
                 </Grid>
 
 

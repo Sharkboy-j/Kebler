@@ -9,24 +9,18 @@ namespace Kebler.Models.Tree
     {
         private int _totalCount = -1;
         private byte _height = 1;
-        protected FlattenerNode.Flattener _treeFlattener;
+        protected Flattener _treeFlattener;
         private FlattenerNode _Parent;
         private FlattenerNode _left;
         private FlattenerNode _right;
 
         public bool IsVisible { get; protected set; } = true;
 
-        private int Balance
-        {
-            get
-            {
-                return Height(this._right) - Height(this._left);
-            }
-        }
+        private int Balance => Height(_right) - Height(_left);
 
         public MultiselectionTreeViewItem GetListRoot()
         {
-            FlattenerNode flattenerNode = this;
+            var flattenerNode = this;
             while (flattenerNode._Parent != null)
                 flattenerNode = flattenerNode._Parent;
             return (MultiselectionTreeViewItem)flattenerNode;
@@ -34,20 +28,20 @@ namespace Kebler.Models.Tree
 
         private int TotalCount()
         {
-            if (this._totalCount > 0)
-                return this._totalCount;
-            int num = this.IsVisible ? 1 : 0;
-            if (this._left != null)
-                num += this._left.TotalCount();
-            if (this._right != null)
-                num += this._right.TotalCount();
-            this._totalCount = num;
-            return this._totalCount;
+            if (_totalCount > 0)
+                return _totalCount;
+            int num = IsVisible ? 1 : 0;
+            if (_left != null)
+                num += _left.TotalCount();
+            if (_right != null)
+                num += _right.TotalCount();
+            _totalCount = num;
+            return _totalCount;
         }
 
         protected void InvalidateParents()
         {
-            for (FlattenerNode flattenerNode = this; flattenerNode != null && flattenerNode._totalCount >= 0; flattenerNode = flattenerNode._Parent)
+            for (var flattenerNode = this; flattenerNode != null && flattenerNode._totalCount >= 0; flattenerNode = flattenerNode._Parent)
                 flattenerNode._totalCount = -1;
         }
 
@@ -57,21 +51,18 @@ namespace Kebler.Models.Tree
 
         private static int Height(FlattenerNode node)
         {
-            return node == null ? 0 : node._height;
+            return node?._height ?? 0;
         }
 
         protected void CheckRootInvariants()
         {
-            this.GetListRoot().CheckInvariants();
+            GetListRoot().CheckInvariants();
         }
 
         private void CheckInvariants()
         {
-            if (this._left != null)
-                this._left.CheckInvariants();
-            if (this._right == null)
-                return;
-            this._right.CheckInvariants();
+            _left?.CheckInvariants();
+            _right?.CheckInvariants();
         }
 
         private static void DumpTree(FlattenerNode node)
@@ -81,17 +72,14 @@ namespace Kebler.Models.Tree
 
         private void DumpTree()
         {
-            if (this._left != null)
-                this._left.DumpTree();
-            if (this._right == null)
-                return;
-            this._right.DumpTree();
+            _left?.DumpTree();
+            _right?.DumpTree();
         }
 
         internal static FlattenerNode GetNodeByVisibleIndex(FlattenerNode root, int index)
         {
             root.TotalCount();
-            FlattenerNode flattenerNode = root;
+            var flattenerNode = root;
             while (true)
             {
                 for (; flattenerNode._left == null || index >= flattenerNode._left._totalCount; flattenerNode = flattenerNode._right)
@@ -111,7 +99,7 @@ namespace Kebler.Models.Tree
 
         internal static int GetVisibleIndexForNode(FlattenerNode node)
         {
-            int num = node._left != null ? node._left.TotalCount() : 0;
+            var num = node._left?.TotalCount() ?? 0;
             for (; node._Parent != null; node = node._Parent)
             {
                 if (node == node._Parent._right)
@@ -132,7 +120,7 @@ namespace Kebler.Models.Tree
                 if (node.Balance > 1)
                 {
                     if (node._right.Balance < 0)
-                        node._right = node._right.RRRotate();
+                        node._right = node._right.Rotate();
                     node = node.LLRotate();
                     node._left = Rebalance(node._left);
                 }
@@ -140,7 +128,7 @@ namespace Kebler.Models.Tree
                 {
                     if (node._left.Balance > 0)
                         node._left = node._left.LLRotate();
-                    node = node.RRRotate();
+                    node = node.Rotate();
                     node._right = Rebalance(node._right);
                 }
             }
@@ -151,28 +139,30 @@ namespace Kebler.Models.Tree
 
         private FlattenerNode LLRotate()
         {
-            FlattenerNode left = this._right._left;
-            FlattenerNode right = this._right;
+            var left = _right._left;
+            var right = _right;
             if (left != null)
                 left._Parent = this;
-            this._right = left;
+
+            _right = left;
             right._left = this;
-            right._Parent = this._Parent;
-            this._Parent = right;
+            right._Parent = _Parent;
+
+            _Parent = right;
             right._left = Rebalance(this);
             return right;
         }
 
-        private FlattenerNode RRRotate()
+        private FlattenerNode Rotate()
         {
-            FlattenerNode right = this._left._right;
-            FlattenerNode left = this._left;
+            var right = _left._right;
+            var left = _left;
             if (right != null)
                 right._Parent = this;
-            this._left = right;
+            _left = right;
             left._right = this;
-            left._Parent = this._Parent;
-            this._Parent = left;
+            left._Parent = _Parent;
+            _Parent = left;
             left._right = Rebalance(this);
             return left;
         }
@@ -181,7 +171,7 @@ namespace Kebler.Models.Tree
         {
             for (; pos._Parent != null; pos = pos._Parent)
                 pos = pos != pos._Parent._left ? (pos._Parent._right = Rebalance(pos)) : (pos._Parent._left = Rebalance(pos));
-            FlattenerNode flattenerNode = Rebalance(pos);
+            var flattenerNode = Rebalance(pos);
             if (flattenerNode == pos || pos._treeFlattener == null)
                 return;
             flattenerNode._treeFlattener = pos._treeFlattener;
@@ -210,13 +200,13 @@ namespace Kebler.Models.Tree
 
         protected void RemoveNodes(FlattenerNode start, FlattenerNode end)
         {
-            List<FlattenerNode> flattenerNodeList = new List<FlattenerNode>();
-            FlattenerNode node = start;
+            var flattenerNodeList = new List<FlattenerNode>();
+            var node = start;
             FlattenerNode flattenerNode1;
             do
             {
-                HashSet<FlattenerNode> flattenerNodeSet = new HashSet<FlattenerNode>();
-                for (FlattenerNode flattenerNode2 = end; flattenerNode2 != null; flattenerNode2 = flattenerNode2._Parent)
+                var flattenerNodeSet = new HashSet<FlattenerNode>();
+                for (var flattenerNode2 = end; flattenerNode2 != null; flattenerNode2 = flattenerNode2._Parent)
                     flattenerNodeSet.Add(flattenerNode2);
                 flattenerNodeList.Add(node);
                 if (!flattenerNodeSet.Contains(node) && node._right != null)
@@ -225,20 +215,20 @@ namespace Kebler.Models.Tree
                     node._right._Parent = null;
                     node._right = null;
                 }
-                FlattenerNode flattenerNode3 = node.Successor();
+                var flattenerNode3 = node.Successor();
                 DeleteNode(node);
                 flattenerNode1 = node;
                 node = flattenerNode3;
             }
             while (flattenerNode1 != end);
-            FlattenerNode first = flattenerNodeList[0];
-            for (int index = 1; index < flattenerNodeList.Count; ++index)
+            var first = flattenerNodeList[0];
+            for (var index = 1; index < flattenerNodeList.Count; ++index)
                 first = ConcatTrees(first, flattenerNodeList[index]);
         }
 
         private static FlattenerNode ConcatTrees(FlattenerNode first, FlattenerNode second)
         {
-            FlattenerNode pos = first;
+            var pos = first;
             while (pos._right != null)
                 pos = pos._right;
             InsertNodeAfter(pos, second);
@@ -247,14 +237,14 @@ namespace Kebler.Models.Tree
 
         private FlattenerNode Successor()
         {
-            if (this._right != null)
+            if (_right != null)
             {
-                FlattenerNode flattenerNode = this._right;
+                var flattenerNode = _right;
                 while (flattenerNode._left != null)
                     flattenerNode = flattenerNode._left;
                 return flattenerNode;
             }
-            FlattenerNode flattenerNode1 = this;
+            var flattenerNode1 = this;
             FlattenerNode flattenerNode2;
             do
             {
@@ -309,30 +299,29 @@ namespace Kebler.Models.Tree
 
         private void ReplaceWith(FlattenerNode node)
         {
-            if (this._Parent != null)
+            if (_Parent != null)
             {
-                if (this._Parent._left == this)
-                    this._Parent._left = node;
+                if (_Parent._left == this)
+                    _Parent._left = node;
                 else
-                    this._Parent._right = node;
+                    _Parent._right = node;
                 if (node != null)
-                    node._Parent = this._Parent;
-                this._Parent = null;
+                    node._Parent = _Parent;
+                _Parent = null;
             }
             else
             {
                 node._Parent = null;
-                if (this._treeFlattener == null)
+                if (_treeFlattener == null)
                     return;
-                node._treeFlattener = this._treeFlattener;
-                this._treeFlattener = null;
+                node._treeFlattener = _treeFlattener;
+                _treeFlattener = null;
                 node._treeFlattener._root = node;
             }
         }
 
-        public class Flattener : IList, IEnumerable, ICollection, INotifyCollectionChanged
+        public class Flattener : IList, INotifyCollectionChanged
         {
-            private readonly object _syncRoot = new object();
             public FlattenerNode _root;
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -340,68 +329,35 @@ namespace Kebler.Models.Tree
             public Flattener(FlattenerNode root)
             {
                 root = root.GetListRoot();
-                this._root = root;
+                _root = root;
                 root._treeFlattener = this;
             }
 
             public void Unmount()
             {
-                this._root._treeFlattener = null;
+                _root._treeFlattener = null;
             }
 
             public object this[int index]
             {
                 get
                 {
-                    if (index < 0 || index >= this.Count)
+                    if (index < 0 || index >= Count)
                         throw new ArgumentOutOfRangeException();
-                    return GetNodeByVisibleIndex(this._root, index + 1);
+                    return GetNodeByVisibleIndex(_root, index + 1);
                 }
-                set
-                {
-                    throw new NotSupportedException();
-                }
+                set => throw new NotSupportedException();
             }
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            public bool IsReadOnly => true;
 
-            public bool IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsFixedSize => false;
 
-            public int Count
-            {
-                get
-                {
-                    return this._root.TotalCount() - 1;
-                }
-            }
+            public int Count => _root.TotalCount() - 1;
 
-            public object SyncRoot
-            {
-                get
-                {
-                    return this._syncRoot;
-                }
-            }
+            public object SyncRoot { get; } = new object();
 
-            public bool IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsSynchronized => false;
 
             public int Add(object value)
             {
@@ -415,7 +371,7 @@ namespace Kebler.Models.Tree
 
             public bool Contains(object item)
             {
-                return this.IndexOf(item) >= 0;
+                return IndexOf(item) >= 0;
             }
 
             public void CopyTo(Array array, int index)
@@ -425,13 +381,13 @@ namespace Kebler.Models.Tree
 
             public IEnumerator GetEnumerator()
             {
-                for (int i = 0; i < this.Count; ++i)
+                for (var i = 0; i < Count; ++i)
                     yield return this[i];
             }
 
             public int IndexOf(object item)
             {
-                return item is MultiselectionTreeViewItem multiselectionTreeViewItem && multiselectionTreeViewItem.IsVisible && multiselectionTreeViewItem.GetListRoot() == this._root ? GetVisibleIndexForNode(multiselectionTreeViewItem) - 1 : -1;
+                return item is MultiselectionTreeViewItem multiselectionTreeViewItem && multiselectionTreeViewItem.IsVisible && multiselectionTreeViewItem.GetListRoot() == _root ? GetVisibleIndexForNode(multiselectionTreeViewItem) - 1 : -1;
             }
 
             public void Insert(int index, object value)
@@ -452,11 +408,9 @@ namespace Kebler.Models.Tree
             public void NodesInserted(int index, IEnumerable<MultiselectionTreeViewItem> nodes)
             {
                 --index;
-                foreach (MultiselectionTreeViewItem node in nodes)
+                foreach (var node in nodes)
                 {
-                    NotifyCollectionChangedEventHandler collectionChanged = this.CollectionChanged;
-                    if (collectionChanged != null)
-                        collectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, node, index++));
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, node, index++));
                 }
             }
 
@@ -465,9 +419,7 @@ namespace Kebler.Models.Tree
                 --index;
                 foreach (MultiselectionTreeViewItem node in nodes)
                 {
-                    NotifyCollectionChangedEventHandler collectionChanged = this.CollectionChanged;
-                    if (collectionChanged != null)
-                        collectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, node, index));
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, node, index));
                 }
             }
         }

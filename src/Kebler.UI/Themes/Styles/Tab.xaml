@@ -4,11 +4,11 @@
     xmlns:local="clr-namespace:Kebler.UI.Themes.Styles">
 
     <Style TargetType="{x:Type TabControl}">
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="{DynamicResource TabItem.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource TabItem.Static.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TabItem.Static.Border}" />
         <Setter Property="BorderThickness" Value="0,1,0,0" />
 
         <Setter Property="Template">
@@ -30,7 +30,7 @@
 
                         <!--  header background  -->
                         <TabPanel
-                            x:Name="HeaderPanel"
+                            Name="HeaderPanel"
                             Grid.Row="0"
                             Grid.Column="0"
                             Panel.ZIndex="1"
@@ -38,7 +38,7 @@
                             IsItemsHost="True"
                             KeyboardNavigation.TabIndex="1" />
                         <Border
-                            x:Name="ContentPanel"
+                            Name="ContentPanel"
                             Grid.Row="1"
                             Grid.Column="0"
                             Background="{TemplateBinding Background}"
@@ -97,13 +97,12 @@
     </Style>
 
     <Style TargetType="{x:Type TabItem}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="Foreground" Value="{DynamicResource TabItem.Static.Foreground}" />
         <Setter Property="Background" Value="{DynamicResource TabItem.Static.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource TabItem.Static.Border}" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="MinWidth" Value="50" />
-        <Setter Property="Padding" Value="6,2,6,2" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -148,124 +147,5 @@
         </Setter>
     </Style>
 
-
-    <!--<Style TargetType="{x:Type TabItem}">
-        <Setter Property="Control.Foreground" Value="{DynamicResource ForegroundBrush}" />
-        <Setter Property="Control.Background" Value="{DynamicResource TabItem.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource TabItem.Static.Border}" />
-        <Setter Property="Control.BorderThickness" Value="0" />
-        <Setter Property="FrameworkElement.Margin" Value="0" />
-        <Setter Property="Control.Padding" Value="0" />
-        <Setter Property="Control.HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Control.VerticalContentAlignment" Value="Stretch" />
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                        <ContentPresenter
-                            x:Name="contentPresenter"
-                            Margin="{TemplateBinding Control.Padding}"
-                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                            VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                            ContentSource="Header"
-                            Focusable="false"
-                            RecognizesAccessKey="true"
-                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type TabControl}">
-        <Style.Resources>
-            <Style TargetType="{x:Type TabPanel}">
-                <Setter Property="Panel.Background" Value="{DynamicResource TabItem.Static.Background}" />
-            </Style>
-            <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="{x:Type TabItem}" />
-        </Style.Resources>
-        <Setter Property="Control.Padding" Value="2" />
-        <Setter Property="Control.HorizontalContentAlignment" Value="Center" />
-        <Setter Property="Control.VerticalContentAlignment" Value="Center" />
-        <Setter Property="Control.Background" Value="{DynamicResource TabItem.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource TabItem.Static.Border}" />
-        <Setter Property="Control.BorderThickness" Value="0" />
-        <Setter Property="Control.Foreground" Value="{DynamicResource ForegroundBrush}" />
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid
-                        x:Name="templateRoot"
-                        ClipToBounds="true"
-                        KeyboardNavigation.TabNavigation="Local"
-                        SnapsToDevicePixels="true">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Name="ColumnDefinition0" />
-                            <ColumnDefinition x:Name="ColumnDefinition1" Width="0" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition x:Name="RowDefinition0" Height="Auto" />
-                            <RowDefinition x:Name="RowDefinition1" Height="*" />
-                        </Grid.RowDefinitions>
-                        <TabPanel
-                            x:Name="headerPanel"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="0"
-                            IsItemsHost="true"
-                            KeyboardNavigation.TabIndex="1"
-                            ZIndex="1" />
-                        <Border
-                            x:Name="contentPanel"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Background="{TemplateBinding Control.Background}"
-                            BorderBrush="{TemplateBinding Control.BorderBrush}"
-                            BorderThickness="{TemplateBinding Control.BorderThickness}"
-                            KeyboardNavigation.DirectionalNavigation="Contained"
-                            KeyboardNavigation.TabIndex="2"
-                            KeyboardNavigation.TabNavigation="Local">
-                            <ContentPresenter
-                                x:Name="PART_SelectedContentHost"
-                                Margin="{TemplateBinding Control.Padding}"
-                                ContentSource="SelectedContent"
-                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                        </Border>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="TabControl.TabStripPlacement" Value="Bottom">
-                            <Setter TargetName="headerPanel" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="contentPanel" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="RowDefinition0" Property="RowDefinition.Height" Value="*" />
-                            <Setter TargetName="RowDefinition1" Property="RowDefinition.Height" Value="Auto" />
-                        </Trigger>
-                        <Trigger Property="TabControl.TabStripPlacement" Value="Left">
-                            <Setter TargetName="headerPanel" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="contentPanel" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="headerPanel" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="contentPanel" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="ColumnDefinition0" Property="ColumnDefinition.Width" Value="Auto" />
-                            <Setter TargetName="ColumnDefinition1" Property="ColumnDefinition.Width" Value="*" />
-                            <Setter TargetName="RowDefinition0" Property="RowDefinition.Height" Value="*" />
-                            <Setter TargetName="RowDefinition1" Property="RowDefinition.Height" Value="0" />
-                        </Trigger>
-                        <Trigger Property="TabControl.TabStripPlacement" Value="Right">
-                            <Setter TargetName="headerPanel" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="contentPanel" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="headerPanel" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="contentPanel" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="ColumnDefinition0" Property="ColumnDefinition.Width" Value="*" />
-                            <Setter TargetName="ColumnDefinition1" Property="ColumnDefinition.Width" Value="Auto" />
-                            <Setter TargetName="RowDefinition0" Property="RowDefinition.Height" Value="*" />
-                            <Setter TargetName="RowDefinition1" Property="RowDefinition.Height" Value="0" />
-                        </Trigger>
-                        <Trigger Property="UIElement.IsEnabled" Value="false">
-                            <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{DynamicResource Disabled.ForegroundBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>-->
 
 </ResourceDictionary>

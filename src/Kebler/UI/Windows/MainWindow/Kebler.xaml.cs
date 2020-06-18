@@ -223,13 +223,13 @@ namespace Kebler.UI.Windows
             InitConnection();
         }
 
-        private void TorrentsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void TorrentsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!IsLoaded)
                 return;
 
             SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToArray();
-            Update(SelectedTorrents.Select(x => x.Id).ToArray());
+            await Update(SelectedTorrents.Select(x => x.Id).ToArray());
 
         }
 
@@ -239,83 +239,32 @@ namespace Kebler.UI.Windows
         {
 
 
-            //if (id.Length > 1)
-            //{
-            //    MoreInfo.IsMore = true;
-            //    MoreInfo.Clear();
-            //    MoreInfo.SelectedCount = id.Length;
-            //    return;
-            //}
+            if (id.Length > 1)
+            {
+                MoreInfo.IsMore = true;
+                MoreInfo.Clear();
+                MoreInfo.SelectedCount = id.Length;
+                return;
+            }
 
+            MoreInfo.IsMore = false;
+            MoreInfo.Loading = true;
 
-            //MoreInfo.IsMore = false;
-            //MoreInfo.Loading = true;
             var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, id);
-            MoreInfo.Selected = answ.Torrents.FirstOrDefault();
-            //MoreInfo.Files = 
-            //MoreInfo.Loading = false;
-            var items = LoadTree(MoreInfo.Selected);
-            MoreInfoControl.Update(items);
+
+            var torrent = answ.Torrents.FirstOrDefault();
+            MoreInfo.FilesTree.UpdateFilesTree(ref torrent);
+            MoreInfo.PercentDone = torrent.PercentDone;
+            answ = null;
+            torrent = null;
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            MoreInfo.Loading = false;
         }
 
-
-
-        private MultiselectionTreeViewItem LoadTree(TorrentInfo tr)
-        {
-            return CreateTree(tr);
-        }
-
-
-        private static MultiselectionTreeViewItem CreateTree(TorrentInfo torrent)
-        {
-
-            var root = new MultiselectionTreeViewItem { Title = torrent.Name };
-            foreach (var itm in torrent.Files)
-            {
-                itm.Name = itm.Name.Replace(torrent.Name, string.Empty).TrimStart('/', '\\');
-            }
-
-            var count = 0;
-            foreach (var file in torrent.Files)
-            {
-                CreateNodes(ref root, Path.Combine(file.Name), count);
-                count++;
-            }
-
-            return root;
-        }
-
-
-        private static void CreateNodes(ref MultiselectionTreeViewItem root, string file, int index)
-        {
-            file = file.Replace('/', '\\');
-            var dirs = file.Split('\\');
-
-            var last = root;
-            foreach (var s in dirs)
-            {
-                if (string.IsNullOrEmpty(s))
-                    continue;
-
-                if (last.Children.All(x => x.Title != s))
-                {
-                    //if not found children
-                    var pth = new MultiselectionTreeViewItem{Title = s, IsExpanded = true };
-                    last.Children.Add(pth);
-                    last = pth;
-                }
-                else
-                {
-                    last = last.Children.First(p => p.Title == s);
-                }
-            }
-            //last.Index = index;
-        }
-
-
-
-
-
+       
 
 
 

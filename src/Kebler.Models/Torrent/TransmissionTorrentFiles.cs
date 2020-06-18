@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.ComponentModel;
+using System.IO;
 
 namespace Kebler.Models.Torrent
 {
@@ -9,16 +11,22 @@ namespace Kebler.Models.Torrent
         public double BytesCompleted { get; set; }
 
         [JsonProperty("length")]
-        public double Length { get; set; }
+        public long Length { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        //~TransmissionTorrentFiles()
-        //{
-        //    Name = null;
-        //    PropertyChanged = null;
-        //}
+        [JsonConstructor]
+        public TransmissionTorrentFiles()
+        {
+
+        }
+
+        public TransmissionTorrentFiles(long pLen, params string[] fullPath)
+        {
+            Length = pLen;
+            Name = System.IO.Path.Combine(fullPath);
+        }
     }
 }
