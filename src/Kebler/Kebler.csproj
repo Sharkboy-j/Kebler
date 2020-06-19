@@ -6,14 +6,22 @@
     <AssemblyName>Kebler</AssemblyName>
     <LangVersion>8.0</LangVersion>
     <PackageIconUrl></PackageIconUrl>
-    <ApplicationIcon>Theme\Icons\Kebler.ico</ApplicationIcon>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <ApplicationIcon>Kebler.ico</ApplicationIcon>
     <StartupObject>Kebler.App</StartupObject>
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
-    <FileVersion>0.3.0.0</FileVersion>
+    <AssemblyVersion>0.7.2.0</AssemblyVersion>
+    <FileVersion>0.7.2.0</FileVersion>
+    <Authors>https://github.com/JeremiSharkboy/</Authors>
+    <Company>Kebler</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <SignAssembly>false</SignAssembly>
+    <Version>0.6.2</Version>
+    <PackageProjectUrl>https://github.com/JeremiSharkboy/Kebler</PackageProjectUrl>
+    <PackageIcon>KeblerVided.png</PackageIcon>
+    <RepositoryUrl>https://github.com/JeremiSharkboy/Kebler</RepositoryUrl>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -27,39 +35,62 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Theme\Icons\Kebler.svg" />
-    <None Remove="Theme\Icons\Kebler_16x16.png" />
-    <None Remove="Theme\Icons\Kebler_32x32.png" />
-    <None Remove="Theme\Icons\Kebler_512x512.png" />
-    <None Remove="Theme\Icons\Kebler_64x64.png" />
-    <None Remove="Theme\Icons\Kebler_dark_512x512.png" />
-    <None Remove="Theme\Icons\Kebler_darl2_512x512.png" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="NotifyIconWpf" Version="1.0.0" />
-    <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" />
-    <PackageReference Include="sharpconfig" Version="3.2.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
+    <PackageReference Include="sharpconfig" Version="3.2.9.1" />
+    <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Theme\Icons\Kebler.ico" />
-    <EmbeddedResource Include="Theme\Icons\Kebler.svg" />
-    <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj" />
-    <Resource Include="Theme\Icons\Kebler_16x16.png" />
-    <Resource Include="Theme\Icons\Kebler_32x32.png" />
-    <Resource Include="Theme\Icons\Kebler_512x512.png" />
-    <Resource Include="Theme\Icons\Kebler_64x64.png" />
-    <Resource Include="Theme\Icons\Kebler_dark_512x512.png" />
-    <Resource Include="Theme\Icons\Kebler_darl2_512x512.png" />
+    <ProjectReference Include="..\AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdaterDotNET.csproj" />
+    <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
+    <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
+    <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Dialogs.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Dialogs.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\HeaderMenu.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HeaderMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Windows.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Windows.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Dialogs.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dialogs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\HeaderMenu.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HeaderMenu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Windows.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Windows.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Update="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PublishReadyToRunExclude Include="Transmission.API.RPC.dll" />
   </ItemGroup>
 </Project>

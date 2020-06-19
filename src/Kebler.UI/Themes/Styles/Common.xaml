@@ -1,0 +1,83 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+    <Style TargetType="{x:Type Separator}">
+        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+    </Style>
+
+    <!--  checkbox  -->
+    <Style x:Key="OptionMarkFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle
+                        Margin="14,0,0,0"
+                        SnapsToDevicePixels="true"
+                        Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                        StrokeDashArray="1 2"
+                        StrokeThickness="1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Geometry x:Key="OptionMarkGeomentry">
+        F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z
+    </Geometry>
+
+    <Style TargetType="{x:Type Label}">
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Fixed" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+    </Style>
+
+
+
+    <Style TargetType="{x:Type GridSplitter}">
+        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+    </Style>
+    <Style x:Key="HorizontalGridSplitter" TargetType="{x:Type GridSplitter}">
+        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch" />
+        <Setter Property="Control.IsTabStop" Value="false" />
+        <Setter Property="FrameworkElement.Margin" Value="0,-3,0,-3" />
+        <Setter Property="FrameworkElement.Height" Value="7" />
+        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                    <Grid Background="Transparent">
+                        <Border
+                            Height="1"
+                            Background="{TemplateBinding Control.Background}"
+                            BorderBrush="{TemplateBinding Control.BorderBrush}"
+                            BorderThickness="{TemplateBinding Control.BorderThickness}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="VerticalGridSplitter" TargetType="{x:Type GridSplitter}">
+        <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch" />
+        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Control.IsTabStop" Value="false" />
+        <Setter Property="FrameworkElement.Margin" Value="-3,0,-3,0" />
+        <Setter Property="FrameworkElement.Width" Value="7" />
+        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                    <Grid Background="Transparent">
+                        <Border
+                            Width="1"
+                            Background="{TemplateBinding Control.Background}"
+                            BorderBrush="{TemplateBinding Control.BorderBrush}"
+                            BorderThickness="{TemplateBinding Control.BorderThickness}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

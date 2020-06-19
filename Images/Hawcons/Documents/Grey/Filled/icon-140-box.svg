@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 140 box</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-140-box" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M3,12 L8,4 L23,4 L28,12 L28,13 L28,28 L3,28 L3,12 L3,12 Z M26.7750244,12 L22.4000244,5 L8.59997559,5 L4.22497559,12 L26.7750244,12 L26.7750244,12 Z M12.9973917,18 C11.8942627,18 11,18.8877296 11,20 C11,21.1045695 11.8958578,22 12.9973917,22 L18.0026083,22 C19.1057373,22 20,21.1122704 20,20 C20,18.8954305 19.1041422,18 18.0026083,18 L12.9973917,18 L12.9973917,18 Z" id="box" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

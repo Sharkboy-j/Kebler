@@ -1,0 +1,56 @@
+﻿<UserControl
+    x:Class="Kebler.UI.TopBarControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:local="clr-namespace:Kebler.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="HeaderMenu"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Menu
+        Name="TopBarMenu"
+        Background="Transparent"
+        IsMainMenu="True">
+        <MenuItem Header="{lex:LocText MI_Kebler}">
+            <MenuItem
+                Click="OpenConnectionManager"
+                Header="{lex:LocText MI_CM}"
+                InputGestureText="Ctrl+Shift+C" />
+            <MenuItem Name="ServersMenu" Header="{lex:LocText MI_Servers}" />
+        </MenuItem>
+        <MenuItem Header="{lex:LocText MI_Torrent}">
+            <MenuItem
+                Click="AddTorrent"
+                Header="{lex:LocText MI_AddTorrent}"
+                InputGestureText="Ctrl+N"
+                IsEnabled="{Binding IsConnected}" />
+        </MenuItem>
+        <MenuItem Name="LangMenu" Header="{lex:LocText MI_lang}" />
+        <MenuItem
+            Header="{lex:LocText Mi_Info}"
+            IsEnabled="True"
+            Style="{DynamicResource TopBarMenuButton}">
+            <MenuItem
+                Click="Report"
+                Header="{lex:LocText MI_Report}"
+                IsCheckable="False" />
+            <Separator />
+            <MenuItem
+                Click="About"
+                Header="{lex:LocText MI_About}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Check"
+                Header="{lex:LocText MI_Check}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Contact"
+                Header="{lex:LocText MI_Contact}"
+                IsCheckable="False" />
+        </MenuItem>
+    </Menu>
+</UserControl>

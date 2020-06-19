@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 30 book</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-30-book" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M8.99420208,29 C7.34331197,29 6,27.6570978 6,26.0005439 L6,6.5 C6,5.10966206 7.115964,4 8.49257535,4 L26,4 L26,5 L25.4953156,5 C24.6771088,5 24,5.67157288 24,6.5 C24,7.33420277 24.6694756,8 25.4953156,8 L26,8 L26,29 L11,29 L11,8 L23.5,8 C23.5,8 23,7.21048453 23,6.47355449 C23,5.73662445 23.5,5 23.5,5 L8.49336625,5 C7.66860284,5 7,5.66579723 7,6.5 C7,7.32842712 7.66725546,8 8.49336625,8 L10,8 L10,29 L8.99420208,29 Z" id="book" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

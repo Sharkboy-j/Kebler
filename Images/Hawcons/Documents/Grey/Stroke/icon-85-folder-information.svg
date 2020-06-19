@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 85 folder information</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-85-folder-information" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M21.5997073,25 L1.99296544,25 C1.44610862,25 1,24.5559546 1,24.0081969 L1,13 L28,13 L28,17.2070325 C27.5231682,17.0721672 27.0200119,17 26.5,17 C23.4624337,17 21,19.4624337 21,22.5 C21,23.4002236 21.2162787,24.2499326 21.5997098,25.0000006 L21.5997073,25 L21.5997073,25 Z M22.257162,26 L1.99328744,26 C0.899712682,26 0,25.1085295 0,24.008845 L0,5.991155 C0,4.88967395 0.896666251,4 2.00276013,4 L13,4 L15,8 L26.9941413,8 C28.1029399,8 29,8.8932319 29,9.99508929 L29,17.5997095 C30.780838,18.510065 32,20.3626571 32,22.5 C32,25.5375663 29.5375663,28 26.5,28 C24.7920629,28 23.2659536,27.2215034 22.257162,26 L22.257162,26 L22.257162,26 Z M1,12 L1,5.99180311 C1,5.45530558 1.44401481,5 1.99173483,5 L12.4000244,5 L14.3599854,9 L26.9970172,9 C27.5461723,9 28,9.4481055 28,10.0008717 L28,12 L1,12 L1,12 L1,12 Z M26.5,27 C28.9852815,27 31,24.9852815 31,22.5 C31,20.0147185 28.9852815,18 26.5,18 C24.0147185,18 22,20.0147185 22,22.5 C22,24.9852815 24.0147185,27 26.5,27 L26.5,27 Z M26,20 L26,21 L27,21 L27,20 L26,20 L26,20 Z M25,22 L25,23 L26,23 L26,24 L25,24 L25,25 L27,25 L28,25 L28,24 L27,24 L27,22 L25,22 L25,22 Z" id="folder-information" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

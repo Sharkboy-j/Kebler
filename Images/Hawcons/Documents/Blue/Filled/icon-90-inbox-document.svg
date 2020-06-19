@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 90 inbox document</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-90-inbox-document" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M19,20 L23,20 L23,13 L18.9979131,13 C17.8944962,13 17,12.1134452 17,10.9940809 L17,6 L6.9955775,6 C6.44573523,6 6,6.43891776 6,7.00307055 L6,20 L6,20 L10,20 L10,22.0020869 C10,23.1055038 10.8958578,24 11.9973917,24 L17.0026083,24 C18.1057373,24 19,23.1017394 19,22.0020869 L19,20 L19,20 Z M27,21.5 L27,20 L24,15.2 L24,12 L24,12 L18,5 L7.00276013,5 C5.89666625,5 5,5.89702623 5,7.00494659 L5,15.2 L5,15.2 L2,20 L2,29 L27,29 L27,21.5 L27,21.5 Z M5,20 L5,17.1599609 L3.22497559,20 L5,20 L5,20 L5,20 Z M25.7750244,20 L24,17.1599609 L24,20 L25.7750244,20 L25.7750244,20 L25.7750244,20 Z M18,6.5 L18,10.9912152 C18,11.5483517 18.4506511,12 18.9967388,12 L22.6999512,12 L18,6.5 L18,6.5 Z" id="inbox-document" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

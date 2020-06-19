@@ -1,5 +1,4 @@
-[![Build Status](https://dev.azure.com/SharkboyJeremi/KEBLER/_apis/build/status/JeremiSharkboy.Kebler)](https://dev.azure.com/SharkboyJeremi/KEBLER/_build?latest)
-![.NET Core](https://github.com/JeremiSharkboy/Kebler/workflows/.NET%20Core/badge.svg?branch=master)
+![WPF .NET Core](https://github.com/JeremiSharkboy/Kebler/workflows/WPF%20.NET%20Core/badge.svg?branch=master)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/JeremiSharkboy/Kebler/blob/master/LICENSE)
 # Kebler - Transmission Remote GUI (Windows only)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)

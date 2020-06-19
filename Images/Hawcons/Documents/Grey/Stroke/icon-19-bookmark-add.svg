@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 19 bookmark add</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-19-bookmark-add" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M19,13 L19,10 L20,10 L20,13 L23,13 L23,14 L20,14 L20,17 L19,17 L19,14 L16,14 L16,13 L19,13 L19,13 Z M20,18.9775785 L20,28 L14,22 L8,28 L8,6.99109042 C8,5.34177063 9.34187067,4 10.997152,4 L17.002848,4 C18.6583772,4 20,5.33915679 20,6.99109042 L20,8.0224215 C22.8032501,8.27503587 25,10.6309786 25,13.5 C25,16.3690214 22.8032501,18.7249641 20,18.9775785 L20,18.9775785 L20,18.9775785 Z M19,18.9775785 L19,25.5999756 L14,20.5999756 L9,25.5999756 L9,6.99392978 C9,5.89840125 9.89525812,5 10.999615,5 L17.000385,5 C18.1125667,5 19,5.89271277 19,6.99392978 L19,8.0224215 C16.1967499,8.27503587 14,10.6309786 14,13.5 C14,16.3690214 16.1967499,18.7249641 19,18.9775785 L19,18.9775785 L19,18.9775785 Z M19.5,18 C21.9852815,18 24,15.9852815 24,13.5 C24,11.0147185 21.9852815,9 19.5,9 C17.0147185,9 15,11.0147185 15,13.5 C15,15.9852815 17.0147185,18 19.5,18 L19.5,18 L19.5,18 Z" id="bookmark-add" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

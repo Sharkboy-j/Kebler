@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 10 cloud lightning</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-10-cloud-lightning" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M17.0666911,18 L19.5999756,18 L13.5,24.1000061 L14.9786564,20 L12.4000244,20 L14.6999512,14 L18.5999756,14 L17.0666911,18 L17.0666911,18 Z M18,21 L25.0005601,21 C27.7616745,21 30,18.7558048 30,16 C30,13.9483386 28.7676457,12.1852931 26.9993494,11.4145295 L26.9993494,11.4145295 C26.9536744,8.41637629 24.5090248,6 21.5,6 C20.441357,6 19.4525719,6.29909701 18.6135384,6.81739735 C17.3372745,5.10728055 15.2979469,4 13,4 C9.13400656,4 6,7.13400656 6,11 C6,11.1381509 6.00400207,11.275367 6.01189661,11.4115388 L6.01189661,11.4115388 C4.23965876,12.1816085 3,13.9491311 3,16 C3,18.7614237 5.23249418,21 7.99943992,21 L13.5454545,21 L11,28 L18,21 L18,21 L18,21 Z" id="cloud-lightning" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

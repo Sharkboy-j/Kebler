@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
+using AutoUpdaterDotNET;
 using Kebler.Models;
 using Kebler.Services;
 using Kebler.UI.Windows;
 using log4net;
 using log4net.Config;
-using SharpConfig;
 
 namespace Kebler
 {
@@ -24,55 +22,33 @@ namespace Kebler
     /// </summary>
     public partial class App
     {
-        public static event EventHandler LanguageChanged;
-
-        //private static Models.GlobalConfiguration Configuration;
-        private static readonly List<CultureInfo> Languages = new List<CultureInfo>();
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        private static Configuration Conf;
-        public static UI.Windows.KeblerWindow KeblerControl;
+        public KeblerWindow KeblerControl;
+        public static App Instance;
 
-        Mutex myMutex;
+        public delegate void ConnectionToServerInitialisedHandler(Server srv);
+        public static event ConnectionToServerInitialisedHandler ConnectionChanged;
+        public delegate void ServerListChangedHandler();
+        public static event ServerListChangedHandler ServerListChanged;
 
-        private static CultureInfo Language
+
+
+        public delegate void Langhandler();
+        public event Langhandler LangChanged;
+
+        public static void ChangeConnectedServer(Server srv)
         {
-            get => System.Threading.Thread.CurrentThread.CurrentUICulture;
-            set
-            {
-                if (value == null) return;
-                if (Equals(value, System.Threading.Thread.CurrentThread.CurrentUICulture)) return;
+            ConnectionChanged?.Invoke(srv);
+        }
 
-                //1. Меняем язык приложения:
-                System.Threading.Thread.CurrentThread.CurrentUICulture = value;
+        public static void InvokeServerListChanged()
+        {
+            ServerListChanged?.Invoke();
+        }
 
-                //2. Создаём ResourceDictionary для новой культуры
-                var dict = new ResourceDictionary();
-                switch (value.Name)
-                {
-                    case "ru-RU":
-                        dict.Source = new Uri($"Resources/lang.{value.Name}.xaml", UriKind.Relative);
-                        break;
-                    default:
-                        dict.Source = new Uri("Resources/lang.en-US.xaml", UriKind.Relative);
-                        break;
-                }
-
-                //3. Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
-                var oldDict = (from d in Current.Resources.MergedDictionaries where d.Source != null && d.Source.OriginalString.StartsWith("Resources/lang.") select d).FirstOrDefault();
-                if (oldDict != null)
-                {
-                    var ind = Current.Resources.MergedDictionaries.IndexOf(oldDict);
-                    Current.Resources.MergedDictionaries.Remove(oldDict);
-                    Current.Resources.MergedDictionaries.Insert(ind, dict);
-                }
-                else
-                {
-                    Current.Resources.MergedDictionaries.Add(dict);
-                }
-
-                //4. Вызываем евент для оповещения всех окон.
-                LanguageChanged?.Invoke(Current, new EventArgs());
-            }
+        public void LangChangedNotify()
+        {
+            LangChanged?.Invoke();
         }
 
         public object FindRes(string name)
@@ -80,28 +56,32 @@ namespace Kebler
             return FindResource(name);
         }
 
+        public void Check(bool report = false)
+        {
+            Log.Info("AutoUpdater.Start");
+            AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
+
+            AutoUpdater.ReportErrors = report;
+            AutoUpdater.DownloadPath = Path.GetTempPath();
+            AutoUpdater.ShowSkipButton = true;
+            AutoUpdater.ShowRemindLaterButton = true;
+            AutoUpdater.RunUpdateAsAdmin = true;
+
+            Dispatcher.Invoke(() =>
+            {
+                AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
+            });
+        }
+
         App()
         {
-
+            Instance = this;
+            Check();
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
-            
-            //int hwnd = Win32.FindWindow(null, "Kebler");
-            //if (hwnd != 0)
-            //{
 
-            //    var data = "";
-            //    foreach (var text in Environment.GetCommandLineArgs())
-            //    {
-            //        data += $"{text} ";
-            //    }
 
-            //    SendArgs((IntPtr)hwnd, data);
-            //    //App.Current.Shutdown();
-            //}
-
-           // FileAssociations.Create_abc_FileAssociation();
 
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
@@ -110,41 +90,52 @@ namespace Kebler
             //log4net.Config.XmlConfigurator.Configure(null);
 
 
-            LanguageChanged += App_LanguageChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Dispatcher_UnhandledException;
-            if (Current.Dispatcher != null) 
+            if (Current.Dispatcher != null)
                 Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
             ConfigService.LoadConfig();
 
-            Languages.Clear();
-
-            foreach (var lang in Data.LangList)
+            if (string.IsNullOrEmpty(ConfigService.Instanse.Language.Name))
             {
-                Languages.Add(new CultureInfo(lang));
+                LocalizationManager.CurrentCulture = LocalizationManager.CultureList[0];
             }
+            else
+            {
+                LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
+            }
+            SetEnv();
 
         }
 
-        public static bool SendArgs(IntPtr targetHWnd, string args)
+        private void SetEnv()
         {
-            var cds = new Win32.CopyDataStruct();
-            try
+
             {
-                cds.cbData = (args.Length + 1) * 2;
-                cds.lpData = Win32.LocalAlloc(0x40, cds.cbData);
-                Marshal.Copy(args.ToCharArray(), 0, cds.lpData, args.Length);
-                cds.dwData = (IntPtr)1;
-                Win32.SendMessage(targetHWnd, Win32.WM_COPYDATA, IntPtr.Zero, ref cds);
-            }
-            finally
-            {
-                cds.Dispose();
+#if DEBUG
+                var glb = Environment.GetEnvironmentVariable(nameof(Kebler)+ "_DEBUG", EnvironmentVariableTarget.User);
+                if (glb == null)
+                    Environment.SetEnvironmentVariable(nameof(Kebler)+"_DEBUG", System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+#else
+                var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+                if (glb == null)
+                    Environment.SetEnvironmentVariable(nameof(Kebler), System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+
+#endif
             }
 
-            return true;
         }
+        private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fileVersionInfo.FileVersion;
+
+            Log.Info($"Installed {version} | Current {args.CurrentVersion}");
+        }
+
+
 
         #region Events
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -154,7 +145,7 @@ namespace Kebler
 
         }
 
-        private static void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private static void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Log.Error(e.Exception);
             e.Handled = true;
@@ -163,38 +154,13 @@ namespace Kebler
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
 
-            KeblerControl = new UI.Windows.KeblerWindow();
-            KeblerControl.Show();
-
+            var control  = new KeblerWindow();
+            control.Show();
             base.OnStartup(e);
-        }
-
-        private static void App_LanguageChanged(object sender, EventArgs e)
-        {
-            Log.Info($"Set language: {Language.Name}");
-            //Conf[nameof(Models.GlobalConfiguration)][nameof(Models.GlobalConfiguration.Language)].StringValue = Language.Name;
-            //Conf.SaveToFile(Data.ConfigName);
         }
 
         #endregion
 
-
-        #region Actions
-
-
-
-        #endregion
-
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            Language = ConfigService.ConfigurationData.Language == null ? new CultureInfo(Data.LangList[0]) : new CultureInfo(ConfigService.ConfigurationData.Language);
-
-            KeblerControl = new UI.Windows.KeblerWindow();
-            KeblerControl.Show();
-
-            base.OnStartup(e);
-        }
     }
 }

@@ -1,49 +1,112 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using Transmission.API.RPC.Entity;
 
 namespace Kebler.Services.Converters
 {
-    public class IntToColorConverter : IValueConverter
+    //0: 'stopped',
+    //1: 'check pending',
+    //2: 'checking',
+    //3: 'download pending',
+    //4: 'downloading',
+    //5: 'seed pending',
+    //6: 'seeding',
+
+    public class IntToColorStrokeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is TorrentInfo torrInf))
+            if (!(value is double torrInf))
                 return null;
 
-            //if (!(value is int num)) return new SolidColorBrush(Color.FromRgb(15, 25, 120));
+            //TorHelp.ValidateTorrent(ref torrInf);
 
-            //0: 'stopped',
-            //1: 'check pending',
-            //2: 'checking',
-            //3: 'download pending',
-            //4: 'downloading',
-            //5: 'seed pending',
-            //6: 'seeding',
-            switch (torrInf.Status)
+            switch (torrInf)
             {
+                case -1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorStrokeBrush");
+                case 1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingStrokeBrush");
+                case 2:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingStrokeBrush");
                 case 0:
-                    {
-                        if (string.IsNullOrEmpty(torrInf.ErrorString))
-                            return new SolidColorBrush(Color.FromRgb(225, 138, 208));      //0: 'stopped',
-                        else
-                            return new SolidColorBrush(Color.FromRgb(187, 22, 0));      //0: 'stopped with error',
-                    }
-
-                case 1://check pending
-                case 3://download pending
-                case 5://seed pending
-                    return new SolidColorBrush(Color.FromRgb(255, 255, 0));
-                case 2://checking
-                    return new SolidColorBrush(Color.FromRgb(248, 167, 59));
-                case 4://downloading
-                    return new SolidColorBrush(Color.FromRgb(0, 122, 204));
-                case 6://seeding
-                    return new SolidColorBrush(Color.FromRgb(18, 122, 30));
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedStrokeBrush");
+                case 4:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.DownloadingStrokeBrush");
+                case 6:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.UploadingStrokeBrush");
                 default:
-                    return new SolidColorBrush(Color.FromRgb(0, 0, 50));
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"));
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IntToColorFillConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is double torrInf))
+                return null;
+
+            //TorHelp.ValidateTorrent(ref torrInf);
+
+
+            switch (torrInf)
+            {
+                case -1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorFillBrush");
+                case 1:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingFillBrush");
+                case 2:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingFillBrush");
+                case 0:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedFillBrush");
+                case 4:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.DownloadingFillBrush");
+                case 6:
+                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.UploadingFillBrush");
+                default:
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"));
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IntToIconConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is double torrInf))
+                return null;
+
+            //TorHelp.ValidateTorrent(ref torrInf);
+
+            switch (torrInf)
+            {
+                case -1:
+                    return Application.Current.FindResource("Icon.Error");
+                case 1:
+                case 2:
+                    return Application.Current.FindResource("Icon.Check");
+                case 0:
+                    return Application.Current.FindResource("Icon.Stopped");
+                case 4:
+                    return Application.Current.FindResource("Icon.Download");
+                case 6:
+                    return Application.Current.FindResource("Icon.Upload");
+                default:
+                    return Application.Current.FindResource("Icon.WTF");
             }
         }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 104 folder checked</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-104-folder-checked" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M21.0218178,26 L1.99328744,26 C0.899712682,26 0,25.1085295 0,24.008845 L0,13 L0,13 L29,13 L29,16.4981633 C28.2304079,16.1772281 27.3859009,16 26.5,16 C22.9101489,16 20,18.9101489 20,22.5 C20,23.7886423 20.3749964,24.9896995 21.0218178,26 L21.0218178,26 L21.0218178,26 Z M3.33066907e-16,12 L3.33066907e-16,5.991155 C3.33066907e-16,4.88967395 0.896666251,4 2.00276013,4 L13,4 L15,8 L26.9941413,8 C28.1029399,8 29,8.8932319 29,9.99508929 L29,12 L0,12 L3.33066907e-16,12 L3.33066907e-16,12 Z M26.5,28 C29.5375663,28 32,25.5375663 32,22.5 C32,19.4624337 29.5375663,17 26.5,17 C23.4624337,17 21,19.4624337 21,22.5 C21,25.5375663 23.4624337,28 26.5,28 L26.5,28 Z M26,25.2426407 L23.6464466,22.8890873 L24.3786797,22.1568542 L26,23.7781746 L29.1213203,20.6568542 L29.8535534,21.3890873 L26,25.2426407 L26,25.2426407 Z" id="folder-checked" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

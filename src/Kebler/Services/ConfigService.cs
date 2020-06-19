@@ -1,51 +1,57 @@
-﻿using Kebler.Models;
-using LiteDB;
-using SharpConfig;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.IO;
+using Kebler.Models;
 using log4net;
+using SharpConfig;
 
 namespace Kebler.Services
 {
-    public class ConfigService
+    public static class ConfigService
     {
-        private const string CONFIG_NAME = "settings.config";
+        private const string CONFIG_FILE_NAME = "settings.config";
         private static readonly ILog Log = LogManager.GetLogger(typeof(ConfigService));
         private static Configuration ConfigurationObj;
 
-        public static DefaultSettings ConfigurationData;
+        public static DefaultSettings Instanse;
+        private static string CONFIG_NAME = Path.Combine(Data.GetDataPath().FullName, CONFIG_FILE_NAME);
 
+        private static object _sync = new object();
 
         public static void Save()
         {
-            ConfigurationObj.Clear();
-            ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), ConfigurationData));
+            lock(_sync)
+            {
+                ConfigurationObj.Clear();
+                ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));
 
-            ConfigurationObj.SaveToFile(CONFIG_NAME);
+                ConfigurationObj.SaveToFile(CONFIG_NAME);
+            }
         }
 
         public static void LoadConfig()
         {
-            if (IsExist())
+            lock (_sync)
             {
-                LoadConfigurationFromFile();
+                if (IsExist())
+                {
+                    LoadConfigurationFromFile();
+                }
+                else
+                {
+                    CreateNewConfig();
+                }
             }
-            else
-            {
-                CreateNewConfig();
-            }
-
             Log.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
+
         }
 
         private static void CreateNewConfig()
         {
             ConfigurationObj = new Configuration();
 
-            ConfigurationData = new DefaultSettings();
+            Instanse = new DefaultSettings();
 
-            ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), ConfigurationData));
+            ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));
 
             ConfigurationObj.SaveToFile(CONFIG_NAME);
 
@@ -60,7 +66,7 @@ namespace Kebler.Services
                 Log.Info("Configuration exists");
                 return true;
             }
-            catch (System.IO.FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 Log.Info("Configuration file not found");
                 return false;
@@ -74,7 +80,7 @@ namespace Kebler.Services
             try
             {
                 ConfigurationObj = Configuration.LoadFromFile(CONFIG_NAME);
-                ConfigurationData = ConfigurationObj[nameof(DefaultSettings)].ToObject<DefaultSettings>();
+                Instanse = ConfigurationObj[nameof(DefaultSettings)].ToObject<DefaultSettings>();
             }
             catch (Exception e)
             {
@@ -95,8 +101,6 @@ namespace Kebler.Services
 
                 foreach (var setting in section)
                 {
-                    text += "  " + Environment.NewLine;
-
                     if (setting.IsArray)
                         text += $"[Array, {setting.ArraySize} elements] ";
 

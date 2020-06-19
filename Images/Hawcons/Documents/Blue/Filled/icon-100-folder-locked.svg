@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 100 folder locked</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-100-folder-locked" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M0,15 L0,8.991155 C0,7.88967395 0.896666251,7 2.00276013,7 L13,7 L15,11 L26.9941413,11 C28.1029399,11 29,11.8940823 29,12.9969887 L29,15 L-5.55111512e-16,15 L0,15 L0,15 Z M-5.55111512e-16,16 L-5.55111512e-16,27.008845 C-5.55111512e-16,28.1085295 0.889673948,29 1.991155,29 L22,29 L22,24.9973917 C22,24.2590646 22.4022076,23.6131403 23,23.2674529 L23,21.5058597 C23,19.0175695 25.0147186,17 27.5,17 C28.0256277,17 28.5305751,17.0906054 29,17.2570992 L29,16 L-5.55111512e-16,16 L-5.55111512e-16,16 Z M24,21.5054058 C24,19.5676804 25.5670034,18 27.5,18 C29.4290634,18 31,19.5694236 31,21.5054058 L31,24 C31.5536886,24 32,24.4490268 32,25.0029293 L32,29.9970707 C32,30.5621186 31.553384,31 31.0024554,31 L23.9975446,31 C23.4463114,31 23,30.5509732 23,29.9970707 L23,25.0029293 C23,24.4378814 23.446616,24 23.9975446,24 L24,21.5054058 L24,21.5054058 Z M25,21.5093004 C25,20.1123657 26.1192881,19 27.5,19 C28.8903379,19 30,20.123452 30,21.5093004 L30,24 L25,24 L25,21.5093004 L25,21.5093004 Z" id="folder-locked" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

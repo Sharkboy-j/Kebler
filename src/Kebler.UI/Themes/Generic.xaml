@@ -1,0 +1,19 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Kebler.UI">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Brushes/Brushes.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Common.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Buttons.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Menu.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Input.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Tab.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/List.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/DataGrid.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Scroll.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Check.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/MultiTree.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Styles/Window.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

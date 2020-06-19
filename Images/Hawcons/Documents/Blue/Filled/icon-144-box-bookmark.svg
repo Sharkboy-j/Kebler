@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 144 box bookmark</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-144-box-bookmark" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M28,13 L28,28 L5,28 L5,13 L18,13 L18,22 L21,19 L24,22 L24,13 L28,13 L28,13 Z M30,12 L30,5 L3,5 L3,12 L30,12 L30,12 L30,12 Z M19,13 L19,19.5999756 L21,17.5999756 L23,19.5999756 L23,13 L19,13 L19,13 Z" id="box-bookmark" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

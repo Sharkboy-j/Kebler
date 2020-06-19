@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 50 half moon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-50-half-moon" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M16,22 C12.6862913,22 10,19.3137087 10,16 C10,12.6862913 12.6862913,10 16,10 C19.3137087,10 22,12.6862913 22,16 C22,19.3137087 19.3137087,22 16,22 L16,22 Z M16,21 L16,16 L16,11 C18.7614237,11 21,13.2385763 21,16 C21,18.7614237 18.7614237,21 16,21 L16,21 Z" id="half-moon" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
