@@ -142,7 +142,7 @@ namespace Kebler.UI.Windows
                 try
                 {
                     var info = await UpdateSessionInfo();
-
+                    info.ParseTransmissionReponse(Log);
 
                     if (CheckResponse(info))
                     {
@@ -211,7 +211,7 @@ namespace Kebler.UI.Windows
             _whileCycleTask.Start();
         }
 
-        private bool CheckResponse(TransmissionResponse resp)
+        private bool CheckResponse(ITransmissionReponse resp)
         {
 
             if (resp.WebException != null)

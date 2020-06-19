@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -182,6 +183,7 @@ namespace Kebler.UI.Windows
                     {
                         if (Dispatcher.HasShutdownStarted) return;
                         var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value, true, _cancelTokenSource.Token);
+                        resp.ParseTransmissionReponse(Log);
 
                         if (CheckResponse(resp))
                             break;
@@ -305,7 +307,9 @@ namespace Kebler.UI.Windows
             if (unwanted.Length > 0)
                 Log.Info("unwanted " + string.Join(", ", unwanted));
 
-            await _transmissionClient.TorrentSetAsync(settings);
+            var resp =  await _transmissionClient.TorrentSetAsync(settings);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
 
@@ -314,21 +318,18 @@ namespace Kebler.UI.Windows
         private async void PauseTorrent_Click(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
-            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
 
-            await _transmissionClient.TorrentStopAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         private async void StartAll_Button_CLick(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
 
-            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-            Log.Info("Try start all torrents");
-
-            await _transmissionClient.TorrentStartAsync(selectedIDs);
-
-            Log.Info("Started all");
+            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
         }
 
         private void AddTorrentButtonClick(object sender, RoutedEventArgs e)
@@ -340,19 +341,18 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-            Log.Info("Try pause all torrents");
+            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
 
-            await _transmissionClient.TorrentStopAsync(selectedIDs);
-
-            Log.Info("Paused all");
         }
 
         private async void StartTorrent_Click(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            await _transmissionClient.TorrentStartAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         private void RemoveTorrent_Click(object sender, RoutedEventArgs e)
@@ -370,7 +370,9 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var tr = await _transmissionClient.TorrentVerifyAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         private async void Reannounce_Click(object sender, RoutedEventArgs e)
@@ -379,6 +381,8 @@ namespace Kebler.UI.Windows
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
 
@@ -388,6 +392,8 @@ namespace Kebler.UI.Windows
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         private async void MoveUp_Click(object sender, RoutedEventArgs e)
@@ -396,6 +402,8 @@ namespace Kebler.UI.Windows
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         private async void MoveDown_Click(object sender, RoutedEventArgs e)
@@ -404,14 +412,19 @@ namespace Kebler.UI.Windows
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private async void MoveBot_CLick(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
-
+         
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs);
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         public void RemoveTorrent(bool removeData = false)
@@ -442,10 +455,12 @@ namespace Kebler.UI.Windows
             }
         }
 
-        private void SlowMode_Click(object sender, RoutedEventArgs e)
+        private async void SlowMode_Click(object sender, RoutedEventArgs e)
         {
             IsSlowModeEnabled = !IsSlowModeEnabled;
-            _transmissionClient.SetSessionSettingsAsync(new SessionSettings { AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled });
+            var resp = await _transmissionClient.SetSessionSettingsAsync(new SessionSettings { AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled });
+            resp.ParseTransmissionReponse(Log);
+
         }
 
         #endregion

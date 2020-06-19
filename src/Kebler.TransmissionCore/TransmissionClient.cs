@@ -3,6 +3,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -80,68 +81,7 @@ namespace Kebler.TransmissionCore
         }
 
 
-        private TransmissionResponse SendRequest(CommunicateBase request)
-        {
-            var result = new TransmissionResponse();
-
-            request.Tag = ++CurrentTag;
-
-            try
-            {
-
-                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
-
-                //Prepare http web request
-                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
-
-                webRequest.ContentType = "application/json-rpc";
-                webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
-                webRequest.Method = "POST";
-
-                if (_needAuthorization)
-                    webRequest.Headers["Authorization"] = _authorization;
-
-                var requestTask = webRequest.GetRequestStreamAsync();
-                requestTask.WaitAndUnwrapException();
-                using (var dataStream = requestTask.Result)
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
-
-                var responseTask = webRequest.GetResponseAsync();
-                responseTask.WaitAndUnwrapException();
-
-                //Send request and prepare response
-                using var webResponse = responseTask.Result;
-                using var responseStream = webResponse.GetResponseStream();
-                var reader = new StreamReader(responseStream ?? throw new InvalidOperationException(nameof(responseStream)), Encoding.UTF8);
-                var responseString = reader.ReadToEnd();
-                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
-
-                if (result.Result != "success")
-                    throw new Exception(result.Result);
-            }
-            catch (WebException ex)
-            {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
-                {
-                    if (ex.Response.Headers.Count > 0)
-                    {
-                        //If session id expiried, try get session id and send request
-                        SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
-
-                        if (SessionId == null)
-                            throw new Exception("Session ID Error");
-
-                        result = SendRequest(request);
-                    }
-                }
-                else
-                    throw ex;
-            }
-
-            return result;
-        }
+     
     }
 
 
@@ -175,7 +115,7 @@ namespace Kebler.TransmissionCore
         /// Set information to current session (API: session-set)
         /// </summary>
         /// <param name="settings">New session settings</param>
-        public Task SetSessionSettingsAsync(SessionSettings settings)
+        public Task<TransmissionResponse> SetSessionSettingsAsync(SessionSettings settings)
         {
             var request = new TransmissionRequest("session-set", settings);
             return SendRequestAsync(request);
@@ -201,16 +141,21 @@ namespace Kebler.TransmissionCore
         {
             var request = new TransmissionRequest("session-get");
             var response = await SendRequestAsync(request);
-            var result = response.Deserialize<SessionInfo>();
 
-            var answ = new TransmissionInfoResponse<SessionInfo>(result)
+            var answ = new TransmissionInfoResponse<SessionInfo>
             {
+                Value = response.Deserialize<SessionInfo>(),
                 HttpWebResponse = response.HttpWebResponse,
                 CustomException = response.CustomException,
-                WebException = response.WebException
+                WebException = response.WebException,
+                Result = response.Result,
+                Method = request.Method,
+                Success = response.Success
             };
+            
             return answ;
         }
+
 
         #endregion
 
@@ -260,7 +205,7 @@ namespace Kebler.TransmissionCore
         /// Set torrent params (API: torrent-set)
         /// </summary>
         /// <param name="settings">Torrent settings</param>
-        public Task TorrentSetAsync(TorrentSettings settings)
+        public Task<TransmissionResponse> TorrentSetAsync(TorrentSettings settings)
         {
             var request = new TransmissionRequest("torrent-set", settings);
             return SendRequestAsync(request);
@@ -392,11 +337,10 @@ namespace Kebler.TransmissionCore
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public async Task<TransmissionResponse> TorrentStopAsync(uint[] ids)
+        public Task<TransmissionResponse> TorrentStopAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
-            return resp;
+            return SendRequestAsync(request);
         }
 
         /// <summary>
@@ -575,7 +519,6 @@ namespace Kebler.TransmissionCore
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request, CancellationToken token)
         {
             var result = new TransmissionResponse();
-
             request.Tag = ++CurrentTag;
 
             try
@@ -634,6 +577,7 @@ namespace Kebler.TransmissionCore
                             if (SessionId == null)
                             {
                                 result.CustomException = new Exception("Session ID Error");
+                                result.Method = request.Method;
                                 return result;
                             }
                             result = SendRequest(request);
@@ -647,6 +591,72 @@ namespace Kebler.TransmissionCore
             {
                 result.CustomException = ex;
                 Log.Error(ex);
+            }
+
+            result.Method = request.Method;
+            return result;
+        }
+
+        private TransmissionResponse SendRequest(CommunicateBase request)
+        {
+            var result = new TransmissionResponse();
+
+            request.Tag = ++CurrentTag;
+
+            try
+            {
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
+
+                //Prepare http web request
+                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
+
+                webRequest.ContentType = "application/json-rpc";
+                webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
+                webRequest.Method = "POST";
+
+                if (_needAuthorization)
+                    webRequest.Headers["Authorization"] = _authorization;
+
+                var requestTask = webRequest.GetRequestStreamAsync();
+                requestTask.WaitAndUnwrapException();
+                using (var dataStream = requestTask.Result)
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+
+                var responseTask = webRequest.GetResponseAsync();
+                responseTask.WaitAndUnwrapException();
+
+                //Send request and prepare response
+                using var webResponse = responseTask.Result;
+                using var responseStream = webResponse.GetResponseStream();
+                var reader = new StreamReader(responseStream ?? throw new InvalidOperationException(nameof(responseStream)), Encoding.UTF8);
+                var responseString = reader.ReadToEnd();
+                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
+
+                if (!result.Success)
+                {
+                    throw new Exception(result.Result);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
+                {
+                    if (ex.Response.Headers.Count > 0)
+                    {
+                        //If session id expiried, try get session id and send request
+                        SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
+
+                        if (SessionId == null)
+                            throw new Exception("Session ID Error");
+
+                        result = SendRequest(request);
+                    }
+                }
+                else
+                    throw ex;
             }
 
             return result;
@@ -692,12 +702,10 @@ namespace Kebler.TransmissionCore
                 var responseString = await reader.ReadToEndAsync();
                 result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
 
-                if (result.Result != "success")
+                if (!result.Success)
                 {
                     throw new Exception(result.Result);
                 }
-
-                result.Success = true;
             }
             catch (WebException ex)
             {
@@ -734,6 +742,7 @@ namespace Kebler.TransmissionCore
                 Log.Error(ex);
             }
 
+            result.Method = request.Method;
             return result;
         }
     }
