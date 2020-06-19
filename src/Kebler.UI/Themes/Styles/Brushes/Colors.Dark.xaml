@@ -1,38 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Kebler.UI.Themes.Styles.Brushes"
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
-    <!--<Color
-        x:Key="WindowBorderBrush"
-        A="0"
-        B="237"
-        G="172"
-        R="59" />-->
-    <Color x:Key="LabelColor">#E8E6E6</Color>
-    <Color x:Key="SecondaryLabelColor">#CAC6C6</Color>
-    <Color x:Key="AccentColor">#3E9FF8</Color>
-    <Color x:Key="AccentSecondaryColor">#007ACC</Color>
-    <Color x:Key="ReferenceColor">#3E9FF8</Color>
-    <Color x:Key="GlyphColor">#777777</Color>
-    <Color x:Key="Disabled.GlyphColor">#C6C6C6</Color>
-    <Color x:Key="ForegroundColor">#E8E6E6</Color>
-    <Color x:Key="ForegroundColor.Light">#FFFFFF</Color>
-    <Color x:Key="ForegroundColor.DimGray">#DADADA</Color>
-    <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
-    <Color x:Key="Disabled.ForegroundColor">#ABABAB</Color>
-    <Color x:Key="BackgroundColor">#333333</Color>
-    <Color x:Key="BackgroundColor.Dark">#252525</Color>
-    <Color x:Key="MouseOver.BackgroundColor">#3C3C3C</Color>
-    <Color x:Key="Pressed.BackgroundColor">#3C3C3C</Color>
-    <Color x:Key="Disabled.BackgroundColor">#3C3C3C</Color>
-    <Color x:Key="BorderColor">#525252</Color>
-    <Color x:Key="MouseOver.BorderColor">#F0F0F0</Color>
-    <Color x:Key="Pressed.BorderColor">#E5E5E5</Color>
-    <Color x:Key="Pressed.BorderColorDark">#F0F0F0</Color>
-    <Color x:Key="Disabled.BorderColor">#FFBCBCBC</Color>
-    <Color x:Key="BusyIndicatorColor">#E8E6E6</Color>
-    <Color x:Key="DropShadowColor">Black</Color>
+
+
 
     <Color x:Key="DataGrid.Header.BorderColor">#464646</Color>
     <Color x:Key="DataGrid.Header.BackgroundColor">Transparent</Color>
@@ -61,6 +32,76 @@
 
 
 
+
+    <!--<Color x:Key="Window.BackgroundColor">#252525</Color>-->
+    <Color x:Key="Window.BorderColor">#3BACED</Color>
+    <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
+    <Color x:Key="Window.ButtonsRegionBackgroundColor">#333333</Color>
+    <Color x:Key="Window.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.TitleBar.BackgroundColor">#333333</Color>
+    <Color x:Key="Window.BackgroundColor">#333333</Color>
+    <Color x:Key="Window.TitleBar.ForegroundColor">White</Color>
+    <Color x:Key="Window.Dialog.BackgroundColor">#2D2D30</Color>
+    <Color x:Key="Window.Dialog.TitleBar.BackgroundColor">#2D2D30</Color>
+    <Color x:Key="Window.Button.Static.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.Button.MouseOver.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.Button.Static.BackgroundColor">Transparent</Color>
+    <Color x:Key="Window.Button.MouseOver.BackgroundColor">#525252</Color>
+    <Color x:Key="Window.Button.Pressed.BackgroundColor">#3E3E40</Color>
+    <Color x:Key="Window.CloseButton.ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="Window.CloseButton.Static.BackgroundColor">Transparent</Color>
+    <Color x:Key="Window.CloseButton.MouseOver.BackgroundColor">#FFE81123</Color>
+    <Color x:Key="Window.CloseButton.Pressed.BackgroundColor">#F1707A</Color>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <Color x:Key="LabelColor">#E8E6E6</Color>
+    <Color x:Key="SecondaryLabelColor">#CAC6C6</Color>
+    <Color x:Key="AccentColor">#3E9FF8</Color>
+    <Color x:Key="AccentSecondaryColor">#007ACC</Color>
+    <Color x:Key="ReferenceColor">#3E9FF8</Color>
+    <Color x:Key="GlyphColor">#777777</Color>
+    <Color x:Key="Disabled.GlyphColor">#C6C6C6</Color>
+    <Color x:Key="ForegroundColor">#E8E6E6</Color>
+    <Color x:Key="ForegroundColor.Light">#FFFFFF</Color>
+    <Color x:Key="ForegroundColor.DimGray">#DADADA</Color>
+    <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
+    <Color x:Key="Disabled.ForegroundColor">#ABABAB</Color>
+    <Color x:Key="BackgroundColor">#333333</Color>
+    <Color x:Key="BackgroundColor.Dark">#252525</Color>
+    <Color x:Key="MouseOver.BackgroundColor">#3C3C3C</Color>
+    <Color x:Key="Pressed.BackgroundColor">#3C3C3C</Color>
+    <Color x:Key="Disabled.BackgroundColor">#3C3C3C</Color>
+    <Color x:Key="BorderColor">#525252</Color>
+    <Color x:Key="MouseOver.BorderColor">#F0F0F0</Color>
+    <Color x:Key="Pressed.BorderColor">#E5E5E5</Color>
+    <Color x:Key="Pressed.BorderColorDark">#F0F0F0</Color>
+    <Color x:Key="Disabled.BorderColor">#FFBCBCBC</Color>
+    <Color x:Key="BusyIndicatorColor">#E8E6E6</Color>
+    <Color x:Key="DropShadowColor">Black</Color>
     <Color x:Key="Diff.Added.ForegroundColor">#2F8E39</Color>
     <Color x:Key="Diff.Removed.ForegroundColor">#DA3D3D</Color>
     <Color x:Key="Diff.AddedColor">#38563C</Color>
@@ -264,22 +305,5 @@
     <Color x:Key="SliderThumb.Pressed.BorderColor">#7A7A74</Color>
     <Color x:Key="SliderThumb.Disabled.BackgroundColor">#3C3C3C</Color>
     <Color x:Key="SliderThumb.Disabled.BorderColor">#434346</Color>
-    <Color x:Key="Window.BackgroundColor">#252525</Color>
-    <Color x:Key="Window.BorderColor">#3BACED</Color>
-    <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
-    <Color x:Key="Window.ButtonsRegionBackgroundColor">#333333</Color>
-    <Color x:Key="Window.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.TitleBar.BackgroundColor">#333333</Color>
-    <Color x:Key="Window.TitleBar.ForegroundColor">White</Color>
-    <Color x:Key="Window.Dialog.BackgroundColor">#FF2D2D30</Color>
-    <Color x:Key="Window.Dialog.TitleBar.BackgroundColor">#2D2D30</Color>
-    <Color x:Key="Window.Button.Static.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.Button.MouseOver.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.Button.Static.BackgroundColor">Transparent</Color>
-    <Color x:Key="Window.Button.MouseOver.BackgroundColor">#525252</Color>
-    <Color x:Key="Window.Button.Pressed.BackgroundColor">#3E3E40</Color>
-    <Color x:Key="Window.CloseButton.ForegroundColor">#FFFFFF</Color>
-    <Color x:Key="Window.CloseButton.Static.BackgroundColor">Transparent</Color>
-    <Color x:Key="Window.CloseButton.MouseOver.BackgroundColor">#FFE81123</Color>
-    <Color x:Key="Window.CloseButton.Pressed.BackgroundColor">#F1707A</Color>
+
 </ResourceDictionary>

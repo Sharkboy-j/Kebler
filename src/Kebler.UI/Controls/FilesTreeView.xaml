@@ -48,8 +48,8 @@
                     <Path.Effect>
                         <DropShadowEffect
                             BlurRadius="5"
-                            RenderingBias="Quality"
                             Direction="0"
+                            RenderingBias="Quality"
                             ShadowDepth="0" />
                     </Path.Effect>
                 </Path>
@@ -74,7 +74,7 @@
         x:Name="Trree"
         BorderThickness="{Binding Border}"
         ItemTemplate="{StaticResource ListViewTemplate}"
-        RootItem="{Binding Files}"
         PreviewKeyDown="Trree_PreviewKeyDown"
+        RootItem="{Binding Files}"
         Style="{StaticResource FileListMultiselectionTreeViewDefaultStyle}" />
 </UserControl>

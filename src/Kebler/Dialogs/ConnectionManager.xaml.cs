@@ -16,7 +16,7 @@ using log4net;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Kebler.UI.Windows
+namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for ConnectionManager.xaml
@@ -41,7 +41,7 @@ namespace Kebler.UI.Windows
         private readonly LiteCollection<Server> _dbServersList;
         private TransmissionClient _client;
 
-        public ConnectionManager(ref LiteCollection<Server> dbServersList)
+        public ConnectionManager(ref LiteCollection<Server> dbServersList, Window owner) : base(owner)
         {
             Log.Info("Open ConnectionManager");
 
@@ -177,9 +177,9 @@ namespace Kebler.UI.Windows
             }
             var ind = ServersListBox.SelectedIndex -= 1;
 
-            if (App.KeblerControl.SelectedServer.Id == SelectedServer.Id)
+            if (App.Instance.KeblerControl.SelectedServer.Id == SelectedServer.Id)
             {
-                App.KeblerControl.Disconnect();
+                App.Instance.KeblerControl.Disconnect();
             }
 
             SelectedServer = null;
@@ -194,7 +194,7 @@ namespace Kebler.UI.Windows
             string pass = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new MessageBox(true,"Enter password",true, string.Empty);
+                var dialog = new MessageBox(true, "Enter password", true, string.Empty);
                 dialog.Owner = this;
                 try
                 {
@@ -221,7 +221,7 @@ namespace Kebler.UI.Windows
             ConnectStatusResult = result
                 ? Kebler.Resources.Windows.CM_TestConnectionGood
                 : Kebler.Resources.Windows.CM_TestConnectionBad;
-            
+
             ConnectStatusColor = (result
                 ? new SolidColorBrush { Color = Colors.Green }
                 : new SolidColorBrush { Color = Colors.Red });
@@ -284,7 +284,7 @@ namespace Kebler.UI.Windows
 
             if (ServerList.Count != 0)
             {
-                App.KeblerControl.InitConnection();
+                App.Instance.KeblerControl.InitConnection();
             }
 
         }

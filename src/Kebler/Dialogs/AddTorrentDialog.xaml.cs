@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -17,18 +14,17 @@ using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Response;
 using Kebler.Services;
 using Kebler.TransmissionCore;
-using Kebler.UI.CSControls.MultiTreeView;
 using log4net;
 using Microsoft.Win32;
 
-namespace Kebler.UI.Dialogs
+namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for AddTorrentDialog.xaml
     /// </summary>
     public partial class AddTorrentDialog : INotifyPropertyChanged
     {
-        public AddTorrentDialog(string path, TransmissionClient transmissionClient)
+        public AddTorrentDialog(string path, TransmissionClient transmissionClient, Window owner) : base(owner)
         {
             _torrentFileInfo = new FileInfo(path);
             TorrentPath = _torrentFileInfo.FullName;
@@ -112,12 +108,12 @@ namespace Kebler.UI.Dialogs
                 TorrentInfo.TryParse(data, out var parsedTorrent);
                 FilesTree.UpdateFilesTree(ref parsedTorrent);
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
 
             }
-            catch(Exception ex)
-            { 
+            catch (Exception ex)
+            {
                 Log.Error(ex);
             }
         }
@@ -228,11 +224,7 @@ namespace Kebler.UI.Dialogs
             ConfigService.Save();
         }
 
-        public new void Show()
-        {
-            throw new Exception("Use ShowDialog instead of Show()");
-        }
-
+     
         private void AddTorrentDialog_OnClosing(object sender, CancelEventArgs e)
         {
             FilesTree.Files = null;

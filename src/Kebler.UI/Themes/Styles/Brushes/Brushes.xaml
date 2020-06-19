@@ -54,7 +54,6 @@
 
 
     <SolidColorBrush x:Key="LabelBrush" Color="{DynamicResource LabelColor}" />
-    <SolidColorBrush x:Key="WindowBorderBrush" Color="{DynamicResource WindowBorderBrushColor}" />
     <SolidColorBrush x:Key="SecondaryLabelBrush" Color="{DynamicResource SecondaryLabelColor}" />
     <SolidColorBrush x:Key="MouseOver.BackgroundBrush" Color="{DynamicResource MouseOver.BackgroundColor}" />
     <SolidColorBrush x:Key="BusyIndicatorBrush" Color="{DynamicResource BusyIndicatorColor}" />
@@ -302,6 +301,7 @@
     <SolidColorBrush x:Key="Window.ButtonsRegionBrush" Color="{DynamicResource Window.ButtonsRegionBackgroundColor}" />
     <SolidColorBrush x:Key="Window.Foreground" Color="{DynamicResource Window.ForegroundColor}" />
     <SolidColorBrush x:Key="Window.TitleBar.Background" Color="{DynamicResource Window.TitleBar.BackgroundColor}" />
+    <SolidColorBrush x:Key="Window.Background" Color="{DynamicResource Window.BackgroundColor}" />
     <SolidColorBrush x:Key="Window.TitleBar.Foreground" Color="{DynamicResource Window.TitleBar.ForegroundColor}" />
     <SolidColorBrush x:Key="Window.Dialog.TitleBar.Background" Color="{DynamicResource Window.Dialog.TitleBar.BackgroundColor}" />
     <SolidColorBrush x:Key="Window.Dialog.Background" Color="{DynamicResource Window.Dialog.BackgroundColor}" />

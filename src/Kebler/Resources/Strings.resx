@@ -124,7 +124,7 @@
     <value>Add Torrent</value>
   </data>
   <data name="QA_ResumeAll" xml:space="preserve">
-    <value>Resume All</value>
+    <value>Start All</value>
   </data>
   <data name="QA_PauseAll" xml:space="preserve">
     <value>Pause All</value>
@@ -133,7 +133,7 @@
     <value>Pause</value>
   </data>
   <data name="QA_Resume" xml:space="preserve">
-    <value>Resume</value>
+    <value>Start</value>
   </data>
   <data name="QA_Remove" xml:space="preserve">
     <value>Remove</value>
@@ -164,5 +164,32 @@
   </data>
   <data name="Cat_Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="QA_SetLoc" xml:space="preserve">
+    <value>Set Data Location...</value>
+  </data>
+  <data name="QA_Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="QA_Reannounce" xml:space="preserve">
+    <value>Reannounce (get more peers)</value>
+  </data>
+  <data name="QA_Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="QA_Queue" xml:space="preserve">
+    <value>Queue</value>
+  </data>
+  <data name="QA_MoveTop" xml:space="preserve">
+    <value>Move Top</value>
+  </data>
+  <data name="QA_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QA_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="QA_MoveBot" xml:space="preserve">
+    <value>Move Bottom</value>
   </data>
 </root>

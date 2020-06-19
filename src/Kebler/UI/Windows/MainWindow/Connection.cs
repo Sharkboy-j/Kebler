@@ -18,169 +18,18 @@ using Kebler.Services;
 using Kebler.Services.Converters;
 using Kebler.TransmissionCore;
 using Newtonsoft.Json;
+using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.UI.Windows
 {
     public partial class KeblerWindow
     {
 
-
-        private void ProcessTorrentData(TransmissionTorrents data)
+        #region REQUEST
+        public void UpdateServers()
         {
-            if (!IsConnected)
-                return;
-
-            lock (_syncTorrentList)
-            {
-                //var torrents = new List<TorrentInfo>(TorrentList);
-                ////1: 'check pending',
-                ////2: 'checking',
-
-                ////5: 'seed pending',
-                ////6: 'seeding',
-                switch (_filterCategory)
-                {
-                    //3: 'download pending',
-                    //4: 'downloading',
-                    case Enums.Categories.Downloading:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 3 || x.Status == 4).ToArray();
-                        break;
-
-                    //4: 'downloading',
-                    //6: 'seeding',
-                    //2: 'checking',
-                    case Enums.Categories.Active:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToArray();
-                        data.Torrents = data.Torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToArray();
-                        break;
-
-                    //0: 'stopped' and is error,
-                    case Enums.Categories.Stopped:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToArray();
-                        break;
-
-                    case Enums.Categories.Error:
-                        data.Torrents = data.Torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToArray();
-                        break;
-
-
-                    //6: 'seeding',
-                    //1: 'checking queue',
-                    case Enums.Categories.Inactive:
-                        //var array1 = data.Torrents.Where(x=> x.Status == 1).ToArray();
-                        var array2 = data.Torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0 && x.Status != 2).ToArray();
-
-                        //int array1OriginalLength = array1.Length;
-                        //Array.Resize<TorrentInfo>(ref array1, array1OriginalLength + array2.Length);
-                        //Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
-                        data.Torrents = array2;
-                        break;
-
-                    //6: 'seeding',
-                    case Enums.Categories.Ended:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 6).ToArray();
-                        break;
-                    case Enums.Categories.All:
-                    default:
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
-                {
-                    var splited = FilterText.Split("{p}:");
-                    var filterKey = splited[^1];
-                    data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
-                }
-
-
-                //add or remove torrents to grid
-                try
-                {
-
-                    var toRm = TorrentList.Except(data.Torrents).ToArray();
-                    var toAdd = data.Torrents.Except(TorrentList).ToArray();
-
-                    //remove
-                    if (toRm.Length > 0)
-                    {
-                        Debug.WriteLine($"toRm {toRm.Length}");
-                        foreach (var item in toRm)
-                        {
-                            Dispatcher.Invoke(() => { TorrentList.Remove(item); });
-                            Log.Info($"Removed torrent from UI Grid'{item}'");
-                        }
-                    }
-
-
-
-
-                    foreach (var item in TorrentList)
-                    {
-                        UpdateTorrentData(TorrentList.IndexOf(item), data.Torrents.First(x => x.Id == item.Id));
-                    }
-
-                    //add
-                    if (toAdd.Length > 0)
-                    {
-                        Debug.WriteLine($"toAdd {toAdd.Length}");
-                        foreach (var item in toAdd)
-                        {
-                            var dt = Validate(item, true);
-                            Dispatcher.Invoke(() => { TorrentList.Add(dt); });
-                            Log.Info($"Added torrent to UI Grid '{dt}'");
-                        }
-                    }
-
-
-
-                    toAdd = null;
-                    toRm = null;
-
-
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-
-
-                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
-
-
-
-                Dispatcher.Invoke(() =>
-                {
-                    var column = TorrentsDataGrid.Columns.Last();
-
-                    // Clear current sort descriptions
-                    TorrentsDataGrid.Items.SortDescriptions.Clear();
-
-                    // Add the new sort description
-                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
-
-                    // Apply sort
-                    foreach (var col in TorrentsDataGrid.Columns)
-                    {
-                        col.SortDirection = null;
-                    }
-                    column.SortDirection = ListSortDirection.Ascending;
-
-                    // Refresh items to display sort
-                    TorrentsDataGrid.Items.Refresh();
-                });
-
-
-            }
-        }
-
-
-
-        private void Instance_LangChanged()
-        {
-            IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                    $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                    $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                    $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+            _dbServers = StorageRepository.GetServersList();
+            _servers = _dbServers.FindAll().ToList();
         }
 
         public void InitConnection()
@@ -320,7 +169,7 @@ namespace Kebler.UI.Windows
 
                             if (allTorrents.Clone() is TransmissionTorrents data)
                             {
-                                ProcessTorrentData(data);
+                                ProcessParsingTransmissionResponse(data);
                             }
 
                             await Task.Delay(5000, token);
@@ -361,8 +210,6 @@ namespace Kebler.UI.Windows
 
             _whileCycleTask.Start();
         }
-
-
 
         private bool CheckResponse(TransmissionResponse resp)
         {
@@ -408,6 +255,89 @@ namespace Kebler.UI.Windows
             await Task.Delay(1500);
             InitConnection();
         }
+        
+        private async Task<TransmissionInfoResponse<SessionInfo>> UpdateSessionInfo()
+        {
+            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, Kebler.Resources.Windows.MW_StatusText_Session);
+        }
+
+        private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
+        {
+            try
+            {
+                _isLongTaskRunning = true;
+                _longActionTimeStart = DateTimeOffset.Now;
+                LongStatusText = longStatusText;
+
+                while (true)
+                {
+                    // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
+                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
+                    {
+                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted");
+                    }
+
+                    var resp = await asyncTask();
+                    if (resp == null)
+                    {
+                        await Task.Delay(100);
+                        continue;
+                    }
+
+                    return resp;
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            finally
+            {
+                IsDoingStuff = false;
+                LongStatusText = string.Empty;
+                _isLongTaskRunning = false;
+            }
+        }
+
+        private async Task<TransmissionTorrents> ExecuteLongTask(Func<string[], Task<TransmissionTorrents>> asyncTask, string longStatusText, string[] args)
+        {
+            try
+            {
+                _isLongTaskRunning = true;
+                _longActionTimeStart = DateTimeOffset.Now;
+                LongStatusText = longStatusText;
+
+                while (true)
+                {
+                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
+                    {
+                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
+                    }
+
+                    var resp = await asyncTask.Invoke(args);
+                    if (resp == null)
+                    {
+                        await Task.Delay(100);
+                        continue;
+                    }
+                    return resp;
+                }
+            }
+            finally
+            {
+                IsDoingStuff = false;
+                LongStatusText = string.Empty;
+                _isLongTaskRunning = false;
+            }
+
+        }
+        #endregion
+
+
+
+
+
+        #region parsing
 
         public void ParseSettings()
         {
@@ -434,42 +364,6 @@ namespace Kebler.UI.Windows
 
             DownloadSpeed = $"D: {dSpeed}";
             UploadSpeed = $"U: {uSpeed}";
-        }
-
-        public void ShowConnectionManager()
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _cmWindow = new ConnectionManager(ref _dbServers) { Owner = Application.Current.MainWindow };
-                _cmWindow.ShowDialog();
-                UpdateServers();
-            });
-        }
-
-
-
-        private static async Task<string> GetPassword()
-        {
-            var pass = string.Empty;
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                var dialog = new MessageBox(true, "Enter password", true);
-                dialog.Owner = Application.Current.MainWindow;
-                try
-                {
-                    if (dialog.ShowDialog() == true)
-                    {
-                        pass = dialog.Value;
-                    }
-                }
-                finally
-                {
-
-                    dialog.Value = null;
-                    dialog = null;
-                }
-            });
-            return pass;
         }
 
         private void UpdateCategories(List<FolderCategory> dirrectories)
@@ -522,99 +416,13 @@ namespace Kebler.UI.Windows
 
         }
 
-
-        #region ServerActions
-
-
-        private async Task<TransmissionTorrents> ExecuteLongTask(Func<string[], Task<TransmissionTorrents>> asyncTask, string longStatusText, string[] args)
-        {
-
-            try
-            {
-                _isLongTaskRunning = true;
-                _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
-
-                    var resp = await asyncTask.Invoke(args);
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    return resp;
-                }
-            }
-            finally
-            {
-                IsDoingStuff = false;
-                LongStatusText = string.Empty;
-                _isLongTaskRunning = false;
-            }
-
-
-        }
-
-
-
-        private async Task<TransmissionInfoResponse<SessionInfo>> UpdateSessionInfo()
-        {
-            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, Kebler.Resources.Windows.MW_StatusText_Session);
-        }
-
-        private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
-        {
-            try
-            {
-                _isLongTaskRunning = true;
-                _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
-
-                    var resp = await asyncTask();
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    return resp;
-                }
-            }
-            finally
-            {
-                IsDoingStuff = false;
-                LongStatusText = string.Empty;
-                _isLongTaskRunning = false;
-            }
-
-        }
-        #endregion
-
-
-        #region ParsersToUserFriendlyFormat
-
-
         private void UpdateTorrentData(int oldIndex, TorrentInfo newData)
         {
-
             var myType = typeof(TorrentInfo);
             var props = myType.GetProperties().Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length == 0);
             props = props.Where(p => p.GetCustomAttributes(typeof(SetIgnoreAttribute), true).Length == 0);
 
-            var trnt = Validate(newData);
+            var trnt = ValidateTorrent(newData);
             foreach (var item in props)
             {
 
@@ -622,7 +430,7 @@ namespace Kebler.UI.Windows
 
 
 
-                if (WorkingParams.Contains(((JsonPropertyAttribute)name).PropertyName))
+                if (WorkingParams.Contains(((JsonPropertyAttribute)name)?.PropertyName))
                 {
                     var newVal = trnt.Get(item.Name);
                     TorrentList[oldIndex].Set(item.Name, newVal);
@@ -630,8 +438,155 @@ namespace Kebler.UI.Windows
             }
         }
 
+        private void ProcessParsingTransmissionResponse(TransmissionTorrents data)
+        {
+            if (!IsConnected)
+                return;
 
-        public TorrentInfo Validate(TorrentInfo torrInf, bool skip = false)
+            lock (_syncTorrentList)
+            {
+                //var torrents = new List<TorrentInfo>(TorrentList);
+                ////1: 'check pending',
+                ////2: 'checking',
+
+                ////5: 'seed pending',
+                ////6: 'seeding',
+                switch (_filterCategory)
+                {
+                    //3: 'download pending',
+                    //4: 'downloading',
+                    case Enums.Categories.Downloading:
+                        data.Torrents = data.Torrents.Where(x => x.Status == 3 || x.Status == 4).ToArray();
+                        break;
+
+                    //4: 'downloading',
+                    //6: 'seeding',
+                    //2: 'checking',
+                    case Enums.Categories.Active:
+                        data.Torrents = data.Torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToArray();
+                        data.Torrents = data.Torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToArray();
+                        break;
+
+                    //0: 'stopped' and is error,
+                    case Enums.Categories.Stopped:
+                        data.Torrents = data.Torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToArray();
+                        break;
+
+                    case Enums.Categories.Error:
+                        data.Torrents = data.Torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToArray();
+                        break;
+
+
+                    //6: 'seeding',
+                    //1: 'checking queue',
+                    case Enums.Categories.Inactive:
+                        //var array1 = data.Torrents.Where(x=> x.Status == 1).ToArray();
+                        var array2 = data.Torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0 && x.Status != 2).ToArray();
+
+                        //int array1OriginalLength = array1.Length;
+                        //Array.Resize<TorrentInfo>(ref array1, array1OriginalLength + array2.Length);
+                        //Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
+                        data.Torrents = array2;
+                        break;
+
+                    //6: 'seeding',
+                    case Enums.Categories.Ended:
+                        data.Torrents = data.Torrents.Where(x => x.Status == 6).ToArray();
+                        break;
+                    case Enums.Categories.All:
+                    default:
+                        break;
+                }
+
+                if (!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
+                {
+                    var splited = FilterText.Split("{p}:");
+                    var filterKey = splited[^1];
+                    data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
+                }
+
+
+                //add or remove torrents to grid
+                try
+                {
+
+                    var toRm = TorrentList.Except(data.Torrents).ToArray();
+                    var toAdd = data.Torrents.Except(TorrentList).ToArray();
+
+                    //remove
+                    if (toRm.Length > 0)
+                    {
+                        Debug.WriteLine($"toRm {toRm.Length}");
+                        foreach (var item in toRm)
+                        {
+                            Dispatcher.Invoke(() => { TorrentList.Remove(item); });
+                            Log.Info($"Removed torrent from UI Grid'{item}'");
+                        }
+                    }
+
+
+
+
+                    foreach (var item in TorrentList)
+                    {
+                        UpdateTorrentData(TorrentList.IndexOf(item), data.Torrents.First(x => x.Id == item.Id));
+                    }
+
+                    //add
+                    if (toAdd.Length > 0)
+                    {
+                        Debug.WriteLine($"toAdd {toAdd.Length}");
+                        foreach (var item in toAdd)
+                        {
+                            var dt = ValidateTorrent(item, true);
+                            Dispatcher.Invoke(() => { TorrentList.Add(dt); });
+                            Log.Info($"Added torrent to UI Grid '{dt}'");
+                        }
+                    }
+
+
+
+                    toAdd = null;
+                    toRm = null;
+
+
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+
+
+                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
+
+
+
+                Dispatcher.Invoke(() =>
+                {
+                    var column = TorrentsDataGrid.Columns.Last();
+
+                    // Clear current sort descriptions
+                    TorrentsDataGrid.Items.SortDescriptions.Clear();
+
+                    // Add the new sort description
+                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
+
+                    // Apply sort
+                    foreach (var col in TorrentsDataGrid.Columns)
+                    {
+                        col.SortDirection = null;
+                    }
+                    column.SortDirection = ListSortDirection.Ascending;
+
+                    // Refresh items to display sort
+                    TorrentsDataGrid.Items.Refresh();
+                });
+
+
+            }
+        }
+
+        public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
         {
             if (torrInf.Status == 1 || torrInf.Status == 2)
             {
@@ -650,15 +605,6 @@ namespace Kebler.UI.Windows
             return torrInf;
 
         }
-
         #endregion
-
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-
     }
 }

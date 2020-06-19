@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Navigation;
 
-namespace Kebler.UI.Controls
+namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
     public partial class About : INotifyPropertyChanged
     {
-        public About()
+        public About(Window owner) : base(owner)
         {
             InitializeComponent();
             DataContext = this;
@@ -22,7 +22,7 @@ namespace Kebler.UI.Controls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-      
+
 
         private void Open(object sender, RequestNavigateEventArgs e)
         {

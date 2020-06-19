@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using static Kebler.Models.Enums;
 
-namespace Kebler.UI.Windows
+namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for MessageBox.xaml

@@ -3,16 +3,17 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Services;
-using MessageBox = Kebler.UI.Windows.MessageBox;
+using MessageBox = Kebler.Dialogs.MessageBox;
 
-namespace Kebler.UI.Controls
+namespace Kebler.UI
 {
     /// <summary>
     /// Interaction logic for TopBarControl.xaml
     /// </summary>
-    public partial class TopBarControl : UserControl
+    public partial class TopBarControl
     {
 
         public TopBarControl()
@@ -20,7 +21,7 @@ namespace Kebler.UI.Controls
             InitializeComponent();
 
             App.ConnectionChanged += App_ConnectionChanged;
-            App.ServerListChanged += UpdateServerList; 
+            App.ServerListChanged += UpdateServerList;
             foreach (var item in LocalizationManager.CultureList)
             {
                 var dd = new MenuItem { Header = item.EnglishName, Tag = item };
@@ -36,15 +37,15 @@ namespace Kebler.UI.Controls
 
         public void UpdateServerList()
         {
-            App.KeblerControl.UpdateServers();
+            App.Instance.KeblerControl.UpdateServers();
 
             ServersMenu.Items.Clear();
-            foreach (var item in App.KeblerControl.ServersList)
+            foreach (var item in App.Instance.KeblerControl.ServersList)
             {
                 var dd = new MenuItem { Header = item.Title, Tag = item };
                 dd.Click += ServerMenuItemCkicked;
                 dd.IsCheckable = true;
-                dd.IsChecked = item.Equals(App.KeblerControl.SelectedServer);
+                dd.IsChecked = item.Equals(App.Instance.KeblerControl.SelectedServer);
                 ServersMenu.Items.Add(dd);
             }
         }
@@ -76,8 +77,8 @@ namespace Kebler.UI.Controls
         {
             if (!(sender is MenuItem ss)) return;
 
-            App.KeblerControl.SelectedServer = ss.Tag as Server;
-            App.KeblerControl.ReconnectToNewServer();
+            App.Instance.KeblerControl.SelectedServer = ss.Tag as Server;
+            App.Instance.KeblerControl.ReconnectToNewServer();
         }
 
 
@@ -100,39 +101,17 @@ namespace Kebler.UI.Controls
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)
         {
-            App.KeblerControl.ShowConnectionManager();
+            App.Instance.KeblerControl.ShowConnectionManager();
         }
 
         private void ConnectFirst(object sender, RoutedEventArgs e)
         {
-            App.KeblerControl.InitConnection();
+            App.Instance.KeblerControl.InitConnection();
         }
 
         private void AddTorrent(object sender, RoutedEventArgs e)
         {
-            App.KeblerControl.AddTorrent();
-        }
-
-        private void SortValMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            //if (!(sender is MenuItem mi)) return;
-
-            //ConfigService.Instanse.SortVal = mi.Tag.ToString();
-            //ConfigService.Save();
-            //App.KeblerControl.UpdateSorting();
-        }
-
-        private void SortTypeMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            //if (!(sender is MenuItem mi)) return;
-
-            //int.TryParse(mi.Tag.ToString(), out var val);
-
-            //ConfigService.Instanse.SortType = val;
-
-            //ConfigService.Save();
-
-            //App.KeblerControl.UpdateSorting();
+            App.Instance.KeblerControl.AddTorrent();
         }
 
         private void Report(object sender, RoutedEventArgs e)
@@ -142,9 +121,11 @@ namespace Kebler.UI.Controls
 
         private void About(object sender, RoutedEventArgs e)
         {
-            var dd = new MessageBox(new About());
-            dd.Owner = App.Instance.MainWindow;
-            dd.ShowDialog();
+
+            var dialog = new About(Application.Current.MainWindow);
+            dialog.ShowDialog();
+
+
         }
 
         private void Check(object sender, RoutedEventArgs e)

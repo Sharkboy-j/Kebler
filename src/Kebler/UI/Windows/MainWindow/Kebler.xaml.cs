@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,22 +12,15 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
-using Kebler.Models.Torrent.Attributes;
-using Kebler.Models.Torrent.Common;
-using Kebler.Models.Torrent.Entity;
-using Kebler.Models.Torrent.Response;
-using Kebler.Models.Tree;
 using Kebler.Resources;
 using Kebler.Services;
-using Kebler.Services.Converters;
-using Kebler.TransmissionCore;
-using Kebler.UI.Dialogs;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Enums = Kebler.Models.Enums;
+using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.UI.Windows
 {
@@ -58,18 +48,15 @@ namespace Kebler.UI.Windows
             CategoriesListBox.Items.Add(new StatusCategory { Title = Strings.Cat_Error, Cat = Enums.Categories.Error });
 
             CategoriesListBox.SelectedIndex = 0;
+            App.Instance.KeblerControl = this;
+            Application.Current.MainWindow = this;
         }
 
-        private void KeblerWindow_OnActivated(object sender, EventArgs e)
-        {
-            Init_HK();
-        }
 
-        private void KeblerWindow_OnDeactivated(object sender, EventArgs e)
-        {
-            UnregisterHotKeys();
-        }
 
+
+
+        #region Config&HotKeys
         private void Init_HK()
         {
 
@@ -95,7 +82,6 @@ namespace Kebler.UI.Windows
                 RegisteredKeys = null;
             }
         }
-
 
         private void ApplyConfig()
         {
@@ -129,7 +115,7 @@ namespace Kebler.UI.Windows
                 MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
                 Width = ConfigService.Instanse.MainWindowWidth;
                 Height = ConfigService.Instanse.MainWindowHeight;
-                WindowState = (System.Windows.WindowState)ConfigService.Instanse.MainWindowState;
+                WindowState = ConfigService.Instanse.MainWindowState;
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
                 //if (!string.IsNullOrEmpty(ConfigService.Instanse.ColumnSizes))
@@ -152,15 +138,7 @@ namespace Kebler.UI.Windows
             }
         }
 
-        private void DragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            ConfigService.Instanse.CategoriesWidth = CategoriesColumn.ActualWidth;
-            ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
-            ConfigService.Save();
-
-        }
-
-        private void ClosingW(object sender, CancelEventArgs e)
+        private void SaveConfig()
         {
             var size = new StringBuilder();
             foreach (var column in TorrentsDataGrid.Columns)
@@ -175,13 +153,57 @@ namespace Kebler.UI.Windows
             //ConfigService.Instanse.ColumnSizes = size.ToString().TrimEnd(',');
 
             ConfigService.Save();
-
-            Log.Info("-----------Exit-----------");
         }
+        #endregion
+
+
 
 
 
         #region ToolBar actions
+        private async void SetLocation_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+           //var items = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToList();
+            var question = selectedIDs.Length > 1 ? Kebler.Resources.Dialogs.SetLocForMany.Replace("%d", selectedIDs.Length.ToString())
+                : Kebler.Resources.Dialogs.SetLocOnce;
+
+            var path = ((TorrentInfo)TorrentsDataGrid.SelectedItem).DownloadDir;
+
+            var dialog = new DialogBox(question, path, false) { Owner = Application.Current.MainWindow };
+
+            if (dialog.ShowDialog() == true)
+            {
+                await Task.Factory.StartNew(async () =>
+                {
+                    var itms = selectedIDs;
+                    while (true)
+                    {
+                        if (Dispatcher.HasShutdownStarted) return;
+                        var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value, true, _cancelTokenSource.Token);
+
+                        if (CheckResponse(resp))
+                            break;
+
+                        await Task.Delay(500, _cancelTokenSource.Token);
+                    }
+                }, _cancelTokenSource.Token);
+            }
+
+            dialog.Value = null;
+        }
+
+        public void ShowConnectionManager()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _cmWindow = new ConnectionManager(ref _dbServers, Application.Current.MainWindow);
+                _cmWindow.ShowDialog();
+                UpdateServers();
+            });
+        }
+
         public void AddTorrent()
         {
 
@@ -201,7 +223,7 @@ namespace Kebler.UI.Windows
         {
             foreach (var item in names)
             {
-                var dialog = new AddTorrentDialog(item, _transmissionClient) { Owner = this };
+                var dialog = new AddTorrentDialog(item, _transmissionClient, this);
 
                 if (!(bool)dialog.ShowDialog())
                     return;
@@ -232,29 +254,28 @@ namespace Kebler.UI.Windows
                 return;
 
             SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToArray();
-            await Update(SelectedTorrents.Select(x => x.Id).ToArray());
+
+            selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
+            await UpdateMoreInfoView();
 
         }
 
 
 
-        public async Task Update(uint[] id)
+        public async Task UpdateMoreInfoView()
         {
-
-
-            if (id.Length != 1)
+            if (selectedIDs.Length != 1)
             {
                 MoreInfo.IsMore = true;
                 MoreInfo.Clear();
-                MoreInfo.SelectedCount = id.Length;
+                MoreInfo.SelectedCount = selectedIDs.Length;
                 return;
             }
-            selectedIDs = id;
 
             MoreInfo.IsMore = false;
             MoreInfo.Loading = true;
 
-            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, id);
+            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, selectedIDs);
 
             var torrent = answ.Torrents.FirstOrDefault();
             MoreInfo.FilesTree.UpdateFilesTree(ref torrent);
@@ -268,15 +289,14 @@ namespace Kebler.UI.Windows
             MoreInfo.Loading = false;
         }
 
-        private uint[] selectedIDs;
 
         private async void FileTreeViewControl_OnFileStatusUpdate(uint[] wanted, uint[] unwanted, bool status)
         {
             var settings = new TorrentSettings
             {
                 IDs = selectedIDs,
-                FilesWanted = wanted.Count() > 0 ? wanted : null,
-                FilesUnwanted = unwanted.Count() > 0 ? unwanted : null
+                FilesWanted = wanted.Any() ? wanted : null,
+                FilesUnwanted = unwanted.Any() ? unwanted : null
             };
 
             if (wanted.Length > 0)
@@ -291,36 +311,24 @@ namespace Kebler.UI.Windows
 
 
 
-
-
-
-
-
-
-
-
-
-
-        private void PauseTorrent_ItemClick(object sender, RoutedEventArgs e)
+        private async void PauseTorrent_Click(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
+            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
 
-            _transmissionClient.TorrentStopAsync(SelectedTorrents.Select(x => x.Id).ToArray());
+            await _transmissionClient.TorrentStopAsync(selectedIDs);
         }
 
         private async void StartAll_Button_CLick(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
 
-            var torrentIds = TorrentList.Select(x => x.Id).ToArray();
-            await Task.Factory.StartNew(() =>
-            {
-                Log.Info("Try start all torrents");
+            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
+            Log.Info("Try start all torrents");
 
-                _transmissionClient.TorrentStartAsync(torrentIds);
+            await _transmissionClient.TorrentStartAsync(selectedIDs);
 
-                Log.Info("Started all");
-            });
+            Log.Info("Started all");
         }
 
         private void AddTorrentButtonClick(object sender, RoutedEventArgs e)
@@ -332,40 +340,83 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var torrentIds = TorrentList.Select(x => x.Id).ToArray();
-            await Task.Factory.StartNew(() =>
-            {
-                Log.Info("Try pause all torrents");
+            //selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
+            Log.Info("Try pause all torrents");
 
-                _transmissionClient.TorrentStopAsync(torrentIds);
+            await _transmissionClient.TorrentStopAsync(selectedIDs);
 
-                Log.Info("Paused all");
-            });
+            Log.Info("Paused all");
         }
 
-        private void StartSelected_ButtonClick(object sender, RoutedEventArgs e)
+        private async void StartTorrent_Click(object sender, RoutedEventArgs e)
         {
             if (!IsConnected) return;
-
-            Task.Factory.StartNew(() =>
-            {
-                _transmissionClient.TorrentStartAsync(SelectedTorrents.Select(x => x.Id).ToArray());
-            });
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            await _transmissionClient.TorrentStartAsync(selectedIDs);
         }
 
-        private void RemoveTorrent_ButtonClick(object sender, RoutedEventArgs e)
+        private void RemoveTorrent_Click(object sender, RoutedEventArgs e)
         {
             RemoveTorrent();
         }
 
-        private void RemoveTorrentWithData_ButtonClick(object sender, RoutedEventArgs e)
+        private void RemoveTorrentWithData_Click(object sender, RoutedEventArgs e)
         {
             RemoveTorrent(true);
         }
 
+        private async void VerifyTorrent_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var tr = await _transmissionClient.TorrentVerifyAsync(selectedIDs);
+        }
+
+        private async void Reannounce_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs);
+        }
+
+
+        private async void MoveTop_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs);
+        }
+
+        private async void MoveUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs);
+        }
+
+        private async void MoveDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs);
+        }
+
+        private async void MoveBot_CLick(object sender, RoutedEventArgs e)
+        {
+            if (!IsConnected) return;
+
+            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
+            var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs);
+        }
+
         public void RemoveTorrent(bool removeData = false)
         {
-            var toRemove = SelectedTorrents.Select(x => x.Id).ToArray();
+            var toRemove = selectedIDs;
             var dialog = new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove, ref _transmissionClient, removeData) { Owner = this };
             if ((bool)dialog.ShowDialog())
             {
@@ -382,7 +433,7 @@ namespace Kebler.UI.Windows
                         }
                         if (allTorrents.Clone() is TransmissionTorrents data)
                         {
-                            ProcessTorrentData(data);
+                            ProcessParsingTransmissionResponse(data);
                         }
 
                     }
@@ -400,6 +451,10 @@ namespace Kebler.UI.Windows
         #endregion
 
 
+
+
+
+        #region WindowEvents
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!IsLoaded || !IsConnected)
@@ -413,40 +468,36 @@ namespace Kebler.UI.Windows
 
             if (allTorrents.Clone() is TransmissionTorrents data)
             {
-                ProcessTorrentData(data);
+                ProcessParsingTransmissionResponse(data);
             }
         }
 
-        private async void SetLocation_OnClick(object sender, RoutedEventArgs e)
+
+        private void KeblerWindow_OnActivated(object sender, EventArgs e)
         {
-            if (!IsConnected) return;
+            Init_HK();
+        }
 
-            var items = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToList();
-            var question = items.Count > 1 ? Kebler.Resources.Dialogs.SetLocForMany.Replace("%d", items.Count.ToString())
-                : Kebler.Resources.Dialogs.SetLocOnce;
+        private void KeblerWindow_OnDeactivated(object sender, EventArgs e)
+        {
+            UnregisterHotKeys();
+        }
 
-            var path = items.First().DownloadDir;
+        private void ClearFilter(object sender, MouseButtonEventArgs e)
+        {
+            FilterTextBox.Clear();
+            FolderListBox.SelectedIndex = -1;
+        }
 
-            var dialog = new DialogBox(question, path, false) { Owner = Application.Current.MainWindow };
-
-            if (dialog.ShowDialog() == true)
+        private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+            FilterText = FilterTextBox.Text;
+            if (allTorrents.Clone() is TransmissionTorrents data)
             {
-                await Task.Factory.StartNew(async () =>
-                {
-                    while (true)
-                    {
-                        if (Dispatcher.HasShutdownStarted) return;
-                        var resp = await _transmissionClient.TorrentSetLocationAsync(SelectedTorrents.Select(x => x.Id).ToArray(), dialog.Value, true, _cancelTokenSource.Token);
-
-                        if (CheckResponse(resp))
-                            break;
-
-                        await Task.Delay(500, _cancelTokenSource.Token);
-                    }
-                }, _cancelTokenSource.Token);
+                ProcessParsingTransmissionResponse(data);
             }
-
-            dialog.Value = null;
         }
 
         private void ChangeFolderFilter(object sender, MouseButtonEventArgs e)
@@ -457,525 +508,13 @@ namespace Kebler.UI.Windows
             }
         }
 
-        private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!IsLoaded)
-                return;
-            FilterText = FilterTextBox.Text;
-            if (allTorrents.Clone() is TransmissionTorrents data)
-            {
-                ProcessTorrentData(data);
-            }
-        }
-
-        private void ClearFilter(object sender, MouseButtonEventArgs e)
-        {
-            FilterTextBox.Clear();
-            FolderListBox.SelectedIndex = -1;
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public partial class KeblerWindow
-    {
-
-
-        private void ProcessTorrentData(TransmissionTorrents data)
-        {
-            if (!IsConnected)
-                return;
-
-            lock (_syncTorrentList)
-            {
-                //var torrents = new List<TorrentInfo>(TorrentList);
-                ////1: 'check pending',
-                ////2: 'checking',
-
-                ////5: 'seed pending',
-                ////6: 'seeding',
-                switch (_filterCategory)
-                {
-                    //3: 'download pending',
-                    //4: 'downloading',
-                    case Enums.Categories.Downloading:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 3 || x.Status == 4).ToArray();
-                        break;
-
-                    //4: 'downloading',
-                    //6: 'seeding',
-                    //2: 'checking',
-                    case Enums.Categories.Active:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2).ToArray();
-                        data.Torrents = data.Torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToArray();
-                        break;
-
-                    //0: 'stopped' and is error,
-                    case Enums.Categories.Stopped:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString)).ToArray();
-                        break;
-
-                    case Enums.Categories.Error:
-                        data.Torrents = data.Torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToArray();
-                        break;
-
-
-                    //6: 'seeding',
-                    //1: 'checking queue',
-                    case Enums.Categories.Inactive:
-                        //var array1 = data.Torrents.Where(x=> x.Status == 1).ToArray();
-                        var array2 = data.Torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0 && x.Status != 2).ToArray();
-
-                        //int array1OriginalLength = array1.Length;
-                        //Array.Resize<TorrentInfo>(ref array1, array1OriginalLength + array2.Length);
-                        //Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
-                        data.Torrents = array2;
-                        break;
-
-                    //6: 'seeding',
-                    case Enums.Categories.Ended:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 6).ToArray();
-                        break;
-                    case Enums.Categories.All:
-                    default:
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
-                {
-                    var splited = FilterText.Split("{p}:");
-                    var filterKey = splited[^1];
-                    data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
-                }
-
-
-                //add or remove torrents to grid
-                try
-                {
-
-                    var toRm = TorrentList.Except(data.Torrents).ToArray();
-                    var toAdd = data.Torrents.Except(TorrentList).ToArray();
-
-                    //remove
-                    if (toRm.Length > 0)
-                    {
-                        Debug.WriteLine($"toRm {toRm.Length}");
-                        foreach (var item in toRm)
-                        {
-                            Dispatcher.Invoke(() => { TorrentList.Remove(item); });
-                            Log.Info($"Removed torrent from UI Grid'{item}'");
-                        }
-                    }
-
-
-
-
-                    foreach (var item in TorrentList)
-                    {
-                        UpdateTorrentData(TorrentList.IndexOf(item), data.Torrents.First(x => x.Id == item.Id));
-                    }
-
-                    //add
-                    if (toAdd.Length > 0)
-                    {
-                        Debug.WriteLine($"toAdd {toAdd.Length}");
-                        foreach (var item in toAdd)
-                        {
-                            var dt = Validate(item, true);
-                            Dispatcher.Invoke(() => { TorrentList.Add(dt); });
-                            Log.Info($"Added torrent to UI Grid '{dt}'");
-                        }
-                    }
-
-
-
-                    toAdd = null;
-                    toRm = null;
-
-
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-
-
-                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
-
-
-
-                Dispatcher.Invoke(() =>
-                {
-                    var column = TorrentsDataGrid.Columns.Last();
-
-                    // Clear current sort descriptions
-                    TorrentsDataGrid.Items.SortDescriptions.Clear();
-
-                    // Add the new sort description
-                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
-
-                    // Apply sort
-                    foreach (var col in TorrentsDataGrid.Columns)
-                    {
-                        col.SortDirection = null;
-                    }
-                    column.SortDirection = ListSortDirection.Ascending;
-
-                    // Refresh items to display sort
-                    TorrentsDataGrid.Items.Refresh();
-                });
-
-
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void Instance_LangChanged()
         {
             IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                               $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                               $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                               $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                                    $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                    $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                    $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
         }
-
-        public void InitConnection()
-        {
-            if (IsConnected) return;
-
-            if (ServersList.Count == 0)
-            {
-                ShowConnectionManager();
-            }
-            else
-            {
-                if (_checkerTask == null)
-                {
-                    _checkerTask = GetLongChecker();
-                    _checkerTask.Start();
-                }
-
-                SelectedServer ??= ServersList.FirstOrDefault();
-                TryConnect();
-
-            }
-        }
-
-        private async void TryConnect()
-        {
-            if (SelectedServer == null) return;
-
-            Log.Info("Try initialize connection");
-            IsErrorOccuredWhileConnecting = false;
-            IsConnectedStatusText = Kebler.Resources.Windows.MW_ConnectingText;
-            try
-            {
-                IsConnecting = true;
-                var pass = string.Empty;
-                if (SelectedServer.AskForPassword)
-                {
-                    Log.Info("Manual ask password");
-
-                    pass = await GetPassword();
-                    if (string.IsNullOrEmpty(pass))
-                    {
-                        IsErrorOccuredWhileConnecting = true;
-                        return;
-                    }
-                }
-
-                try
-                {
-                    _transmissionClient = new TransmissionClient(SelectedServer.FullUriPath, null, SelectedServer.UserName,
-                        SelectedServer.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
-                    Log.Info("Client created");
-                    ConnectedServer = SelectedServer;
-                    StartCycle();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message, ex);
-                    IsConnectedStatusText = ex.Message;
-                    IsConnected = false;
-                    IsErrorOccuredWhileConnecting = true;
-                }
-            }
-            finally
-            {
-                IsConnecting = false;
-            }
-        }
-
-        private Task GetLongChecker()
-        {
-            return new Task(async () =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        if (Dispatcher.HasShutdownStarted)
-                        {
-                            throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                        }
-
-                        var date = DateTimeOffset.Now;
-                        var time = (date - _longActionTimeStart);
-                        if (time.TotalSeconds > 2 && _isLongTaskRunning)
-                        {
-                            IsDoingStuff = true;
-                        }
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        return;
-                    }
-                    catch
-                    {
-
-                    }
-                    await Task.Delay(1000);
-                }
-            });
-        }
-
-        void StartCycle()
-        {
-            _cancelTokenSource = new CancellationTokenSource();
-            var token = _cancelTokenSource.Token;
-            MoreInfoControl.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
-            _whileCycleTask = new Task(async () =>
-            {
-                try
-                {
-                    var info = await UpdateSessionInfo();
-
-
-                    if (CheckResponse(info))
-                    {
-                        _sessionInfo = info.Value;
-                        IsConnected = true;
-                        Log.Info($"Connected {_sessionInfo.Version}");
-
-                        while (IsConnected && !token.IsCancellationRequested)
-                        {
-
-                            if (Application.Current?.Dispatcher != null &&
-                                Application.Current.Dispatcher.HasShutdownStarted)
-                                throw new TaskCanceledException();
-
-                            _stats = await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync,
-                                Kebler.Resources.Windows.MW_StatusText_Stats);
-
-
-                            allTorrents = await ExecuteLongTask(_transmissionClient.TorrentGetAsync,
-                                Kebler.Resources.Windows.MW_StatusText_Torrents, WorkingParams);
-
-                            ParseSettings();
-                            ParseStats();
-
-                            if (allTorrents.Clone() is TransmissionTorrents data)
-                            {
-                                ProcessTorrentData(data);
-                            }
-
-                            await Task.Delay(5000, token);
-                        }
-                    }
-                    else
-                    {
-                        if (info.WebException != null)
-                            throw info.WebException;
-                        if (info.CustomException != null)
-                            throw info.CustomException;
-
-                        throw new Exception(info.HttpWebResponse.StatusCode.ToString());
-                    }
-                }
-                catch (TaskCanceledException)
-                {
-
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-                finally
-                {
-                    if (IsConnected)
-                    {
-                        await _transmissionClient.CloseSessionAsync();
-                    }
-
-                    allTorrents = null;
-                    TorrentList = new System.Collections.ObjectModel.ObservableCollection<TorrentInfo>();
-                    IsConnected = false;
-                    IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
-                    Log.Info("Disconnected from server");
-                }
-            }, token);
-
-            _whileCycleTask.Start();
-        }
-
-
-
-        private bool CheckResponse(TransmissionResponse resp)
-        {
-
-            if (resp.WebException != null)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    var msg = resp.WebException.Status switch
-                    {
-                        System.Net.WebExceptionStatus.NameResolutionFailure => $"{Kebler.Resources.Dialogs.EX_Host} '{SelectedServer.Host}'",
-                        _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
-                    };
-
-                    var dialog = new MessageBox(msg, Kebler.Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true) { Owner = this };
-                    dialog.ShowDialog();
-                });
-                return false;
-            }
-
-            if (resp.CustomException != null)
-            {
-
-            }
-            return true;
-        }
-
-        public void Disconnect()
-        {
-            if (!IsConnected) return;
-
-            IsConnected = false;
-            _cancelTokenSource.Cancel();
-            _whileCycleTask.Wait();
-            _whileCycleTask.Dispose();
-            _whileCycleTask = null;
-        }
-
-        public async void ReconnectToNewServer()
-        {
-            Log.Info("Try connect to another server");
-            Disconnect();
-            await Task.Delay(1500);
-            InitConnection();
-        }
-
-        public void ParseSettings()
-        {
-
-            if (_settings?.AlternativeSpeedEnabled != null)
-                IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
-        }
-
-        public void ParseStats()
-        {
-            Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
-
-            IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                    $"      {Kebler.Resources.Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                    $"      {Kebler.Resources.Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                    $"      {Kebler.Resources.Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
-
-            var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
-            var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
-
-            var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
-            var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-
-            DownloadSpeed = $"D: {dSpeed}";
-            UploadSpeed = $"U: {uSpeed}";
-        }
-
-        public void ShowConnectionManager()
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _cmWindow = new ConnectionManager(ref _dbServers) { Owner = Application.Current.MainWindow };
-                _cmWindow.ShowDialog();
-                UpdateServers();
-            });
-        }
-
-
 
         private static async Task<string> GetPassword()
         {
@@ -1001,192 +540,27 @@ namespace Kebler.UI.Windows
             return pass;
         }
 
-        private void UpdateCategories(List<FolderCategory> dirrectories)
+        private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            if (dirrectories == null) return;
-            var dirs = dirrectories.Distinct().ToList();
-
-            var cats = new List<FolderCategory>();
-
-            foreach (var cat in dirs)
-            {
-
-                cat.Title += $"{cat.FolderName} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == cat.FullPath)})";
-                cats.Add(cat);
-            }
-
-
-            var toRm = Categories.Except(cats).ToList();
-            var toAdd = cats.Except(Categories).ToList();
-
-            if (toRm.Any())
-            {
-                Log.Info($"Remove categories" + string.Join(", ", toRm));
-
-                foreach (var itm in toRm)
-                {
-                    Dispatcher.Invoke(() => { Categories.Remove(itm); });
-                }
-            }
-
-
-            Dispatcher.Invoke(() =>
-            {
-                foreach (var itm in Categories)
-                {
-                    itm.Title += $"{itm.FolderName} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
-                }
-            });
-
-            if (toAdd.Any())
-            {
-                Log.Info($"Add categories" + string.Join(", ", toAdd));
-                foreach (var itm in toAdd)
-                {
-
-                    Dispatcher.Invoke(() => { Categories.Add(itm); });
-                }
-            }
-
+            ConfigService.Instanse.CategoriesWidth = CategoriesColumn.ActualWidth;
+            ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
+            ConfigService.Save();
 
         }
 
-
-        #region ServerActions
-
-
-        private async Task<TransmissionTorrents> ExecuteLongTask(Func<string[], Task<TransmissionTorrents>> asyncTask, string longStatusText, string[] args)
+        private void ClosingW(object sender, CancelEventArgs e)
         {
+            SaveConfig();
 
-            try
-            {
-                _isLongTaskRunning = true;
-                _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
-
-                    var resp = await asyncTask.Invoke(args);
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    return resp;
-                }
-            }
-            finally
-            {
-                IsDoingStuff = false;
-                LongStatusText = string.Empty;
-                _isLongTaskRunning = false;
-            }
-
-
-        }
-
-
-
-        private async Task<TransmissionInfoResponse<SessionInfo>> UpdateSessionInfo()
-        {
-            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, Kebler.Resources.Windows.MW_StatusText_Session);
-        }
-
-        private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
-        {
-            try
-            {
-                _isLongTaskRunning = true;
-                _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
-
-                    var resp = await asyncTask();
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    return resp;
-                }
-            }
-            finally
-            {
-                IsDoingStuff = false;
-                LongStatusText = string.Empty;
-                _isLongTaskRunning = false;
-            }
-
+            Log.Info("-----------Exit-----------");
         }
         #endregion
-
-
-        #region ParsersToUserFriendlyFormat
-
-
-        private void UpdateTorrentData(int oldIndex, TorrentInfo newData)
-        {
-
-            var myType = typeof(TorrentInfo);
-            var props = myType.GetProperties().Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length == 0);
-            props = props.Where(p => p.GetCustomAttributes(typeof(SetIgnoreAttribute), true).Length == 0);
-
-            var trnt = Validate(newData);
-            foreach (var item in props)
-            {
-
-                var name = item.GetCustomAttribute(typeof(JsonPropertyAttribute));
-
-
-
-                if (WorkingParams.Contains(((JsonPropertyAttribute)name).PropertyName))
-                {
-                    var newVal = trnt.Get(item.Name);
-                    TorrentList[oldIndex].Set(item.Name, newVal);
-                }
-            }
-        }
-
-
-        public TorrentInfo Validate(TorrentInfo torrInf, bool skip = false)
-        {
-            if (torrInf.Status == 1 || torrInf.Status == 2)
-            {
-                torrInf.PercentDone = torrInf.RecheckProgress;
-                return torrInf;
-            }
-
-            if (torrInf.Status == 0)
-                return torrInf;
-
-            if (!skip)
-                if (torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false))
-                {
-                    torrInf.Status = -1;
-                }
-            return torrInf;
-
-        }
-
-        #endregion
-
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
 
 
     }

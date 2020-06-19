@@ -23,7 +23,7 @@ namespace Kebler
     public partial class App
     {
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        public static KeblerWindow KeblerControl;
+        public KeblerWindow KeblerControl;
         public static App Instance;
 
         public delegate void ConnectionToServerInitialisedHandler(Server srv);
@@ -155,20 +155,12 @@ namespace Kebler
         protected override void OnStartup(StartupEventArgs e)
         {
 
-            KeblerControl = new KeblerWindow();
-            KeblerControl.Show();
-
+            var control  = new KeblerWindow();
+            control.Show();
             base.OnStartup(e);
         }
 
         #endregion
 
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            KeblerControl = new KeblerWindow();
-            KeblerControl.Show();
-
-            base.OnStartup(e);
-        }
     }
 }

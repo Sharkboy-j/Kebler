@@ -21,7 +21,7 @@ namespace Kebler.Services.Converters
             if (!(value is double torrInf))
                 return null;
 
-            //TorHelp.Validate(ref torrInf);
+            //TorHelp.ValidateTorrent(ref torrInf);
 
             switch (torrInf)
             {
@@ -55,7 +55,7 @@ namespace Kebler.Services.Converters
             if (!(value is double torrInf))
                 return null;
 
-            //TorHelp.Validate(ref torrInf);
+            //TorHelp.ValidateTorrent(ref torrInf);
 
 
             switch (torrInf)
@@ -90,7 +90,7 @@ namespace Kebler.Services.Converters
             if (!(value is double torrInf))
                 return null;
 
-            //TorHelp.Validate(ref torrInf);
+            //TorHelp.ValidateTorrent(ref torrInf);
 
             switch (torrInf)
             {

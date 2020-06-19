@@ -142,6 +142,42 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Bottom.
+        /// </summary>
+        internal static string QA_MoveBot {
+            get {
+                return ResourceManager.GetString("QA_MoveBot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Down.
+        /// </summary>
+        internal static string QA_MoveDown {
+            get {
+                return ResourceManager.GetString("QA_MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Top.
+        /// </summary>
+        internal static string QA_MoveTop {
+            get {
+                return ResourceManager.GetString("QA_MoveTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Up.
+        /// </summary>
+        internal static string QA_MoveUp {
+            get {
+                return ResourceManager.GetString("QA_MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
         internal static string QA_Pause {
@@ -156,6 +192,33 @@ namespace Kebler.Resources {
         internal static string QA_PauseAll {
             get {
                 return ResourceManager.GetString("QA_PauseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Priority.
+        /// </summary>
+        internal static string QA_Priority {
+            get {
+                return ResourceManager.GetString("QA_Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue.
+        /// </summary>
+        internal static string QA_Queue {
+            get {
+                return ResourceManager.GetString("QA_Queue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reannounce (get more peers).
+        /// </summary>
+        internal static string QA_Reannounce {
+            get {
+                return ResourceManager.GetString("QA_Reannounce", resourceCulture);
             }
         }
         
@@ -178,7 +241,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resume.
+        ///   Looks up a localized string similar to Start.
         /// </summary>
         internal static string QA_Resume {
             get {
@@ -187,11 +250,20 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resume All.
+        ///   Looks up a localized string similar to Start All.
         /// </summary>
         internal static string QA_ResumeAll {
             get {
                 return ResourceManager.GetString("QA_ResumeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Data Location....
+        /// </summary>
+        internal static string QA_SetLoc {
+            get {
+                return ResourceManager.GetString("QA_SetLoc", resourceCulture);
             }
         }
         
@@ -201,6 +273,15 @@ namespace Kebler.Resources {
         internal static string QA_Slow {
             get {
                 return ResourceManager.GetString("QA_Slow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify.
+        /// </summary>
+        internal static string QA_Verify {
+            get {
+                return ResourceManager.GetString("QA_Verify", resourceCulture);
             }
         }
     }

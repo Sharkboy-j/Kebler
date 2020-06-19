@@ -16,13 +16,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
         private bool _wasSelected;
         private DragAdorner _adorner;
 
-        public MultiselectionTreeViewItem Node
-        {
-            get
-            {
-                return this.DataContext as MultiselectionTreeViewItem;
-            }
-        }
+        public MultiselectionTreeViewItem Node => DataContext as MultiselectionTreeViewItem;
 
         public MultiselectionTreeView ParentTreeView { get; internal set; }
 
@@ -31,29 +25,27 @@ namespace Kebler.UI.CSControls.MultiTreeView
             base.OnPropertyChanged(e);
             if (e.Property != DataContextProperty)
                 return;
-            this.UpdateDataContext(e.OldValue as MultiselectionTreeViewItem, e.NewValue as MultiselectionTreeViewItem);
+            UpdateDataContext(e.OldValue as MultiselectionTreeViewItem, e.NewValue as MultiselectionTreeViewItem);
         }
 
-        private void UpdateDataContext(
-          MultiselectionTreeViewItem oldNode,
-          MultiselectionTreeViewItem newNode)
+        private void UpdateDataContext(INotifyPropertyChanged oldNode, INotifyPropertyChanged newNode)
         {
             if (newNode != null)
             {
-                newNode.PropertyChanged += new PropertyChangedEventHandler(this.Node_PropertyChanged);
-                if (this.Template != null)
-                    this.UpdateTemplate();
+                newNode.PropertyChanged += Node_PropertyChanged;
+                if (Template != null)
+                    UpdateTemplate();
             }
             if (oldNode == null)
                 return;
-            oldNode.PropertyChanged -= new PropertyChangedEventHandler(this.Node_PropertyChanged);
+            oldNode.PropertyChanged -= Node_PropertyChanged;
         }
 
         private void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!(e.PropertyName == "IsExpanded") || !this.Node.IsExpanded)
+            if (e.PropertyName != "IsExpanded" || !Node.IsExpanded)
                 return;
-            //this.ParentTreeView.HandleExpanding(this.Node);
+            ParentTreeView.HandleExpanding(Node);
         }
 
         private void UpdateTemplate()
@@ -62,72 +54,72 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         internal double CalculateIndent()
         {
-            int num = 19 * this.Node.Level - 19;
+            int num = 19 * Node.Level - 19;
             return num < 0 ? 0.0 : num;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            this._wasSelected = this.IsSelected;
-            if (!this.IsSelected)
+            _wasSelected = IsSelected;
+            if (!IsSelected)
                 base.OnMouseLeftButtonDown(e);
-            if (!this.ParentTreeView.AllowDragDrop || Mouse.LeftButton != MouseButtonState.Pressed)
+            if (!ParentTreeView.AllowDragDrop || Mouse.LeftButton != MouseButtonState.Pressed)
                 return;
-            this._startPoint = e.GetPosition(null);
-            this.CaptureMouse();
+            _startPoint = e.GetPosition(null);
+            CaptureMouse();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (!this.IsMouseCaptured)
+            if (!IsMouseCaptured)
                 return;
-            Point position = e.GetPosition(null);
-            if (Math.Abs(position.X - this._startPoint.X) < SystemParameters.MinimumHorizontalDragDistance && Math.Abs(position.Y - this._startPoint.Y) < SystemParameters.MinimumVerticalDragDistance)
+            var position = e.GetPosition(null);
+            if (Math.Abs(position.X - _startPoint.X) < SystemParameters.MinimumHorizontalDragDistance && Math.Abs(position.Y - _startPoint.Y) < SystemParameters.MinimumVerticalDragDistance)
                 return;
-            this._adorner = new DragAdorner(this, e.GetPosition(this));
-            if (this._adorner == null)
+            _adorner = new DragAdorner(this, e.GetPosition(this));
+            if (_adorner == null)
                 return;
-            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(ParentTreeView);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(ParentTreeView);
             if (adornerLayer == null)
                 return;
             adornerLayer.Add(_adorner);
-            this.Node.StartDrag(this, this.ParentTreeView.GetTopLevelSelection().ToArray<MultiselectionTreeViewItem>());
+            Node.StartDrag(this, ParentTreeView.GetTopLevelSelection().ToArray<MultiselectionTreeViewItem>());
             adornerLayer.Remove(_adorner);
         }
 
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
-            if (!this.IsVisible || this._adorner == null)
+            if (!IsVisible || _adorner == null)
                 return;
-            this._adorner.UpdatePosition(this.PointFromScreen(MouseHelper.GetMousePosition()));
+            _adorner.UpdatePosition(PointFromScreen(MouseHelper.GetMousePosition()));
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            this.ReleaseMouseCapture();
-            if (!this._wasSelected)
+            ReleaseMouseCapture();
+            if (!_wasSelected)
                 return;
             base.OnMouseLeftButtonDown(e);
         }
 
         protected override void OnDragEnter(DragEventArgs e)
         {
-            this.ParentTreeView.HandleDragEnter(this, e);
+            ParentTreeView.HandleDragEnter(this, e);
         }
 
         protected override void OnDragOver(DragEventArgs e)
         {
-            this.ParentTreeView.HandleDragOver(this, e);
+            ParentTreeView.HandleDragOver(this, e);
         }
 
         protected override void OnDrop(DragEventArgs e)
         {
-            this.ParentTreeView.HandleDrop(this, e);
+            ParentTreeView.HandleDrop(this, e);
         }
 
         protected override void OnDragLeave(DragEventArgs e)
         {
-            this.ParentTreeView.HandleDragLeave(this, e);
+            ParentTreeView.HandleDragLeave(this, e);
         }
     }
 }

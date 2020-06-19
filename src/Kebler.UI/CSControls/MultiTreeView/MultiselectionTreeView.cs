@@ -354,7 +354,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
             }
             catch (Exception ex)
             {
-               // MultiselectionTreeView.Log.Debug(ex.ToString());
+                // MultiselectionTreeView.Log.Debug(ex.ToString());
                 throw;
             }
         }
@@ -379,9 +379,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
             return null;
         }
 
-        private List<DropTarget> BuildDropTargets(
-          TreeViewControlItem item,
-          DragEventArgs e)
+        private IEnumerable<DropTarget> BuildDropTargets(TreeViewControlItem item, DragEventArgs e)
         {
             var targets = new List<DropTarget>();
             var node = item.Node;
@@ -402,14 +400,9 @@ namespace Kebler.UI.CSControls.MultiTreeView
             return targets;
         }
 
-        private void TryAddDropTarget(
-          List<DropTarget> targets,
-          TreeViewControlItem item,
-          DragEventArgs e)
+        private void TryAddDropTarget(List<DropTarget> targets, TreeViewControlItem item, DragEventArgs e)
         {
-            MultiselectionTreeViewItem node;
-            int index;
-            GetNodeAndIndex(item, out node, out index);
+            GetNodeAndIndex(item, out var node, out var index);
             if (node == null)
                 return;
             var dropEffect = node.GetDropEffect(e, index);
@@ -425,13 +418,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
             targets.Add(dropTarget);
         }
 
-        private void GetNodeAndIndex(
-          TreeViewControlItem item,
-          out MultiselectionTreeViewItem node,
-          out int index)
+        private static void GetNodeAndIndex(TreeViewControlItem item, out MultiselectionTreeViewItem node, out int index)
         {
-            node = null;
-            index = 0;
             node = item.Node;
             index = node.Children.Count;
         }
@@ -461,7 +449,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         private class UpdateLock : IDisposable
         {
-            private MultiselectionTreeView _instance;
+            private readonly MultiselectionTreeView _instance;
 
             public UpdateLock(MultiselectionTreeView instance)
             {

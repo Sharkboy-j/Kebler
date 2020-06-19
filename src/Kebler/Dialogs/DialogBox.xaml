@@ -1,9 +1,10 @@
-﻿<ui:CustomWindow
-    x:Class="Kebler.UI.Dialogs.DialogBox"
+﻿<window:CustomizableWindow
+    x:Class="Kebler.Dialogs.DialogBox"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
+    xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
     MinWidth="380"
     MinHeight="155"
     MaxWidth="400"
@@ -12,9 +13,7 @@
     lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
-    ShowTopLine="False"
     SizeToContent="WidthAndHeight"
-    Style="{StaticResource MainWindow}"
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType"
     UseLayoutRounding="True"
@@ -101,4 +100,4 @@
             </StackPanel>
         </Grid>
     </Grid>
-</ui:CustomWindow>
+</window:CustomizableWindow>

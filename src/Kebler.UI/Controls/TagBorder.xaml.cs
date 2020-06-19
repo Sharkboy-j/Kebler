@@ -6,7 +6,7 @@ namespace Kebler.UI.Controls
     /// <summary>
     /// Interaction logic for TagBorder.xaml
     /// </summary>
-    public partial class TagBorder : UserControl
+    public partial class TagBorder
     {
         public TagBorder()
         {
@@ -19,14 +19,8 @@ namespace Kebler.UI.Controls
 
         public double Percent
         {
-            get
-            {
-                return (int)GetValue(PercentProperty);
-            }
-            set
-            {
-                SetValue(PercentProperty, value);
-            }
+            get => (int)GetValue(PercentProperty);
+            set => SetValue(PercentProperty, value);
         }
 
 
@@ -35,14 +29,8 @@ namespace Kebler.UI.Controls
 
         public double Status
         {
-            get
-            {
-                return (int)GetValue(StatusProperty);
-            }
-            set
-            {
-                SetValue(StatusProperty, value);
-            }
+            get => (int)GetValue(StatusProperty);
+            set => SetValue(StatusProperty, value);
         }
     }
 }

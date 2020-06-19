@@ -335,9 +335,20 @@ namespace Kebler.TransmissionCore
         /// Start torrents (API: torrent-start)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStartAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentStartAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> { { "ids", ids } });
+            var resp = await SendRequestAsync(request);
+            return resp;
+        }    
+        
+        /// <summary>
+        /// Start torrents (API: torrent-start)
+        /// </summary>
+        /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
+        public Task TorrentStartForceAsync(uint[] ids)
+        {
+            var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request);
         }
 
@@ -381,10 +392,11 @@ namespace Kebler.TransmissionCore
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStopAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentStopAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            var resp = await SendRequestAsync(request);
+            return resp;
         }
 
         /// <summary>
@@ -404,7 +416,7 @@ namespace Kebler.TransmissionCore
         /// Verify torrents (API: torrent-verify)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentVerifyAsync(int[] ids)
+        public Task<TransmissionResponse> TorrentVerifyAsync(uint[] ids)
         {
             var request = new TransmissionRequest("torrent-verify", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request);
@@ -424,40 +436,44 @@ namespace Kebler.TransmissionCore
         /// Move torrents in queue on top (API: queue-move-top)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public Task TorrentQueueMoveTopAsync(int[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids)
         {
             var request = new TransmissionRequest("queue-move-top", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            var resp =  await SendRequestAsync(request);
+            return resp;
         }
 
         /// <summary>
         /// Move up torrents in queue (API: queue-move-up)
         /// </summary>
         /// <param name="ids"></param>
-        public Task TorrentQueueMoveUpAsync(int[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveUpAsync(uint[] ids)
         {
             var request = new TransmissionRequest("queue-move-up", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            var resp = await SendRequestAsync(request);
+            return resp;
         }
 
         /// <summary>
         /// Move down torrents in queue (API: queue-move-down)
         /// </summary>
         /// <param name="ids"></param>
-        public Task TorrentQueueMoveDownAsync(int[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveDownAsync(uint[] ids)
         {
             var request = new TransmissionRequest("queue-move-down", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            var resp = await SendRequestAsync(request);
+            return resp;
         }
 
         /// <summary>
         /// Move torrents to bottom in queue  (API: queue-move-bottom)
         /// </summary>
         /// <param name="ids"></param>
-        public Task TorrentQueueMoveBottomAsync(int[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveBottomAsync(uint[] ids)
         {
             var request = new TransmissionRequest("queue-move-bottom", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            var resp = await SendRequestAsync(request);
+            return resp;
         }
 
         /// <summary>
@@ -493,18 +509,18 @@ namespace Kebler.TransmissionCore
         }
 
         //method name not recognized
-        ///// <summary>
-        ///// Reannounce torrent (API: torrent-reannounce)
-        ///// </summary>
-        ///// <param name="ids"></param>
-        //public void ReannounceTorrents(object[] ids)
-        //{
-        //    var arguments = new Dictionary<string, object>();
-        //    arguments.Add("ids", ids);
+        /// <summary>
+        /// Reannounce torrent (API: torrent-reannounce)
+        /// </summary>
+        /// <param name="ids"></param>
+        public async Task<TransmissionResponse> ReannounceTorrentsAsync(uint[] ids)
+        {
+            var arguments = new Dictionary<string, object> {{"ids", ids}};
 
-        //    var request = new TransmissionRequest("torrent-reannounce", arguments);
-        //    var response = SendRequest(request);
-        //}
+            var request = new TransmissionRequest("torrent-reannounce", arguments);
+            var response = await SendRequestAsync(request);
+            return response;
+        }
 
         #endregion
 
@@ -680,6 +696,8 @@ namespace Kebler.TransmissionCore
                 {
                     throw new Exception(result.Result);
                 }
+
+                result.Success = true;
             }
             catch (WebException ex)
             {

@@ -8,7 +8,7 @@ using Kebler.Models;
 using Kebler.TransmissionCore;
 using log4net;
 
-namespace Kebler.UI.Dialogs
+namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for RemoveTorrentDialog.xaml
