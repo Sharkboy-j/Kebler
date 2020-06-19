@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 133 inbox filled</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-133-inbox-filled" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M21,16 L27.7750244,16 L23.4000244,9 L9.59997559,9 L5.22497559,16 L12,16 L12,17.9951185 C12,19.102384 12.8958578,20 13.9973917,20 L19.0026083,20 C20.1057373,20 21,19.1061002 21,17.9951185 L21,16 L21,16 L21,16 Z M22,17 L28,17 L28,24 L5,24 L5,17 L11,17 L11,18.5 C11,19.8807119 12.1152735,21 13.4960703,21 L19.5039297,21 C20.8824713,21 22,19.8903379 22,18.5 L22,17 L22,17 L22,17 Z M4,16.75 L4,16 L9,8 L24,8 L29,16 L29,16.75 L29,25 L4,25 L4,16.75 L4,16.75 Z M11,10 L10.4000244,11 L22.5999756,11 L22,10 L11,10 L11,10 Z M9.69995117,12 L9.09997559,13 L23.9000244,13 L23.3000488,12 L9.69995117,12 L9.69995117,12 Z M8.5,14 L7.90002441,15 L25.0999756,15 L24.5,14 L8.5,14 L8.5,14 Z" id="inbox-filled" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

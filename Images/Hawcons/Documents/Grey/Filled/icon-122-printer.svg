@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 122 printer</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-122-printer" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M4,11 L4,4.9973917 C4,3.89585781 4.89427625,3 5.99742191,3 L21.0025781,3 C22.1090746,3 23,3.89426273 23,4.9973917 L23,11 L4,11 L4,11 Z M3,27 L1.99428189,27 C0.340568705,27 -1,25.6571128 -1,24.0005775 L-1,14.9994225 C-1,13.3443507 0.340585665,12 1.99428189,12 L25.0057181,12 C26.6594313,12 28,13.3428872 28,14.9994225 L28,24.0005775 C28,25.6556493 26.6594143,27 25.0057181,27 L24,27 L24,19 L3,19 L3,27 L3,27 L3,27 Z M4,20 L4,28.000385 C4,29.1047419 4.89092539,30 5.99742191,30 L21.0025781,30 C22.1057238,30 23,29.1125667 23,28.000385 L23,20 L4,20 L4,20 Z M22,17 C22.5522848,17 23,16.5522848 23,16 C23,15.4477152 22.5522848,15 22,15 C21.4477152,15 21,15.4477152 21,16 C21,16.5522848 21.4477152,17 22,17 L22,17 Z" id="printer" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

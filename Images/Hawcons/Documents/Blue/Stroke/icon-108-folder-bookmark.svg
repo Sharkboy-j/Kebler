@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 108 folder bookmark</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-108-folder-bookmark" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M24,14 L30,14 L30,24.9991283 C30,25.5553691 29.5554342,26 29.0070346,26 L3.99296544,26 C3.44610862,26 3,25.5559546 3,25.0081969 L3,14 L18,14 L18,23 L21,20 L24,23 L24,14 L24,14 L24,14 Z M3,13 L3,6.99180311 C3,6.45530558 3.44401481,6 3.99173483,6 L14.4000244,6 L16.3599854,10 L28.9970172,10 C29.5461723,10 30,10.4481055 30,11.0008717 L30,13 L3,13 L3,13 Z M17,9 L15,5 L4.00276013,5 C2.89666625,5 2,5.88967395 2,6.991155 L2,25.008845 C2,26.1085295 2.89971268,27 3.99328744,27 L29.0067126,27 C30.1075748,27 31,26.1073772 31,25.0049107 L31,10.9950893 C31,9.8932319 30.1029399,9 28.9941413,9 L17,9 L17,9 Z M19,14 L19,20.5999756 L21,18.5999756 L23,20.5999756 L23,14 L19,14 L19,14 Z" id="folder-bookmark" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

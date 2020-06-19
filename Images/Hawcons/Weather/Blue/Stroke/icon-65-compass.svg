@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 65 compass</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-65-compass" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M16,29 C23.1797021,29 29,23.1797021 29,16 C29,8.8202979 23.1797021,3 16,3 C8.8202979,3 3,8.8202979 3,16 C3,23.1797021 8.8202979,29 16,29 L16,29 Z M16,28 C22.6274173,28 28,22.6274173 28,16 C28,9.37258267 22.6274173,4 16,4 C9.37258267,4 4,9.37258267 4,16 C4,22.6274173 9.37258267,28 16,28 L16,28 Z M18.1213203,18.1213203 C16.3535535,19.8890874 8.92893219,23.0710678 8.92893219,23.0710678 C8.92893219,23.0710678 12.1109127,15.6464466 13.8786797,13.8786797 C15.6464466,12.1109127 23.0710678,8.92893219 23.0710678,8.92893219 C23.0710678,8.92893219 19.8890872,16.3535533 18.1213203,18.1213203 L18.1213203,18.1213203 Z M14.6204574,14.6000004 C13.206244,16.0142139 11.0142139,21.034671 11.0142139,21.034671 C11.0142139,21.034671 16.034671,18.8426411 17.4488846,17.4284275 L14.6204574,14.6000004 L14.6204574,14.6000004 Z" id="compass" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

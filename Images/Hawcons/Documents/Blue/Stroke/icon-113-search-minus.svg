@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 113 search minus</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-113-search-minus" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M19.1453485,19.8546515 C17.644113,21.1892864 15.6667327,22 13.5,22 C8.80557939,22 5,18.1944206 5,13.5 C5,8.80557939 8.80557939,5 13.5,5 C18.1944206,5 22,8.80557939 22,13.5 C22,15.6667327 21.1892864,17.644113 19.8546515,19.1453485 L20,19 L26.5077736,25.5077736 C26.782828,25.782828 26.7761424,26.2238576 26.5,26.5 C26.2219324,26.7780676 25.7796227,26.7796227 25.5077736,26.5077736 L19,20 L19.145348,19.854652 L19.1453485,19.8546515 L19.1453485,19.8546515 Z M13.5,21 C17.6421358,21 21,17.6421358 21,13.5 C21,9.35786417 17.6421358,6 13.5,6 C9.35786417,6 6,9.35786417 6,13.5 C6,17.6421358 9.35786417,21 13.5,21 L13.5,21 Z M9,13 L9,14 L18,14 L18,13 L9,13 L9,13 Z" id="search-minus" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

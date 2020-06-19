@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 1 mail envelope</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-1-mail-envelope" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M6.00359486,8 C4.89703997,8 4,8.89451376 4,9.99406028 L4,22.0059397 C4,23.1072288 4.88976324,24 6.00359486,24 L26.9964051,24 C28.10296,24 29,23.1054862 29,22.0059397 L29,9.99406028 C29,8.8927712 28.1102368,8 26.9964051,8 L6.00359486,8 L6.00359486,8 Z M6.00307055,9 C5.44908998,9 5,9.44994876 5,10.0068455 L5,21.9931545 C5,22.5492199 5.43891776,23 6.00307055,23 L26.9969294,23 C27.55091,23 28,22.5500512 28,21.9931545 L28,10.0068455 C28,9.45078007 27.5610822,9 26.9969294,9 L6.00307055,9 L6.00307055,9 Z M23,11 L23,14 L26,14 L26,11 L23,11 L23,11 Z M24,12 L24,13 L25,13 L25,12 L24,12 L24,12 Z M7,18 L7,19 L15,19 L15,18 L7,18 L7,18 Z M7,11 L7,12 L11,12 L11,11 L7,11 L7,11 Z M7,20 L7,21 L15,21 L15,20 L7,20 L7,20 Z" id="mail-envelope" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 28 moon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-28-moon" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M21.8364888,17.8310925 C21.2394286,20.222796 19.0766283,21.9946037 16.5,21.9946037 C13.4624337,21.9946037 11,19.5321699 11,16.4946037 C11,13.9179753 12.7718077,11.7551751 15.1635112,11.1581148 C15.5148964,11.0703957 15.879662,11.0164731 16.2541551,11 C16.089541,11.4676426 16,11.9706664 16,12.4946037 C16,14.9798852 18.0147185,16.9946037 20.5,16.9946037 C21.0239372,16.9946037 21.5269611,16.9050627 21.9946037,16.7404486 C21.9781305,17.1149417 21.9242079,17.4797073 21.8364888,17.8310925 Z" id="moon" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

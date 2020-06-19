@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 7 soccer court</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-7-soccer-court" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M2,21 L2,24.0025781 C2,25.1057238 2.89971268,26 3.99328744,26 L16,26 L16,26 L16,20.9725356 C13.7500247,20.7238135 12,18.8162769 12,16.5 C12,14.1837231 13.7500247,12.2761865 16,12.0274644 L16,7 L3.99328744,7 C2.89242519,7 2,7.89092539 2,8.99742191 L2,12 L7,12 L7,21 L2,21 L2,21 L2,21 Z M31,21 L31,24.0025781 C31,25.1090746 30.1075748,26 29.0067126,26 L17,26 L17,26 L17,20.9725356 C19.2499753,20.7238135 21,18.8162769 21,16.5 C21,14.1837231 19.2499753,12.2761865 17,12.0274644 L17,7 L29.0067126,7 C30.1002873,7 31,7.89427625 31,8.99742191 L31,12 L26,12 L26,21 L31,21 L31,21 L31,21 Z M17,19.9645556 C18.6961471,19.7219408 20,18.263236 20,16.5 C20,14.736764 18.6961471,13.2780592 17,13.0354444 L17,19.9645556 L17,19.9645556 L17,19.9645556 Z M16,13.0354444 C14.3038529,13.2780592 13,14.736764 13,16.5 C13,18.263236 14.3038529,19.7219408 16,19.9645556 L16,13.0354444 L16,13.0354444 Z M27,13 L27,20 L31,20 L31,13 L27,13 L27,13 Z M2,13 L2,20 L6,20 L6,13 L2,13 L2,13 Z" id="soccer-court" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

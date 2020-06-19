@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 45 bowling pins</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-45-bowling-pins" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M18,13 L18,11 L22,11 L22,13 L18,13 L18,13 Z M17.4386289,14 C16.8470298,15.1926053 16,17.3573829 16,19.9760742 C16,24 18,27 18,27 L22,27 C22,27 24,23.9974976 24,19.9760742 C24,17.3585758 23.1526882,15.1930218 22.5610756,14 L17.4386289,14 L17.4386289,14 Z M17.91298,10 C17.6696646,8.62015878 17,7.72749553 17,6.5 C17,5.38772964 18,4 20,4 C22,4 23,5.3954305 23,6.5 C23,7.72749553 22.3303354,8.62015878 22.08702,10 L17.91298,10 L17.91298,10 L17.91298,10 Z M6,13 L6,11 L10,11 L10,13 L6,13 L6,13 L6,13 Z M5.43862891,14 C4.84702979,15.1926053 4,17.3573829 4,19.9760742 C4,24 6,27 6,27 L10,27 C10,27 12,23.9974976 12,19.9760742 C12,17.3585758 11.1526882,15.1930218 10.5610756,14 L5.43862891,14 L5.43862891,14 L5.43862891,14 Z M5.91298002,10 C5.66966457,8.62015878 5,7.72749553 5,6.5 C5,5.38772964 6,4 8,4 C10,4 11,5.3954305 11,6.5 C11,7.72749553 10.3303354,8.62015878 10.08702,10 L5.91298002,10 L5.91298002,10 L5.91298002,10 Z" id="bowling-pins" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

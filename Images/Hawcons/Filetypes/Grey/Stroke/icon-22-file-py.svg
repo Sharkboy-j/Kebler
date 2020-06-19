@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 22 file py</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-22-file-py" sketch:type="MSArtboardGroup" fill="#929292">
+            <path d="M8.00684834,10 C6.34621185,10 5,11.3422643 5,12.9987856 L5,20.0012144 C5,21.6573979 6.33599155,23 8.00684834,23 L24.9931517,23 C26.6537881,23 28,21.6577357 28,20.0012144 L28,12.9987856 C28,11.3426021 26.6640085,10 24.9931517,10 L8.00684834,10 L8.00684834,10 Z M7.99456145,11 C6.89299558,11 6,11.9001762 6,12.992017 L6,20.007983 C6,21.1081436 6.90234375,22 7.99456145,22 L25.0054385,22 C26.1070044,22 27,21.0998238 27,20.007983 L27,12.992017 C27,11.8918564 26.0976562,11 25.0054385,11 L7.99456145,11 L7.99456145,11 Z M11,15 L11,20 L12,20 L12,17 L13.9951185,17 C15.102384,17 16,16.1122704 16,15 C16,13.8954305 15.1061002,13 13.9951185,13 L11,13 L11,15 L11,15 Z M12,14 L12,16 L14.0010434,16 C14.5527519,16 15,15.5561352 15,15 C15,14.4477153 14.5573397,14 14.0010434,14 L12,14 L12,14 Z M20,17 L20,20 L19,20 L19,17 L17,14 L17,13 L18,13 L18,14 L19.5,16.25 L21,14 L21,13 L22,13 L22,14 L20,17 L20,17 Z" id="file-py" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

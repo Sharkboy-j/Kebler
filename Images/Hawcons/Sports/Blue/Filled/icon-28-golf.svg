@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>icon 28 golf</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-28-golf" sketch:type="MSArtboardGroup" fill="#157EFB">
+            <path d="M12,7.5 L12,25 L13,25 L13,12.5714286 L26,7 L12,1 L12,7.5 L12,7.5 L12,7.5 Z M14,20.1066323 C14.8048604,20.0368155 15.6414429,20 16.5,20 C22.8512746,20 28,22.0147186 28,24.5 C28,26.9852814 22.8512746,29 16.5,29 C10.1487254,29 5,26.9852814 5,24.5 C5,22.7942967 7.42524477,21.3102463 11,20.5470491 L11,23.2998901 C10.3927766,23.573552 10,24.0092547 10,24.5 C10,25.3284271 11.1192881,26 12.5,26 C13.8807119,26 15,25.3284271 15,24.5 C15,24.0092547 14.6072234,23.573552 14,23.2998901 L14,20.1066323 L14,20.1066323 L14,20.1066323 Z M20.5,25 C21.3284271,25 22,24.5522847 22,24 C22,23.4477153 21.3284271,23 20.5,23 C19.6715729,23 19,23.4477153 19,24 C19,24.5522847 19.6715729,25 20.5,25 L20.5,25 Z" id="golf" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
