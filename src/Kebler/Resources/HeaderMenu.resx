@@ -151,4 +151,7 @@
   <data name="MI_Servers" xml:space="preserve">
     <value>Servers</value>
   </data>
+  <data name="MI_Logs" xml:space="preserve">
+    <value>Open Logs</value>
+  </data>
 </root>

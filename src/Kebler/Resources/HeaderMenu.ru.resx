@@ -168,4 +168,10 @@
   <data name="MI_Kebler" xml:space="preserve">
     <value>Kebler</value>
   </data>
+  <data name="MI_Logs" xml:space="preserve">
+    <value>Открыть Логи</value>
+  </data>
+  <data name="MI_Servers" xml:space="preserve">
+    <value>Сервера</value>
+  </data>
 </root>

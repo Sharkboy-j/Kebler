@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Test", "Kebler.Test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Models", "Kebler.Models\Kebler.Models.csproj", "{8DB0FE2C-8A06-429A-BDB5-44677D6C9B75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.TransmissionCore", "Kebler.TransmissionCore\Kebler.TransmissionCore.csproj", "{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.TransmissionCore", "Kebler.TransmissionCore\Kebler.TransmissionCore.csproj", "{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,8 +107,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowErrorsInErrorList = False
-		RESX_TaskErrorCategory = Message
 		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
+		RESX_TaskErrorCategory = Message
+		RESX_ShowErrorsInErrorList = False
 	EndGlobalSection
 EndGlobal

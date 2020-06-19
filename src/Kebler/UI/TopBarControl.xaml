@@ -38,6 +38,10 @@
                 Click="Report"
                 Header="{lex:LocText MI_Report}"
                 IsCheckable="False" />
+            <MenuItem
+                Click="OpenLogs"
+                Header="{lex:LocText MI_Logs}"
+                IsCheckable="False" />
             <Separator />
             <MenuItem
                 Click="About"

@@ -133,6 +133,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Logs.
+        /// </summary>
+        internal static string MI_Logs {
+            get {
+                return ResourceManager.GetString("MI_Logs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report a Problem.
         /// </summary>
         internal static string MI_Report {

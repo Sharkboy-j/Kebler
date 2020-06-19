@@ -82,7 +82,6 @@ namespace Kebler
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
 
-
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
 

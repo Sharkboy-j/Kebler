@@ -1,11 +1,17 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Services;
+using log4net;
+using log4net.Appender;
+using log4net.Repository.Hierarchy;
 using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.UI
@@ -136,6 +142,19 @@ namespace Kebler.UI
         private void Contact(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo("cmd", "/c start https://t.me/jeremiSharkboy") { CreateNoWindow = true });
+        }
+
+        private void OpenLogs(object sender, RoutedEventArgs e)
+        {
+            var rootAppender = ((Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly()))
+                .Root.Appenders.OfType<FileAppender>()
+                .FirstOrDefault();
+            string filename = rootAppender != null ? rootAppender.File : string.Empty;
+
+            var filein = new FileInfo(filename);
+
+            Process.Start(new ProcessStartInfo("explorer.exe", $"{filein.DirectoryName}") { CreateNoWindow = true });
+
         }
     }
 }
