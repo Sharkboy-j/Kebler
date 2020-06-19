@@ -17,6 +17,6 @@ Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases) page and dow
 
 Copyright (c)2019 by JeremiSharkboy
 
-Kebler is free opensource software; you can redistribute it and/or modify it under the terms of the MIT License;
+Kebler is free opensource software;
 
 KeblerI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the MIT License for more details.
