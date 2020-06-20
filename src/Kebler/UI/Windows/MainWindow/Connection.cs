@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -141,10 +142,9 @@ namespace Kebler.UI.Windows
             {
                 try
                 {
-                    var info = await UpdateSessionInfo();
-                    info.ParseTransmissionReponse(Log);
+                    var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token), Kebler.Resources.Windows.MW_StatusText_Session);
 
-                    if (CheckResponse(info))
+                    if (CheckResponse(info.Response))
                     {
                         _sessionInfo = info.Value;
                         IsConnected = true;
@@ -157,12 +157,10 @@ namespace Kebler.UI.Windows
                                 Application.Current.Dispatcher.HasShutdownStarted)
                                 throw new TaskCanceledException();
 
-                            _stats = await ExecuteLongTask(_transmissionClient.GetSessionStatisticAsync,
-                                Kebler.Resources.Windows.MW_StatusText_Stats);
 
+                            _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), Kebler.Resources.Windows.MW_StatusText_Stats)).Value;
 
-                            allTorrents = await ExecuteLongTask(_transmissionClient.TorrentGetAsync,
-                                Kebler.Resources.Windows.MW_StatusText_Torrents, WorkingParams);
+                            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(WorkingParams, _cancelTokenSource.Token), Kebler.Resources.Windows.MW_StatusText_Torrents)).Value;
 
                             ParseSettings();
                             ParseStats();
@@ -177,12 +175,13 @@ namespace Kebler.UI.Windows
                     }
                     else
                     {
-                        if (info.WebException != null)
-                            throw info.WebException;
-                        if (info.CustomException != null)
-                            throw info.CustomException;
+                        if (info.Response.WebException != null)
+                            throw info.Response.WebException;
 
-                        throw new Exception(info.HttpWebResponse.StatusCode.ToString());
+                        if (info.Response.CustomException != null)
+                            throw info.Response.CustomException;
+
+                        throw new Exception(info.Response.HttpWebResponse.StatusCode.ToString());
                     }
                 }
                 catch (TaskCanceledException)
@@ -197,7 +196,7 @@ namespace Kebler.UI.Windows
                 {
                     if (IsConnected)
                     {
-                        await _transmissionClient.CloseSessionAsync();
+                        await _transmissionClient.CloseSessionAsync(_cancelTokenSource.Token);
                     }
 
                     allTorrents = null;
@@ -211,7 +210,10 @@ namespace Kebler.UI.Windows
             _whileCycleTask.Start();
         }
 
-        private bool CheckResponse(ITransmissionReponse resp)
+
+
+
+        private bool CheckResponse(TransmissionResponse resp)
         {
 
             if (resp.WebException != null)
@@ -237,6 +239,8 @@ namespace Kebler.UI.Windows
             return true;
         }
 
+
+
         public void Disconnect()
         {
             if (!IsConnected) return;
@@ -255,41 +259,18 @@ namespace Kebler.UI.Windows
             await Task.Delay(1500);
             InitConnection();
         }
-        
-        private async Task<TransmissionInfoResponse<SessionInfo>> UpdateSessionInfo()
-        {
-            return await ExecuteLongTask(_transmissionClient.GetSessionInformationAsync, Kebler.Resources.Windows.MW_StatusText_Session);
-        }
 
-        private async Task<dynamic> ExecuteLongTask(Func<dynamic> asyncTask, string longStatusText)
+
+        private async Task<TransmissionResponse<T>> Get<T>(Task<TransmissionResponse<T>> t, string status)
         {
             try
             {
                 _isLongTaskRunning = true;
                 _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    // Debug.WriteLine($"Start getting {nameof(asyncTask)}");
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted");
-                    }
-
-                    var resp = await asyncTask();
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-
-                    return resp;
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                return null;
+                LongStatusText = status;
+                var resp = await t;
+                resp.ParseTransmissionReponse(Log);
+                return resp;
             }
             finally
             {
@@ -297,39 +278,6 @@ namespace Kebler.UI.Windows
                 LongStatusText = string.Empty;
                 _isLongTaskRunning = false;
             }
-        }
-
-        private async Task<TransmissionTorrents> ExecuteLongTask(Func<string[], Task<TransmissionTorrents>> asyncTask, string longStatusText, string[] args)
-        {
-            try
-            {
-                _isLongTaskRunning = true;
-                _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = longStatusText;
-
-                while (true)
-                {
-                    if (Dispatcher == null || Dispatcher.HasShutdownStarted)
-                    {
-                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
-                    }
-
-                    var resp = await asyncTask.Invoke(args);
-                    if (resp == null)
-                    {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    return resp;
-                }
-            }
-            finally
-            {
-                IsDoingStuff = false;
-                LongStatusText = string.Empty;
-                _isLongTaskRunning = false;
-            }
-
         }
         #endregion
 
@@ -561,26 +509,26 @@ namespace Kebler.UI.Windows
 
 
 
-                Dispatcher.Invoke(() =>
-                {
-                    var column = TorrentsDataGrid.Columns.Last();
+                //Dispatcher.Invoke(() =>
+                //{
+                //    var column = TorrentsDataGrid.Columns.Last();
 
-                    // Clear current sort descriptions
-                    TorrentsDataGrid.Items.SortDescriptions.Clear();
+                //    // Clear current sort descriptions
+                //    TorrentsDataGrid.Items.SortDescriptions.Clear();
 
-                    // Add the new sort description
-                    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
+                //    // Add the new sort description
+                //    TorrentsDataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, ListSortDirection.Descending));
 
-                    // Apply sort
-                    foreach (var col in TorrentsDataGrid.Columns)
-                    {
-                        col.SortDirection = null;
-                    }
-                    column.SortDirection = ListSortDirection.Ascending;
+                //    // Apply sort
+                //    foreach (var col in TorrentsDataGrid.Columns)
+                //    {
+                //        col.SortDirection = null;
+                //    }
+                //    column.SortDirection = ListSortDirection.Ascending;
 
-                    // Refresh items to display sort
-                    TorrentsDataGrid.Items.Refresh();
-                });
+                //    // Refresh items to display sort
+                //    TorrentsDataGrid.Items.Refresh();
+                //});
 
 
             }

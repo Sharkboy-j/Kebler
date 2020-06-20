@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System;
+using System.Collections.Generic;
 
 namespace Kebler.Models.Torrent.Common
 {
@@ -8,7 +9,7 @@ namespace Kebler.Models.Torrent.Common
 	/// Transmission response 
 	/// </summary>
 	public class TransmissionResponse : CommunicateBase, ITransmissionReponse
-	{
+    {
 		/// <summary>
 		/// Contains "success" on success, or an error string on failure.
 		/// </summary>
@@ -25,9 +26,22 @@ namespace Kebler.Models.Torrent.Common
         public Exception CustomException { get; set; }
 
         [JsonIgnore]
-		public bool Success  => this.Result == "success";
+		public bool Success  => Result == "success";
         
         [JsonIgnore]
         public string Method { get; set; }
+    }
+
+    public class TransmissionResponse<T>
+    {
+        public TransmissionResponse(TransmissionResponse t)
+        {
+            Response = t;
+            Value = t.Deserialize<T>();
+        }
+      
+        public TransmissionResponse Response { get; set; }
+
+        public T Value { get; set; }
     }
 }

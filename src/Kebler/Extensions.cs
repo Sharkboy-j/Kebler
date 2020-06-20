@@ -51,10 +51,9 @@ namespace Kebler
             return Expression.Lambda<Func<T, object>>(propAsObject, parameter);
         }
 
-        public static void ParseTransmissionReponse(this ITransmissionReponse resp, ILog logger)
+
+        public static void ParseTransmissionReponse(this TransmissionResponse resp, ILog logger)
         {
-
-
             if (resp.Success)
             {
                 logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
@@ -72,6 +71,11 @@ namespace Kebler
                     sb.Append(resp.CustomException).Append(Environment.NewLine);
                 logger.Error($"[{resp.Method}] RESULT '{resp.Result}'{Environment.NewLine}{sb}");
             }
+        }
+
+        public static void ParseTransmissionReponse<T>(this TransmissionResponse<T> resp, ILog logger)
+        {
+            resp.Response.ParseTransmissionReponse(logger);
         }
     }
 }

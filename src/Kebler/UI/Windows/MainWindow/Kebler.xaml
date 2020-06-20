@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muliTreeView="clr-namespace:Kebler.UI.CSControls.MuliTreeView;assembly=Kebler.UI"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     xmlns:ui1="clr-namespace:Kebler.UI"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
@@ -416,7 +417,6 @@
                 </ListBox>
             </Grid>
 
-
             <DataGrid
                 Name="TorrentsDataGrid"
                 Grid.Row="0"
@@ -444,7 +444,14 @@
                                 <controls:TagBorder
                                     Height="20"
                                     Percent="{Binding PercentDone, UpdateSourceTrigger=PropertyChanged}"
-                                    Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />
+                                    Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}">
+                                    <controls:TagBorder.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="5"
+                                            Direction="305"
+                                            ShadowDepth="0" />
+                                    </controls:TagBorder.Effect>
+                                </controls:TagBorder>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

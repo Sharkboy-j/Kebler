@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
+using Kebler.Models.Torrent.Common;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent.Entity
 {
-    public class SessionInfo : INotifyPropertyChanged
+    public class SessionInfo : TransmissionResponse, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using Kebler.Models.Torrent.Common;
-using Kebler.Models.Torrent.Entity;
+﻿using Kebler.Models.Torrent.Entity;
 
 namespace Kebler.Models.Torrent.Response
 {
@@ -11,16 +8,5 @@ namespace Kebler.Models.Torrent.Response
         {
             Result = val;
         }
-    }
-
-    public sealed class TransmissionInfoResponse<T> : ITransmissionReponse
-    {
-        public T Value;
-        public string Result { get; set; }
-        public WebException WebException { get; set; }
-        public HttpWebResponse HttpWebResponse { get; set; }
-        public Exception CustomException { get; set; }
-        public bool Success { get; set; }
-        public string Method { get; set; }
     }
 }

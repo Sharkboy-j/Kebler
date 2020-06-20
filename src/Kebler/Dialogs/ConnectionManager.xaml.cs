@@ -243,11 +243,11 @@ namespace Kebler.Dialogs
 
                 var _client = new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
 
-                var sessionInfo = await _client.GetSessionInformationAsync();
+                var sessionInfo = await _client.GetSessionInformationAsync(new System.Threading.CancellationToken());
                 if (sessionInfo == null)
                     throw new Exception("Error while testing");
 
-                await _client.CloseSessionAsync();
+                await _client.CloseSessionAsync(new System.Threading.CancellationToken());
             }
             catch (Exception ex)
             {

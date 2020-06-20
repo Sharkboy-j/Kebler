@@ -12,6 +12,7 @@ using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Services;
 using Kebler.TransmissionCore;
+using Kebler.UI.CSControls.MultiTreeView;
 using LiteDB;
 using log4net;
 using Enums = Kebler.Models.Enums;
@@ -40,10 +41,6 @@ namespace Kebler.UI.Windows
         private Enums.Categories _filterCategory;
         private string[] WorkingParams;
         private uint[] selectedIDs;
-
-
-
-
 
         public TransmissionClient _transmissionClient;
         public SessionSettings _settings;

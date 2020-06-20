@@ -277,7 +277,7 @@ namespace Kebler.UI.Windows
             MoreInfo.IsMore = false;
             MoreInfo.Loading = true;
 
-            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, selectedIDs);
+            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, _cancelTokenSource.Token, selectedIDs);
 
             var torrent = answ.Torrents.FirstOrDefault();
             MoreInfo.FilesTree.UpdateFilesTree(ref torrent);
@@ -307,7 +307,7 @@ namespace Kebler.UI.Windows
             if (unwanted.Length > 0)
                 Log.Info("unwanted " + string.Join(", ", unwanted));
 
-            var resp =  await _transmissionClient.TorrentSetAsync(settings);
+            var resp =  await _transmissionClient.TorrentSetAsync(settings, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -319,7 +319,7 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -328,7 +328,7 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
         }
 
@@ -341,7 +341,7 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
 
-            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -350,7 +350,7 @@ namespace Kebler.UI.Windows
         {
             if (!IsConnected) return;
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -370,7 +370,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -380,7 +380,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs);
+            var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -391,7 +391,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -401,7 +401,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -411,7 +411,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
 
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -422,7 +422,7 @@ namespace Kebler.UI.Windows
             if (!IsConnected) return;
          
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs);
+            var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
@@ -458,7 +458,7 @@ namespace Kebler.UI.Windows
         private async void SlowMode_Click(object sender, RoutedEventArgs e)
         {
             IsSlowModeEnabled = !IsSlowModeEnabled;
-            var resp = await _transmissionClient.SetSessionSettingsAsync(new SessionSettings { AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled });
+            var resp = await _transmissionClient.SetSessionSettingsAsync(new SessionSettings { AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled }, _cancelTokenSource.Token);
             resp.ParseTransmissionReponse(Log);
 
         }
