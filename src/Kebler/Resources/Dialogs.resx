@@ -160,9 +160,6 @@
   <data name="ConfigApllyError" xml:space="preserve">
     <value>Error occurred while applying settings. Some preferences may be not applied correctly</value>
   </data>
-  <data name="RetryConnection" xml:space="preserve">
-    <value>Retry</value>
-  </data>
   <data name="EX_Host" xml:space="preserve">
     <value>Host name unknown</value>
   </data>

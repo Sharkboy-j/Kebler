@@ -6,87 +6,39 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Caliburn.Micro;
 using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Services;
-using log4net;
+using Kebler.ViewModels;
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
+using LogManager = log4net.LogManager;
 using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.UI
 {
     /// <summary>
-    /// Interaction logic for TopBarControl.xaml
+    /// Interaction logic for TopBarView.xaml
     /// </summary>
-    public partial class TopBarControl
+    public partial class TopBarView
     {
-
-        public TopBarControl()
+        IWindowManager manager = new WindowManager();
+        public TopBarView()
         {
             InitializeComponent();
 
-            App.ConnectionChanged += App_ConnectionChanged;
-            App.ServerListChanged += UpdateServerList;
-            foreach (var item in LocalizationManager.CultureList)
-            {
-                var dd = new MenuItem { Header = item.EnglishName, Tag = item };
-                dd.Click += langChanged;
-                dd.IsCheckable = true;
-                dd.IsChecked = Equals(Thread.CurrentThread.CurrentCulture, item);
-                LangMenu.Items.Add(dd);
-            }
+            //foreach (var item in LocalizationManager.CultureList)
+            //{
+            //    var dd = new MenuItem { Header = item.EnglishName, Tag = item };
+            //    dd.Click += langChanged;
+            //    dd.IsCheckable = true;
+            //    dd.IsChecked = Equals(Thread.CurrentThread.CurrentCulture, item);
+            //    LangMenu.Items.Add(dd);
+            //}
 
-            UpdateServerList();
 
         }
-
-        public void UpdateServerList()
-        {
-            App.Instance.KeblerControl.UpdateServers();
-
-            ServersMenu.Items.Clear();
-            foreach (var item in App.Instance.KeblerControl.ServersList)
-            {
-                var dd = new MenuItem { Header = item.Title, Tag = item };
-                dd.Click += ServerMenuItemCkicked;
-                dd.IsCheckable = true;
-                dd.IsChecked = item.Equals(App.Instance.KeblerControl.SelectedServer);
-                ServersMenu.Items.Add(dd);
-            }
-        }
-
-
-        private void App_ConnectionChanged(Server srv)
-        {
-            Dispatcher.InvokeAsync(() =>
-            {
-                if (srv == null)
-                {
-                    foreach (MenuItem mi in ServersMenu.Items)
-                    {
-                        mi.IsChecked = false;
-                    }
-                }
-                else
-                {
-                    foreach (MenuItem mi in ServersMenu.Items)
-                    {
-                        mi.IsChecked = ((Server)mi.Tag).Equals(srv);
-                    }
-                }
-            });
-        }
-
-
-        private void ServerMenuItemCkicked(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is MenuItem ss)) return;
-
-            App.Instance.KeblerControl.SelectedServer = ss.Tag as Server;
-            App.Instance.KeblerControl.ReconnectToNewServer();
-        }
-
 
         private void langChanged(object sender, RoutedEventArgs e)
         {
@@ -107,17 +59,17 @@ namespace Kebler.UI
 
         private void OpenConnectionManager(object sender, RoutedEventArgs e)
         {
-            App.Instance.KeblerControl.ShowConnectionManager();
+            manager.ShowDialogAsync(new ConnectionManagerViewModel());
         }
 
         private void ConnectFirst(object sender, RoutedEventArgs e)
         {
-            App.Instance.KeblerControl.InitConnection();
+            //App.Instance.KeblerControl.InitConnection();
         }
 
         private void AddTorrent(object sender, RoutedEventArgs e)
         {
-            App.Instance.KeblerControl.AddTorrent();
+            //App.Instance.KeblerControl.AddTorrent();
         }
 
         private void Report(object sender, RoutedEventArgs e)

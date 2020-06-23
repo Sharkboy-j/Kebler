@@ -1,12 +1,13 @@
 ﻿<window:CustomizableWindow
-    x:Class="Kebler.UI.Windows.KeblerWindow"
+    x:Class="Kebler.Views.KeblerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:controls="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muliTreeView="clr-namespace:Kebler.UI.CSControls.MuliTreeView;assembly=Kebler.UI"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     xmlns:ui1="clr-namespace:Kebler.UI"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
@@ -15,12 +16,10 @@
     Height="600"
     MinWidth="850"
     MinHeight="600"
+    cal:Message.Attach="[Event Closing] = [Action ClosingW];[Event Activated] = [Action ActivatedW];[Event Deactivated] = [Action DeactivatedW]"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-    Activated="KeblerWindow_OnActivated"
-    Closing="ClosingW"
-    Deactivated="KeblerWindow_OnDeactivated"
     IsTitleVisible="True"
     ResizeMode="CanResize"
     ShowHeaderLine="True"
@@ -59,9 +58,10 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <ui1:TopBarControl
+                                        <ui1:TopBarView
                                             Grid.Column="0"
                                             HorizontalAlignment="Left"
+                                            DataContext="{Binding TopBar}"
                                             WindowChrome.IsHitTestVisibleInChrome="true" />
                                         <Label
                                             Grid.Column="0"
@@ -121,6 +121,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </window:CustomizableWindow.Resources>
     <Grid Background="{DynamicResource DataGrid.BackgroundBrush}">
         <Grid.RowDefinitions>
@@ -134,7 +135,7 @@
             Grid.Row="0"
             Background="{DynamicResource ToolBarBackgroundBrush}"
             BorderBrush="{DynamicResource ToolBarBorderBrush}"
-            BorderThickness="0,0,0,1"
+            BorderThickness="0,1"
             IsEnabled="{Binding IsConnected}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -155,7 +156,7 @@
                         Title="{lex:LocText QA_AddTorrent}"
                         Grid.Column="1"
                         Margin="0,2"
-                        Click="AddTorrentButtonClick"
+                        cal:Message.Attach="Add"
                         Data="{StaticResource Icon.Open}"
                         PathHeight="17"
                         PathWidth="20"
@@ -165,7 +166,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_ResumeAll}"
                             Margin="0,2"
-                            Click="StartAll_Button_CLick"
+                            cal:Message.Attach="StartAll"
                             Data="{StaticResource Icon.Resume}"
                             PathHeight="16"
                             PathWidth="16"
@@ -173,7 +174,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_PauseAll}"
                             Margin="0,2"
-                            Click="PauseAll_ButtonClick"
+                            cal:Message.Attach="PauseAll"
                             Data="{StaticResource Icon.Pause}"
                             PathHeight="16"
                             PathWidth="16"
@@ -181,7 +182,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_Slow}"
                             Margin="0,2"
-                            Click="SlowMode_Click"
+                            cal:Message.Attach="Slow"
                             ImageSource="{Binding IsSlowModeEnabled, Converter={StaticResource BoolToSlowImageConveter}}"
                             PathHeight="16"
                             PathWidth="16"
@@ -277,7 +278,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_Resume}"
                             Margin="0,2"
-                            Click="StartTorrent_Click"
+                            cal:Message.Attach="Start"
                             Data="{StaticResource Icon.Resume}"
                             PathHeight="16"
                             PathWidth="16"
@@ -286,7 +287,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_Pause}"
                             Margin="0,2"
-                            Click="PauseTorrent_Click"
+                            cal:Message.Attach="Pause"
                             Data="{StaticResource Icon.Pause}"
                             PathHeight="16"
                             PathWidth="16"
@@ -300,7 +301,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_Remove}"
                             Margin="0,2"
-                            Click="RemoveTorrent_Click"
+                            cal:Message.Attach="Remove"
                             Data="{StaticResource Icon.Remove}"
                             PathHeight="18"
                             PathWidth="16"
@@ -309,7 +310,7 @@
                         <ui:ToolBarButton
                             Title="{lex:LocText QA_RemoveData}"
                             Margin="0,2"
-                            Click="RemoveTorrentWithData_Click"
+                            cal:Message.Attach="RemoveWithData"
                             Data="{StaticResource Icon.RemoveData}"
                             PathHeight="18"
                             PathWidth="16"
@@ -337,7 +338,10 @@
                 <RowDefinition Height="1" />
                 <RowDefinition Name="MoreInfoColumn" MinHeight="202" />
             </Grid.RowDefinitions>
-            <Grid Background="{DynamicResource ListBox.Static.Background}" RowSpan="3">
+            <Grid
+                Background="{DynamicResource ListBox.Static.Background}"
+                IsEnabled="{Binding IsConnected}"
+                RowSpan="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -346,9 +350,11 @@
 
                 <ListBox
                     Name="CategoriesListBox"
+                    cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
                     BorderThickness="0"
                     DisplayMemberPath="Title"
-                    SelectionChanged="Selector_OnSelectionChanged"
+                    ItemsSource="{Binding CategoriesList}"
+                    SelectedValue="{Binding SelectedCat}"
                     SelectionMode="Single">
                     <!--<ListBox.ItemTemplate>
                         <DataTemplate>
@@ -421,13 +427,14 @@
                 Name="TorrentsDataGrid"
                 Grid.Row="0"
                 Grid.Column="2"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)]"
                 x:FieldModifier="public"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
+                CanUserSortColumns="True"
                 HorizontalScrollBarVisibility="Disabled"
-                ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                SelectedIndex="{Binding TorrentDataGridSelectedIndex}"
-                SelectionChanged="TorrentsDataGrid_SelectionChanged"
+                ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                SelectedIndex="{Binding TorrentDataGridSelectedIndex, Mode=OneWayToSource}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsConnected, FallbackValue=Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                 <DataGrid.Columns>
@@ -470,20 +477,20 @@
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Click="StartTorrent_Click" Header="{lex:LocText QA_Resume}" />
-                        <MenuItem Click="PauseTorrent_Click" Header="{lex:LocText QA_Pause}" />
-                        <MenuItem Click="RemoveTorrent_Click" Header="{lex:LocText QA_Remove}" />
-                        <MenuItem Click="RemoveTorrentWithData_Click" Header="{lex:LocText QA_RemoveData}" />
+                        <MenuItem cal:Message.Attach="Start" Header="{lex:LocText QA_Resume}" />
+                        <MenuItem cal:Message.Attach="Pause" Header="{lex:LocText QA_Pause}" />
+                        <MenuItem cal:Message.Attach="Remove" Header="{lex:LocText QA_Remove}" />
+                        <MenuItem cal:Message.Attach="RemoveWithData" Header="{lex:LocText QA_RemoveData}" />
                         <Separator />
                         <MenuItem Header="{lex:LocText QA_Queue}">
-                            <MenuItem Click="MoveTop_Click" Header="{lex:LocText QA_MoveTop}" />
-                            <MenuItem Click="MoveUp_Click" Header="{lex:LocText QA_MoveUp}" />
-                            <MenuItem Click="MoveDown_Click" Header="{lex:LocText QA_MoveDown}" />
-                            <MenuItem Click="MoveBot_CLick" Header="{lex:LocText QA_MoveBot}" />
+                            <MenuItem cal:Message.Attach="MoveTop" Header="{lex:LocText QA_MoveTop}" />
+                            <MenuItem cal:Message.Attach="MoveUp" Header="{lex:LocText QA_MoveUp}" />
+                            <MenuItem cal:Message.Attach="MoveDown" Header="{lex:LocText QA_MoveDown}" />
+                            <MenuItem cal:Message.Attach="MoveBot" Header="{lex:LocText QA_MoveBot}" />
                         </MenuItem>
-                        <MenuItem Click="Reannounce_Click" Header="{lex:LocText QA_Reannounce}" />
-                        <MenuItem Click="VerifyTorrent_Click" Header="{lex:LocText QA_Verify}" />
-                        <MenuItem Click="SetLocation_Click" Header="{lex:LocText QA_SetLoc}" />
+                        <MenuItem cal:Message.Attach="Reannounce" Header="{lex:LocText QA_Reannounce}" />
+                        <MenuItem cal:Message.Attach="Verify" Header="{lex:LocText QA_Verify}" />
+                        <MenuItem cal:Message.Attach="SetLoc" Header="{lex:LocText QA_SetLoc}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
@@ -500,7 +507,7 @@
                 <Button
                     Width="70"
                     Margin="0,10,0,0"
-                    Click="RetryConnection_ButtonCLick"
+                    cal:Message.Attach="Retry"
                     Content="{lex:LocText RetryConnection}"
                     IsDefault="True"
                     Visibility="{Binding IsErrorOccuredWhileConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=false}" />
@@ -510,9 +517,9 @@
             <Grid
                 Background="{DynamicResource ListBox.Static.Background}"
                 Column="2"
-                DataContext="{Binding MoreInfo}"
-                Row="2">
-                <controls:TorrentMoreInfo Name="MoreInfoControl" DataContext="{Binding}" />
+                Row="2"
+                Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
+                <controls:TorrentMoreInfo DataContext="{Binding MoreInfoView}" />
             </Grid>
 
 
@@ -527,7 +534,8 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 DragCompleted="DragCompleted"
-                Style="{DynamicResource HorizontalGridSplitter}" />
+                Style="{DynamicResource HorizontalGridSplitter}"
+                Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" />
 
         </Grid>
 

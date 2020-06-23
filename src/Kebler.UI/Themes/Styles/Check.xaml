@@ -65,6 +65,12 @@
                             <Setter TargetName="optionMark" Property="Shape.Fill" Value="{DynamicResource OptionMark.MouseOver.Glyph}" />
                             <Setter TargetName="indeterminateMark" Property="Shape.Fill" Value="{DynamicResource OptionMark.MouseOver.Glyph}" />
                         </Trigger>
+                        <Trigger Property="UIElement.IsFocused" Value="true">
+                            <Setter TargetName="checkBoxBorder" Property="Border.Background" Value="{DynamicResource OptionMark.MouseOver.Background}" />
+                            <Setter TargetName="checkBoxBorder" Property="Border.BorderBrush" Value="{DynamicResource OptionMark.MouseOver.Border}" />
+                            <Setter TargetName="optionMark" Property="Shape.Fill" Value="{DynamicResource OptionMark.MouseOver.Glyph}" />
+                            <Setter TargetName="indeterminateMark" Property="Shape.Fill" Value="{DynamicResource OptionMark.MouseOver.Glyph}" />
+                        </Trigger>
                         <Trigger Property="UIElement.IsEnabled" Value="false">
                             <Setter TargetName="checkBoxBorder" Property="Border.Background" Value="{DynamicResource OptionMark.Disabled.Background}" />
                             <Setter TargetName="checkBoxBorder" Property="Border.BorderBrush" Value="{DynamicResource OptionMark.Disabled.Border}" />

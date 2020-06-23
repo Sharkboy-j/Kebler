@@ -8,21 +8,22 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Kebler.Models;
-using Kebler.Models.PsevdoVM;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Response;
 using Kebler.Services;
 using Kebler.TransmissionCore;
+using Kebler.ViewModels;
 using log4net;
 using Microsoft.Win32;
+using MoreInfoViewModel = Kebler.ViewModels.MoreInfoViewModel;
 
 namespace Kebler.Dialogs
 {
     /// <summary>
     /// Interaction logic for AddTorrentDialog.xaml
     /// </summary>
-    public partial class AddTorrentDialog : INotifyPropertyChanged
+    public partial class AddTorrentDialog
     {
         public AddTorrentDialog(string path, TransmissionClient transmissionClient, Window owner) : base(owner)
         {
@@ -265,11 +266,7 @@ namespace Kebler.Dialogs
 
         public FilesTreeViewModel FilesTree { get; private set; } = new FilesTreeViewModel();
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+  
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Kebler.Models;
 using static Kebler.Models.Enums;
 
 namespace Kebler.Dialogs
@@ -41,7 +42,7 @@ namespace Kebler.Dialogs
                 Logo.Visibility = Visibility.Visible;
         }
 
-        public MessageBox(string message, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok, bool showLogo = false, bool isDialog=false)
+        public MessageBox(string message, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok, bool showLogo = false, bool isDialog = false)
         {
             InitializeComponent();
             //this.Title = title;
@@ -110,7 +111,7 @@ namespace Kebler.Dialogs
 
 
 
-        public MessageBox(FrameworkElement obj,bool isDialog=true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
+        public MessageBox(FrameworkElement obj, bool isDialog = true, string title = "", MessageBoxDilogButtons buttons = MessageBoxDilogButtons.None, bool showLogo = false)
         {
             InitializeComponent();
             Title = title;
@@ -125,5 +126,13 @@ namespace Kebler.Dialogs
             Height = obj.Height;
             Width = obj.Width;
         }
+
+        public static void Show(string msg, Window owner = null)
+        {
+            var dialog = new MessageBox(msg, Kebler.Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true) { Owner = owner ?? Application.Current.MainWindow };
+            dialog.ShowDialog();
+        }
+
+     
     }
 }

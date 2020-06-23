@@ -259,15 +259,6 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retry.
-        /// </summary>
-        internal static string RetryConnection {
-            get {
-                return ResourceManager.GetString("RetryConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove with data.
         /// </summary>
         internal static string RMT_RemoveWithData {

@@ -284,5 +284,14 @@ namespace Kebler.Resources {
                 return ResourceManager.GetString("QA_Verify", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        internal static string RetryConnection {
+            get {
+                return ResourceManager.GetString("RetryConnection", resourceCulture);
+            }
+        }
     }
 }

@@ -1,19 +1,13 @@
-﻿using LiteDB;
+﻿using System;
+using Caliburn.Micro;
+using LiteDB;
 using Newtonsoft.Json;
 
 namespace Kebler.Models
 {
-    public class Server
+    public class Server: PropertyChangedBase
     {
-        public Server()
-        {
-        }
-        public Server(int id)
-        {
-            Id = id;
-        }
-
-        public int Id { get; }
+        public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
 
         public string Host { get; set; } = string.Empty;
@@ -26,7 +20,14 @@ namespace Kebler.Models
 
         public bool AuthEnabled { get; set; } = false;
         public bool AskForPassword { get; set; } = false;
-        public bool SslEnabled { get; set; } = true;
+
+
+        private bool _sslEnabled = true;
+        public bool SslEnabled
+        {
+            get => _sslEnabled;
+            set => Set(ref _sslEnabled, value);
+        }
 
         public string RpcPath { get; set; } = @"/transmission/rpc";
 
@@ -41,15 +42,20 @@ namespace Kebler.Models
         {
             get
             {
-                var type = SslEnabled ? "https://" : "http://";
+                var scheme = SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
 
-                if (!RpcPath.StartsWith("/")) RpcPath = $"/{RpcPath}";
-                var uri = $"{type}{Host}:{Port}{RpcPath}";
-                if (!uri.EndsWith("/")) uri += "/";
-                return uri;
+                var uri = new UriBuilder(scheme, Host, Port, RpcPath);
+
+                //var type = SslEnabled ? "https://" : "http://";
+
+                //if (!RpcPath.StartsWith("/")) RpcPath = $"/{RpcPath}";
+                //var uri = $"{type}{Host}:{Port}{RpcPath}";
+                //if (!uri.EndsWith("/")) uri += "/";
+                return uri.Uri.AbsoluteUri;
             }
         }
 
+        [BsonIgnore]
         public override bool Equals(object obj)
         {
             if (obj != null && obj is Server srv)
@@ -59,6 +65,7 @@ namespace Kebler.Models
             return false;
         }
 
+        [BsonIgnore]
         public override int GetHashCode()
         {
             unchecked

@@ -29,6 +29,10 @@
     <Color x:Key="DataGrid.Tag.CheckPendingStrokeColor">#FFB4B3F1</Color>
     <Color x:Key="DataGrid.Tag.CheckPendingFillColor">#33B4B3F1</Color>
 
+    <Color x:Key="ForegroundColor">#E8E6E6</Color>
+    <Color x:Key="ForegroundColor.Light">#FFFFFF</Color>
+    <Color x:Key="ForegroundColor.DimGray">#DADADA</Color>
+    <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
 
 
 
@@ -85,10 +89,7 @@
     <Color x:Key="ReferenceColor">#3E9FF8</Color>
     <Color x:Key="GlyphColor">#777777</Color>
     <Color x:Key="Disabled.GlyphColor">#C6C6C6</Color>
-    <Color x:Key="ForegroundColor">#E8E6E6</Color>
-    <Color x:Key="ForegroundColor.Light">#FFFFFF</Color>
-    <Color x:Key="ForegroundColor.DimGray">#DADADA</Color>
-    <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
+
     <Color x:Key="Disabled.ForegroundColor">#ABABAB</Color>
     <Color x:Key="BackgroundColor">#333333</Color>
     <Color x:Key="BackgroundColor.Dark">#252525</Color>

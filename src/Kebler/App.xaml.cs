@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using AutoUpdaterDotNET;
 using Kebler.Models;
 using Kebler.Services;
-using Kebler.UI.Windows;
+using Kebler.Views;
 using log4net;
 using log4net.Config;
 
@@ -23,7 +23,7 @@ namespace Kebler
     public partial class App
     {
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        public KeblerWindow KeblerControl;
+        //public KeblerView KeblerControl;
         public static App Instance;
 
         public delegate void ConnectionToServerInitialisedHandler(Server srv);
@@ -105,6 +105,7 @@ namespace Kebler
                 LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
             }
             SetEnv();
+            InitializeComponent();
 
         }
 
@@ -151,13 +152,13 @@ namespace Kebler
         }
 
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
+        //protected override void OnStartup(StartupEventArgs e)
+        //{
 
-            var control  = new KeblerWindow();
-            control.Show();
-            base.OnStartup(e);
-        }
+        //    var control  = new KeblerView();
+        //    control.Show();
+        //    base.OnStartup(e);
+        //}
 
         #endregion
 

@@ -192,4 +192,7 @@
   <data name="QA_MoveBot" xml:space="preserve">
     <value>Move Bottom</value>
   </data>
+  <data name="RetryConnection" xml:space="preserve">
+    <value>Retry</value>
+  </data>
 </root>

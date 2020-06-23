@@ -16,11 +16,13 @@ using Kebler.UI.CSControls.MultiTreeView;
 using LiteDB;
 using log4net;
 using Enums = Kebler.Models.Enums;
+using MoreInfoViewModel = Kebler.ViewModels.MoreInfoViewModel;
+
 // ReSharper disable UnusedMember.Global
 
-namespace Kebler.UI.Windows
+namespace Kebler.Views
 {
-    public partial class KeblerWindow
+    public partial class KeblerView
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
@@ -33,7 +35,7 @@ namespace Kebler.UI.Windows
         private LiteCollection<Server> _dbServers;
         private Statistic _stats;
         private SessionInfo _sessionInfo;
-        private ConnectionManager _cmWindow;
+        private ConnectionManagerView _cmWindow;
         private Task _whileCycleTask;
         private DateTimeOffset _longActionTimeStart;
         private bool _isLongTaskRunning;
@@ -57,17 +59,6 @@ namespace Kebler.UI.Windows
             {
                 _connectedServer = value;
                 App.ChangeConnectedServer(_connectedServer);
-            }
-        }
-        public List<Server> ServersList
-        {
-            get
-            {
-                if (_servers == null)
-                {
-                    UpdateServers();
-                }
-                return _servers;
             }
         }
 
@@ -96,7 +87,7 @@ namespace Kebler.UI.Windows
 
         public ObservableCollection<TorrentInfo> TorrentList { get; set; } = new ObservableCollection<TorrentInfo>();
         public ObservableCollection<FolderCategory> Categories { get; set; } = new ObservableCollection<FolderCategory>();
-        public MoreInfoModel MoreInfo { get; set; } = new MoreInfoModel();
+        public MoreInfoViewModel MoreInfoView { get; set; } = new MoreInfoViewModel();
         public string IsConnectedStatusText { get; set; } = string.Empty;
         public string DownloadSpeed { get; set; } = string.Empty;
         public string UploadSpeed { get; set; } = string.Empty;

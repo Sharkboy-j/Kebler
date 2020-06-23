@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Kebler.UI.Windows
+namespace Kebler.Views
 {
-    public partial class KeblerWindow
+    public partial class KeblerView
     {
 
         public void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }

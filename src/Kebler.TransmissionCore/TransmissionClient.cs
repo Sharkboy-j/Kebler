@@ -516,6 +516,12 @@ namespace Kebler.TransmissionCore
                 var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
                 //Prepare http web request
+                if(!CheckURLValid(Url))
+                {
+                    throw new WebException("Host error", WebExceptionStatus.NameResolutionFailure);
+                }
+                
+
                 var webRequest = (HttpWebRequest)WebRequest.Create(Url);
 
                 webRequest.ContentType = "application/json-rpc";
@@ -584,9 +590,12 @@ namespace Kebler.TransmissionCore
 
             result.Method = request.Method;
             return result;
-        } 
-      
+        }
 
+        public static bool CheckURLValid(string source)
+        {
+            return Uri.TryCreate(source, UriKind.Absolute, out _);
+        }
 
         private TransmissionResponse SendRequest(CommunicateBase request)
         {

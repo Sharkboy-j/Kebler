@@ -83,10 +83,10 @@
                 Margin="5,0"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-                <controls:LoadingRing
+                <!--<controls:LoadingRing
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+                    Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />-->
                 <Button
                     Name="No"
                     Height="26"
