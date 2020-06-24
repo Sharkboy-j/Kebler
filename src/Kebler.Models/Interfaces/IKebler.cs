@@ -5,9 +5,8 @@ using System.Windows.Controls;
 
 namespace Kebler.Models.Interfaces
 {
-    public interface IDialogBox
+    public interface IKebler
     {
-        PasswordBox PWD { get; }
-        TextBox TBX { get; }
+        DataGrid TorrentsGrid { get; }
     }
 }

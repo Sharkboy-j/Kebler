@@ -24,8 +24,10 @@ namespace Kebler
             container.Singleton<IWindowManager, WindowManager>();
             container.Singleton<IEventAggregator, EventAggregator>();
             container.Singleton<KeblerViewModel>();
-            container.Singleton<TopBarViewModel>();
             container.Singleton<ConnectionManagerViewModel>();
+            container.Singleton<BoxViewModel>();
+            container.Singleton<DialogBoxViewModel>();
+            container.Singleton<MessageBoxViewModel>();
 
          
         }

@@ -1,5 +1,5 @@
 ﻿<window:DialogWindow
-    x:Class="Kebler.Dialogs.AddTorrentDialog"
+    x:Class="Kebler.Dialogs.AddTorrentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls1="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"

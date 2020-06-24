@@ -13,7 +13,7 @@ using log4net.Appender;
 using log4net.Repository.Hierarchy;
 using LogManager = log4net.LogManager;
 
-namespace Kebler.UI
+namespace Kebler.Views
 {
     /// <summary>
     /// Interaction logic for TopBarView.xaml
@@ -21,22 +21,12 @@ namespace Kebler.UI
     public partial class TopBarView
     {
         IWindowManager manager = new WindowManager();
+
         public TopBarView()
         {
             InitializeComponent();
         }
 
-
-        private void OpenConnectionManager(object sender, RoutedEventArgs e)
-        {
-            manager.ShowDialogAsync(new ConnectionManagerViewModel(IoC.Get<IEventAggregator>()));
-        }
-
-        private void AddTorrent(object sender, RoutedEventArgs e)
-        {
-            manager.ShowDialogAsync(new AddTorrentViewModel());
-
-        }
 
         private void Report(object sender, RoutedEventArgs e)
         {

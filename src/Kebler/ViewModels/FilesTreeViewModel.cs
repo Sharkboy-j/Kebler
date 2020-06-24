@@ -105,7 +105,8 @@ namespace Kebler.ViewModels
             {
                 if (torrent.FileStats != null)
                     createNodes(ref root, torrent.Files[i].Name, count, torrent.FileStats[i].Wanted);
-                createNodes(ref root, torrent.Files[i].Name, count, true);
+                else
+                    createNodes(ref root, torrent.Files[i].Name, count, true);
 
                 count++;
             }
@@ -121,23 +122,28 @@ namespace Kebler.ViewModels
             var dirs = file.Split('\\');
 
             var last = root;
-            foreach (var s in dirs)
+
+            for (var i = 0; i < dirs.Length; i++)
             {
-                if (string.IsNullOrEmpty(s))
+                var pathPart = dirs[i];
+                if (string.IsNullOrEmpty(pathPart))
                     continue;
 
-                if (last.Children.All(x => x.Title != s))
+                if (last.Children.All(x => x.Title != pathPart))
                 {
                     //if not found children
-                    var pth = new MultiselectionTreeViewItem { Title = s, IsExpanded = true };
-                    last.Children.Add(pth);
+                    var pth = new MultiselectionTreeViewItem { Title = pathPart, IsExpanded = true };
+
+                    //this will put all dirs into priority pos
+                    last.Children.Insert(i == dirs.Length - 1 ? last.Children.Count : 0, pth);
                     last = pth;
                 }
                 else
                 {
-                    last = last.Children.First(p => p.Title == s);
+                    last = last.Children.First(p => p.Title == pathPart);
                 }
             }
+
             last.IndexPattern = index;
             last.IsChecked = wanted;
 

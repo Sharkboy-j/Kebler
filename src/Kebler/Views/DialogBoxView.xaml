@@ -54,6 +54,7 @@
                     Text="{Binding Message}"
                     TextAlignment="Left" />
                 <TextBox
+                    Name="TBXC"
                     Height="25"
                     Margin="0,10,0,0"
                     VerticalContentAlignment="Center"

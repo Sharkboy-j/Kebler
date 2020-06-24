@@ -54,11 +54,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Dialogs.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\HeaderMenu.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>HeaderMenu.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -74,10 +69,6 @@
     <EmbeddedResource Update="Resources\Dialogs.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Dialogs.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\HeaderMenu.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>HeaderMenu.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

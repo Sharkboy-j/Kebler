@@ -268,6 +268,42 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type new name.
+        /// </summary>
+        internal static string MSG_InterNewName {
+            get {
+                return ResourceManager.GetString("MSG_InterNewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert link to torrent file or magnet.
+        /// </summary>
+        internal static string MSG_LinkOrMagnet {
+            get {
+                return ResourceManager.GetString("MSG_LinkOrMagnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select only one torrent.
+        /// </summary>
+        internal static string MSG_OnlyOneTorrent {
+            get {
+                return ResourceManager.GetString("MSG_OnlyOneTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select torrent.
+        /// </summary>
+        internal static string MSG_SelectOneTorrent {
+            get {
+                return ResourceManager.GetString("MSG_SelectOneTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove with data.
         /// </summary>
         internal static string RMT_RemoveWithData {

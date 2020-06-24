@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using Kebler.Models;
+﻿using Kebler.Models;
 using Kebler.Models.Interfaces;
 
 namespace Kebler.ViewModels
@@ -21,6 +15,7 @@ namespace Kebler.ViewModels
             ShowPasswordBox = isPassword;
             ShowTextBox = !ShowPasswordBox;
             Message = message;
+            LogoVisibility = true;
             if (!isPassword)
             {
                 ShowTextBox = true;
@@ -38,7 +33,11 @@ namespace Kebler.ViewModels
         protected override void OnViewAttached(object view, object context)
         {
             _view = view as IDialogBox;
-            _view.PWD.Focus();
+            if (ShowPasswordBox)
+                _view?.PWD.Focus();
+            else
+                _view?.TBX.Focus();
+
             base.OnViewAttached(view, context);
         }
 

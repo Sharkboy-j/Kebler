@@ -1,16 +1,19 @@
 ﻿using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Kebler.Models.Torrent.Args;
 using Kebler.Services;
 
 namespace Kebler.Views
 {
-    public partial class KeblerView
+    public partial class KeblerView : Kebler.Models.Interfaces.IKebler
+
     {
 
         public KeblerView()
         {
             InitializeComponent();
+            TorrentsGrid = TorrentsDataGrid;
         }
 
 
@@ -21,5 +24,6 @@ namespace Kebler.Views
             ConfigService.Save();
         }
 
+        public DataGrid TorrentsGrid { get; }
     }
 }

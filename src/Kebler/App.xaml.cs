@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using AutoUpdaterDotNET;
 using Kebler.Models;
 using Kebler.Services;
+using Kebler.ViewModels;
 using log4net;
 using log4net.Config;
 
@@ -21,7 +22,7 @@ namespace Kebler
     public partial class App
     {
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        //public KeblerView KeblerControl;
+        public KeblerViewModel KeblerVM;
         public static App Instance;
 
         public delegate void ConnectionToServerInitialisedHandler(Server srv);

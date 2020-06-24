@@ -195,4 +195,73 @@
   <data name="RetryConnection" xml:space="preserve">
     <value>Retry</value>
   </data>
+  <data name="MI_lang" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MI_Report" xml:space="preserve">
+    <value>Report a Problem</value>
+  </data>
+  <data name="MI_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MI_Check" xml:space="preserve">
+    <value>Check For New Version</value>
+  </data>
+  <data name="MI_Contact" xml:space="preserve">
+    <value>Contact Developer</value>
+  </data>
+  <data name="Mi_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="MI_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="MI_SortHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="MI_SortLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="MI_Sort_Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="MI_Sort_DownloadSpeed" xml:space="preserve">
+    <value>Download speed</value>
+  </data>
+  <data name="MI_Sort_UploadSpeed" xml:space="preserve">
+    <value>Upload speed</value>
+  </data>
+  <data name="MI_Sort_AddedDate" xml:space="preserve">
+    <value>Added date</value>
+  </data>
+  <data name="MI_Torrent" xml:space="preserve">
+    <value>Torrent</value>
+  </data>
+  <data name="MI_CM" xml:space="preserve">
+    <value>Connection Manager</value>
+  </data>
+  <data name="MI_AddTorrent" xml:space="preserve">
+    <value>Add Torrent</value>
+  </data>
+  <data name="MI_Kebler" xml:space="preserve">
+    <value>Kebler</value>
+  </data>
+  <data name="MI_Servers" xml:space="preserve">
+    <value>Servers</value>
+  </data>
+  <data name="MI_Logs" xml:space="preserve">
+    <value>Open Logs</value>
+  </data>
+  <data name="MI_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="MI_Props" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="QA_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="MI_AddMagnet" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -91,16 +91,6 @@ namespace Kebler.TransmissionCore
     {
         #region Session methods
 
-        /// <summary>
-        /// Close current session (API: session-close)
-        /// AND ALL OPENED SESSION FOR THIS INSTANCE....
-        /// </summary>
-        public Task CloseSessionAsync(CancellationToken token)
-        {
-            var request = new TransmissionRequest("session-close");
-            return SendRequestAsync(request, token);
-        }
-
 
         /// <summary>
         /// Set information to current session (API: session-set)
@@ -428,16 +418,13 @@ namespace Kebler.TransmissionCore
         /// <param name="id">The torrent whose path will be renamed</param>
         /// <param name="path">The path to the file or folder that will be renamed</param>
         /// <param name="name">The file or folder's new name</param>
-        public async Task<RenameTorrentInfo> TorrentRenamePathAsync(int id, string path, string name, CancellationToken token)
+        public async Task<TransmissionResponse<RenameTorrentInfo>> TorrentRenamePathAsync(uint id, string path, string name, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "ids", new[] { id } }, { "path", path }, { "name", name } };
-
             var request = new TransmissionRequest("torrent-rename-path", arguments);
             var response = await SendRequestAsync(request, token);
-
-            var result = response.Deserialize<RenameTorrentInfo>();
-
-            return result;
+            var trans = new TransmissionResponse<RenameTorrentInfo>(response);
+            return trans;
         }
 
         //method name not recognized
