@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-	<version>0.7.2</version>
-	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.7.2/Kebler.exe</url>
+	<version>0.7.3</version>
+	<url>https://github.com/JeremiSharkboy/Kebler/releases/download/0.7.3/Kebler.exe</url>
 	<mandatory>true</mandatory>
-  	<changelog>https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/Release-info/0.7.2.info</changelog>
+  	<changelog>https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/Release-info/0.7.3.info</changelog>
 </item>
