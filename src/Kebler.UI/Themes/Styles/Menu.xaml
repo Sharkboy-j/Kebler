@@ -630,6 +630,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
     <Style TargetType="{x:Type Menu}">
         <Setter Property="Control.Background" Value="{DynamicResource Menu.Static.Background}" />
         <Setter Property="Control.Foreground" Value="{DynamicResource Menu.Static.Foreground}" />

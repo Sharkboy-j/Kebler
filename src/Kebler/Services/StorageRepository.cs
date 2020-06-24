@@ -10,16 +10,11 @@ namespace Kebler.Services
 		public static LiteCollection<Server> GetServersList()
 		{
 			var pth = Path.Combine(Data.GetDataPath().FullName, $"{nameof(Kebler)}.db");
-			
 
-			LiteCollection<Server> servers;
-			using (var db = new LiteDatabase(pth))
-			{
-				servers = db.GetCollection<Server>(nameof(GetServersList));
-			}
 
-			//TODO: Check null expression
-			return servers;
+            using var db = new LiteDatabase(pth);
+            var servers = db.GetCollection<Server>(nameof(GetServersList));
+            return servers;
 		}
 
 

@@ -160,9 +160,6 @@
   <data name="ConfigApllyError" xml:space="preserve">
     <value>Error occurred while applying settings. Some preferences may be not applied correctly</value>
   </data>
-  <data name="RetryConnection" xml:space="preserve">
-    <value>Retry</value>
-  </data>
   <data name="EX_Host" xml:space="preserve">
     <value>Host name unknown</value>
   </data>
@@ -180,5 +177,20 @@
   </data>
   <data name="ATD_Files" xml:space="preserve">
     <value>Files:</value>
+  </data>
+  <data name="DialogBox_EnterPWD" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="MSG_OnlyOneTorrent" xml:space="preserve">
+    <value>Select only one torrent</value>
+  </data>
+  <data name="MSG_SelectOneTorrent" xml:space="preserve">
+    <value>Select torrent</value>
+  </data>
+  <data name="MSG_InterNewName" xml:space="preserve">
+    <value>Type new name</value>
+  </data>
+  <data name="MSG_LinkOrMagnet" xml:space="preserve">
+    <value>Insert link to torrent file or magnet</value>
   </data>
 </root>

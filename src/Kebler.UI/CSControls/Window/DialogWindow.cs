@@ -14,6 +14,13 @@ namespace Kebler.UI.CSControls.Window
             Style = Application.Current.TryFindResource("DialogWindowStyle") as Style;
         }
 
+        public DialogWindow()
+        {
+            OverridesDefaultStyle = true;
+            ShowHeaderLine = true;
+            Style = Application.Current.TryFindResource("DialogWindowStyle") as Style;
+        }
+
         public new void Show()
         {
             throw new Exception("Use ShowDialog instead of Show()");

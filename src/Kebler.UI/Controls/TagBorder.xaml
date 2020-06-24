@@ -12,12 +12,7 @@
         BorderThickness="1"
         ClipToBounds="True"
         CornerRadius="2">
-        <Border.Effect>
-            <DropShadowEffect
-                BlurRadius="5"
-                Direction="305"
-                ShadowDepth="0" />
-        </Border.Effect>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="19" />

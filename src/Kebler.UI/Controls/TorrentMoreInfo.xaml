@@ -54,9 +54,15 @@
                     DataContext="{Binding FilesTree}" />
             </TabItem>
         </TabControl>
+        <Label
+            Height="27"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Content="Esc, to hide"
+            Foreground="{DynamicResource ForegroundBrush.Gray}" />
 
         <Grid
-            d:IsHidden="True"
+            VerticalAlignment="Stretch"
             Background="{DynamicResource ListBox.Static.Background}"
             Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel
@@ -82,6 +88,7 @@
 
         <Grid
             Grid.Row="0"
+            d:IsHidden="True"
             Background="{DynamicResource ListBox.Static.Background}"
             Visibility="{Binding IsMore, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel

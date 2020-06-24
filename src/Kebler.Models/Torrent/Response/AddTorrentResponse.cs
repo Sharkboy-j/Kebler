@@ -1,5 +1,4 @@
-﻿using Kebler.Models.Torrent.Common;
-using Kebler.Models.Torrent.Entity;
+﻿using Kebler.Models.Torrent.Entity;
 
 namespace Kebler.Models.Torrent.Response
 {
@@ -9,14 +8,5 @@ namespace Kebler.Models.Torrent.Response
         {
             Result = val;
         }
-    }
-
-    public sealed class TransmissionInfoResponse<T> : TransmissionResponse
-    {
-        public TransmissionInfoResponse(T s)
-        {
-            Value = s;
-        }
-        public T Value;
     }
 }

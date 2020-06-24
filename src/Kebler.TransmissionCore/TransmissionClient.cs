@@ -3,6 +3,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -13,6 +14,7 @@ using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Models.Torrent.Response;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -80,68 +82,7 @@ namespace Kebler.TransmissionCore
         }
 
 
-        private TransmissionResponse SendRequest(CommunicateBase request)
-        {
-            var result = new TransmissionResponse();
 
-            request.Tag = ++CurrentTag;
-
-            try
-            {
-
-                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
-
-                //Prepare http web request
-                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
-
-                webRequest.ContentType = "application/json-rpc";
-                webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
-                webRequest.Method = "POST";
-
-                if (_needAuthorization)
-                    webRequest.Headers["Authorization"] = _authorization;
-
-                var requestTask = webRequest.GetRequestStreamAsync();
-                requestTask.WaitAndUnwrapException();
-                using (var dataStream = requestTask.Result)
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
-
-                var responseTask = webRequest.GetResponseAsync();
-                responseTask.WaitAndUnwrapException();
-
-                //Send request and prepare response
-                using var webResponse = responseTask.Result;
-                using var responseStream = webResponse.GetResponseStream();
-                var reader = new StreamReader(responseStream ?? throw new InvalidOperationException(nameof(responseStream)), Encoding.UTF8);
-                var responseString = reader.ReadToEnd();
-                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
-
-                if (result.Result != "success")
-                    throw new Exception(result.Result);
-            }
-            catch (WebException ex)
-            {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
-                {
-                    if (ex.Response.Headers.Count > 0)
-                    {
-                        //If session id expiried, try get session id and send request
-                        SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
-
-                        if (SessionId == null)
-                            throw new Exception("Session ID Error");
-
-                        result = SendRequest(request);
-                    }
-                }
-                else
-                    throw ex;
-            }
-
-            return result;
-        }
     }
 
 
@@ -149,15 +90,6 @@ namespace Kebler.TransmissionCore
     public partial class TransmissionClient
     {
         #region Session methods
-
-        /// <summary>
-        /// Close current session (API: session-close)
-        /// </summary>
-        public Task CloseSessionAsync()
-        {
-            var request = new TransmissionRequest("session-close");
-            return SendRequestAsync(request);
-        }
 
 
         /// <summary>
@@ -175,42 +107,36 @@ namespace Kebler.TransmissionCore
         /// Set information to current session (API: session-set)
         /// </summary>
         /// <param name="settings">New session settings</param>
-        public Task SetSessionSettingsAsync(SessionSettings settings)
+        public Task<TransmissionResponse> SetSessionSettingsAsync(SessionSettings settings, CancellationToken token)
         {
             var request = new TransmissionRequest("session-set", settings);
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
         /// Get session stat
         /// </summary>
         /// <returns>Session stat</returns>
-        public async Task<Statistic> GetSessionStatisticAsync()
+        public async Task<TransmissionResponse<Statistic>> GetSessionStatisticAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("session-stats");
-            var response = await SendRequestAsync(request);
-            var result = response.Deserialize<Statistic>();
-            return result;
+            var response = await SendRequestAsync(request, token);
+            var trans = new TransmissionResponse<Statistic>(response);
+            return trans;
         }
 
         /// <summary>
         /// Get information of current session (API: session-get)
         /// </summary>
         /// <returns>Session information</returns>
-        public async Task<TransmissionInfoResponse<SessionInfo>> GetSessionInformationAsync()
+        public async Task<TransmissionResponse<SessionInfo>> GetSessionInformationAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("session-get");
-            var response = await SendRequestAsync(request);
-            var result = response.Deserialize<SessionInfo>();
-
-            var answ = new TransmissionInfoResponse<SessionInfo>(result)
-            {
-                HttpWebResponse = response.HttpWebResponse,
-                CustomException = response.CustomException,
-                WebException = response.WebException
-            };
-            return answ;
+            var response = await SendRequestAsync(request, token);
+            var trans = new TransmissionResponse<SessionInfo>(response);
+            return trans;
         }
+
 
         #endregion
 
@@ -260,10 +186,10 @@ namespace Kebler.TransmissionCore
         /// Set torrent params (API: torrent-set)
         /// </summary>
         /// <param name="settings">Torrent settings</param>
-        public Task TorrentSetAsync(TorrentSettings settings)
+        public Task<TransmissionResponse> TorrentSetAsync(TorrentSettings settings, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-set", settings);
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
@@ -272,16 +198,13 @@ namespace Kebler.TransmissionCore
         /// <param name="fields">Fields of torrents</param>
         /// <param name="ids">IDs of torrents (null or empty for get all torrents)</param>
         /// <returns>Torrents info</returns>
-        public async Task<TransmissionTorrents> TorrentGetAsync(string[] fields)
+        public async Task<TransmissionResponse<TransmissionTorrents>> TorrentGetAsync(string[] fields, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "fields", fields } };
-
             var request = new TransmissionRequest("torrent-get", arguments);
-
-            var response = await SendRequestAsync(request);
-            var result = response.Deserialize<TransmissionTorrents>();
-
-            return result;
+            var response = await SendRequestAsync(request, token);
+            var trans = new TransmissionResponse<TransmissionTorrents>(response);
+            return trans;
         }
 
         /// <summary>
@@ -290,7 +213,7 @@ namespace Kebler.TransmissionCore
         /// <param name="fields">Fields of torrents</param>
         /// <param name="ids">IDs of torrents (null or empty for get all torrents)</param>
         /// <returns>Torrents info</returns>
-        public async Task<TransmissionTorrents> TorrentGetAsyncWithID(string[] fields, params uint[] ids)
+        public async Task<TransmissionTorrents> TorrentGetAsyncWithID(string[] fields, CancellationToken token, params uint[] ids)
         {
             var arguments = new Dictionary<string, object> { { "fields", fields } };
 
@@ -299,7 +222,7 @@ namespace Kebler.TransmissionCore
 
             var request = new TransmissionRequest("torrent-get", arguments);
 
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
             var result = response.Deserialize<TransmissionTorrents>();
 
             return result;
@@ -335,30 +258,30 @@ namespace Kebler.TransmissionCore
         /// Start torrents (API: torrent-start)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public async Task<TransmissionResponse> TorrentStartAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentStartAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
+            var resp = await SendRequestAsync(request, token);
             return resp;
-        }    
-        
+        }
+
         /// <summary>
         /// Start torrents (API: torrent-start)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStartForceAsync(uint[] ids)
+        public Task TorrentStartForceAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
         /// Start recently active torrents (API: torrent-start)
         /// </summary>
-        public Task TorrentStartAsync()
+        public Task TorrentStartAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> { { "ids", "recently-active" } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         #endregion
@@ -369,19 +292,19 @@ namespace Kebler.TransmissionCore
         /// Start now torrents (API: torrent-start-now)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task TorrentStartNowAsync(int[] ids)
+        public Task TorrentStartNowAsync(int[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
         /// Start now recently active torrents (API: torrent-start-now)
         /// </summary>
-        public Task TorrentStartNowAsync()
+        public Task TorrentStartNowAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", "recently-active" } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         #endregion
@@ -392,20 +315,19 @@ namespace Kebler.TransmissionCore
         /// Stop torrents (API: torrent-stop)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public async Task<TransmissionResponse> TorrentStopAsync(uint[] ids)
+        public Task<TransmissionResponse> TorrentStopAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
-            return resp;
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
         /// Stop recently active torrents (API: torrent-stop)
         /// </summary>
-        public Task TorrentStopAsync()
+        public Task TorrentStopAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", "recently-active" } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         #endregion
@@ -416,19 +338,19 @@ namespace Kebler.TransmissionCore
         /// Verify torrents (API: torrent-verify)
         /// </summary>
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
-        public Task<TransmissionResponse> TorrentVerifyAsync(uint[] ids)
+        public Task<TransmissionResponse> TorrentVerifyAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-verify", new Dictionary<string, object> { { "ids", ids } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
 
         /// <summary>
         /// Verify recently active torrents (API: torrent-verify)
         /// </summary>
-        public Task TorrentVerifyAsync()
+        public Task TorrentVerifyAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-verify", new Dictionary<string, object> { { "ids", "recently-active" } });
-            return SendRequestAsync(request);
+            return SendRequestAsync(request, token);
         }
         #endregion
 
@@ -436,10 +358,10 @@ namespace Kebler.TransmissionCore
         /// Move torrents in queue on top (API: queue-move-top)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids,CancellationToken token)
         {
             var request = new TransmissionRequest("queue-move-top", new Dictionary<string, object> { { "ids", ids } });
-            var resp =  await SendRequestAsync(request);
+            var resp = await SendRequestAsync(request, token);
             return resp;
         }
 
@@ -447,10 +369,10 @@ namespace Kebler.TransmissionCore
         /// Move up torrents in queue (API: queue-move-up)
         /// </summary>
         /// <param name="ids"></param>
-        public async Task<TransmissionResponse> TorrentQueueMoveUpAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveUpAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("queue-move-up", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
+            var resp = await SendRequestAsync(request, token);
             return resp;
         }
 
@@ -458,10 +380,10 @@ namespace Kebler.TransmissionCore
         /// Move down torrents in queue (API: queue-move-down)
         /// </summary>
         /// <param name="ids"></param>
-        public async Task<TransmissionResponse> TorrentQueueMoveDownAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveDownAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("queue-move-down", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
+            var resp = await SendRequestAsync(request, token);
             return resp;
         }
 
@@ -469,10 +391,10 @@ namespace Kebler.TransmissionCore
         /// Move torrents to bottom in queue  (API: queue-move-bottom)
         /// </summary>
         /// <param name="ids"></param>
-        public async Task<TransmissionResponse> TorrentQueueMoveBottomAsync(uint[] ids)
+        public async Task<TransmissionResponse> TorrentQueueMoveBottomAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("queue-move-bottom", new Dictionary<string, object> { { "ids", ids } });
-            var resp = await SendRequestAsync(request);
+            var resp = await SendRequestAsync(request, token);
             return resp;
         }
 
@@ -496,16 +418,13 @@ namespace Kebler.TransmissionCore
         /// <param name="id">The torrent whose path will be renamed</param>
         /// <param name="path">The path to the file or folder that will be renamed</param>
         /// <param name="name">The file or folder's new name</param>
-        public async Task<RenameTorrentInfo> TorrentRenamePathAsync(int id, string path, string name)
+        public async Task<TransmissionResponse<RenameTorrentInfo>> TorrentRenamePathAsync(uint id, string path, string name, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "ids", new[] { id } }, { "path", path }, { "name", name } };
-
             var request = new TransmissionRequest("torrent-rename-path", arguments);
-            var response = await SendRequestAsync(request);
-
-            var result = response.Deserialize<RenameTorrentInfo>();
-
-            return result;
+            var response = await SendRequestAsync(request, token);
+            var trans = new TransmissionResponse<RenameTorrentInfo>(response);
+            return trans;
         }
 
         //method name not recognized
@@ -513,12 +432,12 @@ namespace Kebler.TransmissionCore
         /// Reannounce torrent (API: torrent-reannounce)
         /// </summary>
         /// <param name="ids"></param>
-        public async Task<TransmissionResponse> ReannounceTorrentsAsync(uint[] ids)
+        public async Task<TransmissionResponse> ReannounceTorrentsAsync(uint[] ids, CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"ids", ids}};
+            var arguments = new Dictionary<string, object> { { "ids", ids } };
 
             var request = new TransmissionRequest("torrent-reannounce", arguments);
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
             return response;
         }
 
@@ -530,10 +449,10 @@ namespace Kebler.TransmissionCore
         /// See if your incoming peer port is accessible from the outside world (API: port-test)
         /// </summary>
         /// <returns>Accessible state</returns>
-        public async Task<bool> PortTestAsync()
+        public async Task<bool> PortTestAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("port-test");
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
             var result = (bool)data.GetValue("port-is-open");
@@ -544,10 +463,10 @@ namespace Kebler.TransmissionCore
         /// Update blocklist (API: blocklist-update)
         /// </summary>
         /// <returns>Blocklist size</returns>
-        public async Task<int> BlocklistUpdateAsync()
+        public async Task<int> BlocklistUpdateAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("blocklist-update");
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
             var result = (int)data.GetValue("blocklist-size");
@@ -558,12 +477,12 @@ namespace Kebler.TransmissionCore
         /// Get free space is available in a client-specified folder.
         /// </summary>
         /// <param name="path">The directory to query</param>
-        public async Task<long> FreeSpaceAsync(string path)
+        public async Task<long> FreeSpaceAsync(string path, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "path", path } };
 
             var request = new TransmissionRequest("free-space", arguments);
-            var response = await SendRequestAsync(request);
+            var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
             var result = (long)data.GetValue("size-bytes");
@@ -572,10 +491,11 @@ namespace Kebler.TransmissionCore
 
         #endregion
 
+
+
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request, CancellationToken token)
         {
             var result = new TransmissionResponse();
-
             request.Tag = ++CurrentTag;
 
             try
@@ -584,6 +504,12 @@ namespace Kebler.TransmissionCore
                 var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
                 //Prepare http web request
+                if(!CheckURLValid(Url))
+                {
+                    throw new WebException("Host error", WebExceptionStatus.NameResolutionFailure);
+                }
+                
+
                 var webRequest = (HttpWebRequest)WebRequest.Create(Url);
 
                 webRequest.ContentType = "application/json-rpc";
@@ -628,20 +554,25 @@ namespace Kebler.TransmissionCore
                     {
                         if (ex.Response.Headers.Count > 0)
                         {
+                            result.WebException = null;
                             //If session id expiried, try get session id and send request
                             SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
 
                             if (SessionId == null)
                             {
                                 result.CustomException = new Exception("Session ID Error");
+                                result.Method = request.Method;
                                 return result;
                             }
                             result = SendRequest(request);
+                            result.Method = request.Method;
+                            return result;
                         }
                     }
                 }
-
                 Log.Error(ex);
+
+
             }
             catch (Exception ex)
             {
@@ -649,10 +580,16 @@ namespace Kebler.TransmissionCore
                 Log.Error(ex);
             }
 
+            result.Method = request.Method;
             return result;
         }
 
-        private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request)
+        public static bool CheckURLValid(string source)
+        {
+            return Uri.TryCreate(source, UriKind.Absolute, out _);
+        }
+
+        private TransmissionResponse SendRequest(CommunicateBase request)
         {
             var result = new TransmissionResponse();
 
@@ -661,7 +598,7 @@ namespace Kebler.TransmissionCore
             try
             {
 
-                var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
+                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
                 //Prepare http web request
                 var webRequest = (HttpWebRequest)WebRequest.Create(Url);
@@ -673,68 +610,50 @@ namespace Kebler.TransmissionCore
                 if (_needAuthorization)
                     webRequest.Headers["Authorization"] = _authorization;
 
-                await using (var dataStream = await webRequest.GetRequestStreamAsync())
+                var requestTask = webRequest.GetRequestStreamAsync();
+                requestTask.WaitAndUnwrapException();
+                using (var dataStream = requestTask.Result)
                 {
-                    await dataStream.WriteAsync(byteArray, 0, byteArray.Length);
+                    dataStream.Write(byteArray, 0, byteArray.Length);
                 }
+
+                var responseTask = webRequest.GetResponseAsync();
+                responseTask.WaitAndUnwrapException();
 
                 //Send request and prepare response
-                using var webResponse = await webRequest.GetResponseAsync();
-                await using var responseStream = webResponse.GetResponseStream();
-                if (responseStream == null)
-                {
-                    result.CustomException = new Exception("Stream resonse is null");
-                    Log.Error(result.WebException);
-                    return result;
-                }
-
-                var reader = new StreamReader(responseStream, Encoding.UTF8);
-                var responseString = await reader.ReadToEndAsync();
+                using var webResponse = responseTask.Result;
+                using var responseStream = webResponse.GetResponseStream();
+                var reader = new StreamReader(responseStream ?? throw new InvalidOperationException(nameof(responseStream)), Encoding.UTF8);
+                var responseString = reader.ReadToEnd();
                 result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
 
-                if (result.Result != "success")
+                if (!result.Success)
                 {
                     throw new Exception(result.Result);
                 }
-
-                result.Success = true;
             }
             catch (WebException ex)
             {
-                result.WebException = ex;
-                if (ex.Response is HttpWebResponse wr)
+                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
                 {
-                    result.HttpWebResponse = wr;
-
-                    if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
+                    if (ex.Response.Headers.Count > 0)
                     {
-                        if (ex.Response.Headers.Count > 0)
-                        {
-                            //If session id expiried, try get session id and send request
-                            SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
+                        //If session id expiried, try get session id and send request
+                        SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
 
-                            if (SessionId == null)
-                            {
-                                result.CustomException = new Exception("Session ID Error");
-                                return result;
-                            }
-                            result = SendRequest(request);
-                        }
+                        if (SessionId == null)
+                            throw new Exception("Session ID Error");
+
+                        result = SendRequest(request);
                     }
                 }
                 else
-                {
-                    Log.Error(ex);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                result.CustomException = ex;
-                Log.Error(ex);
+                    throw ex;
             }
 
             return result;
         }
+
+
     }
 }

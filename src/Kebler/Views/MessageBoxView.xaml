@@ -1,0 +1,67 @@
+﻿<window:CustomizableWindow
+    x:Class="Kebler.Views.MessageBoxView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
+    xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
+    MinHeight="155"
+    MaxWidth="{Binding MinWidth}"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid
+            Grid.Row="0"
+            MinHeight="69"
+            Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            <Image
+                Grid.Column="1"
+                Width="60"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                RenderOptions.EdgeMode="Aliased"
+                Source="/Kebler.UI;Component/Icons/KeblerVided.png"
+                Visibility="{Binding LogoVisibility, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <TextBlock
+                Grid.Column="3"
+                Width="Auto"
+                MaxWidth="500"
+                VerticalAlignment="Center"
+                FontSize="13"
+                Text="{Binding Message}"
+                TextAlignment="Left"
+                TextOptions.TextFormattingMode="Ideal"
+                TextOptions.TextHintingMode="Animated"
+                TextOptions.TextRenderingMode="ClearType"
+                TextWrapping="Wrap" />
+        </Grid>
+        <controls:BoxDialogButtons
+            Grid.Row="1"
+            MinHeight="49"
+            Margin="5,0"
+            HorizontalAlignment="Right" />
+    </Grid>
+</window:CustomizableWindow>

@@ -277,7 +277,6 @@
     </Style>
 
 
-
     <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Control.BorderThickness" Value="0" />

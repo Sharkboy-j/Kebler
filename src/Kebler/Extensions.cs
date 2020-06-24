@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Kebler.Models.Torrent.Common;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Interop;
+using log4net;
 using Expression = System.Linq.Expressions.Expression;
+using System.Text;
 
 namespace Kebler
 {
@@ -44,6 +47,33 @@ namespace Kebler
             var propAsObject = Expression.Convert(property, typeof(object));
 
             return Expression.Lambda<Func<T, object>>(propAsObject, parameter);
+        }
+
+
+        public static void ParseTransmissionReponse(this TransmissionResponse resp, ILog logger)
+        {
+            if (resp.Success)
+            {
+                logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
+            }
+            else
+            {
+                var sb = new StringBuilder();
+                if (resp.HttpWebResponse != null)
+                    sb.Append(resp.HttpWebResponse).Append(Environment.NewLine);
+
+                if (resp.WebException != null)
+                    sb.Append(resp.WebException).Append(Environment.NewLine);
+
+                if (resp.CustomException != null)
+                    sb.Append(resp.CustomException).Append(Environment.NewLine);
+                logger.Error($"[{resp.Method}] RESULT '{resp.Result}'{Environment.NewLine}{sb}");
+            }
+        }
+
+        public static void ParseTransmissionReponse<T>(this TransmissionResponse<T> resp, ILog logger)
+        {
+            resp.Response.ParseTransmissionReponse(logger);
         }
     }
 }
