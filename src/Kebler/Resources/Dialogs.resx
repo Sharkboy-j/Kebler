@@ -178,4 +178,7 @@
   <data name="ATD_Files" xml:space="preserve">
     <value>Files:</value>
   </data>
+  <data name="DialogBox_EnterPWD" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
 </root>

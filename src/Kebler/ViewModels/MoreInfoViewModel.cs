@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 
 namespace Kebler.ViewModels
 {

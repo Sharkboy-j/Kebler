@@ -11,5 +11,28 @@ namespace Kebler.Models
         {
             public CultureInfo Culture;
         }
+
+        public class ServerAdded
+        {
+        }
+
+        public class ConnectedServerChanged
+        {
+            public Server srv;
+        }
+
+        public class ReconnectRequested
+        {
+            public Server srv;
+        }
+
+        public class ReconnectAllowed
+        {
+        }
+
+        public class ServerRemoved
+        {
+            public Server srv;
+        }
     }
 }

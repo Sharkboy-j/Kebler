@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,13 +9,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
 using Caliburn.Micro;
 using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
-using Kebler.Models.Torrent.Attributes;
 using Kebler.Models.Torrent.Common;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Resources;
@@ -26,16 +21,16 @@ using Kebler.Services;
 using Kebler.Services.Converters;
 using Kebler.TransmissionCore;
 using Kebler.Views;
-using LiteDB;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
-using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.ViewModels
 {
-    public partial class KeblerViewModel : Screen, IHandle<Messages.LocalizationCultureChangesMessage>
+    public partial class KeblerViewModel : Screen,
+        IHandle<Messages.LocalizationCultureChangesMessage>,
+        IHandle<Messages.ReconnectRequested>,
+        IHandle<Messages.ReconnectAllowed>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -53,7 +48,9 @@ namespace Kebler.ViewModels
             CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Stopped, Cat = Enums.Categories.Stopped });
             CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Error, Cat = Enums.Categories.Error });
 
-            SelectedCategoryIndex = 0;
+            SelectedFolderIndex = -1;
+
+            SelectedCat = CategoriesList.First();
 
             WorkingParams = new[]
             {
@@ -73,15 +70,37 @@ namespace Kebler.ViewModels
             };
 
 
+
             ApplyConfig();
         }
 
         protected override void OnViewAttached(object view, object context)
         {
             _view = view as KeblerView;
+            if (_view != null)
+                _view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
+
             base.OnViewAttached(view, context);
         }
 
+        private async void FileTreeViewControl_OnFileStatusUpdate(uint[] wanted, uint[] unwanted, bool status)
+        {
+            var settings = new TorrentSettings
+            {
+                IDs = selectedIDs,
+                FilesWanted = wanted.Any() ? wanted : null,
+                FilesUnwanted = unwanted.Any() ? unwanted : null
+            };
+
+            if (wanted.Length > 0)
+                Log.Info("wanted " + string.Join(", ", wanted));
+
+            if (unwanted.Length > 0)
+                Log.Info("unwanted " + string.Join(", ", unwanted));
+
+            var resp = await _transmissionClient.TorrentSetAsync(settings, _cancelTokenSource.Token);
+            resp.ParseTransmissionReponse(Log);
+        }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -94,7 +113,7 @@ namespace Kebler.ViewModels
 
         public void ShowConnectionManager()
         {
-            manager.ShowDialogAsync(new ConnectionManagerViewModel());
+            manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
         }
 
         private Task GetLongChecker()
@@ -176,9 +195,7 @@ namespace Kebler.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
-
-                var msg = new MessageBox(Kebler.Resources.Dialogs.ConfigApllyError, Kebler.Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true);
-                msg.ShowDialog();
+                MessageBoxViewModel.ShowDialog(Kebler.Resources.Dialogs.ConfigApllyError, manager);
             }
         }
 
@@ -273,28 +290,23 @@ namespace Kebler.ViewModels
 
         }
 
-        private static async Task<string> GetPassword()
+        private async Task<string> GetPassword()
         {
-            var pass = string.Empty;
-            await Application.Current.Dispatcher.InvokeAsync(() =>
+            string dd = null;
+            await Execute.OnUIThreadAsync(async () =>
             {
-                var dialog = new MessageBox(true, "Enter password", true);
-                dialog.Owner = Application.Current.MainWindow;
-                try
-                {
-                    if (dialog.ShowDialog() == true)
-                    {
-                        pass = dialog.Value;
-                    }
-                }
-                finally
-                {
+                var dialog = new DialogBoxViewModel(Resources.Dialogs.DialogBox_EnterPWD, string.Empty, true);
 
-                    dialog.Value = null;
-                    dialog = null;
-                }
+                await manager.ShowDialogAsync(dialog);
+
+                dd = dialog.Value;
             });
-            return pass;
+
+            if (dd == null)
+                throw new TaskCanceledException();
+
+            return dd;
+
         }
 
         public void UpdateServers()
@@ -350,10 +362,12 @@ namespace Kebler.ViewModels
 
                 try
                 {
-                    _transmissionClient = new TransmissionClient(SelectedServer.FullUriPath, null, SelectedServer.UserName,
-                        SelectedServer.AskForPassword ? pass : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
+                    _transmissionClient = new TransmissionClient(SelectedServer.FullUriPath, null,
+                        SelectedServer.UserName,
+                        SelectedServer.AskForPassword
+                            ? pass
+                            : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
                     Log.Info("Client created");
-                    ConnectedServer = SelectedServer;
                     StartCycle();
                 }
                 catch (Exception ex)
@@ -363,6 +377,10 @@ namespace Kebler.ViewModels
                     IsConnected = false;
                     IsErrorOccuredWhileConnecting = true;
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                IsConnectedStatusText = "Canceled";
             }
             finally
             {
@@ -386,6 +404,7 @@ namespace Kebler.ViewModels
                         _sessionInfo = info.Value;
                         IsConnected = true;
                         Log.Info($"Connected {_sessionInfo.Version}");
+                        ConnectedServer = SelectedServer;
 
                         while (IsConnected && !token.IsCancellationRequested)
                         {
@@ -434,7 +453,7 @@ namespace Kebler.ViewModels
                 {
                     if (IsConnected)
                     {
-                        await _transmissionClient.CloseSessionAsync(_cancelTokenSource.Token);
+                        await _transmissionClient.CloseSessionAsync(CancellationToken.None);
                     }
 
                     ConnectedServer = null;
@@ -442,8 +461,11 @@ namespace Kebler.ViewModels
                     allTorrents = null;
                     TorrentList = new BindableCollection<TorrentInfo>();
                     IsConnected = false;
+                    Categories.Clear();
                     IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
                     Log.Info("Disconnected from server");
+                    if(requested)
+                        await _eventAggregator.PublishOnBackgroundThreadAsync(new Messages.ReconnectAllowed(), CancellationToken.None);
                 }
             }, token);
 
@@ -463,8 +485,7 @@ namespace Kebler.ViewModels
                         _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
                     };
 
-                    var dialog = new MessageBox(msg, Kebler.Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true) { Owner = Application.Current.MainWindow };
-                    dialog.ShowDialog();
+                    MessageBoxViewModel.ShowDialog(msg, manager,string.Empty,Enums.MessageBoxDilogButtons.Ok);
                 });
                 return false;
             }
@@ -692,7 +713,7 @@ namespace Kebler.ViewModels
         public DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
         {
             var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
-            return (DataGridCell) cellContent?.Parent;
+            return (DataGridCell)cellContent?.Parent;
         }
 
         public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
@@ -779,6 +800,22 @@ namespace Kebler.ViewModels
 
             return Task.CompletedTask;
         }
+
+        public Task HandleAsync(Messages.ReconnectRequested message, CancellationToken cancellationToken)
+        {
+            requested = true;
+            _cancelTokenSource.Cancel();
+            IsConnecting = true;
+            SelectedServer = message.srv;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(Messages.ReconnectAllowed message, CancellationToken cancellationToken)
+        {
+            requested = false;
+            InitConnection();
+            return Task.CompletedTask;
+        }
     }
 
 
@@ -835,6 +872,28 @@ namespace Kebler.ViewModels
                     _view.TorrentsDataGrid.SelectedItem = null;
             });
         }
+
+        public void ClearFilter()
+        {
+            FilterText = string.Empty;
+            SelectedFolderIndex = -1;
+        }
+
+        public void FilterTextChanged()
+        {
+            if (allTorrents.Clone() is TransmissionTorrents data)
+            {
+                ProcessParsingTransmissionResponse(data);
+            }
+        }
+
+        public void ChangeFolderFilter()
+        {
+            if (SelectedFolderIndex != -1 && SelectedFolder != null)
+            {
+                FilterText = $"{{p}}:{SelectedFolder.FullPath}";
+            }
+        }
     }
 
     public partial class KeblerViewModel //TorrentActions
@@ -860,9 +919,13 @@ namespace Kebler.ViewModels
 
             var path = SelectedTorrent.DownloadDir;
 
-            var dialog = new DialogBox(question, path, false) { Owner = Application.Current.MainWindow };
+            //var dialog = new DialogBoxView(question, path, false) { Owner = Application.Current.MainWindow };
 
-            if (dialog.ShowDialog() == true)
+            var dialog = new DialogBoxViewModel(question, path, false);
+
+            var result = await manager.ShowDialogAsync(dialog);
+
+            if ((bool)result)
             {
                 await Task.Factory.StartNew(async () =>
                 {
@@ -1062,7 +1125,7 @@ namespace Kebler.ViewModels
     public partial class KeblerViewModel
     {
         readonly IWindowManager manager = new WindowManager();
-
+        private bool requested = false;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
         private BindableCollection<StatusCategory> _categoriesList = new BindableCollection<StatusCategory>();
         private BindableCollection<TorrentInfo> _torrentList = new BindableCollection<TorrentInfo>();
@@ -1094,6 +1157,8 @@ namespace Kebler.ViewModels
         private object syncObjKeys = new object();
         private KeblerView _view;
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
+        private int _selectedFolderIndex;
+        private FolderCategory _selectedFolder;
 
         private List<Server> ServersList
         {
@@ -1172,7 +1237,11 @@ namespace Kebler.ViewModels
         public Server ConnectedServer
         {
             get => _ConnectedServer;
-            set => Set(ref _ConnectedServer, value);
+            set
+            {
+                Set(ref _ConnectedServer, value);
+                _eventAggregator.PublishOnUIThreadAsync(new Messages.ConnectedServerChanged { srv = value });
+            } 
         }
         public string LongStatusText
         {
@@ -1199,13 +1268,24 @@ namespace Kebler.ViewModels
             get => _filterText;
             set => Set(ref _filterText, value);
         }
+        public int SelectedFolderIndex
+        {
+            get => _selectedFolderIndex;
+            set => Set(ref _selectedFolderIndex, value);
+        }
 
         public StatusCategory SelectedCat
         {
             get => _selectedCat;
             set => Set(ref _selectedCat, value);
-        } 
-        
+        }
+
+        public FolderCategory SelectedFolder
+        {
+            get => _selectedFolder;
+            set => Set(ref _selectedFolder, value);
+        }
+
         public double MoreInfoColumnHeight
         {
             get => _MoreInfoColumnHeight;
@@ -1216,7 +1296,6 @@ namespace Kebler.ViewModels
             get => _minMoreInfoColumnHeight;
             set => Set(ref _minMoreInfoColumnHeight, value);
         }
-
 
         public string HeaderTitle
         {

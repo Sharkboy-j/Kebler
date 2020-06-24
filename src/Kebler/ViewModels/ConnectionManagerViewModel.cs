@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
@@ -14,13 +13,19 @@ using LogManager = log4net.LogManager;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Media;
+using Kebler.Dialogs;
 using Kebler.Models.Torrent.Common;
-using MessageBox = Kebler.Dialogs.MessageBox;
 
 namespace Kebler.ViewModels
 {
     public partial class ConnectionManagerViewModel : Screen
     {
+        private readonly IEventAggregator _eventAggregator;
+
+        public ConnectionManagerViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -33,7 +38,6 @@ namespace Kebler.ViewModels
         protected override void OnViewAttached(object view, object context)
         {
             _view = view as IConnectionManager;
-
             if (view is DependencyObject dependencyObject)
             {
                 var thisWindow = Window.GetWindow(dependencyObject);
@@ -68,6 +72,9 @@ namespace Kebler.ViewModels
             Log.Info($"Add new Server {server}");
 
             ServerList.Add(server);
+
+            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServerAdded());
+
             // App.InvokeServerListChanged();
         }
 
@@ -83,7 +90,7 @@ namespace Kebler.ViewModels
             if (!result)
             {
                 //TODO: Add string 
-                Dialogs.MessageBox.Show("RemoveErrorContent");
+                MessageBoxViewModel.ShowDialog("RemoveErrorContent", manager);
             }
 
             var ind = ServerIndex -= 1;
@@ -92,6 +99,7 @@ namespace Kebler.ViewModels
             //{
             //    App.Instance.KeblerControl.Disconnect();
             //}
+            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServerRemoved { srv = SelectedServer });
 
             SelectedServer = null;
             GetServers();
@@ -122,7 +130,8 @@ namespace Kebler.ViewModels
 
         public void Cancel()
         {
-
+            SelectedServer = null;
+            ServerIndex = -1;
         }
 
         private static bool ValidateServer(Server server, out Enums.ValidateError error)
@@ -141,7 +150,7 @@ namespace Kebler.ViewModels
             //TODO: Check ipadress port
         }
 
-        private bool CheckResponse(TransmissionResponse resp)
+        private async Task<bool> CheckResponse(TransmissionResponse resp)
         {
 
             if (resp.WebException != null)
@@ -154,13 +163,14 @@ namespace Kebler.ViewModels
                 };
 
 
-                var dialog = new MessageBox(msg, Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok, true) { Owner = Application.Current.MainWindow };
-                dialog.Show();
+
+
+                await MessageBoxViewModel.ShowDialog(msg, manager, Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok);
 
                 return false;
             }
 
-            else if (resp.CustomException != null)
+            if (resp.CustomException != null)
             {
                 return false;
             }
@@ -169,29 +179,22 @@ namespace Kebler.ViewModels
 
         public async void Test()
         {
+            IsTesting = true;
 
-            string pass = null;
+            string pswd = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new MessageBox(true, "Enter password", true) { Owner = Application.Current.MainWindow };
-                try
+                var dialog = new DialogBoxViewModel(Resources.Dialogs.DialogBox_EnterPWD, string.Empty, true);
+                var res = await manager.ShowDialogAsync(dialog);
+                if (res == false)
                 {
-                    if (dialog.ShowDialog() == true)
-                    {
-                        pass = dialog.Value;
-                    }
+                    IsTesting = false;
+                    return;
                 }
-                finally
-                {
-
-                    dialog.Value = null;
-                    dialog = null;
-                }
+                pswd = dialog.Value;
             }
 
-
-            IsTesting = true;
-            var result = await TesConnection(pass);
+            var result = await TesConnection(pswd);
 
             ConnectStatusResult = result
                 ? Resources.Windows.CM_TestConnectionGood
@@ -214,11 +217,11 @@ namespace Kebler.ViewModels
                 var user = SelectedServer.AuthEnabled ? SelectedServer.UserName : null;
                 var pswd = SelectedServer.AuthEnabled ? pass ?? _view.pwd.Password : null;
 
-                _client =  new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
+                _client = new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
 
                 var sessionInfo = await _client.GetSessionInformationAsync(new CancellationToken());
 
-                return CheckResponse(sessionInfo.Response);
+                return await CheckResponse(sessionInfo.Response);
             }
             catch (Exception ex)
             {
@@ -227,11 +230,19 @@ namespace Kebler.ViewModels
             }
             finally
             {
-#pragma warning disable 4014
-                _client.CloseSessionAsync(new CancellationToken());
-#pragma warning restore 4014
                 _client = null;
                 IsTesting = false;
+            }
+        }
+
+        public void ServerChanged()
+        {
+            if (SelectedServer != null)
+            {
+                if (SelectedServer.AuthEnabled && !SelectedServer.AskForPassword)
+                    _view.pwd.Password = SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password);
+                else
+                    _view.pwd.Password = string.Empty;
             }
         }
     }

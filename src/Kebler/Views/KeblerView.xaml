@@ -336,7 +336,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="1" />
-                <RowDefinition Name="MoreInfoColumn" MinHeight="202" />
+                <RowDefinition
+                    Name="MoreInfoColumn"
+                    Height="0"
+                    MinHeight="0" />
             </Grid.RowDefinitions>
             <Grid
                 Background="{DynamicResource ListBox.Static.Background}"
@@ -353,6 +356,7 @@
                     cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
                     BorderThickness="0"
                     DisplayMemberPath="Title"
+                    SelectedIndex="{Binding SelectedCategoryIndex}"
                     ItemsSource="{Binding CategoriesList}"
                     SelectedValue="{Binding SelectedCat}"
                     SelectionMode="Single">
@@ -369,19 +373,19 @@
                     VerticalAlignment="Stretch"
                     Row="1">
                     <TextBox
-                        Name="FilterTextBox"
                         Margin="0"
                         Padding="0,0,17,0"
                         VerticalContentAlignment="Center"
+                        cal:Message.Attach="[Event TextChanged] = [Action FilterTextChanged]"
                         BorderBrush="{StaticResource BorderBrush}"
                         Foreground="{StaticResource ForegroundBrush}"
-                        TextChanged="FilterTextBox_OnTextChanged" />
+                        Text="{Binding FilterText, Mode=TwoWay}" />
 
                     <Border
                         Width="20"
                         HorizontalAlignment="Right"
-                        Cursor="Hand"
-                        PreviewMouseUp="ClearFilter">
+                        cal:Message.Attach="[Event PreviewMouseUp] = [Action ClearFilter]"
+                        Cursor="Hand">
                         <Image
                             Width="13"
                             Height="13"
@@ -391,12 +395,13 @@
                 </Grid>
 
                 <ListBox
-                    Name="FolderListBox"
                     Grid.Row="2"
+                    cal:Message.Attach="[Event PreviewMouseUp] = [Action ChangeFolderFilter]"
                     BorderThickness="0"
                     ItemsSource="{Binding Categories}"
-                    PreviewMouseUp="ChangeFolderFilter"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    SelectedIndex="{Binding SelectedFolderIndex}"
+                    SelectedValue="{Binding SelectedFolder}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -519,7 +524,10 @@
                 Column="2"
                 Row="2"
                 Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
-                <controls:TorrentMoreInfo DataContext="{Binding MoreInfoView}" />
+                <controls:TorrentMoreInfo
+                    Name="MoreView"
+                    x:FieldModifier="public"
+                    DataContext="{Binding MoreInfoView}" />
             </Grid>
 
 

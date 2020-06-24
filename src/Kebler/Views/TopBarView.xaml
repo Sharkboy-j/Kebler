@@ -20,7 +20,7 @@
                 Click="OpenConnectionManager"
                 Header="{lex:LocText MI_CM}"
                 InputGestureText="Ctrl+Shift+C" />
-            <MenuItem Name="ServersMenu" Header="{lex:LocText MI_Servers}" />
+            <MenuItem  Header="{lex:LocText MI_Servers}"  ItemsSource="{Binding Servers}" />
         </MenuItem>
         <MenuItem Header="{lex:LocText MI_Torrent}">
             <MenuItem

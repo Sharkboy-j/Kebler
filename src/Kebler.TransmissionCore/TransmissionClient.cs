@@ -93,6 +93,7 @@ namespace Kebler.TransmissionCore
 
         /// <summary>
         /// Close current session (API: session-close)
+        /// AND ALL OPENED SESSION FOR THIS INSTANCE....
         /// </summary>
         public Task CloseSessionAsync(CancellationToken token)
         {
@@ -566,6 +567,7 @@ namespace Kebler.TransmissionCore
                     {
                         if (ex.Response.Headers.Count > 0)
                         {
+                            result.WebException = null;
                             //If session id expiried, try get session id and send request
                             SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
 
@@ -576,11 +578,14 @@ namespace Kebler.TransmissionCore
                                 return result;
                             }
                             result = SendRequest(request);
+                            result.Method = request.Method;
+                            return result;
                         }
                     }
                 }
-
                 Log.Error(ex);
+
+
             }
             catch (Exception ex)
             {

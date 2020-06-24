@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
+using Kebler.Services;
 using Kebler.ViewModels;
 
 namespace Kebler
@@ -25,10 +26,22 @@ namespace Kebler
             container.Singleton<KeblerViewModel>();
             container.Singleton<TopBarViewModel>();
             container.Singleton<ConnectionManagerViewModel>();
+
+         
         }
+
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            if (string.IsNullOrEmpty(ConfigService.Instanse.Language.Name))
+            {
+                LocalizationManager.CurrentCulture = LocalizationManager.CultureList[0];
+            }
+            else
+            {
+                LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
+            }
+
             DisplayRootViewFor<KeblerViewModel>();
         }
 

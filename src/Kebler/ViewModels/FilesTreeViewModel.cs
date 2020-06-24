@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using Caliburn.Micro;
+using Kebler.Models.Interfaces;
 using Kebler.Models.Torrent;
 using Kebler.Models.Tree;
 
 namespace Kebler.ViewModels
 {
-    public class FilesTreeViewModel : PropertyChangedBase
+    public class FilesTreeViewModel : PropertyChangedBase, IFilesTreeView
     {
         private MultiselectionTreeViewItem _files = new MultiselectionTreeViewItem();
         public MultiselectionTreeViewItem Files

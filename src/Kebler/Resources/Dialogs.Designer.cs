@@ -241,6 +241,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter password.
+        /// </summary>
+        internal static string DialogBox_EnterPWD {
+            get {
+                return ResourceManager.GetString("DialogBox_EnterPWD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string Error {

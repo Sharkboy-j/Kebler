@@ -3,14 +3,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using AutoUpdaterDotNET;
 using Kebler.Models;
 using Kebler.Services;
-using Kebler.Views;
 using log4net;
 using log4net.Config;
 
@@ -96,14 +94,7 @@ namespace Kebler
 
             ConfigService.LoadConfig();
 
-            if (string.IsNullOrEmpty(ConfigService.Instanse.Language.Name))
-            {
-                LocalizationManager.CurrentCulture = LocalizationManager.CultureList[0];
-            }
-            else
-            {
-                LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
-            }
+       
             SetEnv();
             InitializeComponent();
 
@@ -126,6 +117,8 @@ namespace Kebler
             }
 
         }
+
+
         private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -151,14 +144,6 @@ namespace Kebler
             e.Handled = true;
         }
 
-
-        //protected override void OnStartup(StartupEventArgs e)
-        //{
-
-        //    var control  = new KeblerView();
-        //    control.Show();
-        //    base.OnStartup(e);
-        //}
 
         #endregion
 

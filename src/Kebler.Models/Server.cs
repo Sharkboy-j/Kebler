@@ -21,7 +21,6 @@ namespace Kebler.Models
         public bool AuthEnabled { get; set; } = false;
         public bool AskForPassword { get; set; } = false;
 
-
         private bool _sslEnabled = true;
         public bool SslEnabled
         {

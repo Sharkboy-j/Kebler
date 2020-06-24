@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +15,6 @@ using Kebler.TransmissionCore;
 using Kebler.ViewModels;
 using log4net;
 using Microsoft.Win32;
-using MoreInfoViewModel = Kebler.ViewModels.MoreInfoViewModel;
 
 namespace Kebler.Dialogs
 {

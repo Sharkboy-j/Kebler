@@ -107,8 +107,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
-		RESX_TaskErrorCategory = Message
 		RESX_ShowErrorsInErrorList = False
+		RESX_TaskErrorCategory = Message
+		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
 	EndGlobalSection
 EndGlobal
