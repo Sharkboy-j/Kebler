@@ -73,7 +73,7 @@ namespace Kebler.ViewModels
 
             ServerList.Add(server);
 
-            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServerAdded());
+            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
 
             // App.InvokeServerListChanged();
         }
@@ -99,11 +99,10 @@ namespace Kebler.ViewModels
             //{
             //    App.Instance.KeblerControl.Disconnect();
             //}
-            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServerRemoved { srv = SelectedServer });
+            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
 
             SelectedServer = null;
             GetServers();
-            App.InvokeServerListChanged();
             ServerIndex = ind;
         }
 
@@ -125,7 +124,9 @@ namespace Kebler.ViewModels
                 Log.Error($"SaveError: {error}");
                 System.Windows.MessageBox.Show(error.ToString());
             }
-            App.InvokeServerListChanged();
+
+            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
+
         }
 
         public void Cancel()

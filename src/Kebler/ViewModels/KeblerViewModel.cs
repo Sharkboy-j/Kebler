@@ -36,8 +36,7 @@ namespace Kebler.ViewModels
         IHandle<Messages.ReconnectRequested>,
         IHandle<Messages.ReconnectAllowed>,
         IHandle<Messages.ConnectedServerChanged>,
-        IHandle<Messages.ServerRemoved>,
-        IHandle<Messages.ServerAdded>
+        IHandle<Messages.ServersUpdated>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -189,10 +188,19 @@ namespace Kebler.ViewModels
             var items = _dbServersList?.FindAll() ?? new List<Server>();
 
 
+            //var ex = Excepted(items);
+
+
+            //foreach (var srv in ex)
+            //{
+            //    var first = Servers.First(x => ((Server)x.Tag).Equals(srv));
+            //    Servers.Remove(first);
+            //}
+
+            Servers.Clear();
+
             foreach (var srv in items)
             {
-                if (Contains(srv))
-                    continue;
                 var dd = new MenuItem { Header = srv.Title, Tag = srv };
                 dd.Click += srvClicked;
                 dd.IsCheckable = true;
@@ -213,6 +221,15 @@ namespace Kebler.ViewModels
                 }
             }
             return false;
+        }
+
+        private List<Server> Excepted(IEnumerable<Server> list)
+        {
+            var items = Servers.Select(x => (Server)x.Tag).ToList();
+
+            var itms = items.Except(list).ToList();
+
+            return itms;
         }
 
         private void srvClicked(object sender, RoutedEventArgs e)
@@ -410,13 +427,13 @@ namespace Kebler.ViewModels
 
         public void InitConnection()
         {
+
             if (IsConnected) return;
 
-            if (ServersList.Count == 0)
-            {
-                ShowConnectionManager();
-            }
-            else
+            UpdateServers();
+
+
+            if (ServersList.Count > 0)
             {
                 if (_checkerTask == null)
                 {
@@ -426,7 +443,6 @@ namespace Kebler.ViewModels
 
                 SelectedServer ??= ServersList.FirstOrDefault();
                 TryConnect();
-
             }
         }
 
@@ -847,10 +863,19 @@ namespace Kebler.ViewModels
 
         public Task HandleAsync(Messages.ReconnectRequested message, CancellationToken cancellationToken)
         {
-            requested = true;
-            _cancelTokenSource.Cancel();
-            IsConnecting = true;
-            SelectedServer = message.srv;
+            if (IsConnected)
+            {
+                requested = true;
+                _cancelTokenSource.Cancel();
+                IsConnecting = true;
+                _SelectedServer = message.srv;
+            }
+            else
+            {
+                IsConnecting = true;
+                _SelectedServer = message.srv;
+                InitConnection();
+            }
             return Task.CompletedTask;
         }
 
@@ -887,18 +912,9 @@ namespace Kebler.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.ServerAdded message, CancellationToken cancellationToken)
+        public Task HandleAsync(Messages.ServersUpdated message, CancellationToken cancellationToken)
         {
             ReInitServers();
-            return Task.CompletedTask;
-        }
-
-        public Task HandleAsync(Messages.ServerRemoved message, CancellationToken cancellationToken)
-        {
-            var rm = Servers.FirstOrDefault(x => ((Server)x.Tag).Equals(message.srv));
-
-            Servers.Remove(rm);
-
             return Task.CompletedTask;
         }
     }

@@ -41,30 +41,12 @@ namespace Kebler
         public KeblerViewModel KeblerVM;
         public static App Instance;
         public GeoService Geo;
-        public delegate void ConnectionToServerInitialisedHandler(Server srv);
-        public static event ConnectionToServerInitialisedHandler ConnectionChanged;
-        public delegate void ServerListChangedHandler();
-        public static event ServerListChangedHandler ServerListChanged;
         public CountryIdToFlagImageSourceConverter Flags = new CountryIdToFlagImageSourceConverter();
         public List<string> torrentsToAdd = new List<string>();
 
         public delegate void Langhandler();
         public event Langhandler LangChanged;
 
-        public static void ChangeConnectedServer(Server srv)
-        {
-            ConnectionChanged?.Invoke(srv);
-        }
-
-        public static void InvokeServerListChanged()
-        {
-            ServerListChanged?.Invoke();
-        }
-
-        public void LangChangedNotify()
-        {
-            LangChanged?.Invoke();
-        }
 
         public object FindRes(string name)
         {

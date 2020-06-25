@@ -67,15 +67,15 @@
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding announce, Mode=OneWay}"
-                            Header="Name" />
+                            Header="{lex:LocText MoreInfo_Trackers_Name}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding LastAnnounceResult, Mode=OneWay}"
-                            Header="Status" />
+                            Header="{lex:LocText MoreInfo_Trackers_Status}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding SeederCount, Mode=OneWay}"
-                            Header="Seeds" />
+                            Header="{lex:LocText MoreInfo_Trackers_Seeds}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -89,7 +89,7 @@
                     ItemsSource="{Binding Peers, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="Auto" Header="Host">
+                        <DataGridTemplateColumn Width="Auto" Header="{lex:LocText MoreInfo_Peers_Host}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="3,0" Orientation="Horizontal">
@@ -105,24 +105,24 @@
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding ClientName, Mode=OneWay}"
-                            Header="Client" />
+                            Header="{lex:LocText MoreInfo_Peers_Client}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Progress, Mode=OneWay, Converter={StaticResource PercentToUserFriendlyConvertor}}"
-                            Header="Progress" />
+                            Header="{lex:LocText MoreInfo_Peers_Progress}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding RateToClient, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}"
-                            Header="RateToClient" />
+                            Header="{lex:LocText MoreInfo_PeersRateToClient}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding RateToPeer, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}"
-                            Header="RateToPeer" />
+                            Header="{lex:LocText MoreInfo_PeersRateToPeer}" />
 
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding IsEncrypted, Mode=OneWay}"
-                            Header="IsEncrypted" />
+                            Header="{lex:LocText MoreInfo_Peers_Encryption}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -132,7 +132,7 @@
             Height="27"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Content="Esc, to hide"
+            Content="{lex:LocText MoreInfo_HideHint}"
             Foreground="{DynamicResource ForegroundBrush.Gray}" />
 
         <Grid

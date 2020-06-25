@@ -12,7 +12,7 @@ namespace Kebler.Models
             public CultureInfo Culture;
         }
 
-        public class ServerAdded
+        public class ServersUpdated
         {
         }
 
@@ -30,9 +30,5 @@ namespace Kebler.Models
         {
         }
 
-        public class ServerRemoved
-        {
-            public Server srv;
-        }
     }
 }

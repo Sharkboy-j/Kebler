@@ -61,6 +61,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retrieving Settings From Server.
+        /// </summary>
+        internal static string ATD_RetrievingSettings {
+            get {
+                return ResourceManager.GetString("ATD_RetrievingSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string Cat_Active {
@@ -340,6 +349,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Esc, to hide.
+        /// </summary>
+        internal static string MoreInfo_HideHint {
+            get {
+                return ResourceManager.GetString("MoreInfo_HideHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peers.
         /// </summary>
         internal static string MoreInfo_Peers {
@@ -349,11 +367,92 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client.
+        /// </summary>
+        internal static string MoreInfo_Peers_Client {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Client", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encyption.
+        /// </summary>
+        internal static string MoreInfo_Peers_Encryption {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        internal static string MoreInfo_Peers_Host {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        internal static string MoreInfo_Peers_Progress {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Speed.
+        /// </summary>
+        internal static string MoreInfo_PeersRateToClient {
+            get {
+                return ResourceManager.GetString("MoreInfo_PeersRateToClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload Speed.
+        /// </summary>
+        internal static string MoreInfo_PeersRateToPeer {
+            get {
+                return ResourceManager.GetString("MoreInfo_PeersRateToPeer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trackers.
         /// </summary>
         internal static string MoreInfo_Trackers {
             get {
                 return ResourceManager.GetString("MoreInfo_Trackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Name {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Seeds {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Seeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seeds.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Status {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Status", resourceCulture);
             }
         }
         

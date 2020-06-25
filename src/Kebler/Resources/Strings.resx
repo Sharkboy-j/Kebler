@@ -273,4 +273,37 @@
   <data name="MoreInfo_Peers" xml:space="preserve">
     <value>Peers</value>
   </data>
+  <data name="ATD_RetrievingSettings" xml:space="preserve">
+    <value>Retrieving Settings From Server</value>
+  </data>
+  <data name="MoreInfo_Peers_Encryption" xml:space="preserve">
+    <value>Encyption</value>
+  </data>
+  <data name="MoreInfo_PeersRateToPeer" xml:space="preserve">
+    <value>Upload Speed</value>
+  </data>
+  <data name="MoreInfo_PeersRateToClient" xml:space="preserve">
+    <value>Download Speed</value>
+  </data>
+  <data name="MoreInfo_Peers_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="MoreInfo_Peers_Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="MoreInfo_Peers_Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="MoreInfo_Trackers_Name" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MoreInfo_Trackers_Status" xml:space="preserve">
+    <value>Seeds</value>
+  </data>
+  <data name="MoreInfo_Trackers_Seeds" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="MoreInfo_HideHint" xml:space="preserve">
+    <value>Esc, to hide</value>
+  </data>
 </root>
