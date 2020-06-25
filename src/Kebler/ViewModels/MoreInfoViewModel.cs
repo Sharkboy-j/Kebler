@@ -13,9 +13,9 @@ namespace Kebler.ViewModels
         private int _selectedCount;
 
 
-        public void Update(ref TorrentInfo torrent)
+        public void Update(TorrentInfo torrent)
         {
-            FilesTree.UpdateFilesTree(ref torrent);
+            FilesTree.UpdateFilesTree(torrent);
             PercentDone = torrent.PercentDone;
 
             TrackerStats = torrent.TrackerStats;

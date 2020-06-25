@@ -504,13 +504,13 @@ namespace Kebler.TransmissionCore
                 var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
                 //Prepare http web request
-                if(!CheckURLValid(Url))
+                if (!CheckURLValid(Url))
                 {
                     throw new WebException("Host error", WebExceptionStatus.NameResolutionFailure);
                 }
-                
 
-                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
+
+                var webRequest = (HttpWebRequest) WebRequest.Create(Url);
 
                 webRequest.ContentType = "application/json-rpc";
                 webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
@@ -542,6 +542,10 @@ namespace Kebler.TransmissionCore
                 {
                     throw new Exception(result.Result);
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                throw;
             }
             catch (WebException ex)
             {

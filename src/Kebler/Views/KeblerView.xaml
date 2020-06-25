@@ -535,12 +535,15 @@
                 Grid.RowSpan="3"
                 Grid.Column="1"
                 DragCompleted="DragCompleted"
+                Focusable="False"
                 Style="{DynamicResource VerticalGridSplitter}" />
 
             <GridSplitter
                 Grid.Row="1"
                 Grid.Column="2"
+                cal:Message.Attach="[Event DragCompleted] = [Action HorDragCompleted]"
                 DragCompleted="DragCompleted"
+                Focusable="False"
                 Style="{DynamicResource HorizontalGridSplitter}"
                 Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" />
 

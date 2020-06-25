@@ -175,15 +175,10 @@ namespace Kebler.ViewModels
         }
         
 
-        private async void StartUpdateingMoreInfoCycle()
+        private void StartUpdateingMoreInfoCycle()
         {
 
             _moreInfoCancelTokeSource?.Cancel();
-
-            if (_whileCycleMoreInfoTask != null)
-            {
-                await _whileCycleMoreInfoTask;
-            }
 
             _moreInfoCancelTokeSource = new CancellationTokenSource();
             var token = _moreInfoCancelTokeSource.Token;
@@ -204,7 +199,7 @@ namespace Kebler.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex);
+                    //Log.Error(ex);
                 }
             }, token);
 
@@ -438,9 +433,12 @@ namespace Kebler.ViewModels
             var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token, MoreInfoView.id);
 
             var torrent = answ.Torrents.FirstOrDefault();
-            MoreInfoView.Update(ref torrent);
-            answ = null;
-            torrent = null;
+            if (torrent != null)
+            {
+                MoreInfoView.Update(torrent);
+                answ = null;
+                torrent = null;
+            }
         }
 
 
@@ -454,10 +452,15 @@ namespace Kebler.ViewModels
             }
             else
             {
-                _oldMoreInfoColumnHeight = _view.MoreInfoColumn.Height.Value;
+                _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
                 _view.MoreInfoColumn.MinHeight = 0;
                 _view.MoreInfoColumn.Height = new GridLength(0);
             }
+        }
+
+        public void HorDragCompleted()
+        {
+            _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
         }
         #endregion
 

@@ -78,7 +78,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public void UpdateFilesTree(ref TorrentInfo torrent)
+        public void UpdateFilesTree(TorrentInfo torrent)
         {
 
             var items = createTree(ref torrent);

@@ -105,7 +105,7 @@ namespace Kebler.Dialogs
             {
                 data = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
                 TorrentInfo.TryParse(data, out var parsedTorrent);
-                FilesTree.UpdateFilesTree(ref parsedTorrent);
+                FilesTree.UpdateFilesTree(parsedTorrent);
             }
             catch (TaskCanceledException)
             {
