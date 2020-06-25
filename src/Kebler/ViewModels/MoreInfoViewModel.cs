@@ -22,7 +22,7 @@ namespace Kebler.ViewModels
             Peers = torrent.Peers;
         }
 
-
+        public uint[] id;
 
         public TransmissionTorrentTrackerStats[] TrackerStats
         {

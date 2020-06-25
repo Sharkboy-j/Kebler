@@ -241,7 +241,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string MI_Props {
             get {

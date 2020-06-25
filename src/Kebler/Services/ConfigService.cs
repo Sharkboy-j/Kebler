@@ -13,7 +13,7 @@ namespace Kebler.Services
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;
-        private static string CONFIG_NAME = Path.Combine(Data.GetDataPath().FullName, CONFIG_FILE_NAME);
+        public static string CONFIG_NAME = Path.Combine(Data.GetDataPath().FullName, CONFIG_FILE_NAME);
 
         private static object _sync = new object();
 

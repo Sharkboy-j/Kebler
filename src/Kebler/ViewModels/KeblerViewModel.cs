@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -161,9 +162,61 @@ namespace Kebler.ViewModels
             });
         }
 
+        private async void StoppdateingMoreInfoCycle()
+        {
+            _moreInfoCancelTokeSource?.Cancel();
+            if (_whileCycleMoreInfoTask != null)
+            {
+                await _whileCycleMoreInfoTask;
+            }
+            _whileCycleMoreInfoTask = null;
+
+            //Debug.WriteLine("Stopped");
+        }
+        
+
+        private async void StartUpdateingMoreInfoCycle()
+        {
+
+            _moreInfoCancelTokeSource?.Cancel();
+
+            if (_whileCycleMoreInfoTask != null)
+            {
+                await _whileCycleMoreInfoTask;
+            }
+
+            _moreInfoCancelTokeSource = new CancellationTokenSource();
+            var token = _moreInfoCancelTokeSource.Token;
+
+            _whileCycleMoreInfoTask = new Task(async () =>
+            {
+                try
+                {
+                    while (IsConnected && !token.IsCancellationRequested)
+                    {
+                        await PerformMoreInfoUpdate(token);
+                        await Task.Delay(ConfigService.Instanse.UpdateTime, token);
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+            }, token);
+
+
+            _whileCycleMoreInfoTask.Start();
+            //Debug.WriteLine("Started");
+        }
+
 
 
         #region TopBarMenu
+
 
         private void InitMenu()
         {
@@ -179,6 +232,11 @@ namespace Kebler.ViewModels
             ReInitServers();
         }
 
+
+        public void Settings()
+        {
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConfigService.CONFIG_NAME}") { CreateNoWindow = true });
+        }
 
         private void ReInitServers()
         {
@@ -345,6 +403,13 @@ namespace Kebler.ViewModels
                 UpdateMoreInfoPosition(SelectedTorrents.Any());
                 selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
                 await UpdateMoreInfoView();
+
+                if (selectedIDs.Length == 1)
+                    StartUpdateingMoreInfoCycle();
+                else
+                {
+                    StoppdateingMoreInfoCycle();
+                }
             }
 
         }
@@ -358,18 +423,26 @@ namespace Kebler.ViewModels
                 MoreInfoView.SelectedCount = selectedIDs.Length;
                 return;
             }
-
             MoreInfoView.IsMore = false;
             MoreInfoView.Loading = true;
 
-            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, _cancelTokenSource.Token, selectedIDs);
+            MoreInfoView.id = selectedIDs;
+            await PerformMoreInfoUpdate(_cancelTokenSource.Token);
+
+            MoreInfoView.Loading = false;
+
+        }
+
+        async Task PerformMoreInfoUpdate(CancellationToken token)
+        {
+            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token, MoreInfoView.id);
 
             var torrent = answ.Torrents.FirstOrDefault();
             MoreInfoView.Update(ref torrent);
             answ = null;
             torrent = null;
-            MoreInfoView.Loading = false;
         }
+
 
         private void UpdateMoreInfoPosition(bool val)
         {
@@ -538,7 +611,7 @@ namespace Kebler.ViewModels
                                 ProcessParsingTransmissionResponse(data);
                             }
 
-                            await Task.Delay(5000, token);
+                            await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                         }
                     }
                     else
@@ -886,7 +959,6 @@ namespace Kebler.ViewModels
             return Task.CompletedTask;
         }
 
-
         public Task HandleAsync(Messages.ConnectedServerChanged message, CancellationToken cancellationToken)
         {
             if (message.srv == null)
@@ -967,6 +1039,7 @@ namespace Kebler.ViewModels
         public void Unselect()
         {
             UpdateMoreInfoPosition(false);
+            StoppdateingMoreInfoCycle();
 
             Execute.OnUIThread(() =>
             {
@@ -1310,7 +1383,9 @@ namespace Kebler.ViewModels
         private bool _isLongTaskRunning;
         public TransmissionClient _transmissionClient;
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private Task _whileCycleTask;
+        private Task _whileCycleMoreInfoTask;
         private SessionInfo _sessionInfo;
         private Statistic _stats;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
