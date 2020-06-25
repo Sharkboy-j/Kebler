@@ -25,6 +25,7 @@
             <conv:IntToColorFillConverter x:Key="IntToColorFillConverter" />
             <conv:IntToColorStrokeConverter x:Key="IntToColorStrokeConverter" />
             <conv:PieceToImage x:Key="PieceToImage" />
+            <conv:IpToCountry x:Key="IpToCountry" />
 
 
             <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />

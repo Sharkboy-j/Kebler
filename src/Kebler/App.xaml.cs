@@ -1,17 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using AutoUpdaterDotNET;
+using FamFamFam.Flags.Wpf;
 using Kebler.Models;
 using Kebler.Services;
+using Kebler.SI;
 using Kebler.ViewModels;
 using log4net;
 using log4net.Config;
+using Microsoft.VisualBasic;
+using Microsoft.Win32;
+using Plarium.Geo;
+using Plarium.Geo.Embedded;
+using Plarium.Geo.Services;
 
 namespace Kebler
 {
@@ -19,18 +35,18 @@ namespace Kebler
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App
+    public partial class App : ISingle
     {
         public static readonly ILog Log = LogManager.GetLogger(typeof(App));
         public KeblerViewModel KeblerVM;
         public static App Instance;
-
+        public GeoService Geo;
         public delegate void ConnectionToServerInitialisedHandler(Server srv);
         public static event ConnectionToServerInitialisedHandler ConnectionChanged;
         public delegate void ServerListChangedHandler();
         public static event ServerListChangedHandler ServerListChanged;
-
-
+        public CountryIdToFlagImageSourceConverter Flags = new CountryIdToFlagImageSourceConverter();
+        public List<string> torrentsToAdd = new List<string>();
 
         public delegate void Langhandler();
         public event Langhandler LangChanged;
@@ -55,7 +71,7 @@ namespace Kebler
             return FindResource(name);
         }
 
-        public void Check(bool report = false)
+        public void CheckUpdates(bool report = false)
         {
             Log.Info("AutoUpdater.Start");
             AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
@@ -74,8 +90,25 @@ namespace Kebler
 
         App()
         {
+            var args = Environment.GetCommandLineArgs();
+
+            FileAssociations.EnsureAssociationsSet();
+            var builder = new GeoServiceBuilder();
+            builder.RegisterResource<EmbeddedResourceReader>();
+
+            Geo = new GeoService(builder);
+
+            foreach (var arg in args)
+            {
+                var fileInfo = new FileInfo(arg);
+                if (fileInfo.Extension.Equals(".torrent"))
+                {
+                    torrentsToAdd.Add(fileInfo.FullName);
+                }
+            }
+
             Instance = this;
-            Check();
+            CheckUpdates();
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
@@ -95,7 +128,7 @@ namespace Kebler
 
             ConfigService.LoadConfig();
 
-       
+
             SetEnv();
             InitializeComponent();
 
@@ -106,9 +139,9 @@ namespace Kebler
 
             {
 #if DEBUG
-                var glb = Environment.GetEnvironmentVariable(nameof(Kebler)+ "_DEBUG", EnvironmentVariableTarget.User);
+                var glb = Environment.GetEnvironmentVariable(nameof(Kebler) + "_DEBUG", EnvironmentVariableTarget.User);
                 if (glb == null)
-                    Environment.SetEnvironmentVariable(nameof(Kebler)+"_DEBUG", System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+                    Environment.SetEnvironmentVariable(nameof(Kebler) + "_DEBUG", System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
 #else
                 var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
                 if (glb == null)
@@ -145,8 +178,42 @@ namespace Kebler
             e.Handled = true;
         }
 
+        public void OnInstanceInvoked(string[] args)
+        {
+            foreach (var arg in args)
+            {
+                var fileInfo = new FileInfo(arg);
+                if (fileInfo.Extension.Equals(".torrent") || arg.StartsWith("magnet"))
+                {
+                    torrentsToAdd.Add(arg);
+                }
 
+            }
+
+            if (torrentsToAdd.Count > 0)
+                KeblerVM.OpenPaseedWithArgsFiles();
+        }
         #endregion
 
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var isFirstInstance = SingleInstance<App>.InitializeAsFirstInstance(nameof(Kebler));
+            if (!isFirstInstance)
+            {
+                Current.Shutdown();
+            }
+            base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            SingleInstance<App>.Cleanup();
+            base.OnExit(e);
+        }
+
     }
+
+
+
 }

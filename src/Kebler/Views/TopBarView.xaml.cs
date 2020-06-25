@@ -41,7 +41,7 @@ namespace Kebler.Views
 
         private void Check(object sender, RoutedEventArgs e)
         {
-            App.Instance.Check(true);
+            App.Instance.CheckUpdates(true);
         }
 
         private void Contact(object sender, RoutedEventArgs e)

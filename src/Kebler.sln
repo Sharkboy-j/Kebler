@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Models", "Kebler.Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.TransmissionCore", "Kebler.TransmissionCore\Kebler.TransmissionCore.csproj", "{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.SI", "Kebler.SI\Kebler.SI.csproj", "{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,13 +104,25 @@ Global
 		{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
 		{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
 		{A3DE9DCC-915B-41C1-A8B4-33F4F137B40F}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug-NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug-NET35|Any CPU.Build.0 = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug-NET40|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Debug-NET40|Any CPU.Build.0 = Debug|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release-NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{E1677969-99DC-48C9-AE00-CA4D22E8D1FC}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowErrorsInErrorList = False
-		RESX_TaskErrorCategory = Message
 		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
+		RESX_TaskErrorCategory = Message
+		RESX_ShowErrorsInErrorList = False
 	EndGlobalSection
 EndGlobal

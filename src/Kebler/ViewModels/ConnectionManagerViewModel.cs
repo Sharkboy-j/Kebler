@@ -147,7 +147,7 @@ namespace Kebler.ViewModels
 
             error = Enums.ValidateError.IpOrHostError;
             return false;
-            //TODO: Check ipadress port
+            //TODO: CheckUpdates ipadress port
         }
 
         private async Task<bool> CheckResponse(TransmissionResponse resp)

@@ -9,7 +9,7 @@ namespace Kebler.Dialogs
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class About : INotifyPropertyChanged
+    public partial class About
     {
         public About(Window owner) : base(owner)
         {
@@ -20,7 +20,6 @@ namespace Kebler.Dialogs
 
         public string Vers { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
 
 

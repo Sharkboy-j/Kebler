@@ -1,14 +1,40 @@
 ﻿using Caliburn.Micro;
+using Kebler.Models.Torrent;
 
 namespace Kebler.ViewModels
 {
     public class MoreInfoViewModel : PropertyChangedBase
     {
         private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
+        private TransmissionTorrentTrackerStats[] _trackerStats = new TransmissionTorrentTrackerStats[0];
+        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
         private bool _loading, _isMore;
         private double _percentDone;
         private int _selectedCount;
 
+
+        public void Update(ref TorrentInfo torrent)
+        {
+            FilesTree.UpdateFilesTree(ref torrent);
+            PercentDone = torrent.PercentDone;
+
+            TrackerStats = torrent.TrackerStats;
+            Peers = torrent.Peers;
+        }
+
+
+
+        public TransmissionTorrentTrackerStats[] TrackerStats
+        {
+            get => _trackerStats;
+            set => Set(ref _trackerStats, value);
+        }
+
+        public TransmissionTorrentPeers[] Peers
+        {
+            get => _peers;
+            set => Set(ref _peers, value);
+        }
 
         public FilesTreeViewModel FilesTree
         {

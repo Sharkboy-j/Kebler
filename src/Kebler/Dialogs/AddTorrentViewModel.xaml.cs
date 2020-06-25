@@ -248,7 +248,6 @@ namespace Kebler.Dialogs
         byte[] data;
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;

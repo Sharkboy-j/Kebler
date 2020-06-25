@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentPeers : INotifyPropertyChanged
+    public class TransmissionTorrentPeers
     {
         [JsonProperty("address")]
         public string Address { get; set; }
@@ -49,14 +49,5 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("rateToPeer")]
         public int RateToPeer { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        //~TransmissionTorrentPeers()
-        //{
-        //    Address = null;
-        //    ClientName = null;
-        //    FlagStr = null;
-        //    PropertyChanged = null;
-        //}
     }
 }

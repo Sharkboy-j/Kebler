@@ -205,7 +205,7 @@
     <value>About</value>
   </data>
   <data name="MI_Check" xml:space="preserve">
-    <value>Check For New Version</value>
+    <value>CheckUpdates For New Version</value>
   </data>
   <data name="MI_Contact" xml:space="preserve">
     <value>Contact Developer</value>
@@ -263,5 +263,14 @@
   </data>
   <data name="MI_AddMagnet" xml:space="preserve">
     <value>Add Magnet</value>
+  </data>
+  <data name="MoreInfo_FilesTab" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MoreInfo_Trackers" xml:space="preserve">
+    <value>Trackers</value>
+  </data>
+  <data name="MoreInfo_Peers" xml:space="preserve">
+    <value>Peers</value>
   </data>
 </root>

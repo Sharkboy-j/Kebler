@@ -5,7 +5,6 @@
     xmlns:cal="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"

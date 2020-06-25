@@ -142,7 +142,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Add Magnet.
         /// </summary>
         internal static string MI_AddMagnet {
             get {
@@ -160,7 +160,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check For New Version.
+        ///   Looks up a localized string similar to CheckUpdates For New Version.
         /// </summary>
         internal static string MI_Check {
             get {
@@ -327,6 +327,33 @@ namespace Kebler.Resources {
         internal static string MI_View {
             get {
                 return ResourceManager.GetString("MI_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string MoreInfo_FilesTab {
+            get {
+                return ResourceManager.GetString("MoreInfo_FilesTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peers.
+        /// </summary>
+        internal static string MoreInfo_Peers {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trackers.
+        /// </summary>
+        internal static string MoreInfo_Trackers {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers", resourceCulture);
             }
         }
         

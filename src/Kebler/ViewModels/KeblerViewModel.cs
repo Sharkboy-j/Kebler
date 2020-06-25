@@ -82,6 +82,8 @@ namespace Kebler.ViewModels
 
             ApplyConfig();
             App.Instance.KeblerVM = this;
+
+
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -346,14 +348,9 @@ namespace Kebler.ViewModels
             var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, _cancelTokenSource.Token, selectedIDs);
 
             var torrent = answ.Torrents.FirstOrDefault();
-            MoreInfoView.FilesTree.UpdateFilesTree(ref torrent);
-            MoreInfoView.PercentDone = torrent.PercentDone;
+            MoreInfoView.Update(ref torrent);
             answ = null;
             torrent = null;
-
-            //GC.Collect();
-            //GC.WaitForPendingFinalizers();
-
             MoreInfoView.Loading = false;
         }
 
@@ -502,6 +499,9 @@ namespace Kebler.ViewModels
                         Log.Info($"Connected {_sessionInfo.Version}");
                         ConnectedServer = SelectedServer;
 
+                        if (App.Instance.torrentsToAdd.Count > 0)
+                            OpenPaseedWithArgsFiles();
+
                         while (IsConnected && !token.IsCancellationRequested)
                         {
 
@@ -562,6 +562,20 @@ namespace Kebler.ViewModels
             }, token);
 
             _whileCycleTask.Start();
+        }
+
+        public void OpenPaseedWithArgsFiles()
+        {
+            var ch = new Task(() =>
+            {
+                Execute.OnUIThread(() =>
+                {
+                    OpenTorrent(App.Instance.torrentsToAdd);
+                    App.Instance.torrentsToAdd = new List<string>();
+                });
+
+            }, _cancelTokenSource.Token);
+            ch.Start();
         }
 
         private bool CheckResponse(TransmissionResponse resp)
@@ -751,11 +765,12 @@ namespace Kebler.ViewModels
             if (torrInf.Status == 0)
                 return torrInf;
 
-            if (!skip)
-                if (torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false))
-                {
-                    torrInf.Status = -1;
-                }
+
+            if (!skip && torrInf.TrackerStats.Length > 0 && torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false))
+            {
+                torrInf.Status = -1;
+            }
+
             return torrInf;
 
         }
@@ -1225,21 +1240,38 @@ namespace Kebler.ViewModels
         {
             foreach (var item in names)
             {
-                var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow);
+                if (string.IsNullOrEmpty(item))
+                    continue;
 
-                if (!(bool)dialog.ShowDialog())
-                    return;
-
-                if (dialog.TorrentResult.Value.Status != Enums.AddTorrentStatus.Added) continue;
-
-                TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                if (item.StartsWith("magnet"))
                 {
-                    Name = dialog.TorrentResult.Value.Name,
-                    HashString = dialog.TorrentResult.Value.HashString
-                });
-                dialog = null;
+                    var tr = new NewTorrent
+                    {
+                        Filename = item
+                    };
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    _transmissionClient.TorrentAddAsync(tr, _cancelTokenSource.Token);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+                else
+                {
+                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow);
+
+                    if (dialog.ShowDialog() == false)
+                        return;
+
+                    if (dialog.TorrentResult.Value.Status != Enums.AddTorrentStatus.Added) continue;
+
+                    TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                    {
+                        Name = dialog.TorrentResult.Value.Name,
+                        HashString = dialog.TorrentResult.Value.HashString
+                    });
+                }
             }
         }
+
+
     }
 
 
