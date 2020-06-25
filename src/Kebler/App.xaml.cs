@@ -73,7 +73,8 @@ namespace Kebler
 
         public void CheckUpdates(bool report = false)
         {
-            Log.Info("AutoUpdater.Start");
+#if !PORTABLE
+  Log.Info("AutoUpdater.Start");
             AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
 
             AutoUpdater.ReportErrors = report;
@@ -86,6 +87,7 @@ namespace Kebler
             {
                 AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
             });
+#endif
         }
 
         App()

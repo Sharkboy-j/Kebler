@@ -1475,6 +1475,8 @@ namespace Kebler.ViewModels
             {
 #if DEBUG
                 return "Kebler [DEBUG]";
+#elif PORTABLE
+                return "Kebler [Portable]";
 #else
                 var assembly = Assembly.GetExecutingAssembly();
                 System.Diagnostics.FileVersionInfo fileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);

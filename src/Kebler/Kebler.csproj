@@ -22,12 +22,22 @@
     <PackageIcon>KeblerVided.png</PackageIcon>
     <RepositoryUrl>https://github.com/JeremiSharkboy/Kebler</RepositoryUrl>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <Configurations>Debug;Release;Portable</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Portable|AnyCPU'">
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;PORTABLE</DefineConstants>
+    <OutputPath></OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
