@@ -122,9 +122,9 @@ jobs:
         name: BuildArchive
     
     - name: ZIP # This would actually build your project, using zip for an example artifact
-      uses: TonyBogdanov/zip@1.0
+      uses: edgarrc/action-7z@v1.0.4
       with:
-        args: zip -qq -r KeblerRelease.zip src\publish\
+        args: 7z a -t7z -mx=9 KeblerRelease.zip src\publish\
     
     - name: Create a Release
       id: create_release
