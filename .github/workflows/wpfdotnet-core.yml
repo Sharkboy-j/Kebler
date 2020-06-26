@@ -89,17 +89,21 @@ jobs:
     #  env:
     #    Configuration: ${{ matrix.configuration }}
 
-    - name: Build Artifact
-      shell: cmd
-      run: dir
+    - name: Release86
+      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
-    - name: Setup side by side .NET SDKs on Windows
+    - name: Portable64
+      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
+      
+    - name: MOVE64
+      run: move src/publish/Kebler.exe src/publish/KeblerPortable64.exe
+      shell: cmd
+
+    - name: Portable86
+      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+
+    - name: MOVE86&Del
       run: |
-        dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
-        dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
-        move src/publish/Kebler.exe src/publish/KeblerPortable64.exe
-        dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
         move src/publish/Kebler.exe src/publish/KeblerPortable86.exe
         del src/publish/Kebler.pdb /F /Q
       shell: cmd
-
