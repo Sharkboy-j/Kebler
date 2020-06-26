@@ -12,11 +12,10 @@
         <Setter Property="Opacity" Value="100" />
         <Setter Property="BorderBrush" Value="{DynamicResource DataGrid.Header.BorderBrush}" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
-        <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Fixed" />
         <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
-        <Setter Property="Foreground" Value="{DynamicResource DataGrid.Header.ForegroundBrush}" />
-        <Setter Property="FontSize" Value="13" />
-        <Setter Property="Height" Value="{StaticResource ColumnHeader.Height}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridColumnHeader">
