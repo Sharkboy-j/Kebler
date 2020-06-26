@@ -121,9 +121,10 @@ jobs:
         path: src\publish\
         name: BuildArchive
     
-    - name: Build project # This would actually build your project, using zip for an example artifact
-      run: |
-          zip --junk-paths KeblerRelease src\publish\
+    - name: ZIP # This would actually build your project, using zip for an example artifact
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r KeblerRelease.zip src\publish\
     
     - name: Create a Release
       id: create_release
