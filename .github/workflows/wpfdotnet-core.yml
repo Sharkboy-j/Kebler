@@ -80,8 +80,8 @@ jobs:
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
     # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test $env:Test_Project_Path
+    # - name: Execute unit tests
+    #   run: dotnet test $env:Test_Project_Path
 
     # Restore the WPF application to populate the obj folder with RuntimeIdentifiers
    # - name: Restore the WPF application
@@ -89,15 +89,12 @@ jobs:
     #  env:
     #    Configuration: ${{ matrix.configuration }}
 
-    - name: Build Artifact
-      shell: cmd
-      run: call src/publish.bat
+    # - name: Build Artifact
+    #   shell: cmd
+    #   run: call src/publish.bat
     # Create the app package by building and packaging the Windows Application Packaging project
-    #- name: Create the app package
-    #  run: msbuild $env:Solution_Dir /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
-    #  env:
-    #    Appx_Bundle: Always
-     #   Appx_Bundle_Platforms: x86|x64
-     #   Configuration: ${{ matrix.configuration }}
+    - name: Create the app package
+      run: dotnet publish $env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+
 
 
