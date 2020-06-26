@@ -122,7 +122,7 @@ jobs:
         name: BuildArchive
     
     - name: ZIP # This would actually build your project, using zip for an example artifact
-      uses: montudor/action-zip@v0.1.0
+      uses: TonyBogdanov/zip@1.0
       with:
         args: zip -qq -r KeblerRelease.zip src\publish\
     
