@@ -111,3 +111,8 @@ jobs:
     - name: dir
       run: dir src\publish
       shell: cmd
+
+    - uses: actions/upload-artifact@v2
+      with:
+      name: BuildedArts
+      path: src\publish\
