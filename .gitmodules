@@ -1,0 +1,3 @@
+[submodule "AutoUpdater.NET.Core"]
+	path = AutoUpdater.NET.Core
+	url = https://github.com/JeremiSharkboy/AutoUpdater.NET.Core.git

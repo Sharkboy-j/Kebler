@@ -6,7 +6,6 @@ using System.Text;
 
 namespace Kebler.Services
 {
-    [Obsolete("Peace of shit but it works")]
     public static class SecureStorage
     {
         /// <summary>

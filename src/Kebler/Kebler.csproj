@@ -57,7 +57,7 @@
     <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoUpdater.NET-master\AutoUpdater.NET\AutoUpdaterDotNET.csproj" />
+    <ProjectReference Include="..\..\AutoUpdater.NET.Core\AutoUpdater.NET\AutoUpdaterDotNET.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
     <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />

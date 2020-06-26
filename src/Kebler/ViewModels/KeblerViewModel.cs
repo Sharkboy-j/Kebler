@@ -197,7 +197,7 @@ namespace Kebler.ViewModels
                 {
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //Log.Error(ex);
                 }
