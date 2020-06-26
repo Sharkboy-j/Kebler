@@ -6,7 +6,9 @@ namespace Kebler.ViewModels
     public class MoreInfoViewModel : PropertyChangedBase
     {
         private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
-        private TransmissionTorrentTrackerStats[] _trackerStats = new TransmissionTorrentTrackerStats[0];
+
+        private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
+            new BindableCollection<TransmissionTorrentTrackerStats>();
         private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
         private bool _loading, _isMore;
         private double _percentDone;
@@ -18,13 +20,13 @@ namespace Kebler.ViewModels
             FilesTree.UpdateFilesTree(torrent);
             PercentDone = torrent.PercentDone;
 
-            TrackerStats = torrent.TrackerStats;
+            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(torrent.TrackerStats);
             Peers = torrent.Peers;
         }
 
         public uint[] id;
 
-        public TransmissionTorrentTrackerStats[] TrackerStats
+        public BindableCollection<TransmissionTorrentTrackerStats> TrackerStats
         {
             get => _trackerStats;
             set => Set(ref _trackerStats, value);

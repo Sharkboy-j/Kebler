@@ -1,19 +1,35 @@
 ﻿using System.ComponentModel;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentTrackerStats
+    public class TransmissionTorrentTrackerStats : PropertyChangedBase
     {
+        private string _announce;
+        private int _announceState;
+        private int _downloadCount;
 
         [JsonProperty("announce")]
-        public string announce { get; set; }
+        public string announce
+        {
+            get => _announce;
+            set => Set(ref _announce, value);
+        }
 
         [JsonProperty("announceState")]
-        public int AnnounceState { get; set; }
+        public int AnnounceState
+        {
+            get => _announceState;
+            set => Set(ref _announceState, value);
+        }
 
         [JsonProperty("downloadCount")]
-        public int DownloadCount { get; set; }
+        public int DownloadCount
+        {
+            get => _downloadCount;
+            set => Set(ref _downloadCount, value);
+        }
 
         [JsonProperty("hasAnnounced")]
         public bool HasAnnounced { get; set; }

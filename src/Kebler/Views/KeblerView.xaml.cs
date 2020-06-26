@@ -6,14 +6,13 @@ using Kebler.Services;
 
 namespace Kebler.Views
 {
-    public partial class KeblerView : Kebler.Models.Interfaces.IKebler
+    public partial class KeblerView
 
     {
 
         public KeblerView()
         {
             InitializeComponent();
-            TorrentsGrid = TorrentsDataGrid;
         }
 
 
@@ -23,7 +22,5 @@ namespace Kebler.Views
             ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
             ConfigService.Save();
         }
-
-        public DataGrid TorrentsGrid { get; }
     }
 }

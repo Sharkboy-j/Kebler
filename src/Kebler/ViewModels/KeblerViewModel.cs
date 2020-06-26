@@ -850,17 +850,23 @@ namespace Kebler.ViewModels
             #region //♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
             Execute.OnUIThread(() =>
             {
-                if (FocusManager.GetFocusedElement(_view) is DataGridCell)
+                var tm = FocusManager.GetFocusedElement(_view);
+                if (_view.TorrentsDataGrid.IsFocused)
                 {
-                    var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
-                    if (itm.Item == null) return;
-
-                    var dd = GetDataGridCell(itm);
-                    if (dd != null)
+                    if (FocusManager.GetFocusedElement(_view) is DataGridCell)
                     {
-                        FocusManager.SetFocusedElement(_view, dd);
+                        var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
+                        if (itm.Item == null) return;
+
+                        var dd = GetDataGridCell(itm);
+                        if (dd != null)
+                        {
+                            FocusManager.SetFocusedElement(_view, dd);
+                        }
                     }
+                   
                 }
+              
             });
             #endregion //♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
 

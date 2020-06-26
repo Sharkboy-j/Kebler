@@ -13,6 +13,7 @@
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    Focusable="False"
     mc:Ignorable="d">
 
     <Grid>
@@ -51,10 +52,11 @@
                 <local:FilesTreeView
                     x:Name="FileTreeViewControl"
                     x:FieldModifier="public"
-                    DataContext="{Binding FilesTree}" />
+                    DataContext="{Binding FilesTree}"
+                    Focusable="False" />
             </TabItem>
 
-            <TabItem Header="{lex:LocText MoreInfo_Trackers}">
+            <TabItem Header="{lex:LocText MoreInfo_Trackers}" IsSelected="True">
                 <DataGrid
                     AutoGenerateColumns="False"
                     CanUserResizeColumns="True"
@@ -66,15 +68,15 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"
-                            Binding="{Binding announce, Mode=OneWay}"
+                            Binding="{Binding announce, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Trackers_Name}" />
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding LastAnnounceResult, Mode=OneWay}"
+                            Binding="{Binding LastAnnounceResult, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Trackers_Status}" />
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding SeederCount, Mode=OneWay}"
+                            Binding="{Binding SeederCount, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Trackers_Seeds}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -104,24 +106,24 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding ClientName, Mode=OneWay}"
+                            Binding="{Binding ClientName, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Peers_Client}" />
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding Progress, Converter={StaticResource PercentToUserFriendlyConvertor}}"
+                            Binding="{Binding Progress, Converter={StaticResource PercentToUserFriendlyConvertor}, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Peers_Progress}" />
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding RateToClient, Converter={StaticResource BytesToUserFriendlySpeed}}"
+                            Binding="{Binding RateToClient, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_PeersRateToClient}" />
                         <DataGridTextColumn
                             Width="Auto"
-                            Binding="{Binding RateToPeer, Converter={StaticResource BytesToUserFriendlySpeed}}"
+                            Binding="{Binding RateToPeer, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_PeersRateToPeer}" />
 
                         <DataGridTextColumn
                             Width="*"
-                            Binding="{Binding IsEncrypted, Mode=OneWay}"
+                            Binding="{Binding IsEncrypted, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Peers_Encryption}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -133,12 +135,14 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Content="{lex:LocText MoreInfo_HideHint}"
+            Focusable="False"
             Foreground="{DynamicResource ForegroundBrush.Gray}" />
 
         <Grid
             VerticalAlignment="Stretch"
             d:IsHidden="True"
             Background="{DynamicResource ListBox.Static.Background}"
+            Focusable="False"
             Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel
                 Height="50"
@@ -165,6 +169,7 @@
             Grid.Row="0"
             d:IsHidden="True"
             Background="{DynamicResource ListBox.Static.Background}"
+            Focusable="False"
             Visibility="{Binding IsMore, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel
                 Height="Auto"
