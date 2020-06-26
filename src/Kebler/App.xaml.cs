@@ -45,7 +45,6 @@ namespace Kebler
         public List<string> torrentsToAdd = new List<string>();
 
         public delegate void Langhandler();
-        public event Langhandler LangChanged;
 
 
         public object FindRes(string name)
