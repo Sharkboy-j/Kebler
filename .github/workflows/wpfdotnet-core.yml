@@ -75,7 +75,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-
+    - name: Setup side by side .NET SDKs on Windows
+      run: |
+        SET DOTNET_CLI_TELEMETRY_OPTOUT=1
+      shell: cmd
+      
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
@@ -91,7 +95,8 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: PUBLISH
-      run: $env:BuildEnvBat
+      run: start $env:BuildEnvBat
+      shell: cmd
     # Create the app package by building and packaging the Windows Application Packaging project
     #- name: Create the app package
     #  run: msbuild $env:Solution_Dir /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
