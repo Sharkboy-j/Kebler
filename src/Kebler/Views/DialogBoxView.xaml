@@ -12,7 +12,7 @@
     MaxWidth="400"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
-    lex:ResxLocalizationProvider.DefaultDictionary="Dialogs"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SizeToContent="WidthAndHeight"

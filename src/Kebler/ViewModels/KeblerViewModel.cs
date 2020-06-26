@@ -173,7 +173,7 @@ namespace Kebler.ViewModels
 
             //Debug.WriteLine("Stopped");
         }
-        
+
 
         private void StartUpdateingMoreInfoCycle()
         {
@@ -195,7 +195,7 @@ namespace Kebler.ViewModels
                 }
                 catch (TaskCanceledException)
                 {
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -363,7 +363,7 @@ namespace Kebler.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
-                MessageBoxViewModel.ShowDialog(Kebler.Resources.Dialogs.ConfigApllyError, manager);
+                MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ConfigApllyError, manager);
             }
         }
 
@@ -390,26 +390,40 @@ namespace Kebler.ViewModels
 
         public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
         {
-            SelectedTorrent = inf;
-
-            if (obj != null)
+            try
             {
-                SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
-                UpdateMoreInfoPosition(SelectedTorrents.Any());
-                selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-                await UpdateMoreInfoView();
+                _moreInfoCancelTokeSource?.Cancel();
+                _moreInfoCancelTokeSource = new CancellationTokenSource();
 
-                if (selectedIDs.Length == 1)
-                    StartUpdateingMoreInfoCycle();
-                else
+                await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+
+                if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                    return;
+
+                SelectedTorrent = inf;
+
+                if (obj != null)
                 {
-                    StoppdateingMoreInfoCycle();
+                    SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
+                    UpdateMoreInfoPosition(SelectedTorrents.Any());
+                    selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
+                    await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
+
+                    if (selectedIDs.Length == 1)
+                        StartUpdateingMoreInfoCycle();
+                    else
+                    {
+                        StoppdateingMoreInfoCycle();
+                    }
                 }
             }
+            catch (TaskCanceledException)
+            {
 
+            }
         }
 
-        public async Task UpdateMoreInfoView()
+        public async Task UpdateMoreInfoView(CancellationToken token)
         {
             if (selectedIDs.Length != 1)
             {
@@ -418,11 +432,12 @@ namespace Kebler.ViewModels
                 MoreInfoView.SelectedCount = selectedIDs.Length;
                 return;
             }
+
             MoreInfoView.IsMore = false;
             MoreInfoView.Loading = true;
 
             MoreInfoView.id = selectedIDs;
-            await PerformMoreInfoUpdate(_cancelTokenSource.Token);
+            await PerformMoreInfoUpdate(token);
 
             MoreInfoView.Loading = false;
 
@@ -430,15 +445,25 @@ namespace Kebler.ViewModels
 
         async Task PerformMoreInfoUpdate(CancellationToken token)
         {
-            var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token, MoreInfoView.id);
 
-            var torrent = answ.Torrents.FirstOrDefault();
-            if (torrent != null)
+            while (true)
             {
-                MoreInfoView.Update(torrent);
-                answ = null;
-                torrent = null;
+                var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token, MoreInfoView.id);
+                if (token.IsCancellationRequested || Application.Current.Dispatcher.HasShutdownStarted)
+                    return;
+                if (answ != null)
+                {
+                    var torrent = answ.Torrents.FirstOrDefault();
+                    if (torrent != null)
+                    {
+                        MoreInfoView.Update(torrent);
+                    }
+                    return;
+                }
+
+                await Task.Delay(100, token);
             }
+
         }
 
 
@@ -481,7 +506,7 @@ namespace Kebler.ViewModels
             string dd = null;
             await Execute.OnUIThreadAsync(async () =>
             {
-                var dialog = new DialogBoxViewModel(Resources.Dialogs.DialogBox_EnterPWD, string.Empty, true);
+                var dialog = new DialogBoxViewModel(Resources.Strings.DialogBox_EnterPWD, string.Empty, true);
 
                 await manager.ShowDialogAsync(dialog);
 
@@ -528,7 +553,7 @@ namespace Kebler.ViewModels
 
             Log.Info("Try initialize connection");
             IsErrorOccuredWhileConnecting = false;
-            IsConnectedStatusText = Windows.MW_ConnectingText;
+            IsConnectedStatusText = Strings.MW_ConnectingText;
             try
             {
                 IsConnecting = true;
@@ -582,7 +607,8 @@ namespace Kebler.ViewModels
             {
                 try
                 {
-                    var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token), Windows.MW_StatusText_Session);
+                    var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Session);
+                    //var info = _transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token);
 
                     if (CheckResponse(info.Response))
                     {
@@ -602,9 +628,9 @@ namespace Kebler.ViewModels
                                 throw new TaskCanceledException();
 
 
-                            _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), Windows.MW_StatusText_Stats)).Value;
+                            _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Stats)).Value;
 
-                            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(WorkingParams, _cancelTokenSource.Token), Windows.MW_StatusText_Torrents)).Value;
+                            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(WorkingParams, _cancelTokenSource.Token), Strings.MW_StatusText_Torrents)).Value;
 
                             ParseSettings();
                             ParseStats();
@@ -679,7 +705,7 @@ namespace Kebler.ViewModels
                 {
                     var msg = resp.WebException.Status switch
                     {
-                        System.Net.WebExceptionStatus.NameResolutionFailure => $"{Kebler.Resources.Dialogs.EX_Host} '{SelectedServer.FullUriPath}'",
+                        System.Net.WebExceptionStatus.NameResolutionFailure => $"{Kebler.Resources.Strings.EX_Host} '{SelectedServer.FullUriPath}'",
                         _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
                     };
 
@@ -727,9 +753,9 @@ namespace Kebler.ViewModels
             Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
 
             IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                    $"      {Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                    $"      {Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                    $"      {Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                                    $"      {Strings.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                    $"      {Strings.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                    $"      {Strings.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
             var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
             var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
@@ -929,9 +955,9 @@ namespace Kebler.ViewModels
             if (IsConnected)
             {
                 IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                        $"      {Windows.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                        $"      {Windows.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                        $"      {Windows.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                                        $"      {Strings.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                        $"      {Strings.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                        $"      {Strings.Stats_ActiveTime}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
             }
 
             return Task.CompletedTask;
@@ -1110,20 +1136,20 @@ namespace Kebler.ViewModels
         {
             if (selectedIDs.Length > 1)
             {
-                await MessageBoxViewModel.ShowDialog(Resources.Dialogs.MSG_OnlyOneTorrent, manager);
+                await MessageBoxViewModel.ShowDialog(Resources.Strings.MSG_OnlyOneTorrent, manager);
                 return;
             }
 
             if (selectedIDs.Length < 1)
             {
-                await MessageBoxViewModel.ShowDialog(Resources.Dialogs.MSG_SelectOneTorrent, manager);
+                await MessageBoxViewModel.ShowDialog(Resources.Strings.MSG_SelectOneTorrent, manager);
                 return;
             }
 
             if (!IsConnected) return;
 
             var sel = SelectedTorrent;
-            var dialog = new DialogBoxViewModel(Resources.Dialogs.MSG_InterNewName, sel.Name, false);
+            var dialog = new DialogBoxViewModel(Resources.Strings.MSG_InterNewName, sel.Name, false);
 
             var result = await manager.ShowDialogAsync(dialog);
 
@@ -1139,8 +1165,8 @@ namespace Kebler.ViewModels
             if (!IsConnected) return;
 
             //var items = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToList();
-            var question = selectedIDs.Length > 1 ? Kebler.Resources.Dialogs.SetLocForMany.Replace("%d", selectedIDs.Length.ToString())
-                : Kebler.Resources.Dialogs.SetLocOnce;
+            var question = selectedIDs.Length > 1 ? Kebler.Resources.Strings.SetLocForMany.Replace("%d", selectedIDs.Length.ToString())
+                : Kebler.Resources.Strings.SetLocOnce;
 
             var path = SelectedTorrent.DownloadDir;
 
@@ -1185,7 +1211,7 @@ namespace Kebler.ViewModels
         {
             if (!IsConnected) return;
 
-            var dialog = new DialogBoxViewModel(Resources.Dialogs.MSG_LinkOrMagnet, string.Empty, false);
+            var dialog = new DialogBoxViewModel(Resources.Strings.MSG_LinkOrMagnet, string.Empty, false);
 
             var result = await manager.ShowDialogAsync(dialog);
 

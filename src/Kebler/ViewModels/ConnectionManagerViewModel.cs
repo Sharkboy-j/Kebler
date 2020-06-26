@@ -159,14 +159,14 @@ namespace Kebler.ViewModels
                 //TODO: to IWindowManager manager = new WindowManager();
                 var msg = resp.WebException.Status switch
                 {
-                    System.Net.WebExceptionStatus.NameResolutionFailure => $"{Resources.Dialogs.EX_Host} '{SelectedServer.FullUriPath}'",
+                    System.Net.WebExceptionStatus.NameResolutionFailure => $"{Resources.Strings.EX_Host} '{SelectedServer.FullUriPath}'",
                     _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
                 };
 
 
 
 
-                await MessageBoxViewModel.ShowDialog(msg, manager, Resources.Dialogs.Error, Enums.MessageBoxDilogButtons.Ok);
+                await MessageBoxViewModel.ShowDialog(msg, manager, Resources.Strings.Error, Enums.MessageBoxDilogButtons.Ok);
 
                 return false;
             }
@@ -185,7 +185,7 @@ namespace Kebler.ViewModels
             string pswd = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new DialogBoxViewModel(Resources.Dialogs.DialogBox_EnterPWD, string.Empty, true);
+                var dialog = new DialogBoxViewModel(Resources.Strings.DialogBox_EnterPWD, string.Empty, true);
                 var res = await manager.ShowDialogAsync(dialog);
                 if (res == false)
                 {
@@ -198,8 +198,8 @@ namespace Kebler.ViewModels
             var result = await TesConnection(pswd);
 
             ConnectStatusResult = result
-                ? Resources.Windows.CM_TestConnectionGood
-                : Resources.Windows.CM_TestConnectionBad;
+                ? Resources.Strings.CM_TestConnectionGood
+                : Resources.Strings.CM_TestConnectionBad;
 
             ConnectStatusColor = (result
                 ? new SolidColorBrush { Color = Colors.Green }
@@ -220,7 +220,7 @@ namespace Kebler.ViewModels
 
                 _client = new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
 
-                var sessionInfo = await _client.GetSessionInformationAsync(new CancellationToken());
+                var sessionInfo = await _client.GetSessionInformationAsync(CancellationToken.None);
 
                 return await CheckResponse(sessionInfo.Response);
             }

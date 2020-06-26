@@ -306,4 +306,184 @@
   <data name="MoreInfo_HideHint" xml:space="preserve">
     <value>Esc, to hide</value>
   </data>
+  <data name="Title_AddTorrentDialog" xml:space="preserve">
+    <value>Add Torrent</value>
+  </data>
+  <data name="ATD_TorrentFilePath" xml:space="preserve">
+    <value>Torrent File Path:</value>
+  </data>
+  <data name="ATD_DownloadDIr" xml:space="preserve">
+    <value>Download Dirrectory:</value>
+  </data>
+  <data name="ATD_Connection" xml:space="preserve">
+    <value>Connection:</value>
+  </data>
+  <data name="ATD_PeerLimit" xml:space="preserve">
+    <value>Peer Limit:</value>
+  </data>
+  <data name="ATD_UploadLimit" xml:space="preserve">
+    <value>Upload Limit:</value>
+  </data>
+  <data name="ATD_DownloadLimit" xml:space="preserve">
+    <value>Download Limit:</value>
+  </data>
+  <data name="ATD_StartTorrent" xml:space="preserve">
+    <value>Start torrent</value>
+  </data>
+  <data name="ATD_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="ATD_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ATD_DontShowAddTorrentDialog" xml:space="preserve">
+    <value>Don't show this dialog</value>
+  </data>
+  <data name="BTNS_OK" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="BTNS_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BTNS_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="BTNS_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ATD_TorrentExist" xml:space="preserve">
+    <value>Torrent file exists</value>
+  </data>
+  <data name="RMT_RemoveWithData" xml:space="preserve">
+    <value>Remove with data</value>
+  </data>
+  <data name="RMT_Title" xml:space="preserve">
+    <value>Are you sure you want to remove all this torrents?</value>
+  </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Connection lost. Reconnect and try again</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ConfigApllyError" xml:space="preserve">
+    <value>Error occurred while applying settings. Some preferences may be not applied correctly</value>
+  </data>
+  <data name="EX_Host" xml:space="preserve">
+    <value>Host name unknown</value>
+  </data>
+  <data name="SetLocForMany" xml:space="preserve">
+    <value>Enter new location for %d torrents</value>
+  </data>
+  <data name="SetLocOnce" xml:space="preserve">
+    <value>Enter new location</value>
+  </data>
+  <data name="ATD_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ATD_Files" xml:space="preserve">
+    <value>Files:</value>
+  </data>
+  <data name="DialogBox_EnterPWD" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="MSG_OnlyOneTorrent" xml:space="preserve">
+    <value>Select only one torrent</value>
+  </data>
+  <data name="MSG_SelectOneTorrent" xml:space="preserve">
+    <value>Select torrent</value>
+  </data>
+  <data name="MSG_InterNewName" xml:space="preserve">
+    <value>Type new name</value>
+  </data>
+  <data name="MSG_LinkOrMagnet" xml:space="preserve">
+    <value>Insert link to torrent file or magnet</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Stats_Uploaded" xml:space="preserve">
+    <value>Uploaded:</value>
+  </data>
+  <data name="Stats_Downloaded" xml:space="preserve">
+    <value>Downloaded:</value>
+  </data>
+  <data name="Stats_ActiveTime" xml:space="preserve">
+    <value>Active Time:</value>
+  </data>
+  <data name="MW_ConnectingText" xml:space="preserve">
+    <value>Connecting</value>
+  </data>
+  <data name="MW_PAsswordCantBeEmpty" xml:space="preserve">
+    <value>Password cant be empty</value>
+  </data>
+  <data name="MW_StatusText_Torrents" xml:space="preserve">
+    <value>Getting torrents</value>
+  </data>
+  <data name="MW_StatusText_Stats" xml:space="preserve">
+    <value>Updating stats</value>
+  </data>
+  <data name="MW_StatusText_Session" xml:space="preserve">
+    <value>Connecting to session</value>
+  </data>
+  <data name="MW_StatusText_CloseSession" xml:space="preserve">
+    <value>Closing session</value>
+  </data>
+  <data name="MW_StatusText_Settings" xml:space="preserve">
+    <value>Updateing settings</value>
+  </data>
+  <data name="CM_Title" xml:space="preserve">
+    <value>Connection Manager</value>
+  </data>
+  <data name="CM_ServerTitle" xml:space="preserve">
+    <value>Title:</value>
+  </data>
+  <data name="CM_ServerHost" xml:space="preserve">
+    <value>Host:</value>
+  </data>
+  <data name="CM_ServerPort" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="CM_SSLEnabled" xml:space="preserve">
+    <value>SSL</value>
+  </data>
+  <data name="CM_IsAuthEnabled" xml:space="preserve">
+    <value>Enable Auth</value>
+  </data>
+  <data name="CM_Tab_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="CM_LanSection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="CM_TestConnection" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="CM_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CM_Ok" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="CM_RPCPath" xml:space="preserve">
+    <value>RPC Path:</value>
+  </data>
+  <data name="CM_AuthSection" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
+  <data name="CM_Login" xml:space="preserve">
+    <value>Login:</value>
+  </data>
+  <data name="CM_PSWD" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="CM_AskForPassword" xml:space="preserve">
+    <value>Always ask for password</value>
+  </data>
+  <data name="CM_TestConnectionBad" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CM_TestConnectionGood" xml:space="preserve">
+    <value>Connected</value>
+  </data>
 </root>

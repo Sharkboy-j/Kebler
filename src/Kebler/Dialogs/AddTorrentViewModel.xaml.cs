@@ -184,7 +184,7 @@ namespace Kebler.Dialogs
 
                                             Dispatcher.Invoke(() =>
                                             {
-                                                Result.Content = Kebler.Resources.Dialogs.ATD_TorrentExist;
+                                                Result.Content = Kebler.Resources.Strings.ATD_TorrentExist;
                                                 Result.Visibility = Visibility.Visible;
                                             });
                                             return;

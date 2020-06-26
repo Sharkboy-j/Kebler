@@ -10,7 +10,7 @@
     Height="300"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
-    lex:ResxLocalizationProvider.DefaultDictionary="Windows"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     ShowHeaderLine="False"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
