@@ -95,10 +95,6 @@ jobs:
     - name: Portable64
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
       
-    - name: dir
-      run: dir src\publish
-      shell: cmd
-
     - name: MOVE64
       run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
       shell: cmd
@@ -110,4 +106,8 @@ jobs:
       run: |
         move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
         del src\publish\Kebler.pdb /F /Q
+      shell: cmd
+
+    - name: dir
+      run: dir src\publish
       shell: cmd
