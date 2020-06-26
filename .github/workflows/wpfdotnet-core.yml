@@ -95,11 +95,11 @@ jobs:
 
     - name: Setup side by side .NET SDKs on Windows
       run: |
-        dotnet publish $env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
-        dotnet publish $env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
-        move publish\Kebler.exe publish/KeblerPortable64.exe
-        dotnet publish $env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
-        move publish\Kebler.exe publish/KeblerPortable86.exe
-        del publish\Kebler.pdb /F /Q
+        dotnet publish src/$env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+        dotnet publish src/$env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
+        move src/publish/Kebler.exe src/publish/KeblerPortable64.exe
+        dotnet publish src/$env:Solution_Name -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+        move src/publish/Kebler.exe src/publish/KeblerPortable86.exe
+        del src/publish/Kebler.pdb /F /Q
       shell: cmd
 
