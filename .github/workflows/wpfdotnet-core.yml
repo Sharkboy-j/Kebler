@@ -111,9 +111,9 @@ jobs:
     - name: dir
       run: dir src\publish
       shell: cmd
-
-    - name upload
+      
+    - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: BuildedArts
+    # A file, directory or wildcard pattern that describes what to upload
         path: src\publish\
