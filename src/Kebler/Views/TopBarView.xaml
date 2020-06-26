@@ -1,0 +1,128 @@
+﻿<UserControl
+    x:Class="Kebler.Views.TopBarView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Menu
+        Name="TopBarMenu"
+        Background="Transparent"
+        IsMainMenu="True">
+        <MenuItem Header="{lex:LocText MI_Kebler}">
+            <MenuItem
+                cal:Message.Attach="ShowConnectionManager"
+                Header="{lex:LocText MI_CM}"
+                InputGestureText="Ctrl+C" />
+            <MenuItem Header="{lex:LocText MI_Servers}" ItemsSource="{Binding Servers}" />
+            <MenuItem
+                cal:Message.Attach="Settings"
+                Header="{lex:LocText MI_Props}" />
+            <Separator />
+            <MenuItem
+                cal:Message.Attach="Exit"
+                Header="{lex:LocText MI_Exit}"
+                InputGestureText="Alt+X" />
+        </MenuItem>
+        <MenuItem Header="{lex:LocText MI_Torrent}">
+            <MenuItem
+                cal:Message.Attach="Add"
+                Header="{lex:LocText MI_AddTorrent}"
+                InputGestureText="Ctrl+N"
+                IsEnabled="{Binding IsConnected}" />
+            <MenuItem
+                cal:Message.Attach="AddMagnet"
+                Header="{lex:LocText MI_AddMagnet}"
+                InputGestureText="Ctrl+M"
+                IsEnabled="{Binding IsConnected}" />
+            <Separator />
+            <MenuItem
+                cal:Message.Attach="Start"
+                Header="{lex:LocText QA_Resume}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="Pause"
+                Header="{lex:LocText QA_Pause}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="Remove"
+                Header="{lex:LocText QA_Remove}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="RemoveWithData"
+                Header="{lex:LocText QA_RemoveData}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <Separator />
+            <MenuItem Header="{lex:LocText QA_Queue}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
+                <MenuItem
+                    cal:Message.Attach="MoveTop"
+                    Header="{lex:LocText QA_MoveTop}"
+                    IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                <MenuItem
+                    cal:Message.Attach="MoveUp"
+                    Header="{lex:LocText QA_MoveUp}"
+                    IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                <MenuItem
+                    cal:Message.Attach="MoveDown"
+                    Header="{lex:LocText QA_MoveDown}"
+                    IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                <MenuItem
+                    cal:Message.Attach="MoveBot"
+                    Header="{lex:LocText QA_MoveBot}"
+                    IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            </MenuItem>
+            <MenuItem
+                cal:Message.Attach="Reannounce"
+                Header="{lex:LocText QA_Reannounce}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="Verify"
+                Header="{lex:LocText QA_Verify}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="SetLoc"
+                Header="{lex:LocText QA_SetLoc}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <MenuItem
+                cal:Message.Attach="Rename"
+                Header="{lex:LocText QA_Rename}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+        </MenuItem>
+        <MenuItem
+            Name="LangMenu"
+            Header="{lex:LocText MI_lang}"
+            ItemsSource="{Binding Languages}" />
+        <MenuItem
+            Header="{lex:LocText Mi_Info}"
+            IsEnabled="True"
+            Style="{DynamicResource TopBarMenuButton}">
+            <MenuItem
+                Click="Report"
+                Header="{lex:LocText MI_Report}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="OpenLogs"
+                Header="{lex:LocText MI_Logs}"
+                IsCheckable="False" />
+            <Separator />
+            <MenuItem
+                Click="About"
+                Header="{lex:LocText MI_About}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Check"
+                Header="{lex:LocText MI_Check}"
+                IsCheckable="False" />
+            <MenuItem
+                Click="Contact"
+                Header="{lex:LocText MI_Contact}"
+                IsCheckable="False" />
+        </MenuItem>
+    </Menu>
+</UserControl>

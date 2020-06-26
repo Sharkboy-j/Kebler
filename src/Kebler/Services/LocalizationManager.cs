@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using log4net;
+using Caliburn.Micro;
+using Kebler.Models;
 using WPFLocalizeExtension.Engine;
+using ILog = log4net.ILog;
+using LogManager = log4net.LogManager;
 
 namespace Kebler.Services
 {
@@ -30,7 +33,7 @@ namespace Kebler.Services
 
         public static CultureInfo CurrentCulture
         {
-            get { return _currentCulture; }
+            get => _currentCulture;
             set
             {
                 try
@@ -38,16 +41,21 @@ namespace Kebler.Services
                     _currentCulture = value;
                     ConfigService.Instanse.Language = _currentCulture;
                     ConfigService.Save();
+
+                    var ea = IoC.Get<IEventAggregator>();
+
+                    ea.PublishOnUIThreadAsync(new Messages.LocalizationCultureChangesMessage { Culture = CurrentCulture });
+
                     SetCurrentThreadCulture(CurrentCulture);
-                    App.Instance.LangChangedNotify();
+                    //App.Instance.LangChangedNotify();
                     Log.Info($"Lang changed {_currentCulture}");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.Error(ex);
 
                 }
-             
+
             }
         }
         static CultureInfo _currentCulture;
@@ -69,14 +77,16 @@ namespace Kebler.Services
                 LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
                 LocalizeDictionary.Instance.Culture = culture;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex);
             }
-           
+
 
 
         }
+
+
 
     }
 }

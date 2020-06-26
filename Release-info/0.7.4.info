@@ -1,0 +1,5 @@
+- add .torrent file assoaciation
+- add magnet links assoaciation
+- MoreInfoView -> add trackers tab
+- MoreInfoView -> add peers tab
+- add country parser for peers tab

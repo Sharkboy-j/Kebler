@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -28,6 +29,7 @@ namespace Kebler.TransmissionCore
 
         private readonly string _authorization;
         private readonly bool _needAuthorization;
+        private int _numberOfAttempts = 4;
 
         /// <summary>
         /// Url to service
@@ -55,6 +57,7 @@ namespace Kebler.TransmissionCore
             private set;
         }
 
+
         /// <summary>
         /// Initialize client
         /// <example>For example
@@ -79,10 +82,24 @@ namespace Kebler.TransmissionCore
 
             _authorization = "Basic " + encoded;
             _needAuthorization = true;
+
         }
 
+        public static bool CheckURLValid(string source)
+        {
+            return Uri.TryCreate(source, UriKind.Absolute, out _);
+        }
+        public int NumberOfAttempts
+        {
+            get => _numberOfAttempts;
+            set
+            {
+                if (value < 1)
+                    throw new ArgumentOutOfRangeException("Value has to be greater than one.");
 
-
+                _numberOfAttempts = value;
+            }
+        }
     }
 
 
@@ -90,15 +107,6 @@ namespace Kebler.TransmissionCore
     public partial class TransmissionClient
     {
         #region Session methods
-
-        /// <summary>
-        /// Close current session (API: session-close)
-        /// </summary>
-        public Task CloseSessionAsync(CancellationToken token)
-        {
-            var request = new TransmissionRequest("session-close");
-            return SendRequestAsync(request, token);
-        }
 
 
         /// <summary>
@@ -367,7 +375,7 @@ namespace Kebler.TransmissionCore
         /// Move torrents in queue on top (API: queue-move-top)
         /// </summary>
         /// <param name="ids">Torrents id</param>
-        public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids,CancellationToken token)
+        public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids, CancellationToken token)
         {
             var request = new TransmissionRequest("queue-move-top", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
@@ -427,16 +435,13 @@ namespace Kebler.TransmissionCore
         /// <param name="id">The torrent whose path will be renamed</param>
         /// <param name="path">The path to the file or folder that will be renamed</param>
         /// <param name="name">The file or folder's new name</param>
-        public async Task<RenameTorrentInfo> TorrentRenamePathAsync(int id, string path, string name, CancellationToken token)
+        public async Task<TransmissionResponse<RenameTorrentInfo>> TorrentRenamePathAsync(uint id, string path, string name, CancellationToken token)
         {
             var arguments = new Dictionary<string, object> { { "ids", new[] { id } }, { "path", path }, { "name", name } };
-
             var request = new TransmissionRequest("torrent-rename-path", arguments);
             var response = await SendRequestAsync(request, token);
-
-            var result = response.Deserialize<RenameTorrentInfo>();
-
-            return result;
+            var trans = new TransmissionResponse<RenameTorrentInfo>(response);
+            return trans;
         }
 
         //method name not recognized
@@ -505,153 +510,137 @@ namespace Kebler.TransmissionCore
 
 
 
+
         private async Task<TransmissionResponse> SendRequestAsync(TransmissionRequest request, CancellationToken token)
         {
             var result = new TransmissionResponse();
             request.Tag = ++CurrentTag;
-
-            try
+            var counter = 0;
+            var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
+            //Prepare http web request
+            if (!CheckURLValid(Url))
             {
+                throw new WebException("Host error", WebExceptionStatus.NameResolutionFailure);
+            }
 
-                var byteArray = Encoding.UTF8.GetBytes(request.ToJson());
 
-                //Prepare http web request
-                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
 
-                webRequest.ContentType = "application/json-rpc";
-                webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
-                webRequest.Method = "POST";
 
-                if (_needAuthorization)
-                    webRequest.Headers["Authorization"] = _authorization;
-
-                await using (var dataStream = await webRequest.GetRequestStreamAsync())
+            while (counter < NumberOfAttempts)
+            {
+                try
                 {
-                    await dataStream.WriteAsync(byteArray, 0, byteArray.Length, token);
+                    var webRequest = (HttpWebRequest)WebRequest.Create(Url);
+                    webRequest.ContentType = "application/json-rpc";
+                    webRequest.Method = "POST";
+                    if (_needAuthorization)
+                        webRequest.Headers["Authorization"] = _authorization;
+
+                    webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
+
+                    await using (var dataStream = await webRequest.GetRequestStreamAsync())
+                    {
+                        await dataStream.WriteAsync(byteArray, 0, byteArray.Length, token);
+                    }
+
+                    //Send request and prepare response
+                    using var webResponse = await webRequest.GetResponseAsync(token);
+                    await using var responseStream = await webResponse.GetResponseStream(token);
+
+                    if (responseStream == null)
+                    {
+                        result.CustomException = new Exception("Stream resonse is null");
+                        Log.Error(result.WebException);
+                        return result;
+                    }
+
+                    var reader = new StreamReader(responseStream, Encoding.UTF8);
+                    var responseString = await reader.ReadToEndAsync(token);
+                    result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
+
+                    if (result.Result != "success")
+                    {
+                        throw new Exception(result.Result);
+                    }
+                    break;
                 }
-
-                //Send request and prepare response
-                using var webResponse = await webRequest.GetResponseAsync();
-                await using var responseStream = webResponse.GetResponseStream();
-                if (responseStream == null)
+                catch (TaskCanceledException)
                 {
-                    result.CustomException = new Exception("Stream resonse is null");
-                    Log.Error(result.WebException);
+                    result.Result = "canceled";
                     return result;
                 }
-
-                var reader = new StreamReader(responseStream, Encoding.UTF8);
-                var responseString = await reader.ReadToEndAsync();
-                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
-
-                if (result.Result != "success")
+                catch (WebException ex)
                 {
-                    throw new Exception(result.Result);
-                }
-            }
-            catch (WebException ex)
-            {
-                result.WebException = ex;
-                if (ex.Response is HttpWebResponse wr)
-                {
-                    result.HttpWebResponse = wr;
-
-                    if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
+                    result.WebException = ex;
+                    if (ex.Response is HttpWebResponse wr)
                     {
-                        if (ex.Response.Headers.Count > 0)
+                        result.HttpWebResponse = wr;
+                        if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
                         {
-                            //If session id expiried, try get session id and send request
                             SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
-
-                            if (SessionId == null)
-                            {
-                                result.CustomException = new Exception("Session ID Error");
-                                result.Method = request.Method;
-                                return result;
-                            }
-                            result = SendRequest(request);
+                        }
+                        else
+                        {
+                            counter++;
                         }
                     }
+                    else
+                    {
+                        counter++;
+                    }
                 }
-
-                Log.Error(ex);
-            }
-            catch (Exception ex)
-            {
-                result.CustomException = ex;
-                Log.Error(ex);
+                catch (Exception ex)
+                {
+                    result.CustomException = ex;
+                    counter++;
+                }
             }
 
             result.Method = request.Method;
             return result;
-        } 
-      
-
-
-        private TransmissionResponse SendRequest(CommunicateBase request)
-        {
-            var result = new TransmissionResponse();
-
-            request.Tag = ++CurrentTag;
-
-            try
-            {
-
-                byte[] byteArray = Encoding.UTF8.GetBytes(request.ToJson());
-
-                //Prepare http web request
-                var webRequest = (HttpWebRequest)WebRequest.Create(Url);
-
-                webRequest.ContentType = "application/json-rpc";
-                webRequest.Headers["X-Transmission-Session-Id"] = SessionId;
-                webRequest.Method = "POST";
-
-                if (_needAuthorization)
-                    webRequest.Headers["Authorization"] = _authorization;
-
-                var requestTask = webRequest.GetRequestStreamAsync();
-                requestTask.WaitAndUnwrapException();
-                using (var dataStream = requestTask.Result)
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
-
-                var responseTask = webRequest.GetResponseAsync();
-                responseTask.WaitAndUnwrapException();
-
-                //Send request and prepare response
-                using var webResponse = responseTask.Result;
-                using var responseStream = webResponse.GetResponseStream();
-                var reader = new StreamReader(responseStream ?? throw new InvalidOperationException(nameof(responseStream)), Encoding.UTF8);
-                var responseString = reader.ReadToEnd();
-                result = JsonConvert.DeserializeObject<TransmissionResponse>(responseString);
-
-                if (!result.Success)
-                {
-                    throw new Exception(result.Result);
-                }
-            }
-            catch (WebException ex)
-            {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Conflict)
-                {
-                    if (ex.Response.Headers.Count > 0)
-                    {
-                        //If session id expiried, try get session id and send request
-                        SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
-
-                        if (SessionId == null)
-                            throw new Exception("Session ID Error");
-
-                        result = SendRequest(request);
-                    }
-                }
-                else
-                    throw ex;
-            }
-
-            return result;
         }
+
+
+
+
+        //catch (WebException ex)
+        //{
+        //    result.WebException = ex;
+        //    if (ex.Response is HttpWebResponse wr)
+        //    {
+        //        result.HttpWebResponse = wr;
+
+        //        if (result.HttpWebResponse.StatusCode == HttpStatusCode.Conflict)
+        //        {
+        //            if (ex.Response.Headers.Count > 0)
+        //            {
+        //                result.WebException = null;
+        //                //If session id expiried, try get session id and send request
+        //                SessionId = ex.Response.Headers["X-Transmission-Session-Id"];
+
+        //                if (SessionId == null)
+        //                {
+        //                    result.CustomException = new Exception("Session ID Error");
+        //                    result.Method = request.Method;
+        //                    return result;
+        //                }
+        //                result = await SendRequestAsync(request, token);
+        //                result.Method = request.Method;
+        //                return result;
+        //            }
+        //        }
+        //    }
+        //    Log.Error(ex);
+
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    result.CustomException = ex;
+        //    Log.Error(ex);
+        //}
+
+
 
 
     }

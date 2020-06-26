@@ -1,1 +1,5 @@
 - add open logs folder btn to header
+- fix CM add\remove logic
+- FilesTree -> fixed sorting. files will be lower priority regard to dirs
+- Topheader add new items for menu torrent
+- now u can add magnet links

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentTrackerStats : INotifyPropertyChanged
+    public class TransmissionTorrentTrackerStats
     {
 
         [JsonProperty("announce")]
@@ -83,15 +83,5 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("seederCount")]
         public int SeederCount { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        //~TransmissionTorrentTrackerStats()
-        //{
-        //    announce = null;
-        //    Host = null;
-        //    LastAnnounceResult = null;
-        //    Scrape = null;
-        //    PropertyChanged = null;
-        //}
     }
 }

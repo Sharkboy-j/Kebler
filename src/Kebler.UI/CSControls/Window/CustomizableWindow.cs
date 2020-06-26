@@ -44,6 +44,7 @@ namespace Kebler.UI.CSControls.Window
         private bool _fullScreen;
 
 
+
         public double HeaderHeight
         {
             get => (double)GetValue(HeaderHeightProperty);
@@ -104,7 +105,7 @@ namespace Kebler.UI.CSControls.Window
             });
             WindowChrome.SetWindowChrome(this, chrome);
             _padding = Padding;
-            Loaded += Window_Loaded;
+            Loaded += Onload;
         }
 
 
@@ -152,7 +153,7 @@ namespace Kebler.UI.CSControls.Window
             base.OnSourceInitialized(e);
         }
 
-        private void Window_Loaded(object sender1, RoutedEventArgs e1)
+        public virtual void Onload(object sender1, RoutedEventArgs e1)
         {
             CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, (sender2, e2) => WindowState = WindowState.Minimized));
             CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, (sender2, e2) => WindowState = WindowState.Maximized));

@@ -13,7 +13,7 @@ namespace Kebler.Dialogs
     /// <summary>
     /// Interaction logic for RemoveTorrentDialog.xaml
     /// </summary>
-    public partial class RemoveTorrentDialog : INotifyPropertyChanged
+    public partial class RemoveTorrentDialog 
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly CancellationToken _cancellationToken;
@@ -22,8 +22,6 @@ namespace Kebler.Dialogs
         private readonly TransmissionClient _transmissionClient;
         public Enums.RemoveResult Result;
         public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool)RemoveWithDataCheckBox.IsChecked;
-
-        public event PropertyChangedEventHandler PropertyChanged;
         public bool IsWorking { get; set; }
 
 

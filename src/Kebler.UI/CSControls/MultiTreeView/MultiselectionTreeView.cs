@@ -342,21 +342,13 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         internal void HandleDrop(TreeViewControlItem item, DragEventArgs e)
         {
-            try
-            {
-                HidePreview();
-                var dropTarget = GetDropTarget(item, e);
-                if (dropTarget == null)
-                    return;
-                e.Handled = true;
-                e.Effects = dropTarget.Effect;
-                dropTarget.Node.InternalDrop(e, dropTarget.Index);
-            }
-            catch (Exception ex)
-            {
-                // MultiselectionTreeView.Log.Debug(ex.ToString());
-                throw;
-            }
+            HidePreview();
+            var dropTarget = GetDropTarget(item, e);
+            if (dropTarget == null)
+                return;
+            e.Handled = true;
+            e.Effects = dropTarget.Effect;
+            dropTarget.Node.InternalDrop(e, dropTarget.Index);
         }
 
         internal void HandleDragLeave(TreeViewControlItem item, DragEventArgs e)

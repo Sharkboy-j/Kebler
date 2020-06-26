@@ -1,0 +1,4 @@
+- fixed bug with connection to server after adding first one
+- fix localisation
+- MorInfo -> add auto update (evry 5000ms)
+- TopBar.Kebler -> Enable settings button

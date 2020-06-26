@@ -98,7 +98,7 @@ namespace Kebler.Services.Converters
                     return Application.Current.FindResource("Icon.Error");
                 case 1:
                 case 2:
-                    return Application.Current.FindResource("Icon.Check");
+                    return Application.Current.FindResource("Icon.CheckUpdates");
                 case 0:
                     return Application.Current.FindResource("Icon.Stopped");
                 case 4:

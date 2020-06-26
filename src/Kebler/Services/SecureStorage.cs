@@ -6,10 +6,14 @@ using System.Text;
 
 namespace Kebler.Services
 {
+    [Obsolete("Peace of shit but it works")]
     public static class SecureStorage
     {
-
-        private const string Entropy ="#X$DRCFT&V *YGBUHIOKMHN(UGBYFVTCRRDTFV YG(UH)IJOK_MJ)IN(HвUBGYTV^R%C%CRv6btynumi0nju9yb8TV&C&TYGB";
+        /// <summary>
+        /// Yeah! YEah! Fucking usefull!! I know. STFU
+        /// </summary>
+        #region sdsdsdsd
+        private const string Entropy = "#X$DRCFT&V *YGBUHIOKMHN(UGBYFVTCRRDTFV YG(UH)IJOK_MJ)IN(HвUBGYTV^R%C%CRv6btynumi0nju9yb8TV&C&TYGB";
 
 
 
@@ -24,21 +28,21 @@ namespace Kebler.Services
             return Convert.ToBase64String(encryptedData);
         }
 
-        public static SecureString DecryptString(string encryptedData)
-        {
-            try
-            {
-                var decryptedData = ProtectedData.Unprotect(
-                    Convert.FromBase64String(encryptedData),
-                    Encoding.Unicode.GetBytes(Entropy),
-                    DataProtectionScope.CurrentUser);
-                return SecureString(Encoding.Unicode.GetString(decryptedData));
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        //public static SecureString DecryptString(string encryptedData)
+        //{
+        //    try
+        //    {
+        //        var decryptedData = ProtectedData.Unprotect(
+        //            Convert.FromBase64String(encryptedData),
+        //            Encoding.Unicode.GetBytes(Entropy),
+        //            DataProtectionScope.CurrentUser);
+        //        return SecureString(Encoding.Unicode.GetString(decryptedData));
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
 
         public static string DecryptStringAndUnSecure(string encryptedData)
         {
@@ -56,7 +60,7 @@ namespace Kebler.Services
             }
         }
 
-        public static string UnSecureString(SecureString input)
+        private static string UnSecureString(SecureString input)
         {
             string returnValue;
             var ptr = Marshal.SecureStringToBSTR(input);
@@ -72,8 +76,6 @@ namespace Kebler.Services
             return returnValue;
         }
 
-
-
         private static SecureString SecureString(string input)
         {
             var secure = new SecureString();
@@ -86,6 +88,6 @@ namespace Kebler.Services
             return secure;
         }
 
-      
+        #endregion
     }
 }

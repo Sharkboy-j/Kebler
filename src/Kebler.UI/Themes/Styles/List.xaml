@@ -449,6 +449,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="GridViewColumnHeaderGripper" TargetType="{x:Type Thumb}">
         <Setter Property="Canvas.Right" Value="-9" />
         <Setter Property="FrameworkElement.Width" Value="18" />

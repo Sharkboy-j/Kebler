@@ -61,6 +61,177 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        internal static string About_Version {
+            get {
+                return ResourceManager.GetString("About_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string ATD_Add {
+            get {
+                return ResourceManager.GetString("ATD_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string ATD_Cancel {
+            get {
+                return ResourceManager.GetString("ATD_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection:.
+        /// </summary>
+        internal static string ATD_Connection {
+            get {
+                return ResourceManager.GetString("ATD_Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show this dialog.
+        /// </summary>
+        internal static string ATD_DontShowAddTorrentDialog {
+            get {
+                return ResourceManager.GetString("ATD_DontShowAddTorrentDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Dirrectory:.
+        /// </summary>
+        internal static string ATD_DownloadDIr {
+            get {
+                return ResourceManager.GetString("ATD_DownloadDIr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Limit:.
+        /// </summary>
+        internal static string ATD_DownloadLimit {
+            get {
+                return ResourceManager.GetString("ATD_DownloadLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files:.
+        /// </summary>
+        internal static string ATD_Files {
+            get {
+                return ResourceManager.GetString("ATD_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peer Limit:.
+        /// </summary>
+        internal static string ATD_PeerLimit {
+            get {
+                return ResourceManager.GetString("ATD_PeerLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieving Settings From Server.
+        /// </summary>
+        internal static string ATD_RetrievingSettings {
+            get {
+                return ResourceManager.GetString("ATD_RetrievingSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start torrent.
+        /// </summary>
+        internal static string ATD_StartTorrent {
+            get {
+                return ResourceManager.GetString("ATD_StartTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        internal static string ATD_Stop {
+            get {
+                return ResourceManager.GetString("ATD_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent file exists.
+        /// </summary>
+        internal static string ATD_TorrentExist {
+            get {
+                return ResourceManager.GetString("ATD_TorrentExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent File Path:.
+        /// </summary>
+        internal static string ATD_TorrentFilePath {
+            get {
+                return ResourceManager.GetString("ATD_TorrentFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload Limit:.
+        /// </summary>
+        internal static string ATD_UploadLimit {
+            get {
+                return ResourceManager.GetString("ATD_UploadLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string BTNS_Cancel {
+            get {
+                return ResourceManager.GetString("BTNS_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string BTNS_No {
+            get {
+                return ResourceManager.GetString("BTNS_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        internal static string BTNS_OK {
+            get {
+                return ResourceManager.GetString("BTNS_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string BTNS_Yes {
+            get {
+                return ResourceManager.GetString("BTNS_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string Cat_Active {
@@ -124,11 +295,632 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Always ask for password.
+        /// </summary>
+        internal static string CM_AskForPassword {
+            get {
+                return ResourceManager.GetString("CM_AskForPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization.
+        /// </summary>
+        internal static string CM_AuthSection {
+            get {
+                return ResourceManager.GetString("CM_AuthSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string CM_Cancel {
+            get {
+                return ResourceManager.GetString("CM_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Auth.
+        /// </summary>
+        internal static string CM_IsAuthEnabled {
+            get {
+                return ResourceManager.GetString("CM_IsAuthEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        internal static string CM_LanSection {
+            get {
+                return ResourceManager.GetString("CM_LanSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login:.
+        /// </summary>
+        internal static string CM_Login {
+            get {
+                return ResourceManager.GetString("CM_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        internal static string CM_Ok {
+            get {
+                return ResourceManager.GetString("CM_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password:.
+        /// </summary>
+        internal static string CM_PSWD {
+            get {
+                return ResourceManager.GetString("CM_PSWD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RPC Path:.
+        /// </summary>
+        internal static string CM_RPCPath {
+            get {
+                return ResourceManager.GetString("CM_RPCPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host:.
+        /// </summary>
+        internal static string CM_ServerHost {
+            get {
+                return ResourceManager.GetString("CM_ServerHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port:.
+        /// </summary>
+        internal static string CM_ServerPort {
+            get {
+                return ResourceManager.GetString("CM_ServerPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        internal static string CM_ServerTitle {
+            get {
+                return ResourceManager.GetString("CM_ServerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSL.
+        /// </summary>
+        internal static string CM_SSLEnabled {
+            get {
+                return ResourceManager.GetString("CM_SSLEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string CM_Tab_General {
+            get {
+                return ResourceManager.GetString("CM_Tab_General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        internal static string CM_TestConnection {
+            get {
+                return ResourceManager.GetString("CM_TestConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string CM_TestConnectionBad {
+            get {
+                return ResourceManager.GetString("CM_TestConnectionBad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        internal static string CM_TestConnectionGood {
+            get {
+                return ResourceManager.GetString("CM_TestConnectionGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection Manager.
+        /// </summary>
+        internal static string CM_Title {
+            get {
+                return ResourceManager.GetString("CM_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while applying settings. Some preferences may be not applied correctly.
+        /// </summary>
+        internal static string ConfigApllyError {
+            get {
+                return ResourceManager.GetString("ConfigApllyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection lost. Reconnect and try again.
+        /// </summary>
+        internal static string ConnectionLost {
+            get {
+                return ResourceManager.GetString("ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter password.
+        /// </summary>
+        internal static string DialogBox_EnterPWD {
+            get {
+                return ResourceManager.GetString("DialogBox_EnterPWD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host name unknown.
+        /// </summary>
+        internal static string EX_Host {
+            get {
+                return ResourceManager.GetString("EX_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kebler.
         /// </summary>
         internal static string Kebler {
             get {
                 return ResourceManager.GetString("Kebler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string MI_About {
+            get {
+                return ResourceManager.GetString("MI_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Magnet.
+        /// </summary>
+        internal static string MI_AddMagnet {
+            get {
+                return ResourceManager.GetString("MI_AddMagnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Torrent.
+        /// </summary>
+        internal static string MI_AddTorrent {
+            get {
+                return ResourceManager.GetString("MI_AddTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CheckUpdates For New Version.
+        /// </summary>
+        internal static string MI_Check {
+            get {
+                return ResourceManager.GetString("MI_Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection Manager.
+        /// </summary>
+        internal static string MI_CM {
+            get {
+                return ResourceManager.GetString("MI_CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Developer.
+        /// </summary>
+        internal static string MI_Contact {
+            get {
+                return ResourceManager.GetString("MI_Contact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string MI_Exit {
+            get {
+                return ResourceManager.GetString("MI_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string Mi_Info {
+            get {
+                return ResourceManager.GetString("Mi_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kebler.
+        /// </summary>
+        internal static string MI_Kebler {
+            get {
+                return ResourceManager.GetString("MI_Kebler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string MI_lang {
+            get {
+                return ResourceManager.GetString("MI_lang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Logs.
+        /// </summary>
+        internal static string MI_Logs {
+            get {
+                return ResourceManager.GetString("MI_Logs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string MI_Props {
+            get {
+                return ResourceManager.GetString("MI_Props", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report a Problem.
+        /// </summary>
+        internal static string MI_Report {
+            get {
+                return ResourceManager.GetString("MI_Report", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servers.
+        /// </summary>
+        internal static string MI_Servers {
+            get {
+                return ResourceManager.GetString("MI_Servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added date.
+        /// </summary>
+        internal static string MI_Sort_AddedDate {
+            get {
+                return ResourceManager.GetString("MI_Sort_AddedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download speed.
+        /// </summary>
+        internal static string MI_Sort_DownloadSpeed {
+            get {
+                return ResourceManager.GetString("MI_Sort_DownloadSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded.
+        /// </summary>
+        internal static string MI_Sort_Uploaded {
+            get {
+                return ResourceManager.GetString("MI_Sort_Uploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload speed.
+        /// </summary>
+        internal static string MI_Sort_UploadSpeed {
+            get {
+                return ResourceManager.GetString("MI_Sort_UploadSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        internal static string MI_SortHigh {
+            get {
+                return ResourceManager.GetString("MI_SortHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        internal static string MI_SortLow {
+            get {
+                return ResourceManager.GetString("MI_SortLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent.
+        /// </summary>
+        internal static string MI_Torrent {
+            get {
+                return ResourceManager.GetString("MI_Torrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        internal static string MI_View {
+            get {
+                return ResourceManager.GetString("MI_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string MoreInfo_FilesTab {
+            get {
+                return ResourceManager.GetString("MoreInfo_FilesTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Esc, to hide.
+        /// </summary>
+        internal static string MoreInfo_HideHint {
+            get {
+                return ResourceManager.GetString("MoreInfo_HideHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peers.
+        /// </summary>
+        internal static string MoreInfo_Peers {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client.
+        /// </summary>
+        internal static string MoreInfo_Peers_Client {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Client", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encyption.
+        /// </summary>
+        internal static string MoreInfo_Peers_Encryption {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        internal static string MoreInfo_Peers_Host {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        internal static string MoreInfo_Peers_Progress {
+            get {
+                return ResourceManager.GetString("MoreInfo_Peers_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Speed.
+        /// </summary>
+        internal static string MoreInfo_PeersRateToClient {
+            get {
+                return ResourceManager.GetString("MoreInfo_PeersRateToClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload Speed.
+        /// </summary>
+        internal static string MoreInfo_PeersRateToPeer {
+            get {
+                return ResourceManager.GetString("MoreInfo_PeersRateToPeer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trackers.
+        /// </summary>
+        internal static string MoreInfo_Trackers {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Name {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Seeds {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Seeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seeds.
+        /// </summary>
+        internal static string MoreInfo_Trackers_Status {
+            get {
+                return ResourceManager.GetString("MoreInfo_Trackers_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type new name.
+        /// </summary>
+        internal static string MSG_InterNewName {
+            get {
+                return ResourceManager.GetString("MSG_InterNewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert link to torrent file or magnet.
+        /// </summary>
+        internal static string MSG_LinkOrMagnet {
+            get {
+                return ResourceManager.GetString("MSG_LinkOrMagnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select only one torrent.
+        /// </summary>
+        internal static string MSG_OnlyOneTorrent {
+            get {
+                return ResourceManager.GetString("MSG_OnlyOneTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select torrent.
+        /// </summary>
+        internal static string MSG_SelectOneTorrent {
+            get {
+                return ResourceManager.GetString("MSG_SelectOneTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting.
+        /// </summary>
+        internal static string MW_ConnectingText {
+            get {
+                return ResourceManager.GetString("MW_ConnectingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password cant be empty.
+        /// </summary>
+        internal static string MW_PAsswordCantBeEmpty {
+            get {
+                return ResourceManager.GetString("MW_PAsswordCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closing session.
+        /// </summary>
+        internal static string MW_StatusText_CloseSession {
+            get {
+                return ResourceManager.GetString("MW_StatusText_CloseSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting to session.
+        /// </summary>
+        internal static string MW_StatusText_Session {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Session", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updateing settings.
+        /// </summary>
+        internal static string MW_StatusText_Settings {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating stats.
+        /// </summary>
+        internal static string MW_StatusText_Stats {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Stats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting torrents.
+        /// </summary>
+        internal static string MW_StatusText_Torrents {
+            get {
+                return ResourceManager.GetString("MW_StatusText_Torrents", resourceCulture);
             }
         }
         
@@ -241,6 +1033,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        internal static string QA_Rename {
+            get {
+                return ResourceManager.GetString("QA_Rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         internal static string QA_Resume {
@@ -282,6 +1083,87 @@ namespace Kebler.Resources {
         internal static string QA_Verify {
             get {
                 return ResourceManager.GetString("QA_Verify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        internal static string RetryConnection {
+            get {
+                return ResourceManager.GetString("RetryConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove with data.
+        /// </summary>
+        internal static string RMT_RemoveWithData {
+            get {
+                return ResourceManager.GetString("RMT_RemoveWithData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove all this torrents?.
+        /// </summary>
+        internal static string RMT_Title {
+            get {
+                return ResourceManager.GetString("RMT_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new location for %d torrents.
+        /// </summary>
+        internal static string SetLocForMany {
+            get {
+                return ResourceManager.GetString("SetLocForMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new location.
+        /// </summary>
+        internal static string SetLocOnce {
+            get {
+                return ResourceManager.GetString("SetLocOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active Time:.
+        /// </summary>
+        internal static string Stats_ActiveTime {
+            get {
+                return ResourceManager.GetString("Stats_ActiveTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded:.
+        /// </summary>
+        internal static string Stats_Downloaded {
+            get {
+                return ResourceManager.GetString("Stats_Downloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded:.
+        /// </summary>
+        internal static string Stats_Uploaded {
+            get {
+                return ResourceManager.GetString("Stats_Uploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Torrent.
+        /// </summary>
+        internal static string Title_AddTorrentDialog {
+            get {
+                return ResourceManager.GetString("Title_AddTorrentDialog", resourceCulture);
             }
         }
     }
