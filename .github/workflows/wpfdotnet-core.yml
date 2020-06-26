@@ -95,7 +95,7 @@ jobs:
     - name: Portable64
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
       
-   - name: dir
+    - name: dir
       run: dir src/publish/
       shell: cmd
 
