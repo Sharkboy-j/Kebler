@@ -66,6 +66,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: submodules-init
+      uses: snickerbockers/submodules-init@v4
+      
     # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
