@@ -90,17 +90,21 @@ jobs:
     #    Configuration: ${{ matrix.configuration }}
 
     - name: Release86
-      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
     - name: Portable64
-      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
       
+   - name: dir
+      run: dir src/publish/
+      shell: cmd
+
     - name: MOVE64
       run: move src/publish/Kebler.exe src/publish/KeblerPortable64.exe
       shell: cmd
 
     - name: Portable86
-      run: dotnet publish src/Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
     - name: MOVE86&Del
       run: |
