@@ -40,8 +40,8 @@ namespace Kebler.Update
             {
                
                 Console.WriteLine("CheckUpdate");
+                HasUpdate();
                 Current.Shutdown(0);
-                //HasUpdate();
             }
         }
 
