@@ -90,8 +90,8 @@ jobs:
     - name: Portable64
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
     
-    - name: MOVE64
-      run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
+    # - name: MOVE64
+    - run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
       shell: cmd
 
     - name: Portable86
@@ -100,8 +100,8 @@ jobs:
     - name: Installer
       run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
 
-    - name: MOVE86&Del
-      run: |
+    # - name: MOVE86&Del
+    - run: |
          move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
          del src\publish\*.pdb /F /Q
          del src\publish\RELEASE\*.pdb /F /Q

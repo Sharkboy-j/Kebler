@@ -30,14 +30,18 @@ namespace Kebler.Update
                 nameof(Kebler), module?.ModuleName);
             if (path.Equals(check))
             {
-                var temp = Path.Combine(Path.GetTempPath(), module?.ModuleName);
-                File.Copy(check, temp);
+                var temp = Path.GetTempFileName();
+                File.Copy(check, temp, true);
                 Process.Start(temp);
+                Console.WriteLine("OKEY");
                 Current.Shutdown(0);
             }
             else
             {
-                HasUpdate();
+               
+                Console.WriteLine("CheckUpdate");
+                Current.Shutdown(0);
+                //HasUpdate();
             }
         }
 
