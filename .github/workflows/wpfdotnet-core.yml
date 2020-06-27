@@ -126,13 +126,7 @@ jobs:
 
         7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
         dir    
-      
- 
-      
-    - name: Use tag
-      run: echo ${{steps.tag.outputs.tag}}
-
-     
+  
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.0.1
