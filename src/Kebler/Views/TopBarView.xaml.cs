@@ -54,7 +54,7 @@ namespace Kebler.Views
             var rootAppender = ((Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly()))
                 .Root.Appenders.OfType<FileAppender>()
                 .FirstOrDefault();
-            string filename = rootAppender != null ? rootAppender.File : string.Empty;
+            var filename = rootAppender != null ? rootAppender.File : string.Empty;
 
             var filein = new FileInfo(filename);
 

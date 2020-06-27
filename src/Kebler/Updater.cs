@@ -54,7 +54,7 @@ namespace Kebler
 		static IDictionary<Version,Uri> _GetVersionUrls()
 		{
 
-			string pattern =
+			var pattern =
 					string.Concat(
 						Regex.Escape(GitHubRepo),
 						@"\/releases\/download\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]\/.*\.zip");

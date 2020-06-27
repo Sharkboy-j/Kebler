@@ -9,13 +9,13 @@ namespace Kebler.UI.CSControls.MultiTreeView
         public static ExpandedTreeViewElement GetExpandedItems(
           this MultiselectionTreeView treeView)
         {
-            MultiselectionTreeViewItem rootItem = treeView.RootItem;
+            var rootItem = treeView.RootItem;
             return rootItem != null ? GetExpandedItems(rootItem) : null;
         }
 
         public static void CollapseAllChildren(this MultiselectionTreeViewItem item)
         {
-            foreach (MultiselectionTreeViewItem child in item.Children)
+            foreach (var child in item.Children)
             {
                 child.CollapseAllChildren();
                 if (child.HasChildren)
@@ -25,7 +25,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         public static void ExpandAllChildren(this MultiselectionTreeViewItem item)
         {
-            foreach (MultiselectionTreeViewItem child in item.Children)
+            foreach (var child in item.Children)
             {
                 child.ExpandAllChildren();
                 if (child.HasChildren)
@@ -39,7 +39,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
         {
             if (root == null)
                 return;
-            foreach (ExpandedTreeViewElement child in root.Children)
+            foreach (var child in root.Children)
                 SetExpandedItems(treeView.RootItem, child);
         }
 
@@ -47,12 +47,12 @@ namespace Kebler.UI.CSControls.MultiTreeView
           MultiselectionTreeViewItem treeViewItem,
           ExpandedTreeViewElement childToExpand)
         {
-            foreach (MultiselectionTreeViewItem child1 in treeViewItem.Children)
+            foreach (var child1 in treeViewItem.Children)
             {
                 if (child1.Title == childToExpand.Name)
                 {
                     child1.IsExpanded = true;
-                    foreach (ExpandedTreeViewElement child2 in childToExpand.Children)
+                    foreach (var child2 in childToExpand.Children)
                         SetExpandedItems(child1, child2);
                     break;
                 }
@@ -62,8 +62,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
         private static ExpandedTreeViewElement GetExpandedItems(
           MultiselectionTreeViewItem item)
         {
-            List<ExpandedTreeViewElement> expandedTreeViewElementList = new List<ExpandedTreeViewElement>();
-            foreach (MultiselectionTreeViewItem child in item.Children)
+            var expandedTreeViewElementList = new List<ExpandedTreeViewElement>();
+            foreach (var child in item.Children)
             {
                 if (child.IsExpanded)
                     expandedTreeViewElementList.Add(GetExpandedItems(child));

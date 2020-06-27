@@ -88,7 +88,7 @@ namespace Kebler.Services
         {
             get
             {
-                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                 dateTime = dateTime.AddSeconds(_root.FindNumber("creation date"));
                 return dateTime;
             }
@@ -225,14 +225,14 @@ namespace Kebler.Services
             var strs = new Dictionary<string, TransmissionValue>();
             while (_torrent.PeekChar() != 101)
             {
-                string str = ProcessString();
+                var str = ProcessString();
                 if (str == "info")
                 {
                     _infoStart = _torrent.BaseStream.Position;
                 }
                 if (str != "pieces")
                 {
-                    TransmissionValue tVal = ProcessVal();
+                    var tVal = ProcessVal();
                     strs.Add(str, tVal);
                 }
                 else

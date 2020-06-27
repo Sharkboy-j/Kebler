@@ -12,7 +12,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
     {
         public static object GetObjectAtPoint<ItemContainer>(this ItemsControl control, Point p) where ItemContainer : DependencyObject
         {
-            ItemContainer containerAtPoint = control.GetContainerAtPoint<ItemContainer>(p);
+            var containerAtPoint = control.GetContainerAtPoint<ItemContainer>(p);
             return containerAtPoint == null ? null : control.ItemContainerGenerator.ItemFromContainer(containerAtPoint);
         }
 
@@ -21,10 +21,10 @@ namespace Kebler.UI.CSControls.MuliTreeView
           Point p)
           where ItemContainer : DependencyObject
         {
-            HitTestResult hitTestResult = VisualTreeHelper.HitTest(control, p);
+            var hitTestResult = VisualTreeHelper.HitTest(control, p);
             if (hitTestResult == null)
                 return default(ItemContainer);
-            DependencyObject reference = hitTestResult.VisualHit;
+            var reference = hitTestResult.VisualHit;
             while (VisualTreeHelper.GetParent(reference) != null && !(reference is ItemContainer))
                 reference = VisualTreeHelper.GetParent(reference);
             return reference as ItemContainer;
@@ -34,7 +34,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
         {
             if (control.SelectedIndex <= 0)
                 return;
-            IInputElement item = control.ItemContainerGenerator.ContainerFromIndex(control.SelectedIndex) as IInputElement;
+            var item = control.ItemContainerGenerator.ContainerFromIndex(control.SelectedIndex) as IInputElement;
             if (item == null)
                 return;
             control.Dispatcher.Invoke(() => { Keyboard.Focus(item); });

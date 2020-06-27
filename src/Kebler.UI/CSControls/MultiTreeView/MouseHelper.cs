@@ -11,7 +11,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
 
         public static Point GetMousePosition()
         {
-            MouseHelper.Win32Point pt = new MouseHelper.Win32Point();
+            var pt = new MouseHelper.Win32Point();
             GetCursorPos(ref pt);
             return new Point(pt.X, pt.Y);
         }

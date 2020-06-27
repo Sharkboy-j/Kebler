@@ -17,7 +17,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
           : base(adornedElement)
         {
             this._initialPosition = position;
-            VisualBrush visualBrush = new VisualBrush(AdornedElement);
+            var visualBrush = new VisualBrush(AdornedElement);
             visualBrush.Opacity = 0.6;
             this._visualBrush = visualBrush;
             this.IsHitTestVisible = false;
@@ -31,7 +31,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
 
         protected override void OnRender(DrawingContext context)
         {
-            Point newPosition = this.NewPosition;
+            var newPosition = this.NewPosition;
             newPosition.Offset(-this._initialPosition.X, -this._initialPosition.Y);
             context.DrawRectangle(this._visualBrush, null, new Rect(newPosition, this.RenderSize));
         }

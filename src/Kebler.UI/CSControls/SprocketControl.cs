@@ -898,9 +898,9 @@ namespace Kebler.UI.CSControls
             if (spokes == null)
                 return;
 
-            TranslateTransform translate = new TranslateTransform(centerPoint.X, centerPoint.Y);
+            var translate = new TranslateTransform(centerPoint.X, centerPoint.Y);
             dc.PushTransform(translate);
-            RotateTransform rotate = new RotateTransform(renderStartAngle);
+            var rotate = new RotateTransform(renderStartAngle);
             dc.PushTransform(rotate);
 
             var alpha = (byte)255;
@@ -919,7 +919,7 @@ namespace Kebler.UI.CSControls
                         alpha = (byte)DefaultProgressAlpha;
                 }
 
-                Pen p = new Pen(new SolidColorBrush(Color.FromArgb(alpha, TickColor.R, TickColor.G, TickColor.B)), TickWidth);
+                var p = new Pen(new SolidColorBrush(Color.FromArgb(alpha, TickColor.R, TickColor.G, TickColor.B)), TickWidth);
                 p.StartLineCap = p.EndLineCap = TickStyle;
                 dc.DrawLine(p, spokes[i].StartPoint, spokes[i].EndPoint);
 

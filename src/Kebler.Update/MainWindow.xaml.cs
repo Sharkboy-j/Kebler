@@ -72,8 +72,8 @@ namespace Kebler.Update
             }
             File.Move(tempfile, pth);
 
-            string extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
-            string keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
+            var extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
+            var keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
 
             foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
             {
@@ -123,9 +123,9 @@ namespace Kebler.Update
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (byteCount == 0)
                 return "0" + suf[0];
-            long bytes = Math.Abs(byteCount);
-            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
-            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            var bytes = Math.Abs(byteCount);
+            var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            var num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return $"{(Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture)} {suf[place]}";
         }
 
@@ -141,7 +141,7 @@ namespace Kebler.Update
         /// <inheritdoc />
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
         {
-            WebResponse webResponse = base.GetWebResponse(request, result);
+            var webResponse = base.GetWebResponse(request, result);
             ResponseUri = webResponse.ResponseUri;
             return webResponse;
         }
