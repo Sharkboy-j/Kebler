@@ -80,7 +80,10 @@ jobs:
         dotnet-version: 3.1.101      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
-      
+
+    - name: Release86
+      run: dotnet test
+
     - name: Release86
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
