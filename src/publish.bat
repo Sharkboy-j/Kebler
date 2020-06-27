@@ -9,5 +9,7 @@ move publish\Kebler.exe publish/KeblerPortable64.exe
 
 dotnet publish Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 move publish\Kebler.exe publish/KeblerPortable86.exe
-del publish\Kebler.pdb /F /Q
+dotnet publish Kebler.Update\Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+del publish\*.pdb /F /Q
+del publish\RELEASE\*.pdb /F /Q
 pause
