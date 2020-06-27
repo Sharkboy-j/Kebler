@@ -50,7 +50,7 @@ namespace Kebler.Update
             _webClient.DownloadFileTaskAsync(uri, tempfile);
         }
 
-        private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private async void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
@@ -84,6 +84,8 @@ namespace Kebler.Update
 
             if (Directory.Exists(appPtah))
                 Directory.Delete(appPtah, true);
+
+            await Task.Delay(3000);
 
 
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
