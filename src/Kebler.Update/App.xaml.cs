@@ -22,8 +22,27 @@ namespace Kebler.Update
 
         App()
         {
-            HasUpdate();
+
+            var module = Process.GetCurrentProcess()?.MainModule;
+            var path = module?.FileName;
+
+            var check = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                nameof(Kebler), module?.ModuleName);
+            if (path.Equals(check))
+            {
+                var temp = Path.Combine(Path.GetTempPath(), module?.ModuleName);
+                File.Copy(check, temp);
+                Process.Start(temp);
+                Current.Shutdown(0);
+            }
+            else
+            {
+                HasUpdate();
+            }
         }
+
+
+   
 
         static KeyValuePair<Version, Uri> GetVersion()
         {

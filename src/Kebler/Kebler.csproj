@@ -54,7 +54,6 @@
     <PackageReference Include="Plarium.Geo" Version="2.2.0" />
     <PackageReference Include="Plarium.Geo.Embedded" Version="1.3.0" />
     <PackageReference Include="sharpconfig" Version="3.2.9.1" />
-    <PackageReference Include="squirrel.windows" Version="1.9.1" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
   </ItemGroup>
   <ItemGroup>
