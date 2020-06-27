@@ -63,6 +63,16 @@ jobs:
       Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
+
+        
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: submodules-init
+      uses: snickerbockers/submodules-init@v4
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -74,14 +84,6 @@ jobs:
         draft: false
         prerelease: false
         
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: submodules-init
-      uses: snickerbockers/submodules-init@v4
-      
     # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
