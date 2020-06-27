@@ -95,10 +95,14 @@ jobs:
     - name: Portable86
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
+    - name: Installer
+      run: dotnet publish src/Kebler/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+
     - name: MOVE86&Del
       run: |
          move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
-         del src\publish\Kebler.pdb /F /Q
+         del src\publish\*.pdb /F /Q
+         del src\publish\RELEASE\*.pdb /F /Q
       shell: cmd
 
     - name: dir
