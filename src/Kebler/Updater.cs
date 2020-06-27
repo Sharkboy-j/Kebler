@@ -72,7 +72,7 @@ namespace Kebler
         static KeyValuePair<Version, Uri> GetServerVersion()
         {
             var pattern = string.Concat(Regex.Escape(GitHubRepo),
-                @"\/releases\/download\/*\/[0-9]+.[0-9]+.[0-9]+.[0-9].*\.zip");
+                @"\/releases\/download\/[0-9]\.[0-9]\.[0-9]\.[0-9]\/[R][e][l][e][a][s][e].[0-9]\.[0-9]\.[0-9]\.[0-9]\.zip");
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
             var result = new Dictionary<Version, Uri>();
@@ -83,6 +83,12 @@ namespace Kebler
             string line;
             while (null != (line = sr.ReadLine()))
             {
+                if (string.IsNullOrEmpty(line))
+                    continue;
+                //if (!Uri.TryCreate(line, UriKind.Absolute, out var u))
+                //    continue;
+     
+                
                 var match = urlMatcher.Match(line);
                 if (match.Success)
                 {
