@@ -40,7 +40,6 @@ namespace Kebler.Update
                 }
                 else
                 {
-
                     Console.WriteLine("CheckUpdate");
                     HasUpdate();
                     Current.Shutdown(0);
@@ -48,7 +47,7 @@ namespace Kebler.Update
             }
             catch(Exception ex)
             {
-                StringBuilder ss = new StringBuilder();
+                var ss = new StringBuilder();
                 ss.Append(ex.Message);
                 ss.Append(ex);
                 ss.Append(ex.StackTrace);
