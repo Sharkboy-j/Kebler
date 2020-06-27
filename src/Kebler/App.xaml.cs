@@ -45,17 +45,13 @@ namespace Kebler
         public List<string> torrentsToAdd = new List<string>();
 
         public delegate void Langhandler();
-
+        public bool IsUpdateReady;
 
         public object FindRes(string name)
         {
             return FindResource(name);
         }
 
-        public void CheckUpdates(bool report = false)
-        {
-
-        }
 
         App()
         {
@@ -81,7 +77,6 @@ namespace Kebler
             }
 
             Instance = this;
-            CheckUpdates();
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
@@ -109,23 +104,8 @@ namespace Kebler
 
         private void SetEnv()
         {
-
             var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
             Environment.SetEnvironmentVariable(nameof(Kebler), Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
-
-
-            //#if DEBUG
-            //            var glb = Environment.GetEnvironmentVariable(nameof(Kebler) + "_DEBUG", EnvironmentVariableTarget.User);
-            //            if (glb == null)
-            //                Environment.SetEnvironmentVariable(nameof(Kebler) + "_DEBUG", Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
-            //#else
-            //                var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-            //                if (glb == null)
-            //                    Environment.SetEnvironmentVariable(nameof(Kebler), Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
-
-            //#endif
-
-
         }
 
 
@@ -180,6 +160,8 @@ namespace Kebler
             SingleInstance<App>.Cleanup();
             base.OnExit(e);
         }
+
+
 
     }
 

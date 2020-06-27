@@ -39,9 +39,9 @@ namespace Kebler.Views
             dialog.ShowDialog();
         }
 
-        private void Check(object sender, RoutedEventArgs e)
+        private async void Check(object sender, RoutedEventArgs e)
         {
-            App.Instance.CheckUpdates(true);
+            await Updater.CheckUpdates();
         }
 
         private void Contact(object sender, RoutedEventArgs e)
