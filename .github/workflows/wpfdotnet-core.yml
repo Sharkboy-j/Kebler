@@ -93,10 +93,10 @@ jobs:
       shell: cmd
 
     - name: Portable86
-      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+      run: dotnet publish ./src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
     - name: Installer
-      run: dotnet publish src/Kebler/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
 
     - name: MOVE86&Del
       run: |
