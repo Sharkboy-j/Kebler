@@ -120,3 +120,21 @@ jobs:
     # A file, directory or wildcard pattern that describes what to upload
         path: src\publish\
         name: BuildArchive
+        
+
+    - name: ZIP
+      shell: bash
+      run: |
+          # Define some variables for things we need
+          tag=$(git describe --tags --abbrev=0)
+          release_name="App-$tag-${{ matrix.target }}"
+
+          # Build everything
+          dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+
+          # Pack files
+          if [ "${{ matrix.target }}" == "win-x64" ]; then
+            7z a -tzip "${release_name}.zip" "src\publish\"
+          else
+            tar czvf "${release_name}.tar.gz" "$release_name"
+          fi
