@@ -74,6 +74,59 @@ jobs:
     - name: Get tag
       id: tag
       uses: dawidd6/action-get-tag@v1
+      
+      
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101      
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+      
+      
+    - name: Release86
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+
+    - name: Portable64
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
+    
+    - name: MOVE64
+      run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
+      shell: cmd
+
+    - name: Portable86
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+
+    - name: MOVE86&Del
+      run: |
+         move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
+         del src\publish\Kebler.pdb /F /Q
+      shell: cmd
+
+    - name: dir
+      run: dir src\publish
+      shell: cmd
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+       path: src\publish\
+       name: BuildArchive
+       
+    - name: ZIP
+      shell: bash
+      run: |
+        # Define some variables for things we need
+        release_name="${{steps.tag.outputs.tag}}${{matrix.target}}"
+
+        # Build everything
+        # dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+
+        7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
+        dir    
+      
+ 
+      
     - name: Use tag
       run: echo ${{steps.tag.outputs.tag}}
 
@@ -88,5 +141,15 @@ jobs:
         release_name: ${{steps.tag.outputs.tag}}
         draft: false
         prerelease: false
-
+        
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+       upload_url: ${{steps.create_release.outputs.upload_url}} 
+       asset_path: ./${{steps.tag.outputs.tag}}${{matrix.target}}.zip
+       asset_name: Release ${{steps.tag.outputs.tag}}${{matrix.target}}.zip
+       asset_content_type: application/zip
    
