@@ -120,26 +120,3 @@ jobs:
     # A file, directory or wildcard pattern that describes what to upload
         path: src\publish\
         name: BuildArchive
-    
-    - name: ZIP # This would actually build your project, using zip for an example artifact
-      uses: edgarrc/action-7z@v1.0.4
-      with:
-        args: 7z a -t7z -mx=9 KeblerRelease.zip src\publish\
-    
-    - name: Create a Release
-      id: create_release
-      uses: actions/create-release@v1.1.1
-      with:
-    # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
-        tag_name: ${{ github.ref }}
-    # The name of the release. For example, `Release v1.0.1`
-        release_name: Release ${{ github.ref }}
-        prerelease: false
-        
-    - name: Upload Release Asset 
-      uses: actions/upload-release-asset@v1.0.2      
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: KeblerRelease.zip
-        asset_name: KeblerRelease.zip
-        asset_content_type: application/zip
