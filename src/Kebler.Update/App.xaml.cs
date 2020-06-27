@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,27 +23,38 @@ namespace Kebler.Update
 
         App()
         {
-
-            var module = Process.GetCurrentProcess()?.MainModule;
-            var path = module?.FileName;
-
-            var check = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                nameof(Kebler), module?.ModuleName);
-            if (path.Equals(check))
+            try
             {
-                var temp = Path.GetTempFileName();
-                File.Copy(check, temp, true);
-                Process.Start(temp);
-                Console.WriteLine("OKEY");
-                Current.Shutdown(0);
+                var module = Process.GetCurrentProcess()?.MainModule;
+                var path = module?.FileName;
+
+                var check = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    nameof(Kebler), module?.ModuleName);
+                if (path.Equals(check))
+                {
+                    var temp = Path.GetTempFileName();
+                    File.Copy(check, temp, true);
+                    Process.Start(temp);
+                    Console.WriteLine("OKEY");
+                    Current.Shutdown(0);
+                }
+                else
+                {
+
+                    Console.WriteLine("CheckUpdate");
+                    HasUpdate();
+                    Current.Shutdown(0);
+                }
             }
-            else
+            catch(Exception ex)
             {
-               
-                Console.WriteLine("CheckUpdate");
-                HasUpdate();
-                Current.Shutdown(0);
+                StringBuilder ss = new StringBuilder();
+                ss.Append(ex.Message);
+                ss.Append(ex);
+                ss.Append(ex.StackTrace);
+                new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
             }
+           
         }
 
 
