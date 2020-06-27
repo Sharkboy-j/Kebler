@@ -75,7 +75,7 @@ namespace Kebler.Update
             string extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
             string keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
 
-            foreach (var process in Process.GetProcessesByName("Kebler.exe"))
+            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
             {
                 process.Kill();
             }
