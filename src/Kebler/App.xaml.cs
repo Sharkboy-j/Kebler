@@ -15,7 +15,6 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using AutoUpdaterDotNET;
 using FamFamFam.Flags.Wpf;
 using Kebler.Models;
 using Kebler.Services;
@@ -28,6 +27,7 @@ using Microsoft.Win32;
 using Plarium.Geo;
 using Plarium.Geo.Embedded;
 using Plarium.Geo.Services;
+
 
 namespace Kebler
 {
@@ -54,21 +54,7 @@ namespace Kebler
 
         public void CheckUpdates(bool report = false)
         {
-#if !PORTABLE
-  Log.Info("AutoUpdater.Start");
-            AutoUpdater.NotifyInfoArgsEvent += NotifyInfoArgsEvent;
 
-            AutoUpdater.ReportErrors = report;
-            AutoUpdater.DownloadPath = Path.GetTempPath();
-            AutoUpdater.ShowSkipButton = true;
-            AutoUpdater.ShowRemindLaterButton = true;
-            AutoUpdater.RunUpdateAsAdmin = true;
-
-            Dispatcher.Invoke(() =>
-            {
-                AutoUpdater.Start("https://raw.githubusercontent.com/JeremiSharkboy/Kebler/master/version.xml");
-            });
-#endif
         }
 
         App()
@@ -78,6 +64,10 @@ namespace Kebler
             FileAssociations.EnsureAssociationsSet();
             var builder = new GeoServiceBuilder();
             builder.RegisterResource<EmbeddedResourceReader>();
+
+
+
+
 
             Geo = new GeoService(builder);
 
@@ -120,30 +110,26 @@ namespace Kebler
         private void SetEnv()
         {
 
-            {
-#if DEBUG
-                var glb = Environment.GetEnvironmentVariable(nameof(Kebler) + "_DEBUG", EnvironmentVariableTarget.User);
-                if (glb == null)
-                    Environment.SetEnvironmentVariable(nameof(Kebler) + "_DEBUG", System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
-#else
-                var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-                if (glb == null)
-                    Environment.SetEnvironmentVariable(nameof(Kebler), System.Reflection.Assembly.GetExecutingAssembly().Location, EnvironmentVariableTarget.User);
+            var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(nameof(Kebler), Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
 
-#endif
-            }
+
+            //#if DEBUG
+            //            var glb = Environment.GetEnvironmentVariable(nameof(Kebler) + "_DEBUG", EnvironmentVariableTarget.User);
+            //            if (glb == null)
+            //                Environment.SetEnvironmentVariable(nameof(Kebler) + "_DEBUG", Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
+            //#else
+            //                var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            //                if (glb == null)
+            //                    Environment.SetEnvironmentVariable(nameof(Kebler), Process.GetCurrentProcess().MainModule.FileName, EnvironmentVariableTarget.User);
+
+            //#endif
+
 
         }
 
 
-        private void NotifyInfoArgsEvent(UpdateInfoEventArgs args)
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fileVersionInfo.FileVersion;
 
-            Log.Info($"Installed {version} | Current {args.CurrentVersion}");
-        }
 
 
 

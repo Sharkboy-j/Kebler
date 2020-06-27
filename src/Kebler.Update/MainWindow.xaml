@@ -1,0 +1,27 @@
+﻿<Window
+    x:Class="Kebler.Update.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Kebler.Update"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Update"
+    Width="238"
+    Height="100"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Grid>
+        <ProgressBar
+            Name="PB"
+            Height="45"
+            Margin="0,0" />
+        <Label
+            Name="Size"
+            Height="45"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="Downloading update" />
+    </Grid>
+</Window>
