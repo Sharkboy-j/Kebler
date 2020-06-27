@@ -42,7 +42,6 @@ on:
   push:
     tags:
       - '*.*.*'
-    branches: [ master ]
     
 jobs:
 
