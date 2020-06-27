@@ -23,6 +23,18 @@ namespace Kebler.Update
 
         App()
         {
+            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
+            {
+                process.Kill();
+            }
+            Process current = Process.GetCurrentProcess();
+            foreach (var process in Process.GetProcessesByName("Installer"))
+            {
+                if (process.Id != current.Id)
+                {
+                    process.Kill();
+                }
+            }
             try
             {
                 var module = Process.GetCurrentProcess()?.MainModule;

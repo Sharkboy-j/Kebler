@@ -50,6 +50,8 @@ namespace Kebler
 
         }
 
+
+
         public static void InstallUpdates()
         {
             var installerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), "Installer.exe");

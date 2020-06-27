@@ -75,28 +75,42 @@ namespace Kebler.Update
             var extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
             var keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
 
-            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
-            {
-                process.Kill();
-            }
+       
 
             var appPtah = Path.Combine(extractionPath, nameof(App));
 
-            if (Directory.Exists(appPtah))
-                Directory.Delete(appPtah, true);
+           // DeleteDirectory(appPtah);
 
-            await Task.Delay(3000);
+            //await Task.Delay(3000);
 
 
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
-            zip.ExtractToDirectory(extractionPath,true);
-            
+            zip.ExtractToDirectory(extractionPath, true);
+
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = keblerexe,
             };
             Process.Start(processStartInfo);
             Close();
+        }
+        public static void DeleteDirectory(string target_dir)
+        {
+            string[] files = Directory.GetFiles(target_dir);
+            string[] dirs = Directory.GetDirectories(target_dir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (string dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(target_dir, false);
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
