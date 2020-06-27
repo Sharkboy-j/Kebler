@@ -36,16 +36,14 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name:  WPF .NET Core
+name: Main
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+    
 jobs:
 
   build:
@@ -73,17 +71,25 @@ jobs:
     - name: submodules-init
       uses: snickerbockers/submodules-init@v4
 
+    - name: Extract tag name
+      id: tag
+      uses: actions/github-script@0.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          return context.payload.ref.replace(/\/refs\/tags\//, '');
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.tag.outputs.result }}
+        release_name: Release ${{ steps.tag.outputs.result }}
         draft: false
         prerelease: false
-        
+
     # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
