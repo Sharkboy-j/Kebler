@@ -53,6 +53,7 @@ namespace Kebler.Update
                 ss.Append(ex);
                 ss.Append(ex.StackTrace);
                 new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
+                Current.Shutdown(0);
             }
            
         }
