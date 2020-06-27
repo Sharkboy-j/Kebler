@@ -54,10 +54,10 @@ jobs:
     runs-on: windows-latest  # For a list of available runner types, refer to 
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
-    env:
-      Solution_Dir: src/
-      Solution_Name: src/Kebler.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+    # env:
+    #   Solution_Dir: src/
+    #   Solution_Name: src/Kebler.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
+    #   Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
 
