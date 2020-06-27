@@ -1,4 +1,5 @@
 del publish\ /F /Q
+set -Ux DOTNET_CLI_TELEMETRY_OPTOUT 1
 dotnet clean Kebler.sln
 dotnet test Kebler.sln
 dotnet publish Kebler.sln -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml

@@ -36,14 +36,14 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name:  WPF .NET Core
+name: Main
 
 on:
   push:
+    tags:
+      - '*.*.*'
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+    
 jobs:
 
   build:
@@ -61,44 +61,111 @@ jobs:
       Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
+
+        
     - name: Checkout
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    # Install the .NET Core workload
+    - name: submodules-init
+      uses: snickerbockers/submodules-init@v4
+
+    - name: Get tag
+      id: tag
+      uses: dawidd6/action-get-tag@v1
+      
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+        dotnet-version: 3.1.101      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+      
+    - name: Release86
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test $env:Test_Project_Path
+    - name: Portable64
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
+    
+    - name: MOVE64
+      run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
+      shell: cmd
 
-    # Restore the WPF application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the WPF application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+    - name: Portable86
+      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+
+    - name: MOVE86&Del
+      run: |
+         move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
+         del src\publish\Kebler.pdb /F /Q
+      shell: cmd
+
+    - name: dir
+      run: dir src\publish
+      shell: cmd
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+       path: src\publish\
+       name: BuildArchive
+       
+    - name: ZIP
+      shell: bash
+      run: |
+        # Define some variables for things we need
+        release_name="${{steps.tag.outputs.tag}}"
+
+        # Build everything
+        # dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+
+        7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
+        dir    
+      
+ 
+      
+    - name: Use tag
+      run: echo ${{steps.tag.outputs.tag}}
+
+     
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.1
       env:
-        Configuration: ${{ matrix.configuration }}
-
-    # Decode the base 64 encoded pfx and save the Signing_Certificate
-    #- name: Decode the pfx
-    #  run: |
-    #    $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
-    #    $certificatePath = Join-Path -Path $env:Wap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
-   #   [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-
-    # Create the app package by building and packaging the Windows Application Packaging project
-    - name: Create the app package
-      run: msbuild $env:Solution_Dir /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{steps.tag.outputs.tag}}
+        release_name: ${{steps.tag.outputs.tag}}
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release ZIP
+      uses: actions/upload-release-asset@v1
       env:
-        Appx_Bundle: Always
-        Appx_Bundle_Platforms: x86|x64
-        Configuration: ${{ matrix.configuration }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: ./${{steps.tag.outputs.tag}}.zip
+        asset_name: Release ${{steps.tag.outputs.tag}}.zip
+        asset_content_type: application/zip
 
+    - name: Upload Portable86
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: .\src\publish\KeblerPortable86.exe
+        asset_name: KeblerPortable86.exe
+        asset_content_type: application/exe
 
+    - name: Upload Portable64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: .\src\publish\KeblerPortable64.exe
+        asset_name: KeblerPortable64.exe
+        asset_content_type: application/exe
