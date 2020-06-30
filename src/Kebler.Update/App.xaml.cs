@@ -20,19 +20,27 @@ namespace Kebler.Update
     public partial class App : Application
     {
         private const string GitHubRepo = "/JeremiSharkboy/Kebler";
+        public static StringBuilder BUILDER = new StringBuilder();
+        public static App Instance;
 
         App()
         {
+            Instance = this;
+            Log("Start App");
+
             foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
             {
                 process.Kill();
+                Log("Killed kebler");
             }
+           
             Process current = Process.GetCurrentProcess();
             foreach (var process in Process.GetProcessesByName("Installer"))
             {
                 if (process.Id != current.Id)
                 {
                     process.Kill();
+                    Log("Killed installer");
                 }
             }
             try
@@ -42,16 +50,22 @@ namespace Kebler.Update
 
                 var check = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     nameof(Kebler), module?.ModuleName);
+
+                Log($"Current Path: {check}");
+
                 if (path.Equals(check))
                 {
+                    Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
                     File.Copy(check, temp, true);
                     Process.Start(temp);
-                    Console.WriteLine("OKEY");
+                    Log("Started Temp");
                     Current.Shutdown(0);
                 }
                 else
                 {
+                    Log("Go for Update");
+
                     Console.WriteLine("CheckUpdate");
                     HasUpdate();
                     Current.Shutdown(0);
@@ -70,7 +84,10 @@ namespace Kebler.Update
         }
 
 
-   
+        public static void Log(string msg)
+        {
+            BUILDER.Append(msg + Environment.NewLine);
+        }
 
         static KeyValuePair<Version, Uri> GetVersion()
         {
@@ -105,8 +122,10 @@ namespace Kebler.Update
         public static void HasUpdate()
         {
             var latest = GetVersion();
-            var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            Log($"Server: {latest.Key}|{latest.Value}");
 
+            var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            Log($"Env Path: {getEnv}");
             if (getEnv == null)
             {
                 var wd = new MainWindow(latest.Value);

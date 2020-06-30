@@ -20,7 +20,10 @@ namespace Kebler.Update
         public EXCEPTIONWINDOW(string txt)
         {
             InitializeComponent();
-            TXT.Text = txt;
+
+            App.Instance.Log(txt);
+
+            TXT.Text = App.Instance.BUILDER.ToString();
         }
     }
 }
