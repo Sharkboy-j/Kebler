@@ -77,7 +77,7 @@ namespace Kebler.Update
 
        
 
-            var appPtah = Path.Combine(extractionPath, nameof(App));
+           // var appPtah = Path.Combine(extractionPath, nameof(App));
 
            // DeleteDirectory(appPtah);
 
@@ -94,23 +94,26 @@ namespace Kebler.Update
             Process.Start(processStartInfo);
             Close();
         }
-        public static void DeleteDirectory(string target_dir)
+
+        public static void DeleteDirectory(string path)
         {
-            string[] files = Directory.GetFiles(target_dir);
-            string[] dirs = Directory.GetDirectories(target_dir);
-
-            foreach (string file in files)
+            foreach (var directory in Directory.GetDirectories(path))
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                DeleteDirectory(directory);
             }
 
-            foreach (string dir in dirs)
+            try
             {
-                DeleteDirectory(dir);
+                Directory.Delete(path, true);
             }
-
-            Directory.Delete(target_dir, false);
+            catch (IOException)
+            {
+                Directory.Delete(path, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Directory.Delete(path, true);
+            }
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
