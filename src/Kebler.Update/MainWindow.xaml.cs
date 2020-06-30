@@ -50,7 +50,7 @@ namespace Kebler.Update
             _webClient.DownloadFileTaskAsync(uri, tempfile);
         }
 
-        private async void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
@@ -75,11 +75,11 @@ namespace Kebler.Update
             var extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
             var keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
 
-       
 
-           // var appPtah = Path.Combine(extractionPath, nameof(App));
 
-           // DeleteDirectory(appPtah);
+            // var appPtah = Path.Combine(extractionPath, nameof(App));
+
+            // DeleteDirectory(appPtah);
 
             //await Task.Delay(3000);
 

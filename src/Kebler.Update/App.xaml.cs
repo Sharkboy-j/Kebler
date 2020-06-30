@@ -20,7 +20,7 @@ namespace Kebler.Update
     public partial class App : Application
     {
         private const string GitHubRepo = "/JeremiSharkboy/Kebler";
-        public static StringBuilder BUILDER = new StringBuilder();
+        public StringBuilder BUILDER = new StringBuilder();
         public static App Instance;
 
         App()
@@ -84,7 +84,7 @@ namespace Kebler.Update
         }
 
 
-        public static void Log(string msg)
+        public void Log(string msg)
         {
             BUILDER.Append(msg + Environment.NewLine);
         }
@@ -119,7 +119,7 @@ namespace Kebler.Update
             return new KeyValuePair<Version, Uri>(null, null);
         }
 
-        public static void HasUpdate()
+        public void HasUpdate()
         {
             var latest = GetVersion();
             Log($"Server: {latest.Key}|{latest.Value}");
