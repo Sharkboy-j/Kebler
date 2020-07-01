@@ -83,6 +83,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Windows.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Dialogs.resx">
@@ -106,4 +109,5 @@
   <ItemGroup>
     <Resource Include="Kebler.ico" />
   </ItemGroup>
+  
 </Project>
