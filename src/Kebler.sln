@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.SI", "Kebler.SI\Kebl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Update", "Kebler.Update\Kebler.Update.csproj", "{CD953F00-6042-4F80-BEE7-CDBE3BB7FF47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Const", "Kebler.Const\Kebler.Const.csproj", "{4765BE6F-DEB2-48D8-8BD1-215A36413A30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Const", "Kebler.Const\Kebler.Const.csproj", "{4765BE6F-DEB2-48D8-8BD1-215A36413A30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,8 +152,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowErrorsInErrorList = False
-		RESX_TaskErrorCategory = Message
 		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
+		RESX_TaskErrorCategory = Message
+		RESX_ShowErrorsInErrorList = False
 	EndGlobalSection
 EndGlobal

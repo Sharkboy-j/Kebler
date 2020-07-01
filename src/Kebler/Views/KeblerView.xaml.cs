@@ -22,5 +22,16 @@ namespace Kebler.Views
             ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
             ConfigService.Save();
         }
+
+        private void CustomizableWindow_Activated(object sender, System.EventArgs e)
+        {
+            this.ShowInTaskbar = true;
+        }
+
+        private void CustomizableWindow_Deactivated(object sender, System.EventArgs e)
+        {
+            if (this.WindowState == System.Windows.WindowState.Minimized)
+                this.ShowInTaskbar = false;
+        }
     }
 }

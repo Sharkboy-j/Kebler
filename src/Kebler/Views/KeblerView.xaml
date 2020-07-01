@@ -20,10 +20,13 @@
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     IsTitleVisible="True"
+    Activated="CustomizableWindow_Activated"
+    Deactivated="CustomizableWindow_Deactivated"
     ResizeMode="CanResize"
     ShowHeaderLine="True"
     Style="{DynamicResource MainWindowStyle}"
     WindowStartupLocation="CenterScreen"
+    WindowState="{Binding State}"
     mc:Ignorable="d">
     <window:CustomizableWindow.Resources>
         <Style
