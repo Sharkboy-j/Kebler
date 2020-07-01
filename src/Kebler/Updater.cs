@@ -19,7 +19,6 @@ namespace Kebler
 {
     static class Updater
     {
-        private const string GitHubRepo = "/JeremiSharkboy/Kebler";
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static async Task CheckUpdates()
@@ -54,16 +53,15 @@ namespace Kebler
 
         public static void InstallUpdates()
         {
-            var installerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), "Installer.exe");
-            if (File.Exists(installerPath))
+            if (File.Exists(Const.Strings.InstallerExePath))
             {
-                Process.Start(installerPath);
+                Process.Start(Const.Strings.InstallerExePath);
                 Application.Current.Shutdown(0);
             }
             else
             {
                 var mgr = new WindowManager();
-                mgr.ShowDialogAsync(new MessageBoxViewModel("Installer.exe not found. Try redownload app", string.Empty, Models.Enums.MessageBoxDilogButtons.Ok, true));
+                mgr.ShowDialogAsync(new MessageBoxViewModel($"{Const.Strings.InstallerExeName} not found. Try redownload app", string.Empty, Models.Enums.MessageBoxDilogButtons.Ok, true));
             }
 
         }
@@ -71,12 +69,10 @@ namespace Kebler
 
         static KeyValuePair<Version, Uri> GetServerVersion()
         {
-            var pattern = string.Concat(Regex.Escape(GitHubRepo),
-                @"\/releases\/download\/[0-9]\.[0-9]\.[0-9]\.[0-9]\/[R][e][l][e][a][s][e].[0-9]\.[0-9]\.[0-9]\.[0-9]\.zip");
+            var pattern = string.Concat(Regex.Escape(Const.Strings.GitHubRepo), Const.Strings.GithubRegex);
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", GitHubRepo, "/releases/latest"));
+            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo, "/releases/latest"));
             var wrs = wrq.GetResponse();
 
             using var sr = new StreamReader(wrs.GetResponseStream());
@@ -87,8 +83,8 @@ namespace Kebler
                     continue;
                 //if (!Uri.TryCreate(line, UriKind.Absolute, out var u))
                 //    continue;
-     
-                
+
+
                 var match = urlMatcher.Match(line);
                 if (match.Success)
                 {

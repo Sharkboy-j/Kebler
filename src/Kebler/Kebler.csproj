@@ -57,6 +57,7 @@
     <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
     <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />

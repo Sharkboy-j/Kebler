@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace Kebler.Update
 {
@@ -28,7 +17,6 @@ namespace Kebler.Update
     {
         Uri uri;
         private MyWebClient _webClient;
-        private DateTime _startedAt;
         private string tempfile;
         public MainWindow(Uri uri)
         {
@@ -41,7 +29,7 @@ namespace Kebler.Update
         {
             _webClient = new MyWebClient();
 
-            tempfile = System.IO.Path.GetTempFileName();
+            tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
 
@@ -72,25 +60,14 @@ namespace Kebler.Update
             }
             File.Move(tempfile, pth);
 
-            var extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
-            var keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
-
-
-
-            // var appPtah = Path.Combine(extractionPath, nameof(App));
-
-            // DeleteDirectory(appPtah);
-
-            //await Task.Delay(3000);
-
-
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
-            zip.ExtractToDirectory(extractionPath, true);
+            zip.ExtractToDirectory(Const.Strings.KeblerRoamingFolder, true);
 
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = keblerexe,
+                FileName = Const.Strings.KeblerExepath,
             };
+            App.Instance.CreateShortcut();
             Process.Start(processStartInfo);
             Close();
         }
