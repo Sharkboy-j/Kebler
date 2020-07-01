@@ -29,11 +29,11 @@ namespace Kebler
             container.Singleton<DialogBoxViewModel>();
             container.Singleton<MessageBoxViewModel>();
 
-         
+
         }
 
 
-        protected override void OnStartup(object sender, StartupEventArgs e)
+        protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             if (string.IsNullOrEmpty(ConfigService.Instanse.Language.Name))
             {
@@ -44,7 +44,8 @@ namespace Kebler
                 LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
             }
 
-            DisplayRootViewFor<KeblerViewModel>();
+            await DisplayRootViewFor<KeblerViewModel>();
+            await Updater.CheckUpdates();
         }
 
         protected override object GetInstance(Type service, string key)

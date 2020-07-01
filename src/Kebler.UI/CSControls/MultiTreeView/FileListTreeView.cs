@@ -49,10 +49,10 @@ namespace Kebler.UI.CSControls.MuliTreeView
      this TSource[] source,
      Func<TSource, TResult> selector)
         {
-            List<TResult> resultList = new List<TResult>(source.Length);
-            for (int index = 0; index < source.Length; ++index)
+            var resultList = new List<TResult>(source.Length);
+            for (var index = 0; index < source.Length; ++index)
             {
-                TResult result = selector(source[index]);
+                var result = selector(source[index]);
                 if (result != null)
                     resultList.Add(result);
             }

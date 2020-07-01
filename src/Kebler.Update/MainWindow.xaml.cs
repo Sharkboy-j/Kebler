@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace Kebler.Update
 {
@@ -28,7 +17,6 @@ namespace Kebler.Update
     {
         Uri uri;
         private MyWebClient _webClient;
-        private DateTime _startedAt;
         private string tempfile;
         public MainWindow(Uri uri)
         {
@@ -41,7 +29,7 @@ namespace Kebler.Update
         {
             _webClient = new MyWebClient();
 
-            tempfile = System.IO.Path.GetTempFileName();
+            tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
 
@@ -72,25 +60,37 @@ namespace Kebler.Update
             }
             File.Move(tempfile, pth);
 
-            string extractionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
-            string keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
-
-            foreach (var process in Process.GetProcessesByName("Kebler.exe"))
-            {
-                process.Kill();
-            }
-
-            if (Directory.Exists(extractionPath))
-                Directory.Delete(extractionPath, true);
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
-            zip.ExtractToDirectory(extractionPath,true);
-            
+            zip.ExtractToDirectory(Const.Strings.KeblerRoamingFolder, true);
+
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = keblerexe,
+                FileName = Const.Strings.KeblerExepath,
             };
+            App.Instance.CreateShortcut();
             Process.Start(processStartInfo);
             Close();
+        }
+
+        public static void DeleteDirectory(string path)
+        {
+            foreach (var directory in Directory.GetDirectories(path))
+            {
+                DeleteDirectory(directory);
+            }
+
+            try
+            {
+                Directory.Delete(path, true);
+            }
+            catch (IOException)
+            {
+                Directory.Delete(path, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Directory.Delete(path, true);
+            }
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -119,9 +119,9 @@ namespace Kebler.Update
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (byteCount == 0)
                 return "0" + suf[0];
-            long bytes = Math.Abs(byteCount);
-            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
-            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            var bytes = Math.Abs(byteCount);
+            var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            var num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return $"{(Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture)} {suf[place]}";
         }
 
@@ -137,7 +137,7 @@ namespace Kebler.Update
         /// <inheritdoc />
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
         {
-            WebResponse webResponse = base.GetWebResponse(request, result);
+            var webResponse = base.GetWebResponse(request, result);
             ResponseUri = webResponse.ResponseUri;
             return webResponse;
         }

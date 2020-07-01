@@ -21,9 +21,9 @@ namespace Kebler.UI.CSControls.MuliTreeView
             {
                 if (json == null || !json.HasValues)
                     return null;
-                JToken jtoken = json["Name"];
-                string name = jtoken != null ? jtoken.Value<string>() : null;
-                ExpandedTreeViewElement[] children = DecodeExpandedTreeViewElementArray(json["Children"] as JArray);
+                var jtoken = json["Name"];
+                var name = jtoken != null ? jtoken.Value<string>() : null;
+                var children = DecodeExpandedTreeViewElementArray(json["Children"] as JArray);
                 return Guard.NotNull(name, children) ? null : new ExpandedTreeViewElement(name, children);
             }
 
@@ -32,10 +32,10 @@ namespace Kebler.UI.CSControls.MuliTreeView
             {
                 if (jsonArray == null)
                     return null;
-                List<ExpandedTreeViewElement> expandedTreeViewElementList = new List<ExpandedTreeViewElement>(jsonArray.Count);
-                foreach (JToken json in jsonArray)
+                var expandedTreeViewElementList = new List<ExpandedTreeViewElement>(jsonArray.Count);
+                foreach (var json in jsonArray)
                 {
-                    ExpandedTreeViewElement expandedTreeViewElement = Decode(json);
+                    var expandedTreeViewElement = Decode(json);
                     if (expandedTreeViewElement != null)
                         expandedTreeViewElementList.Add(expandedTreeViewElement);
                 }
@@ -63,10 +63,10 @@ namespace Kebler.UI.CSControls.MuliTreeView
             {
                 if (entries == null)
                     return null;
-                JArray jarray = new JArray();
-                foreach (ExpandedTreeViewElement entry in entries)
+                var jarray = new JArray();
+                foreach (var entry in entries)
                 {
-                    JObject jobject = Encode(entry);
+                    var jobject = Encode(entry);
                     if (jobject != null)
                         jarray.Add(jobject);
                 }

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Kebler.Update
@@ -18,21 +14,84 @@ namespace Kebler.Update
     /// </summary>
     public partial class App : Application
     {
-        private const string GitHubRepo = "/JeremiSharkboy/Kebler";
+
+        public StringBuilder BUILDER = new StringBuilder();
+        public static App Instance;
 
         App()
         {
-            HasUpdate();
+            Instance = this;
+            Log("Start App");
+
+            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
+            {
+                process.Kill();
+                Log("Killed kebler");
+            }
+
+            var current = Process.GetCurrentProcess();
+            foreach (var process in Process.GetProcessesByName("Installer"))
+            {
+                if (process.Id == current.Id) continue;
+                process.Kill();
+                Log("Killed installer");
+            }
+
+            
+
+            try
+            {
+                var module = Process.GetCurrentProcess()?.MainModule;
+                var path = module?.FileName;
+
+
+
+                Log($"Current Path: {Const.Strings.KeblerExepath}");
+
+                if (path.Equals(Const.Strings.KeblerExepath))
+                {
+                    Log("Try start from Temp");
+                    var temp = Path.GetTempFileName();
+                    System.IO.File.Copy(Const.Strings.KeblerExepath, temp, true);
+                    Process.Start(temp);
+                    Log("Started Temp");
+                    Current.Shutdown(0);
+                }
+                else
+                {
+                    Log("Go for Update");
+
+                    Console.WriteLine("CheckUpdate");
+                    HasUpdate();
+                    Current.Shutdown(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                var ss = new StringBuilder();
+                ss.Append(ex.Message);
+                ss.Append(ex);
+                ss.Append(ex.StackTrace);
+                new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
+                Current.Shutdown(0);
+            }
+
+        }
+
+
+        public void Log(string msg)
+        {
+            BUILDER.Append(msg + Environment.NewLine);
         }
 
         static KeyValuePair<Version, Uri> GetVersion()
         {
-            var pattern = string.Concat(Regex.Escape(GitHubRepo),
-                @"\/releases\/download\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]\/.*\.zip");
+            var pattern = string.Concat(Regex.Escape(Const.Strings.GitHubRepo),
+                @"\/releases\/download\/*\/[0-9]+.[0-9]+.[0-9]+.[0-9].*\.zip");
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
             var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", GitHubRepo, "/releases/latest"));
+            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo, "/releases/latest"));
             var wrs = wrq.GetResponse();
 
             using var sr = new StreamReader(wrs.GetResponseStream());
@@ -55,11 +114,13 @@ namespace Kebler.Update
             return new KeyValuePair<Version, Uri>(null, null);
         }
 
-        public static void HasUpdate()
+        public void HasUpdate()
         {
             var latest = GetVersion();
-            var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            Log($"Server: {latest.Key}|{latest.Value}");
 
+            var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            Log($"Env Path: {getEnv}");
             if (getEnv == null)
             {
                 var wd = new MainWindow(latest.Value);
@@ -68,9 +129,8 @@ namespace Kebler.Update
             }
             else
             {
-                var keblerexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    nameof(Kebler), nameof(App), $"{nameof(Kebler)}.exe");
-                if (File.Exists(keblerexe))
+
+                if (System.IO.File.Exists(Const.Strings.KeblerExepath))
                 {
                     var v = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
                     if (latest.Key > v)
@@ -81,6 +141,7 @@ namespace Kebler.Update
                     }
                     else
                     {
+                        CreateShortcut();
                         Process.Start(getEnv);
                         Current.Shutdown(0);
                     }
@@ -92,6 +153,29 @@ namespace Kebler.Update
                     Current.Shutdown(0);
                 }
             }
+        }
+
+        public void CreateShortcut()
+        {
+
+            var deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            using var writer = new StreamWriter(deskDir + "\\" + nameof(Kebler) + ".url");
+            var app = Const.Strings.KeblerExepath;
+            writer.WriteLine("[InternetShortcut]");
+            writer.WriteLine("URL=file:///" + app);
+            writer.WriteLine("IconIndex=0");
+            var icon = app.Replace('\\', '/');
+            writer.WriteLine("IconFile=" + icon);
+
+            //object shDesktop = "Desktop";
+            //var shell = new WshShell();
+            //var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @$"\{nameof(Kebler)}.lnk";
+            //var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            //shortcut.Description = nameof(Kebler);
+            ////shortcut.Hotkey = "Ctrl+Shift+N";
+            //shortcut.TargetPath = Const.Strings.KeblerExepath;
+            //shortcut.Save();
         }
     }
 }

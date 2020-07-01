@@ -24,7 +24,7 @@ namespace Kebler.ViewModels
 
         public uint[] getFilesWantedStatus(bool status)
         {
-            uint[] output = new uint[0];
+            var output = new uint[0];
             foreach (var tm in Files.Children)
             {
                 var ids = get(tm, status);
@@ -35,7 +35,7 @@ namespace Kebler.ViewModels
 
         private void merge(ref uint[] array1, ref uint[] array2, out uint[] result)
         {
-            int array1OriginalLength = array1.Length;
+            var array1OriginalLength = array1.Length;
             Array.Resize(ref array1, array1OriginalLength + array2.Length);
             Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
             result = array1;
@@ -43,7 +43,7 @@ namespace Kebler.ViewModels
 
         private uint[] get(MultiselectionTreeViewItem Node, bool search)
         {
-            uint[] output = new uint[0];
+            var output = new uint[0];
             if (Node.HasChildren)
             {
                 foreach (var item in Node.Children)

@@ -19,7 +19,7 @@ namespace Kebler.Services.Converters
         {
             long B = 0, KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
             double size = length;
-            string suffix = nameof(B);
+            var suffix = nameof(B);
 
             double SelSize;
             if (length >= TB)

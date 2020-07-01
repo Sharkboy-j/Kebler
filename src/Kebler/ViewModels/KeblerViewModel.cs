@@ -835,7 +835,7 @@ namespace Kebler.ViewModels
                     data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
                 }
 
-                for (int i = 0; i < data.Torrents.Length; i++)
+                for (var i = 0; i < data.Torrents.Length; i++)
                 {
                     data.Torrents[i] = ValidateTorrent(data.Torrents[i]);
                 }

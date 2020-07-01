@@ -30,7 +30,7 @@ namespace Kebler.Models.Tree
         {
             if (_totalCount > 0)
                 return _totalCount;
-            int num = IsVisible ? 1 : 0;
+            var num = IsVisible ? 1 : 0;
             if (_left != null)
                 num += _left.TotalCount();
             if (_right != null)
@@ -272,7 +272,7 @@ namespace Kebler.Models.Tree
             }
             else
             {
-                FlattenerNode node1 = node._right;
+                var node1 = node._right;
                 while (node1._left != null)
                     node1 = node1._left;
                 pos = node1._Parent;
@@ -417,7 +417,7 @@ namespace Kebler.Models.Tree
             public void NodesRemoved(int index, IEnumerable<MultiselectionTreeViewItem> nodes)
             {
                 --index;
-                foreach (MultiselectionTreeViewItem node in nodes)
+                foreach (var node in nodes)
                 {
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, node, index));
                 }

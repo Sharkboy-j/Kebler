@@ -16,13 +16,13 @@ namespace Kebler.Services.Converters
             if (pieceCount < 1)
                 return null;
 
-            byte[] pieces = System.Convert.FromBase64String(piecesString);
+            var pieces = System.Convert.FromBase64String(piecesString);
 
 
-            int rowCount = 100;
-            Bitmap result = new Bitmap(pieceCount, rowCount, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var rowCount = 100;
+            var result = new Bitmap(pieceCount, rowCount, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             var bitmapData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
-            byte[] rowPixels = new byte[bitmapData.Stride];
+            var rowPixels = new byte[bitmapData.Stride];
 
 
             //yea yea yea, go further and call me idiot later @Shark
@@ -33,10 +33,10 @@ namespace Kebler.Services.Converters
                 rowPixels[index * 3 + 2] = r;
             }
 
-            for (int i = 0; i < pieceCount; i++)
+            for (var i = 0; i < pieceCount; i++)
             {
                 // read bit at specific place in byte array (since each bit represents piece status, piece #0 is at first array index but is bit #7 in the byte)
-                bool pieceLoaded = (pieces[i / 8] & (1 << 7 - i % 8)) != 0;
+                var pieceLoaded = (pieces[i / 8] & (1 << 7 - i % 8)) != 0;
                 if (pieceLoaded)
                 {
                     //piecesDone++;
@@ -47,10 +47,10 @@ namespace Kebler.Services.Converters
                     insertPixel(i, 50, 50, 50); //gray
             }
 
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
                 unsafe
                 {
-                    byte* rowStart = ((byte*)bitmapData.Scan0.ToPointer() + i * bitmapData.Stride);
+                    var rowStart = ((byte*)bitmapData.Scan0.ToPointer() + i * bitmapData.Stride);
                     System.Runtime.InteropServices.Marshal.Copy(rowPixels, 0, new IntPtr(rowStart), rowPixels.Length);
                 }
 

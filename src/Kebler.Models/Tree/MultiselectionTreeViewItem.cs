@@ -227,7 +227,7 @@ namespace Kebler.Models.Tree
 
         public void ApplyFilterToChild(MultiselectionTreeViewItem child, string filterString)
         {
-            bool flag = child.MatchFilter(filterString);
+            var flag = child.MatchFilter(filterString);
             if (child.HasChildren)
             {
                 child.EnsureChildrenFiltered(filterString);
@@ -292,7 +292,7 @@ namespace Kebler.Models.Tree
                     newItem.UpdateIsVisible(IsVisible && IsExpanded, false);
                     for (; multiselectionTreeViewItem != null; multiselectionTreeViewItem = multiselectionTreeViewItem._children.Last())
                     {
-                        int? count = multiselectionTreeViewItem._children?.Count;
+                        var count = multiselectionTreeViewItem._children?.Count;
                         if (!(count.GetValueOrDefault() > 0 & count.HasValue))
                             break;
                     }

@@ -249,15 +249,15 @@ namespace Kebler.Services.Helpers
         {
             var targetTextbox = (TextBox)sender;
 
-            string text = targetTextbox.Text;
+            var text = targetTextbox.Text;
             if (text.IsNullOrEmpty()) text = "0";
 
             decimal num = 0; // = null?
             decimal.TryParse(text, out num);
 
             //var num = Convert.ToDecimal(text, CultureInfo.InvariantCulture);            
-            decimal? minvalue = GetMinValue(targetTextbox);
-            decimal? maxvalue = GetMaxValue(targetTextbox);
+            var minvalue = GetMinValue(targetTextbox);
+            var maxvalue = GetMaxValue(targetTextbox);
 
             //Decimal
             if (GetIsDecimal(targetTextbox))
@@ -326,7 +326,7 @@ namespace Kebler.Services.Helpers
         public static readonly DependencyProperty IsSerialProperty =
             DependencyProperty.RegisterAttached("IsSerial", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, (s, e) =>
             {
-                TextBox targetTextbox = s as TextBox;
+                var targetTextbox = s as TextBox;
                 if (targetTextbox != null)
                 {
                     if ((bool)e.OldValue && !((bool)e.NewValue))
@@ -346,7 +346,7 @@ namespace Kebler.Services.Helpers
         {
             if (!string.IsNullOrWhiteSpace(e.Text))
             {
-                Char newChar = e.Text.ToUpper()[0];
+                var newChar = e.Text.ToUpper()[0];
                 e.Handled = !Allowed_Char(newChar);
             }
             else
@@ -362,7 +362,7 @@ namespace Kebler.Services.Helpers
         /// <returns></returns>
         public static bool Allowed_Char(Char ss)
         {
-            bool allowed = false;
+            var allowed = false;
             if (((ss >= 'A') && (ss <= 'Z') && (ss != 'O')) || ((ss >= '0') && (ss <= '9')) || ss == '-')
                 allowed = true;
             return allowed;
@@ -381,7 +381,7 @@ namespace Kebler.Services.Helpers
         }
         public static readonly DependencyProperty IsRuLattersProperty = DependencyProperty.RegisterAttached("IsRuLatters", typeof(bool), typeof(TextBoxHelpers), new PropertyMetadata(false, (s, e) =>
         {
-            TextBox textBoxRuLatters = s as TextBox;
+            var textBoxRuLatters = s as TextBox;
             if (textBoxRuLatters != null)
             {
                 if ((bool)e.OldValue && !((bool)e.NewValue))
@@ -401,7 +401,7 @@ namespace Kebler.Services.Helpers
         {
             if (!string.IsNullOrWhiteSpace(e.Text))
             {
-                Char newChar = e.Text[0];
+                var newChar = e.Text[0];
                 e.Handled = !DisableEn_Char(newChar);
             }
             else
@@ -420,7 +420,7 @@ namespace Kebler.Services.Helpers
         /// <returns></returns>
         public static bool DisableEn_Char(Char ss)
         {
-            bool allowed = true;
+            var allowed = true;
             if ((ss >= 'A') && (ss <= 'z'))
                 allowed = false;
             return allowed;
@@ -532,7 +532,7 @@ namespace Kebler.Services.Helpers
         public static readonly DependencyProperty IgnoreCharProperty =
             DependencyProperty.RegisterAttached("IgnoreChar", typeof(string), typeof(TextBoxHelpers), new PropertyMetadata(string.Empty, (s, e) =>
             {
-                TextBox targetTextbox = s as TextBox;
+                var targetTextbox = s as TextBox;
                 if (targetTextbox != null)
                 {
                     if (!((string)e.OldValue).IsNullOrEmpty() && ((string)e.NewValue).IsNullOrEmpty())
@@ -552,8 +552,8 @@ namespace Kebler.Services.Helpers
         {
             if (!string.IsNullOrEmpty(e.Text))
             {
-                string ignore = GetIgnoreChar((TextBox)sender);
-                char newChar = e.Text[0];
+                var ignore = GetIgnoreChar((TextBox)sender);
+                var newChar = e.Text[0];
                 e.Handled = ignore.Contains(newChar);
             }
             else

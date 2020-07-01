@@ -38,7 +38,7 @@ namespace Kebler.Services
 
         public static void EnsureAssociationsSet(params FileAssociation[] associations)
         {
-            bool madeChanges = false;
+            var madeChanges = false;
             foreach (var association in associations)
             {
                 madeChanges |= SetAssociation(

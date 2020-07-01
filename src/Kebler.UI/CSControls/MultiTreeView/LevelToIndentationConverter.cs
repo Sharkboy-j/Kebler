@@ -10,7 +10,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double num1 = 0.0;
+            var num1 = 0.0;
             if (value is int num2)
                 num1 = (num2 - 1) * Offset;
             return num1;

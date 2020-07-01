@@ -54,7 +54,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         internal double CalculateIndent()
         {
-            int num = 19 * Node.Level - 19;
+            var num = 19 * Node.Level - 19;
             return num < 0 ? 0.0 : num;
         }
 

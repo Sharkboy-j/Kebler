@@ -16,7 +16,8 @@ using System.Windows;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("CA7543D7-0F0F-4B43-9398-127120983324")]
 
-[assembly: AssemblyVersion("0.7.5.0")]
+[assembly: AssemblyVersion("0.8.2.3")]
+[assembly: AssemblyFileVersion("0.8.2.3")]
 [assembly: AssemblyTitle("Kebler")]
 [assembly: AssemblyProduct("Kebler")]
 [assembly: AssemblyCopyright("Copyright © SAS 2020")]

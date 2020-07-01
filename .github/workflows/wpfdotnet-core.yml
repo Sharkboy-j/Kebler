@@ -42,7 +42,6 @@ on:
   push:
     tags:
       - '*.*.*'
-    branches: [ master ]
     
 jobs:
 
@@ -55,10 +54,10 @@ jobs:
     runs-on: windows-latest  # For a list of available runner types, refer to 
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
-    env:
-      Solution_Dir: src/
-      Solution_Name: src/Kebler.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+    # env:
+    #   Solution_Dir: src/
+    #   Solution_Name: src/Kebler.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
+    #   Test_Project_Path: src/Kebler.Test/Kebler.Test.csproj  # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
 
@@ -81,25 +80,26 @@ jobs:
         dotnet-version: 3.1.101      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
-      
+
+    - name: TEST
+      run: dotnet test src/Kebler.sln
+
     - name: Release86
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
     - name: Portable64
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
     
-    - name: MOVE64
-      run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
+    - run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
       shell: cmd
 
     - name: Portable86
-      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
+      run: dotnet publish ./src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
     - name: Installer
-      run: dotnet publish src/Kebler/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
 
-    - name: MOVE86&Del
-      run: |
+    - run: |
          move src\publish\Kebler.exe src\publish\KeblerPortable86.exe
          del src\publish\*.pdb /F /Q
          del src\publish\RELEASE\*.pdb /F /Q
@@ -126,13 +126,7 @@ jobs:
 
         7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
         dir    
-      
- 
-      
-    - name: Use tag
-      run: echo ${{steps.tag.outputs.tag}}
-
-     
+  
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.0.1
@@ -172,4 +166,14 @@ jobs:
         upload_url: ${{steps.create_release.outputs.upload_url}} 
         asset_path: .\src\publish\KeblerPortable64.exe
         asset_name: KeblerPortable64.exe
+        asset_content_type: application/exe
+
+    - name: Upload Installer
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: .\src\publish\RELEASE\Installer.exe
+        asset_name: Installer.exe
         asset_content_type: application/exe

@@ -47,6 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
+    <PackageReference Include="Dapplo.CaliburnMicro.NotifyIconWpf" Version="2.1.10" />
     <PackageReference Include="FamFamFam.Flags.Wpf" Version="1.2.1" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
@@ -54,10 +55,10 @@
     <PackageReference Include="Plarium.Geo" Version="2.2.0" />
     <PackageReference Include="Plarium.Geo.Embedded" Version="1.3.0" />
     <PackageReference Include="sharpconfig" Version="3.2.9.1" />
-    <PackageReference Include="squirrel.windows" Version="1.9.1" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.6.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
     <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
