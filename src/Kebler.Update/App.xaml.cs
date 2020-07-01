@@ -6,7 +6,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using IWshRuntimeLibrary;
 
 namespace Kebler.Update
 {
@@ -158,14 +157,25 @@ namespace Kebler.Update
 
         public void CreateShortcut()
         {
-            object shDesktop = "Desktop";
-            var shell = new WshShell();
-            var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @$"\{nameof(Kebler)}.lnk";
-            var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            shortcut.Description = nameof(Kebler);
-            //shortcut.Hotkey = "Ctrl+Shift+N";
-            shortcut.TargetPath = Const.Strings.KeblerExepath;
-            shortcut.Save();
+
+            var deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            using var writer = new StreamWriter(deskDir + "\\" + nameof(Kebler) + ".url");
+            var app = Const.Strings.KeblerExepath;
+            writer.WriteLine("[InternetShortcut]");
+            writer.WriteLine("URL=file:///" + app);
+            writer.WriteLine("IconIndex=0");
+            var icon = app.Replace('\\', '/');
+            writer.WriteLine("IconFile=" + icon);
+
+            //object shDesktop = "Desktop";
+            //var shell = new WshShell();
+            //var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @$"\{nameof(Kebler)}.lnk";
+            //var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            //shortcut.Description = nameof(Kebler);
+            ////shortcut.Hotkey = "Ctrl+Shift+N";
+            //shortcut.TargetPath = Const.Strings.KeblerExepath;
+            //shortcut.Save();
         }
     }
 }
