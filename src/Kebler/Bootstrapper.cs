@@ -28,7 +28,7 @@ namespace Kebler
             container.Singleton<BoxViewModel>();
             container.Singleton<DialogBoxViewModel>();
             container.Singleton<MessageBoxViewModel>();
-
+            container.Singleton<TaskBarIconViewModel>();
 
         }
 

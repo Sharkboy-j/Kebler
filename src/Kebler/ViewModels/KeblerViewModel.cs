@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -38,6 +39,8 @@ namespace Kebler.ViewModels
         IHandle<Messages.ReconnectAllowed>,
         IHandle<Messages.ConnectedServerChanged>,
         IHandle<Messages.ServersUpdated>
+
+
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -864,9 +867,9 @@ namespace Kebler.ViewModels
                             FocusManager.SetFocusedElement(_view, dd);
                         }
                     }
-                   
+
                 }
-              
+
             });
             #endregion //♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
 
@@ -1439,7 +1442,7 @@ namespace Kebler.ViewModels
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
         private int _selectedFolderIndex;
         private FolderCategory _selectedFolder;
-
+        private WindowState _state;
         private List<Server> ServersList
         {
             get
@@ -1593,6 +1596,12 @@ namespace Kebler.ViewModels
         {
             get => _minMoreInfoColumnHeight;
             set => Set(ref _minMoreInfoColumnHeight, value);
+        }
+
+        public WindowState State
+        {
+            get => _state;
+            set => Set(ref _state, value);
         }
 
         public string HeaderTitle

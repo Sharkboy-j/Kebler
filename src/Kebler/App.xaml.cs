@@ -15,7 +15,9 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Caliburn.Micro;
 using FamFamFam.Flags.Wpf;
+using Hardcodet.Wpf.TaskbarNotification;
 using Kebler.Models;
 using Kebler.Services;
 using Kebler.SI;
@@ -37,12 +39,13 @@ namespace Kebler
     /// </summary>
     public partial class App : ISingle
     {
-        public static readonly ILog Log = LogManager.GetLogger(typeof(App));
+        public static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(App));
         public KeblerViewModel KeblerVM;
         public static App Instance;
         public GeoService Geo;
         public CountryIdToFlagImageSourceConverter Flags = new CountryIdToFlagImageSourceConverter();
         public List<string> torrentsToAdd = new List<string>();
+        private TaskbarIcon notifyIcon;
 
         public delegate void Langhandler();
         public bool IsUpdateReady;
@@ -78,7 +81,7 @@ namespace Kebler
 
             Instance = this;
 
-            var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            var logRepo = log4net.LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
 
 
@@ -153,16 +156,24 @@ namespace Kebler
                 Current.Shutdown();
             }
             base.OnStartup(e);
+
+            notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
+
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            notifyIcon.Dispose();
             SingleInstance<App>.Cleanup();
             base.OnExit(e);
         }
 
+        private void TaskbarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            var dd = IoC.Get<KeblerViewModel>();
 
-
+            dd.State = WindowState.Normal;
+        }
     }
 
 
