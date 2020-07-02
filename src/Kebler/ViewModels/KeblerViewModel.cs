@@ -236,6 +236,11 @@ namespace Kebler.ViewModels
             Process.Start(new ProcessStartInfo("cmd", $"/c start {ConfigService.CONFIG_NAME}") { CreateNoWindow = true });
         }
 
+        public void Preferences()
+        {
+            manager.ShowDialogAsync(new ServerPreferencesViewModel(_settings));
+        }
+
         private void ReInitServers()
         {
 

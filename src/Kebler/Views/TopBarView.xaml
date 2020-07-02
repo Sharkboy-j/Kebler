@@ -21,9 +21,8 @@
                 Header="{lex:LocText MI_CM}"
                 InputGestureText="Ctrl+C" />
             <MenuItem Header="{lex:LocText MI_Servers}" ItemsSource="{Binding Servers}" />
-            <MenuItem
-                cal:Message.Attach="Settings"
-                Header="{lex:LocText MI_Props}" />
+            <MenuItem cal:Message.Attach="Settings" Header="{lex:LocText MI_Props}" />
+            <MenuItem cal:Message.Attach="Preferences" Header="{lex:LocText MI_Prefs}" />
             <Separator />
             <MenuItem
                 cal:Message.Attach="Exit"

@@ -610,6 +610,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        internal static string MI_Prefs {
+            get {
+                return ResourceManager.GetString("MI_Prefs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string MI_Props {

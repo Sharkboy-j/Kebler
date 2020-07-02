@@ -177,5 +177,21 @@
         //"priority-normal"     | array      indices of normal-priority file(s)
         //public [] PriorityNormal;
 
+
+        public object Get(string propertyName)
+        {
+
+            var myType = typeof(TorrentSettings);
+            var myPropInfo = myType.GetProperty(propertyName);
+            return myPropInfo?.GetValue(this, null);
+        }
+        public void Set(string propertyName, object value)
+        {
+            var myType = typeof(TorrentInfo);
+            var myPropInfo = myType.GetProperty(propertyName);
+            myPropInfo?.SetValue(this, value, null);
+
+        }
+
     }
 }
