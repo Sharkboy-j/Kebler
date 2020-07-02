@@ -19,9 +19,9 @@
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-    IsTitleVisible="True"
     Activated="CustomizableWindow_Activated"
     Deactivated="CustomizableWindow_Deactivated"
+    IsTitleVisible="True"
     ResizeMode="CanResize"
     ShowHeaderLine="True"
     Style="{DynamicResource MainWindowStyle}"
@@ -374,13 +374,14 @@
                     VerticalAlignment="Stretch"
                     Row="1">
                     <TextBox
+                        Name="FilterTextBox"
                         Margin="0"
                         Padding="0,0,17,0"
                         VerticalContentAlignment="Center"
                         cal:Message.Attach="[Event TextChanged] = [Action FilterTextChanged]"
                         BorderBrush="{StaticResource BorderBrush}"
                         Foreground="{StaticResource ForegroundBrush}"
-                        Text="{Binding FilterText, Mode=TwoWay}" />
+                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Border
                         Width="20"

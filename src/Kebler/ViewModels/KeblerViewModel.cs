@@ -266,27 +266,27 @@ namespace Kebler.ViewModels
         }
 
 
-        private bool Contains(Server srv)
-        {
-            foreach (var item in Servers)
-            {
-                if (item is MenuItem mi && mi.Tag is Server serv)
-                {
-                    if (serv.Equals(srv))
-                        return true;
-                }
-            }
-            return false;
-        }
+        //private bool Contains(Server srv)
+        //{
+        //    foreach (var item in Servers)
+        //    {
+        //        if (item is MenuItem mi && mi.Tag is Server serv)
+        //        {
+        //            if (serv.Equals(srv))
+        //                return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
-        private List<Server> Excepted(IEnumerable<Server> list)
-        {
-            var items = Servers.Select(x => (Server)x.Tag).ToList();
+        //private List<Server> Excepted(IEnumerable<Server> list)
+        //{
+        //    var items = Servers.Select(x => (Server)x.Tag).ToList();
 
-            var itms = items.Except(list).ToList();
+        //    var itms = items.Except(list).ToList();
 
-            return itms;
-        }
+        //    return itms;
+        //}
 
         private void srvClicked(object sender, RoutedEventArgs e)
         {
@@ -333,6 +333,7 @@ namespace Kebler.ViewModels
                     new HotKey(Key.X, KeyModifier.Alt, Exit, _view.GetWindowHandle()),
                     new HotKey(Key.F2, KeyModifier.None, Rename, _view.GetWindowHandle()),
                     new HotKey(Key.Escape, KeyModifier.None, Unselect, _view.GetWindowHandle()),
+                    new HotKey(Key.F, KeyModifier.Ctrl, Find, _view.GetWindowHandle()),
                 };
             }
         }
@@ -634,7 +635,7 @@ namespace Kebler.ViewModels
                             _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Stats)).Value;
 
                             allTorrents = (await Get(_transmissionClient.TorrentGetAsync(WorkingParams, _cancelTokenSource.Token), Strings.MW_StatusText_Torrents)).Value;
-
+                            _settings = (await Get(_transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Settings)).Value;
                             ParseSettings();
                             ParseStats();
 
@@ -687,16 +688,21 @@ namespace Kebler.ViewModels
 
         public void OpenPaseedWithArgsFiles()
         {
-            var ch = new Task(() =>
+            State = WindowState.Normal;
+            if (App.Instance.torrentsToAdd.Count > 0)
             {
-                Execute.OnUIThread(() =>
+                var ch = new Task(() =>
                 {
-                    OpenTorrent(App.Instance.torrentsToAdd);
-                    App.Instance.torrentsToAdd = new List<string>();
-                });
+                    Execute.OnUIThread(() =>
+                    {
+                        OpenTorrent(App.Instance.torrentsToAdd);
+                        App.Instance.torrentsToAdd = new List<string>();
+                    });
 
-            }, _cancelTokenSource.Token);
-            ch.Start();
+                }, _cancelTokenSource.Token);
+                ch.Start();
+            }
+
         }
 
         private bool CheckResponse(TransmissionResponse resp)
@@ -765,9 +771,11 @@ namespace Kebler.ViewModels
 
             var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
             var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
+            var altUp = _settings.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString((long)_settings.AlternativeSpeedUp * 1000)}]" : string.Empty;
+            var altD = _settings.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString((long)_settings.AlternativeSpeedDown * 1000)}]" : string.Empty;
 
-            DownloadSpeed = $"D: {dSpeed}";
-            UploadSpeed = $"U: {uSpeed}";
+            DownloadSpeed = $"D: {dSpeed}{altD}";
+            UploadSpeed = $"U: {uSpeed}{altUp}";
         }
 
         private void ProcessParsingTransmissionResponse(TransmissionTorrents data)
@@ -831,11 +839,22 @@ namespace Kebler.ViewModels
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(FilterText) && FilterText.Contains("{p}:"))
+                if (!string.IsNullOrEmpty(FilterText))
                 {
-                    var splited = FilterText.Split("{p}:");
-                    var filterKey = splited[^1];
-                    data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
+                    //var txtfilter = FilterText;
+                    if (FilterText.Contains("{p}:"))
+                    {
+                        var splited = FilterText.Split("{p}:");
+                        var filterKey = splited[^1];
+                        // txtfilter = txtfilter.Replace($"{{p}}:{filterKey}", string.Empty);
+
+                        data.Torrents = data.Torrents.Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
+                    }
+                    else
+                    {
+                        data.Torrents = data.Torrents.Where(x => x.Name.ToLower().Contains(FilterText.ToLower())).ToArray();
+                    }
+
                 }
 
                 for (var i = 0; i < data.Torrents.Length; i++)
@@ -1095,6 +1114,14 @@ namespace Kebler.ViewModels
         {
             FilterText = string.Empty;
             SelectedFolderIndex = -1;
+        }
+
+        public void Find()
+        {
+            Execute.OnUIThread(() =>
+            {
+                _view.FilterTextBox.Focus();
+            });
         }
 
         public void FilterTextChanged()

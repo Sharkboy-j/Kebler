@@ -9,9 +9,9 @@ namespace Kebler.Models.Torrent.Args
         /// Max global download speed (KBps)
         /// </summary>
         [JsonProperty("alt-speed-down")]
-        public int? AlternativeSpeedDown
+        public long AlternativeSpeedDown
         {
-            get => GetValue<int?>("alt-speed-down");
+            get => GetValue<long>("alt-speed-down");
             set => this["alt-speed-down"] = value;
         }
 
@@ -69,9 +69,9 @@ namespace Kebler.Models.Torrent.Args
         /// Max global upload speed (KBps)
         /// </summary>
         [JsonProperty("alt-speed-up")]
-        public int? AlternativeSpeedUp
+        public long AlternativeSpeedUp
         {
-            get => GetValue<int?>("alt-speed-up");
+            get => GetValue<long>("alt-speed-up");
             set => this["alt-speed-up"] = value;
         }
 
