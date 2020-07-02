@@ -1,8 +1,0 @@
-- improve memory usage
-- add new context items for torrent
-- add More info view (torrent info)
-- add Files tab to more info
-- add FilesTree to Add torrent dialog
-- resize window fixes
-- remove torrent bug fixes
-- add logs for new actions
