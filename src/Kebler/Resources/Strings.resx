@@ -486,4 +486,7 @@
   <data name="CM_TestConnectionGood" xml:space="preserve">
     <value>Connected</value>
   </data>
+  <data name="MI_Prefs" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
 </root>

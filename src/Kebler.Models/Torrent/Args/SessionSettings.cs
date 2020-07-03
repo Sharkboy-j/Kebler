@@ -9,9 +9,9 @@ namespace Kebler.Models.Torrent.Args
         /// Max global download speed (KBps)
         /// </summary>
         [JsonProperty("alt-speed-down")]
-        public int? AlternativeSpeedDown
+        public long AlternativeSpeedDown
         {
-            get => GetValue<int?>("alt-speed-down");
+            get => GetValue<long>("alt-speed-down");
             set => this["alt-speed-down"] = value;
         }
 
@@ -69,9 +69,9 @@ namespace Kebler.Models.Torrent.Args
         /// Max global upload speed (KBps)
         /// </summary>
         [JsonProperty("alt-speed-up")]
-        public int? AlternativeSpeedUp
+        public long AlternativeSpeedUp
         {
-            get => GetValue<int?>("alt-speed-up");
+            get => GetValue<long>("alt-speed-up");
             set => this["alt-speed-up"] = value;
         }
 
@@ -321,7 +321,7 @@ namespace Kebler.Models.Torrent.Args
         [JsonProperty("seedRatioLimit")]
         public double? SeedRatioLimit
         {
-            get => GetValue<int?>("seedRatioLimit");
+            get => GetValue<double?>("seedRatioLimit");
             set => this["seedRatioLimit"] = value;
         }
 
@@ -431,6 +431,19 @@ namespace Kebler.Models.Torrent.Args
             get => GetValue<bool?>("utp-enabled");
             set => this["utp-enabled"] = value;
         }
+        public object Get(string propertyName)
+        {
 
+            var myType = typeof(SessionSettings);
+            var myPropInfo = myType.GetProperty(propertyName);
+            return myPropInfo?.GetValue(this, null);
+        }
+        public void Set(string propertyName, object value)
+        {
+            var myType = typeof(SessionSettings);
+            var myPropInfo = myType.GetProperty(propertyName);
+            myPropInfo?.SetValue(this, value, null);
+
+        }
     }
 }

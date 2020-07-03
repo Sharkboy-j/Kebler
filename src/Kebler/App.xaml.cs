@@ -142,8 +142,8 @@ namespace Kebler
 
             }
 
-            if (torrentsToAdd.Count > 0)
-                KeblerVM.OpenPaseedWithArgsFiles();
+
+            KeblerVM.OpenPaseedWithArgsFiles();
         }
         #endregion
 

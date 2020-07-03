@@ -112,12 +112,12 @@ namespace Kebler.TransmissionCore
         /// <summary>
         /// Set information to current session (API: session-set)
         /// </summary>
-        public async Task<SessionSettings> GetSessionSettingsAsync(CancellationToken token)
+        public async Task<TransmissionResponse<SessionSettings>> GetSessionSettingsAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("session-get");
             var response = await SendRequestAsync(request, token);
-            var result = response?.Deserialize<SessionSettings>();
-            return result;
+            var resp = new TransmissionResponse<SessionSettings>(response);
+            return resp;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace Kebler.ViewModels
 {
@@ -9,7 +10,7 @@ namespace Kebler.ViewModels
     {
         public void Exit()
         {
-
+            Application.Current.Shutdown(0);
         }
     }
 }

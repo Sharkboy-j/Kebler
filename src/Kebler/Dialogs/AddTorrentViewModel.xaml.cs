@@ -48,7 +48,7 @@ namespace Kebler.Dialogs
         private async void AddTorrentDialog_Loaded(object sender, RoutedEventArgs e)
         {
 
-            this.settings = await _transmissionClient.GetSessionSettingsAsync(cancellationToken);
+            this.settings = (await _transmissionClient.GetSessionSettingsAsync(cancellationToken)).Value;
             DownlaodDir = settings.DownloadDirectory;
             await LoadTree();
 
@@ -262,9 +262,5 @@ namespace Kebler.Dialogs
         public bool IsAutoStart { get; set; }
 
         public FilesTreeViewModel FilesTree { get; private set; } = new FilesTreeViewModel();
-
-  
-
-
     }
 }
