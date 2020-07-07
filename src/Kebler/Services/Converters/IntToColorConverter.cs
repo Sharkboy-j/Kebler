@@ -26,17 +26,23 @@ namespace Kebler.Services.Converters
             switch (torrInf)
             {
                 case -1:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorStrokeBrush");
+                    return (SolidColorBrush)Application.Current.FindResource("#B0FF3B30");
                 case 1:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingStrokeBrush");
+                   // return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingStrokeBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB4B3F1"));
                 case 2:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingStrokeBrush");
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingStrokeBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#B0CB73E1"));
+
                 case 0:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedStrokeBrush");
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedStrokeBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0FF9502"));
                 case 4:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.DownloadingStrokeBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#B01CADF8"));
+
                 case 6:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.UploadingStrokeBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#B064DA38"));
+                //return (SolidColorBrush)Application.Current.FindResource("#B064DA38");
                 default:
                     return (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"));
             }
@@ -61,17 +67,24 @@ namespace Kebler.Services.Converters
             switch (torrInf)
             {
                 case -1:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorFillBrush");
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.ErrorFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#40FF3B30"));
+
                 case 1:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#33B4B3F1"));
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckPendingFillBrush");
                 case 2:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#40CB73E1"));
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.CheckingFillBrush");
                 case 0:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#40FF9502"));
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.StoppedFillBrush");
                 case 4:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.DownloadingFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#401CADF8"));
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.DownloadingFillBrush");
                 case 6:
-                    return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.UploadingFillBrush");
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#4064DA38"));
+                    //return (SolidColorBrush)Application.Current.FindResource("DataGrid.Tag.UploadingFillBrush");
                 default:
                     return (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"));
             }
