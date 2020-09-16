@@ -23,7 +23,7 @@ namespace Kebler.Dialogs
     /// </summary>
     public partial class AddTorrentView
     {
-        public AddTorrentView(string path, TransmissionClient transmissionClient, Window owner) : base(owner)
+        public AddTorrentView(string path, TransmissionClient transmissionClient, Window owner, SessionSettings settings ) : base(owner)
         {
             _torrentFileInfo = new FileInfo(path);
             TorrentPath = _torrentFileInfo.FullName;
@@ -31,6 +31,10 @@ namespace Kebler.Dialogs
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
             IsAutoStart = true;
+            this.settings = settings;
+
+            DownlaodDir = settings.DownloadDirectory;
+
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
                 InitializeComponent();
@@ -47,13 +51,8 @@ namespace Kebler.Dialogs
 
         private async void AddTorrentDialog_Loaded(object sender, RoutedEventArgs e)
         {
-
-            this.settings = (await _transmissionClient.GetSessionSettingsAsync(cancellationToken)).Value;
-            DownlaodDir = settings.DownloadDirectory;
             await LoadTree();
-
             LoadingSettingsGrid.Visibility = Visibility.Collapsed;
-
         }
 
         private void ChangePath(object sender, RoutedEventArgs e)

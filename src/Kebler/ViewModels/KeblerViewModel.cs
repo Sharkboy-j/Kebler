@@ -955,7 +955,7 @@ namespace Kebler.ViewModels
                 }
             }
 
-
+            // add torrent counter to title
             Application.Current.Dispatcher.Invoke(() =>
             {
                 foreach (var itm in Categories)
@@ -969,8 +969,27 @@ namespace Kebler.ViewModels
                 Log.Info($"Add categories" + string.Join(", ", toAdd));
                 foreach (var itm in toAdd)
                 {
-
-                    Application.Current.Dispatcher.Invoke(() => { Categories.Add(itm); });
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var ct = Categories.Count(x => x.FolderName == itm.FolderName);
+                        if (ct <=0)
+                        {
+                            Categories.Add(itm);
+                        }
+                        else
+                        {
+                            foreach (var cat in Categories)
+                            {
+                                if (cat.FolderName == itm.FolderName)
+                                    cat.Title =
+                                        $"{cat.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
+                            }
+                            itm.Title =
+                                $"{itm.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
+                            Categories.Add(itm);
+                        }
+                        
+                    });
                 }
             }
 
@@ -1414,7 +1433,7 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow);
+                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow,_settings);
 
                     if (dialog.ShowDialog() == false)
                         return;
