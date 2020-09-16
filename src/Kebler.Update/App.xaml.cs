@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using IWshRuntimeLibrary;
 
 namespace Kebler.Update
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    /// 
     public partial class App : Application
     {
 
@@ -21,6 +22,7 @@ namespace Kebler.Update
 
         App()
         {
+            CreateShortcut();
             Instance = this;
             Log("Start App");
 
@@ -38,7 +40,7 @@ namespace Kebler.Update
                 Log("Killed installer");
             }
 
-            
+
 
             try
             {
@@ -92,7 +94,8 @@ namespace Kebler.Update
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
             var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo, "/releases/latest"));
+            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo,
+                "/releases/latest"));
             var wrs = wrq.GetResponse();
 
             using var sr = new StreamReader(wrs.GetResponseStream());
@@ -158,13 +161,120 @@ namespace Kebler.Update
 
         public void CreateShortcut()
         {
-            object shDesktop = "Desktop";
-            var shell = new WshShell();
-            var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Kebler.lnk";
-            var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            shortcut.Description = "Kebler";
-            shortcut.TargetPath = Const.Strings.KeblerExepath;
+            var lnkFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
+            Shortcut.Create(lnkFileName, Const.Strings.KeblerExepath,
+                null, null, "Kebler", null, null);
+        }
+
+    }
+
+    public class Shortcut
+    {
+        public static void Create(string fileName, string targetPath, string arguments, string workingDirectory, string description, string hotkey, string iconPath)
+        {
+            IWshShortcut shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, m_shell, new object[] { fileName });
+            shortcut.Description = description;
+            shortcut.TargetPath = targetPath;
+            if (!string.IsNullOrEmpty(iconPath))
+                shortcut.IconLocation = iconPath;
             shortcut.Save();
+        }
+
+        private static Type m_type = Type.GetTypeFromProgID("WScript.Shell");
+        private static object m_shell = Activator.CreateInstance(m_type);
+
+        [ComImport, TypeLibType((short)0x1040), Guid("F935DC23-1CF0-11D0-ADB9-00C04FD58A0B")]
+        private interface IWshShortcut
+        {
+            [DispId(0)]
+            string FullName
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0)]
+                get;
+            }
+
+            [DispId(0x3e8)]
+            string Arguments
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3e8)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3e8)]
+                set;
+            }
+
+            [DispId(0x3e9)]
+            string Description
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3e9)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3e9)]
+                set;
+            }
+
+            [DispId(0x3ea)]
+            string Hotkey
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ea)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ea)]
+                set;
+            }
+
+            [DispId(0x3eb)]
+            string IconLocation
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3eb)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3eb)]
+                set;
+            }
+
+            [DispId(0x3ec)]
+            string RelativePath
+            {
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ec)]
+                set;
+            }
+
+            [DispId(0x3ed)]
+            string TargetPath
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ed)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ed)]
+                set;
+            }
+
+            [DispId(0x3ee)] int WindowStyle { [DispId(0x3ee)] get; [param: In] [DispId(0x3ee)] set; }
+
+            [DispId(0x3ef)]
+            string WorkingDirectory
+            {
+                [return: MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ef)]
+                get;
+                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [DispId(0x3ef)]
+                set;
+            }
+
+            [TypeLibFunc((short)0x40), DispId(0x7d0)]
+            void Load([In, MarshalAs(UnmanagedType.BStr)] string PathLink);
+
+            [DispId(0x7d1)]
+            void Save();
         }
     }
 }
