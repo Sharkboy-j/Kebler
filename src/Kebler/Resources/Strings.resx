@@ -205,7 +205,7 @@
     <value>About</value>
   </data>
   <data name="MI_Check" xml:space="preserve">
-    <value>CheckUpdates For New Version</value>
+    <value>Check Updates</value>
   </data>
   <data name="MI_Contact" xml:space="preserve">
     <value>Contact Developer</value>
@@ -277,7 +277,7 @@
     <value>Retrieving Settings From Server</value>
   </data>
   <data name="MoreInfo_Peers_Encryption" xml:space="preserve">
-    <value>Encyption</value>
+    <value>Encryption</value>
   </data>
   <data name="MoreInfo_PeersRateToPeer" xml:space="preserve">
     <value>Upload Speed</value>

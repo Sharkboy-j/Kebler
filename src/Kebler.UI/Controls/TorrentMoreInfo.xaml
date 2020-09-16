@@ -48,7 +48,7 @@
 
                 </Grid>
             </TabItem>-->
-            <TabItem Header="{lex:LocText MoreInfo_FilesTab}">
+            <TabItem Header="{lex:LocText MoreInfo_FilesTab}" IsSelected="True">
                 <local:FilesTreeView
                     x:Name="FileTreeViewControl"
                     x:FieldModifier="public"
@@ -56,7 +56,7 @@
                     Focusable="False" />
             </TabItem>
 
-            <TabItem Header="{lex:LocText MoreInfo_Trackers}" IsSelected="True">
+            <TabItem Header="{lex:LocText MoreInfo_Trackers}" >
                 <DataGrid
                     AutoGenerateColumns="False"
                     CanUserResizeColumns="True"
