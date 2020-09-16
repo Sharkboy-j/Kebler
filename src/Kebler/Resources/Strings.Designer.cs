@@ -538,7 +538,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CheckUpdates For New Version.
+        ///   Looks up a localized string similar to Check Updates.
         /// </summary>
         internal static string MI_Check {
             get {
@@ -754,7 +754,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encyption.
+        ///   Looks up a localized string similar to Encryption.
         /// </summary>
         internal static string MoreInfo_Peers_Encryption {
             get {

@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using IWshRuntimeLibrary;
 
 namespace Kebler.Update
 {
@@ -104,7 +105,7 @@ namespace Kebler.Update
                     var uri = new Uri(string.Concat("https://github.com", match.Value));
 
 
-                    var vs = match.Value.LastIndexOf("/Release");
+                    var vs = match.Value.LastIndexOf("/Release", StringComparison.Ordinal);
                     var sa = match.Value.Substring(vs + 9).Split('.', '/');
                     var v = new Version(int.Parse(sa[0]), int.Parse(sa[1]), int.Parse(sa[2]), int.Parse(sa[3]));
                     return new KeyValuePair<Version, Uri>(v, uri);
@@ -157,25 +158,13 @@ namespace Kebler.Update
 
         public void CreateShortcut()
         {
-
-            var deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-            using var writer = new StreamWriter(deskDir + "\\" + nameof(Kebler) + ".url");
-            var app = Const.Strings.KeblerExepath;
-            writer.WriteLine("[InternetShortcut]");
-            writer.WriteLine("URL=file:///" + app);
-            writer.WriteLine("IconIndex=0");
-            var icon = app.Replace('\\', '/');
-            writer.WriteLine("IconFile=" + icon);
-
-            //object shDesktop = "Desktop";
-            //var shell = new WshShell();
-            //var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @$"\{nameof(Kebler)}.lnk";
-            //var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            //shortcut.Description = nameof(Kebler);
-            ////shortcut.Hotkey = "Ctrl+Shift+N";
-            //shortcut.TargetPath = Const.Strings.KeblerExepath;
-            //shortcut.Save();
+            object shDesktop = "Desktop";
+            var shell = new WshShell();
+            var shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Kebler.lnk";
+            var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Description = "Kebler";
+            shortcut.TargetPath = Const.Strings.KeblerExepath;
+            shortcut.Save();
         }
     }
 }
