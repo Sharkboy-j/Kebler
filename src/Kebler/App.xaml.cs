@@ -42,8 +42,6 @@ namespace Kebler
         public static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(App));
         public KeblerViewModel KeblerVM;
         public static App Instance;
-        public GeoService Geo;
-        public CountryIdToFlagImageSourceConverter Flags = new CountryIdToFlagImageSourceConverter();
         public List<string> torrentsToAdd = new List<string>();
         private TaskbarIcon notifyIcon;
 
@@ -61,14 +59,7 @@ namespace Kebler
             var args = Environment.GetCommandLineArgs();
 
             FileAssociations.EnsureAssociationsSet();
-            var builder = new GeoServiceBuilder();
-            builder.RegisterResource<EmbeddedResourceReader>();
-
-
-
-
-
-            Geo = new GeoService(builder);
+      
 
             foreach (var arg in args)
             {
@@ -90,7 +81,6 @@ namespace Kebler
 
 
             //log4net.Config.XmlConfigurator.Configure(null);
-
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Dispatcher_UnhandledException;

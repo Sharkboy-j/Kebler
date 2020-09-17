@@ -36,7 +36,6 @@
 
 
 
-
     <!--<Color x:Key="Window.BackgroundColor">#252525</Color>-->
     <Color x:Key="Window.BorderColor">#3BACED</Color>
     <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
