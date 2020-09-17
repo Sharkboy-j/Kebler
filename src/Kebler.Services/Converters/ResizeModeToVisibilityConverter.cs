@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Kebler.UI.Converters
+namespace Kebler.Services.Converters
 {
     public class ResizeModeToVisibilityConverter : IValueConverter
     {

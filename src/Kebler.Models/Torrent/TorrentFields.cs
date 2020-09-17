@@ -1,9 +1,7 @@
 ﻿namespace Kebler.Models.Torrent
 {
-    public sealed class TorrentFields
+    public static class TorrentFields
     {
-        private TorrentFields() { }
-
         /// <summary>
         /// activityDate
         /// </summary>

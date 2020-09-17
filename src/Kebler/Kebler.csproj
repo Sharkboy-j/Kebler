@@ -63,43 +63,16 @@
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
+    <ProjectReference Include="..\Kebler.Resources\Kebler.Resources.csproj" />
+    <ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
     <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
     <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resources\Dialogs.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Dialogs.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Windows.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Windows.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Dialogs.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Dialogs.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Windows.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Windows.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Update="log4net.config">

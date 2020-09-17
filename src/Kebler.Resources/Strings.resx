@@ -489,4 +489,115 @@
   <data name="MI_Prefs" xml:space="preserve">
     <value>Preferences</value>
   </data>
+  <data name="MI_State" xml:space="preserve">
+    <value>State:</value>
+  </data>
+  <data name="MI_Downloaded" xml:space="preserve">
+    <value>Downloaded:</value>
+  </data>
+  <data name="MI_SpeedDownload" xml:space="preserve">
+    <value>Download speed:</value>
+  </data>
+  <data name="MI_DownloadLimit" xml:space="preserve">
+    <value>Download limit:</value>
+  </data>
+  <data name="MI_Seeds" xml:space="preserve">
+    <value>Seeds:</value>
+  </data>
+  <data name="MI_Error" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="MI_Uploaded" xml:space="preserve">
+    <value>Uploaded:</value>
+  </data>
+  <data name="MI_UploadSpeed" xml:space="preserve">
+    <value>Upload speed:</value>
+  </data>
+  <data name="MI_Peers" xml:space="preserve">
+    <value>Peers:</value>
+  </data>
+  <data name="MI_TrackerUpate" xml:space="preserve">
+    <value>Tracker updated:</value>
+  </data>
+  <data name="MI_LastActive" xml:space="preserve">
+    <value>Last active:</value>
+  </data>
+  <data name="MI_MaxPeers" xml:space="preserve">
+    <value>Max peers:</value>
+  </data>
+  <data name="MI_ShareRatio" xml:space="preserve">
+    <value>Share ratio:</value>
+  </data>
+  <data name="MI_Wasted" xml:space="preserve">
+    <value>Wasted:</value>
+  </data>
+  <data name="MI_Remaining" xml:space="preserve">
+    <value>Remaining:</value>
+  </data>
+  <data name="MI_UploadLimit" xml:space="preserve">
+    <value>Upload limit:</value>
+  </data>
+  <data name="TI_Status_Seeding" xml:space="preserve">
+    <value>Seeding</value>
+  </data>
+  <data name="TI_Status_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="TI_Status_Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="TI_Status_Checking" xml:space="preserve">
+    <value>Checking</value>
+  </data>
+  <data name="TI_Status_CheckPending" xml:space="preserve">
+    <value>Check pending</value>
+  </data>
+  <data name="sdsd" xml:space="preserve">
+    <value>ssdfdsfdsfdsfs</value>
+  </data>
+  <data name="TI_Status_download_pending" xml:space="preserve">
+    <value>Downlaod pending</value>
+  </data>
+  <data name="TI_Status_SeedPending" xml:space="preserve">
+    <value>Seed pending</value>
+  </data>
+  <data name="TI_webSeedsOF" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="TI_webSeedsConnected" xml:space="preserve">
+    <value>connected</value>
+  </data>
+  <data name="TI_hashfails" xml:space="preserve">
+    <value>hashfails</value>
+  </data>
+  <data name="TI_path" xml:space="preserve">
+    <value>Path:</value>
+  </data>
+  <data name="TI_TotalSize" xml:space="preserve">
+    <value>Total size:</value>
+  </data>
+  <data name="TI_Hash" xml:space="preserve">
+    <value>Hash:</value>
+  </data>
+  <data name="TI_AddedOn" xml:space="preserve">
+    <value>Added on:</value>
+  </data>
+  <data name="TI_Magnet" xml:space="preserve">
+    <value>Magnet link:</value>
+  </data>
+  <data name="TI_CreatedOn" xml:space="preserve">
+    <value>Created on:</value>
+  </data>
+  <data name="TI_Pieces" xml:space="preserve">
+    <value>Pieces:</value>
+  </data>
+  <data name="TI_Comment" xml:space="preserve">
+    <value>Comment:</value>
+  </data>
+  <data name="TI_CompletedOn" xml:space="preserve">
+    <value>Completed on:</value>
+  </data>
+  <data name="TI_Progress" xml:space="preserve">
+    <value>Progress:</value>
+  </data>
 </root>

@@ -22,7 +22,7 @@ namespace Kebler.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Kebler.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kebler.Resources.Strings", typeof(Strings).Assembly);
@@ -51,7 +51,7 @@ namespace Kebler.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
-        internal static string About_Version {
+        public static string About_Version {
             get {
                 return ResourceManager.GetString("About_Version", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
-        internal static string ATD_Add {
+        public static string ATD_Add {
             get {
                 return ResourceManager.GetString("ATD_Add", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string ATD_Cancel {
+        public static string ATD_Cancel {
             get {
                 return ResourceManager.GetString("ATD_Cancel", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection:.
         /// </summary>
-        internal static string ATD_Connection {
+        public static string ATD_Connection {
             get {
                 return ResourceManager.GetString("ATD_Connection", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Don&apos;t show this dialog.
         /// </summary>
-        internal static string ATD_DontShowAddTorrentDialog {
+        public static string ATD_DontShowAddTorrentDialog {
             get {
                 return ResourceManager.GetString("ATD_DontShowAddTorrentDialog", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download Dirrectory:.
         /// </summary>
-        internal static string ATD_DownloadDIr {
+        public static string ATD_DownloadDIr {
             get {
                 return ResourceManager.GetString("ATD_DownloadDIr", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download Limit:.
         /// </summary>
-        internal static string ATD_DownloadLimit {
+        public static string ATD_DownloadLimit {
             get {
                 return ResourceManager.GetString("ATD_DownloadLimit", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Files:.
         /// </summary>
-        internal static string ATD_Files {
+        public static string ATD_Files {
             get {
                 return ResourceManager.GetString("ATD_Files", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Peer Limit:.
         /// </summary>
-        internal static string ATD_PeerLimit {
+        public static string ATD_PeerLimit {
             get {
                 return ResourceManager.GetString("ATD_PeerLimit", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Retrieving Settings From Server.
         /// </summary>
-        internal static string ATD_RetrievingSettings {
+        public static string ATD_RetrievingSettings {
             get {
                 return ResourceManager.GetString("ATD_RetrievingSettings", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Start torrent.
         /// </summary>
-        internal static string ATD_StartTorrent {
+        public static string ATD_StartTorrent {
             get {
                 return ResourceManager.GetString("ATD_StartTorrent", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Stop.
         /// </summary>
-        internal static string ATD_Stop {
+        public static string ATD_Stop {
             get {
                 return ResourceManager.GetString("ATD_Stop", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Torrent file exists.
         /// </summary>
-        internal static string ATD_TorrentExist {
+        public static string ATD_TorrentExist {
             get {
                 return ResourceManager.GetString("ATD_TorrentExist", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Torrent File Path:.
         /// </summary>
-        internal static string ATD_TorrentFilePath {
+        public static string ATD_TorrentFilePath {
             get {
                 return ResourceManager.GetString("ATD_TorrentFilePath", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload Limit:.
         /// </summary>
-        internal static string ATD_UploadLimit {
+        public static string ATD_UploadLimit {
             get {
                 return ResourceManager.GetString("ATD_UploadLimit", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string BTNS_Cancel {
+        public static string BTNS_Cancel {
             get {
                 return ResourceManager.GetString("BTNS_Cancel", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        internal static string BTNS_No {
+        public static string BTNS_No {
             get {
                 return ResourceManager.GetString("BTNS_No", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
-        internal static string BTNS_OK {
+        public static string BTNS_OK {
             get {
                 return ResourceManager.GetString("BTNS_OK", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        internal static string BTNS_Yes {
+        public static string BTNS_Yes {
             get {
                 return ResourceManager.GetString("BTNS_Yes", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
-        internal static string Cat_Active {
+        public static string Cat_Active {
             get {
                 return ResourceManager.GetString("Cat_Active", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        internal static string Cat_AllTorrents {
+        public static string Cat_AllTorrents {
             get {
                 return ResourceManager.GetString("Cat_AllTorrents", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Downloading.
         /// </summary>
-        internal static string Cat_Downloading {
+        public static string Cat_Downloading {
             get {
                 return ResourceManager.GetString("Cat_Downloading", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
-        internal static string Cat_Ended {
+        public static string Cat_Ended {
             get {
                 return ResourceManager.GetString("Cat_Ended", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string Cat_Error {
+        public static string Cat_Error {
             get {
                 return ResourceManager.GetString("Cat_Error", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Inactive.
         /// </summary>
-        internal static string Cat_InActive {
+        public static string Cat_InActive {
             get {
                 return ResourceManager.GetString("Cat_InActive", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Stopped.
         /// </summary>
-        internal static string Cat_Stopped {
+        public static string Cat_Stopped {
             get {
                 return ResourceManager.GetString("Cat_Stopped", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Always ask for password.
         /// </summary>
-        internal static string CM_AskForPassword {
+        public static string CM_AskForPassword {
             get {
                 return ResourceManager.GetString("CM_AskForPassword", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Authorization.
         /// </summary>
-        internal static string CM_AuthSection {
+        public static string CM_AuthSection {
             get {
                 return ResourceManager.GetString("CM_AuthSection", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string CM_Cancel {
+        public static string CM_Cancel {
             get {
                 return ResourceManager.GetString("CM_Cancel", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enable Auth.
         /// </summary>
-        internal static string CM_IsAuthEnabled {
+        public static string CM_IsAuthEnabled {
             get {
                 return ResourceManager.GetString("CM_IsAuthEnabled", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection.
         /// </summary>
-        internal static string CM_LanSection {
+        public static string CM_LanSection {
             get {
                 return ResourceManager.GetString("CM_LanSection", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Login:.
         /// </summary>
-        internal static string CM_Login {
+        public static string CM_Login {
             get {
                 return ResourceManager.GetString("CM_Login", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
-        internal static string CM_Ok {
+        public static string CM_Ok {
             get {
                 return ResourceManager.GetString("CM_Ok", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password:.
         /// </summary>
-        internal static string CM_PSWD {
+        public static string CM_PSWD {
             get {
                 return ResourceManager.GetString("CM_PSWD", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to RPC Path:.
         /// </summary>
-        internal static string CM_RPCPath {
+        public static string CM_RPCPath {
             get {
                 return ResourceManager.GetString("CM_RPCPath", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Host:.
         /// </summary>
-        internal static string CM_ServerHost {
+        public static string CM_ServerHost {
             get {
                 return ResourceManager.GetString("CM_ServerHost", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Port:.
         /// </summary>
-        internal static string CM_ServerPort {
+        public static string CM_ServerPort {
             get {
                 return ResourceManager.GetString("CM_ServerPort", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
-        internal static string CM_ServerTitle {
+        public static string CM_ServerTitle {
             get {
                 return ResourceManager.GetString("CM_ServerTitle", resourceCulture);
             }
@@ -405,7 +405,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to SSL.
         /// </summary>
-        internal static string CM_SSLEnabled {
+        public static string CM_SSLEnabled {
             get {
                 return ResourceManager.GetString("CM_SSLEnabled", resourceCulture);
             }
@@ -414,7 +414,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        internal static string CM_Tab_General {
+        public static string CM_Tab_General {
             get {
                 return ResourceManager.GetString("CM_Tab_General", resourceCulture);
             }
@@ -423,7 +423,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
-        internal static string CM_TestConnection {
+        public static string CM_TestConnection {
             get {
                 return ResourceManager.GetString("CM_TestConnection", resourceCulture);
             }
@@ -432,7 +432,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string CM_TestConnectionBad {
+        public static string CM_TestConnectionBad {
             get {
                 return ResourceManager.GetString("CM_TestConnectionBad", resourceCulture);
             }
@@ -441,7 +441,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connected.
         /// </summary>
-        internal static string CM_TestConnectionGood {
+        public static string CM_TestConnectionGood {
             get {
                 return ResourceManager.GetString("CM_TestConnectionGood", resourceCulture);
             }
@@ -450,7 +450,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection Manager.
         /// </summary>
-        internal static string CM_Title {
+        public static string CM_Title {
             get {
                 return ResourceManager.GetString("CM_Title", resourceCulture);
             }
@@ -459,7 +459,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error occurred while applying settings. Some preferences may be not applied correctly.
         /// </summary>
-        internal static string ConfigApllyError {
+        public static string ConfigApllyError {
             get {
                 return ResourceManager.GetString("ConfigApllyError", resourceCulture);
             }
@@ -468,7 +468,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection lost. Reconnect and try again.
         /// </summary>
-        internal static string ConnectionLost {
+        public static string ConnectionLost {
             get {
                 return ResourceManager.GetString("ConnectionLost", resourceCulture);
             }
@@ -477,7 +477,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter password.
         /// </summary>
-        internal static string DialogBox_EnterPWD {
+        public static string DialogBox_EnterPWD {
             get {
                 return ResourceManager.GetString("DialogBox_EnterPWD", resourceCulture);
             }
@@ -486,7 +486,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string Error {
+        public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
@@ -495,7 +495,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Host name unknown.
         /// </summary>
-        internal static string EX_Host {
+        public static string EX_Host {
             get {
                 return ResourceManager.GetString("EX_Host", resourceCulture);
             }
@@ -504,7 +504,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kebler.
         /// </summary>
-        internal static string Kebler {
+        public static string Kebler {
             get {
                 return ResourceManager.GetString("Kebler", resourceCulture);
             }
@@ -513,7 +513,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string MI_About {
+        public static string MI_About {
             get {
                 return ResourceManager.GetString("MI_About", resourceCulture);
             }
@@ -522,7 +522,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add Magnet.
         /// </summary>
-        internal static string MI_AddMagnet {
+        public static string MI_AddMagnet {
             get {
                 return ResourceManager.GetString("MI_AddMagnet", resourceCulture);
             }
@@ -531,7 +531,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
-        internal static string MI_AddTorrent {
+        public static string MI_AddTorrent {
             get {
                 return ResourceManager.GetString("MI_AddTorrent", resourceCulture);
             }
@@ -540,7 +540,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Check Updates.
         /// </summary>
-        internal static string MI_Check {
+        public static string MI_Check {
             get {
                 return ResourceManager.GetString("MI_Check", resourceCulture);
             }
@@ -549,7 +549,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection Manager.
         /// </summary>
-        internal static string MI_CM {
+        public static string MI_CM {
             get {
                 return ResourceManager.GetString("MI_CM", resourceCulture);
             }
@@ -558,16 +558,43 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contact Developer.
         /// </summary>
-        internal static string MI_Contact {
+        public static string MI_Contact {
             get {
                 return ResourceManager.GetString("MI_Contact", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloaded:.
+        /// </summary>
+        public static string MI_Downloaded {
+            get {
+                return ResourceManager.GetString("MI_Downloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download limit:.
+        /// </summary>
+        public static string MI_DownloadLimit {
+            get {
+                return ResourceManager.GetString("MI_DownloadLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error:.
+        /// </summary>
+        public static string MI_Error {
+            get {
+                return ResourceManager.GetString("MI_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
-        internal static string MI_Exit {
+        public static string MI_Exit {
             get {
                 return ResourceManager.GetString("MI_Exit", resourceCulture);
             }
@@ -576,7 +603,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
-        internal static string Mi_Info {
+        public static string Mi_Info {
             get {
                 return ResourceManager.GetString("Mi_Info", resourceCulture);
             }
@@ -585,7 +612,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kebler.
         /// </summary>
-        internal static string MI_Kebler {
+        public static string MI_Kebler {
             get {
                 return ResourceManager.GetString("MI_Kebler", resourceCulture);
             }
@@ -594,25 +621,52 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
-        internal static string MI_lang {
+        public static string MI_lang {
             get {
                 return ResourceManager.GetString("MI_lang", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last active:.
+        /// </summary>
+        public static string MI_LastActive {
+            get {
+                return ResourceManager.GetString("MI_LastActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Logs.
         /// </summary>
-        internal static string MI_Logs {
+        public static string MI_Logs {
             get {
                 return ResourceManager.GetString("MI_Logs", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max peers:.
+        /// </summary>
+        public static string MI_MaxPeers {
+            get {
+                return ResourceManager.GetString("MI_MaxPeers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peers:.
+        /// </summary>
+        public static string MI_Peers {
+            get {
+                return ResourceManager.GetString("MI_Peers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preferences.
         /// </summary>
-        internal static string MI_Prefs {
+        public static string MI_Prefs {
             get {
                 return ResourceManager.GetString("MI_Prefs", resourceCulture);
             }
@@ -621,34 +675,61 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        internal static string MI_Props {
+        public static string MI_Props {
             get {
                 return ResourceManager.GetString("MI_Props", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remaining:.
+        /// </summary>
+        public static string MI_Remaining {
+            get {
+                return ResourceManager.GetString("MI_Remaining", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report a Problem.
         /// </summary>
-        internal static string MI_Report {
+        public static string MI_Report {
             get {
                 return ResourceManager.GetString("MI_Report", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seeds:.
+        /// </summary>
+        public static string MI_Seeds {
+            get {
+                return ResourceManager.GetString("MI_Seeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Servers.
         /// </summary>
-        internal static string MI_Servers {
+        public static string MI_Servers {
             get {
                 return ResourceManager.GetString("MI_Servers", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Share ratio:.
+        /// </summary>
+        public static string MI_ShareRatio {
+            get {
+                return ResourceManager.GetString("MI_ShareRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added date.
         /// </summary>
-        internal static string MI_Sort_AddedDate {
+        public static string MI_Sort_AddedDate {
             get {
                 return ResourceManager.GetString("MI_Sort_AddedDate", resourceCulture);
             }
@@ -657,7 +738,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download speed.
         /// </summary>
-        internal static string MI_Sort_DownloadSpeed {
+        public static string MI_Sort_DownloadSpeed {
             get {
                 return ResourceManager.GetString("MI_Sort_DownloadSpeed", resourceCulture);
             }
@@ -666,7 +747,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Uploaded.
         /// </summary>
-        internal static string MI_Sort_Uploaded {
+        public static string MI_Sort_Uploaded {
             get {
                 return ResourceManager.GetString("MI_Sort_Uploaded", resourceCulture);
             }
@@ -675,7 +756,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload speed.
         /// </summary>
-        internal static string MI_Sort_UploadSpeed {
+        public static string MI_Sort_UploadSpeed {
             get {
                 return ResourceManager.GetString("MI_Sort_UploadSpeed", resourceCulture);
             }
@@ -684,7 +765,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
-        internal static string MI_SortHigh {
+        public static string MI_SortHigh {
             get {
                 return ResourceManager.GetString("MI_SortHigh", resourceCulture);
             }
@@ -693,34 +774,97 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Low.
         /// </summary>
-        internal static string MI_SortLow {
+        public static string MI_SortLow {
             get {
                 return ResourceManager.GetString("MI_SortLow", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download speed:.
+        /// </summary>
+        public static string MI_SpeedDownload {
+            get {
+                return ResourceManager.GetString("MI_SpeedDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State:.
+        /// </summary>
+        public static string MI_State {
+            get {
+                return ResourceManager.GetString("MI_State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Torrent.
         /// </summary>
-        internal static string MI_Torrent {
+        public static string MI_Torrent {
             get {
                 return ResourceManager.GetString("MI_Torrent", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tracker updated:.
+        /// </summary>
+        public static string MI_TrackerUpate {
+            get {
+                return ResourceManager.GetString("MI_TrackerUpate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded:.
+        /// </summary>
+        public static string MI_Uploaded {
+            get {
+                return ResourceManager.GetString("MI_Uploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload limit:.
+        /// </summary>
+        public static string MI_UploadLimit {
+            get {
+                return ResourceManager.GetString("MI_UploadLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload speed:.
+        /// </summary>
+        public static string MI_UploadSpeed {
+            get {
+                return ResourceManager.GetString("MI_UploadSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View.
         /// </summary>
-        internal static string MI_View {
+        public static string MI_View {
             get {
                 return ResourceManager.GetString("MI_View", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wasted:.
+        /// </summary>
+        public static string MI_Wasted {
+            get {
+                return ResourceManager.GetString("MI_Wasted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
-        internal static string MoreInfo_FilesTab {
+        public static string MoreInfo_FilesTab {
             get {
                 return ResourceManager.GetString("MoreInfo_FilesTab", resourceCulture);
             }
@@ -729,7 +873,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Esc, to hide.
         /// </summary>
-        internal static string MoreInfo_HideHint {
+        public static string MoreInfo_HideHint {
             get {
                 return ResourceManager.GetString("MoreInfo_HideHint", resourceCulture);
             }
@@ -738,7 +882,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Peers.
         /// </summary>
-        internal static string MoreInfo_Peers {
+        public static string MoreInfo_Peers {
             get {
                 return ResourceManager.GetString("MoreInfo_Peers", resourceCulture);
             }
@@ -747,7 +891,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Client.
         /// </summary>
-        internal static string MoreInfo_Peers_Client {
+        public static string MoreInfo_Peers_Client {
             get {
                 return ResourceManager.GetString("MoreInfo_Peers_Client", resourceCulture);
             }
@@ -756,7 +900,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Encryption.
         /// </summary>
-        internal static string MoreInfo_Peers_Encryption {
+        public static string MoreInfo_Peers_Encryption {
             get {
                 return ResourceManager.GetString("MoreInfo_Peers_Encryption", resourceCulture);
             }
@@ -765,7 +909,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Host.
         /// </summary>
-        internal static string MoreInfo_Peers_Host {
+        public static string MoreInfo_Peers_Host {
             get {
                 return ResourceManager.GetString("MoreInfo_Peers_Host", resourceCulture);
             }
@@ -774,7 +918,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Progress.
         /// </summary>
-        internal static string MoreInfo_Peers_Progress {
+        public static string MoreInfo_Peers_Progress {
             get {
                 return ResourceManager.GetString("MoreInfo_Peers_Progress", resourceCulture);
             }
@@ -783,7 +927,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download Speed.
         /// </summary>
-        internal static string MoreInfo_PeersRateToClient {
+        public static string MoreInfo_PeersRateToClient {
             get {
                 return ResourceManager.GetString("MoreInfo_PeersRateToClient", resourceCulture);
             }
@@ -792,7 +936,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload Speed.
         /// </summary>
-        internal static string MoreInfo_PeersRateToPeer {
+        public static string MoreInfo_PeersRateToPeer {
             get {
                 return ResourceManager.GetString("MoreInfo_PeersRateToPeer", resourceCulture);
             }
@@ -801,7 +945,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Trackers.
         /// </summary>
-        internal static string MoreInfo_Trackers {
+        public static string MoreInfo_Trackers {
             get {
                 return ResourceManager.GetString("MoreInfo_Trackers", resourceCulture);
             }
@@ -810,7 +954,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Url.
         /// </summary>
-        internal static string MoreInfo_Trackers_Name {
+        public static string MoreInfo_Trackers_Name {
             get {
                 return ResourceManager.GetString("MoreInfo_Trackers_Name", resourceCulture);
             }
@@ -819,7 +963,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
-        internal static string MoreInfo_Trackers_Seeds {
+        public static string MoreInfo_Trackers_Seeds {
             get {
                 return ResourceManager.GetString("MoreInfo_Trackers_Seeds", resourceCulture);
             }
@@ -828,7 +972,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Seeds.
         /// </summary>
-        internal static string MoreInfo_Trackers_Status {
+        public static string MoreInfo_Trackers_Status {
             get {
                 return ResourceManager.GetString("MoreInfo_Trackers_Status", resourceCulture);
             }
@@ -837,7 +981,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Type new name.
         /// </summary>
-        internal static string MSG_InterNewName {
+        public static string MSG_InterNewName {
             get {
                 return ResourceManager.GetString("MSG_InterNewName", resourceCulture);
             }
@@ -846,7 +990,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Insert link to torrent file or magnet.
         /// </summary>
-        internal static string MSG_LinkOrMagnet {
+        public static string MSG_LinkOrMagnet {
             get {
                 return ResourceManager.GetString("MSG_LinkOrMagnet", resourceCulture);
             }
@@ -855,7 +999,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Select only one torrent.
         /// </summary>
-        internal static string MSG_OnlyOneTorrent {
+        public static string MSG_OnlyOneTorrent {
             get {
                 return ResourceManager.GetString("MSG_OnlyOneTorrent", resourceCulture);
             }
@@ -864,7 +1008,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Select torrent.
         /// </summary>
-        internal static string MSG_SelectOneTorrent {
+        public static string MSG_SelectOneTorrent {
             get {
                 return ResourceManager.GetString("MSG_SelectOneTorrent", resourceCulture);
             }
@@ -873,7 +1017,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connecting.
         /// </summary>
-        internal static string MW_ConnectingText {
+        public static string MW_ConnectingText {
             get {
                 return ResourceManager.GetString("MW_ConnectingText", resourceCulture);
             }
@@ -882,7 +1026,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password cant be empty.
         /// </summary>
-        internal static string MW_PAsswordCantBeEmpty {
+        public static string MW_PAsswordCantBeEmpty {
             get {
                 return ResourceManager.GetString("MW_PAsswordCantBeEmpty", resourceCulture);
             }
@@ -891,7 +1035,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Closing session.
         /// </summary>
-        internal static string MW_StatusText_CloseSession {
+        public static string MW_StatusText_CloseSession {
             get {
                 return ResourceManager.GetString("MW_StatusText_CloseSession", resourceCulture);
             }
@@ -900,7 +1044,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connecting to session.
         /// </summary>
-        internal static string MW_StatusText_Session {
+        public static string MW_StatusText_Session {
             get {
                 return ResourceManager.GetString("MW_StatusText_Session", resourceCulture);
             }
@@ -909,7 +1053,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Updateing settings.
         /// </summary>
-        internal static string MW_StatusText_Settings {
+        public static string MW_StatusText_Settings {
             get {
                 return ResourceManager.GetString("MW_StatusText_Settings", resourceCulture);
             }
@@ -918,7 +1062,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Updating stats.
         /// </summary>
-        internal static string MW_StatusText_Stats {
+        public static string MW_StatusText_Stats {
             get {
                 return ResourceManager.GetString("MW_StatusText_Stats", resourceCulture);
             }
@@ -927,7 +1071,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Getting torrents.
         /// </summary>
-        internal static string MW_StatusText_Torrents {
+        public static string MW_StatusText_Torrents {
             get {
                 return ResourceManager.GetString("MW_StatusText_Torrents", resourceCulture);
             }
@@ -936,7 +1080,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
-        internal static string QA_AddTorrent {
+        public static string QA_AddTorrent {
             get {
                 return ResourceManager.GetString("QA_AddTorrent", resourceCulture);
             }
@@ -945,7 +1089,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Move Bottom.
         /// </summary>
-        internal static string QA_MoveBot {
+        public static string QA_MoveBot {
             get {
                 return ResourceManager.GetString("QA_MoveBot", resourceCulture);
             }
@@ -954,7 +1098,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Move Down.
         /// </summary>
-        internal static string QA_MoveDown {
+        public static string QA_MoveDown {
             get {
                 return ResourceManager.GetString("QA_MoveDown", resourceCulture);
             }
@@ -963,7 +1107,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Move Top.
         /// </summary>
-        internal static string QA_MoveTop {
+        public static string QA_MoveTop {
             get {
                 return ResourceManager.GetString("QA_MoveTop", resourceCulture);
             }
@@ -972,7 +1116,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Move Up.
         /// </summary>
-        internal static string QA_MoveUp {
+        public static string QA_MoveUp {
             get {
                 return ResourceManager.GetString("QA_MoveUp", resourceCulture);
             }
@@ -981,7 +1125,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
-        internal static string QA_Pause {
+        public static string QA_Pause {
             get {
                 return ResourceManager.GetString("QA_Pause", resourceCulture);
             }
@@ -990,7 +1134,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Pause All.
         /// </summary>
-        internal static string QA_PauseAll {
+        public static string QA_PauseAll {
             get {
                 return ResourceManager.GetString("QA_PauseAll", resourceCulture);
             }
@@ -999,7 +1143,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Priority.
         /// </summary>
-        internal static string QA_Priority {
+        public static string QA_Priority {
             get {
                 return ResourceManager.GetString("QA_Priority", resourceCulture);
             }
@@ -1008,7 +1152,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Queue.
         /// </summary>
-        internal static string QA_Queue {
+        public static string QA_Queue {
             get {
                 return ResourceManager.GetString("QA_Queue", resourceCulture);
             }
@@ -1017,7 +1161,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reannounce (get more peers).
         /// </summary>
-        internal static string QA_Reannounce {
+        public static string QA_Reannounce {
             get {
                 return ResourceManager.GetString("QA_Reannounce", resourceCulture);
             }
@@ -1026,7 +1170,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
-        internal static string QA_Remove {
+        public static string QA_Remove {
             get {
                 return ResourceManager.GetString("QA_Remove", resourceCulture);
             }
@@ -1035,7 +1179,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Remove Data.
         /// </summary>
-        internal static string QA_RemoveData {
+        public static string QA_RemoveData {
             get {
                 return ResourceManager.GetString("QA_RemoveData", resourceCulture);
             }
@@ -1044,7 +1188,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
-        internal static string QA_Rename {
+        public static string QA_Rename {
             get {
                 return ResourceManager.GetString("QA_Rename", resourceCulture);
             }
@@ -1053,7 +1197,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
-        internal static string QA_Resume {
+        public static string QA_Resume {
             get {
                 return ResourceManager.GetString("QA_Resume", resourceCulture);
             }
@@ -1062,7 +1206,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Start All.
         /// </summary>
-        internal static string QA_ResumeAll {
+        public static string QA_ResumeAll {
             get {
                 return ResourceManager.GetString("QA_ResumeAll", resourceCulture);
             }
@@ -1071,7 +1215,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Set Data Location....
         /// </summary>
-        internal static string QA_SetLoc {
+        public static string QA_SetLoc {
             get {
                 return ResourceManager.GetString("QA_SetLoc", resourceCulture);
             }
@@ -1080,7 +1224,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Slow Mode.
         /// </summary>
-        internal static string QA_Slow {
+        public static string QA_Slow {
             get {
                 return ResourceManager.GetString("QA_Slow", resourceCulture);
             }
@@ -1089,7 +1233,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Verify.
         /// </summary>
-        internal static string QA_Verify {
+        public static string QA_Verify {
             get {
                 return ResourceManager.GetString("QA_Verify", resourceCulture);
             }
@@ -1098,7 +1242,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Retry.
         /// </summary>
-        internal static string RetryConnection {
+        public static string RetryConnection {
             get {
                 return ResourceManager.GetString("RetryConnection", resourceCulture);
             }
@@ -1107,7 +1251,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Remove with data.
         /// </summary>
-        internal static string RMT_RemoveWithData {
+        public static string RMT_RemoveWithData {
             get {
                 return ResourceManager.GetString("RMT_RemoveWithData", resourceCulture);
             }
@@ -1116,16 +1260,25 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove all this torrents?.
         /// </summary>
-        internal static string RMT_Title {
+        public static string RMT_Title {
             get {
                 return ResourceManager.GetString("RMT_Title", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ssdfdsfdsfdsfs.
+        /// </summary>
+        public static string sdsd {
+            get {
+                return ResourceManager.GetString("sdsd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter new location for %d torrents.
         /// </summary>
-        internal static string SetLocForMany {
+        public static string SetLocForMany {
             get {
                 return ResourceManager.GetString("SetLocForMany", resourceCulture);
             }
@@ -1134,7 +1287,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter new location.
         /// </summary>
-        internal static string SetLocOnce {
+        public static string SetLocOnce {
             get {
                 return ResourceManager.GetString("SetLocOnce", resourceCulture);
             }
@@ -1143,7 +1296,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Active Time:.
         /// </summary>
-        internal static string Stats_ActiveTime {
+        public static string Stats_ActiveTime {
             get {
                 return ResourceManager.GetString("Stats_ActiveTime", resourceCulture);
             }
@@ -1152,7 +1305,7 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Downloaded:.
         /// </summary>
-        internal static string Stats_Downloaded {
+        public static string Stats_Downloaded {
             get {
                 return ResourceManager.GetString("Stats_Downloaded", resourceCulture);
             }
@@ -1161,16 +1314,196 @@ namespace Kebler.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Uploaded:.
         /// </summary>
-        internal static string Stats_Uploaded {
+        public static string Stats_Uploaded {
             get {
                 return ResourceManager.GetString("Stats_Uploaded", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added on:.
+        /// </summary>
+        public static string TI_AddedOn {
+            get {
+                return ResourceManager.GetString("TI_AddedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment:.
+        /// </summary>
+        public static string TI_Comment {
+            get {
+                return ResourceManager.GetString("TI_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed on:.
+        /// </summary>
+        public static string TI_CompletedOn {
+            get {
+                return ResourceManager.GetString("TI_CompletedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created on:.
+        /// </summary>
+        public static string TI_CreatedOn {
+            get {
+                return ResourceManager.GetString("TI_CreatedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hash:.
+        /// </summary>
+        public static string TI_Hash {
+            get {
+                return ResourceManager.GetString("TI_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hashfails.
+        /// </summary>
+        public static string TI_hashfails {
+            get {
+                return ResourceManager.GetString("TI_hashfails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnet link:.
+        /// </summary>
+        public static string TI_Magnet {
+            get {
+                return ResourceManager.GetString("TI_Magnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path:.
+        /// </summary>
+        public static string TI_path {
+            get {
+                return ResourceManager.GetString("TI_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pieces:.
+        /// </summary>
+        public static string TI_Pieces {
+            get {
+                return ResourceManager.GetString("TI_Pieces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress:.
+        /// </summary>
+        public static string TI_Progress {
+            get {
+                return ResourceManager.GetString("TI_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking.
+        /// </summary>
+        public static string TI_Status_Checking {
+            get {
+                return ResourceManager.GetString("TI_Status_Checking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check pending.
+        /// </summary>
+        public static string TI_Status_CheckPending {
+            get {
+                return ResourceManager.GetString("TI_Status_CheckPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downlaod pending.
+        /// </summary>
+        public static string TI_Status_download_pending {
+            get {
+                return ResourceManager.GetString("TI_Status_download_pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading.
+        /// </summary>
+        public static string TI_Status_Downloading {
+            get {
+                return ResourceManager.GetString("TI_Status_Downloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seeding.
+        /// </summary>
+        public static string TI_Status_Seeding {
+            get {
+                return ResourceManager.GetString("TI_Status_Seeding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seed pending.
+        /// </summary>
+        public static string TI_Status_SeedPending {
+            get {
+                return ResourceManager.GetString("TI_Status_SeedPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped.
+        /// </summary>
+        public static string TI_Status_Stopped {
+            get {
+                return ResourceManager.GetString("TI_Status_Stopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total size:.
+        /// </summary>
+        public static string TI_TotalSize {
+            get {
+                return ResourceManager.GetString("TI_TotalSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to connected.
+        /// </summary>
+        public static string TI_webSeedsConnected {
+            get {
+                return ResourceManager.GetString("TI_webSeedsConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to of.
+        /// </summary>
+        public static string TI_webSeedsOF {
+            get {
+                return ResourceManager.GetString("TI_webSeedsOF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
-        internal static string Title_AddTorrentDialog {
+        public static string Title_AddTorrentDialog {
             get {
                 return ResourceManager.GetString("Title_AddTorrentDialog", resourceCulture);
             }

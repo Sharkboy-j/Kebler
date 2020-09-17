@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
-    xmlns:conv="clr-namespace:Kebler.Services.Converters"
+    xmlns:conv="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:kebler="clr-namespace:Kebler"
     xmlns:local="clr-namespace:Kebler.ViewModels"
@@ -39,8 +39,6 @@
             <conv:IntToColorStrokeConverter x:Key="IntToColorStrokeConverter" />
             <conv:PieceToImage x:Key="PieceToImage" />
             <conv:IpToCountry x:Key="IpToCountry" />
-
-
             <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />

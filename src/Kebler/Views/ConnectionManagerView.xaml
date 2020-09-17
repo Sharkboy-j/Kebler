@@ -10,7 +10,7 @@
     Width="520"
     Height="450"
     lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     IsTitleVisible="True"
     ResizeMode="NoResize"

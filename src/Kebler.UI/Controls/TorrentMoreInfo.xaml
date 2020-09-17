@@ -7,48 +7,471 @@
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muliTreeView="clr-namespace:Kebler.UI.CSControls.MuliTreeView"
+    xmlns:converters1="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
     d:DesignHeight="450"
     d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Focusable="False"
     mc:Ignorable="d">
-
+    <UserControl.Resources>
+        <converters1:TI_StateConverter x:Key="TI_StateConverter" />
+    </UserControl.Resources>
     <Grid>
-
         <TabControl>
-            <!--<TabItem Header="General">
-                <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <csControls:PiecesImage
-                            Height="15"
-                            Margin="0"
-                            PieceCount="{Binding PieceCount, Mode=OneWay}"
-                            Pieces="{Binding Pieces, Mode=OneWay}"
-                            Stretch="Fill">
-                            <csControls:PiecesImage.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="15"
-                                    Direction="305"
-                                    ShadowDepth="0" />
-                            </csControls:PiecesImage.Effect>
-                        </csControls:PiecesImage>
+            <TabItem Header="General">
+                <Grid Margin="10,5">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                        
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="0"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Padding="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Text="{lex:LocText TI_Progress}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Grid.Row="2"
+                                    VerticalAlignment="Center"
+                                    Padding="0"
+                                    HorizontalAlignment="Right"
+                                    Text="{lex:LocText TI_Pieces}" />
 
-                        <ProgressBar
-                            Height="5"
-                            Margin="0"
-                            Background="{DynamicResource ProgressBarBackGroundBrush}"
-                            BorderThickness="0"
-                            Foreground="DarkBlue"
-                            Maximum="1"
-                            Value="{Binding PercentDone, Mode=OneWay}" />
-                    </StackPanel>
+                                <ProgressBar
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Height="15"
+                                    Margin="10,0,5,0"
+                                    VerticalAlignment="Center"
+                                    Background="{DynamicResource ProgressBarBackGroundBrush}"
+                                    BorderThickness="0"
+                                    Foreground="#FF007ACC"
+                                    Maximum="1"
+                                    Value="{Binding PercentDone, Mode=OneWay}" />
+                                <Image
+                                    Height="15"
+                                    Margin="10,0,5,0"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Stretch="Fill">
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource PieceToImage}">
+                                            <Binding Path="Pieces" />
+                                            <Binding Path="PiecesCount" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
 
+
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Grid.RowSpan="3"
+                                    Grid.Row="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Text="100%" />
+
+                              
+                              
+                            </Grid>
+
+                            <Separator Margin="0,10" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_State}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Status, Converter={StaticResource TI_StateConverter}}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Downloaded}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Downloaded, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_SpeedDownload}" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding DownloadSpeed, Converter={StaticResource BytesToUserFriendlySpeed}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_DownloadLimit}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding DownloadLimit}" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Seeds}" />
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Seeds}" />
+                                </Grid>
+                                <Grid Grid.Column="1" HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Error}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Error}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Uploaded}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Uploaded, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_UploadSpeed}" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding UploadSpeed, Converter={StaticResource BytesToUserFriendlySpeed}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_UploadLimit}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding UploadLimit}" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Peers}" />
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding PeersCount}" />
+                                </Grid>
+                                <Grid Grid.Column="2" HorizontalAlignment="Right">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Remaining}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Remaining, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_Wasted}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Wasted}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_ShareRatio}" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Ratio}" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_MaxPeers}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding MaxPeers}" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText MI_LastActive}" />
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding LastActive}" />
+                                </Grid>
+                            </Grid>
+                            <Separator Margin="0,10" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_path}" />
+                                    <csControls:LinkableTextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        CopyOnly="True"
+                                        Cursor="Hand"
+                                        SureLink="True"
+                                        Text="{Binding Path}"
+                                        TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_TotalSize}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_Hash}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <csControls:LinkableTextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        CopyOnly="True"
+                                        Cursor="Hand"
+                                        Text="{Binding Hash}" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_AddedOn}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding AddedOn, StringFormat=dd MMMM yyyy HH:mm}" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_Magnet}" />
+                                    <csControls:LinkableTextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        CopyOnly="True"
+                                        Cursor="Hand"
+                                        SureLink="True"
+                                        Text="{Binding MagnetLink, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </Grid>
+
+                                <Grid Grid.Column="1" HorizontalAlignment="Right">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_CreatedOn}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding CreatedOn, StringFormat=dd MMMM yyyy HH:mm}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_Pieces}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding PiecesString}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_Comment}" />
+                                    <csControls:LinkableTextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        CopyOnly="False"
+                                        Cursor="Hand"
+                                        Text="{Binding Comment}"
+                                        TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        Text="{lex:LocText TI_CompletedOn}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="3,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding CompletedOn, StringFormat=dd MMMM yyyy HH:mm}" />
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
-            </TabItem>-->
-            <TabItem Header="{lex:LocText MoreInfo_FilesTab}" IsSelected="True">
+            </TabItem>
+            <TabItem Header="{lex:LocText MoreInfo_FilesTab}">
                 <local:FilesTreeView
                     x:Name="FileTreeViewControl"
                     x:FieldModifier="public"
@@ -56,7 +479,7 @@
                     Focusable="False" />
             </TabItem>
 
-            <TabItem Header="{lex:LocText MoreInfo_Trackers}" >
+            <TabItem Header="{lex:LocText MoreInfo_Trackers}">
                 <DataGrid
                     AutoGenerateColumns="False"
                     CanUserResizeColumns="True"

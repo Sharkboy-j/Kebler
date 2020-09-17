@@ -52,7 +52,6 @@
 
 
 
-
     <SolidColorBrush x:Key="LabelBrush" Color="{DynamicResource LabelColor}" />
     <SolidColorBrush x:Key="SecondaryLabelBrush" Color="{DynamicResource SecondaryLabelColor}" />
     <SolidColorBrush x:Key="MouseOver.BackgroundBrush" Color="{DynamicResource MouseOver.BackgroundColor}" />

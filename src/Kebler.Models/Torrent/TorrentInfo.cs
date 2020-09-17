@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Kebler.Models.Torrent.Attributes;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TorrentInfo : INotifyPropertyChanged, IComparable
+    public class TorrentInfo : IComparable
     {
         [JsonConstructor]
         public TorrentInfo(uint id)
@@ -24,7 +25,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty(TorrentFields.ADDED_DATE)]
         [SetIgnore]
-        public int AddedDate { get; set; }
+        public long AddedDate { get; set; }
 
         [JsonProperty(TorrentFields.BANDWIDTH_PRIORITY)]
         public int BandwidthPriority { get; set; }
@@ -46,19 +47,19 @@ namespace Kebler.Models.Torrent
         public long DesiredAvailable { get; set; }
 
         [JsonProperty(TorrentFields.DONE_DATE)]
-        public int DoneDate { get; set; }
+        public long DoneDate { get; set; }
 
         [JsonProperty(TorrentFields.DOWNLOAD_DIR)]
         public string DownloadDir { get; set; }
 
         [JsonProperty(TorrentFields.DOWNLOADED_EVER)]
-        public string DownloadedEver { get; set; }
+        public long DownloadedEver { get; set; }
 
         [JsonProperty(TorrentFields.DOWNLOAD_LIMIT)]
-        public string DownloadLimit { get; set; }
+        public long DownloadLimit { get; set; }
 
         [JsonProperty(TorrentFields.DOWNLOAD_LIMITED)]
-        public string DownloadLimited { get; set; }
+        public bool DownloadLimited { get; set; }
 
         [JsonProperty(TorrentFields.ERROR)]
         public int Error { get; set; }
@@ -192,6 +193,7 @@ namespace Kebler.Models.Torrent
         /// <para>5: 'seed pending'</para> 
         /// <para>6: 'seeding' </para> 
         /// </summary>
+        ///
         [JsonProperty(TorrentFields.STATUS)]
         public int Status { get; set; }
 
@@ -227,8 +229,6 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty(TorrentFields.WEB_SEEDS_SENDING_TO_US)]
         public int WebseedsSendingToUs { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public override string ToString()
         {

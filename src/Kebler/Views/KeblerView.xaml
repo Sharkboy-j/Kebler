@@ -17,7 +17,7 @@
     MinHeight="600"
     cal:Message.Attach="[Event Closing] = [Action ClosingW];[Event Activated] = [Action ActivatedW];[Event Deactivated] = [Action DeactivatedW]"
     lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Activated="CustomizableWindow_Activated"
     Deactivated="CustomizableWindow_Deactivated"

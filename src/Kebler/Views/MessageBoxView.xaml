@@ -10,7 +10,7 @@
     MinHeight="155"
     MaxWidth="{Binding MinWidth}"
     lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
