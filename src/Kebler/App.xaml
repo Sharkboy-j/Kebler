@@ -42,6 +42,7 @@
             <conv:BoolToSlowImageConveter x:Key="BoolToSlowImageConveter" />
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
+            <conv:PointToPercent x:Key="PointToPercent" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

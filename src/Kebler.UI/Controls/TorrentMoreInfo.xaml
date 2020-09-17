@@ -7,7 +7,7 @@
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converters1="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
+    xmlns:converters="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
     d:DesignHeight="450"
     d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -16,7 +16,7 @@
     Focusable="False"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converters1:TI_StateConverter x:Key="TI_StateConverter" />
+        <converters:TI_StateConverter x:Key="TI_StateConverter" />
     </UserControl.Resources>
     <Grid>
         <TabControl>
@@ -33,7 +33,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
-                                    <RowDefinition Height="0"/>
+                                    <RowDefinition Height="3"/>
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock
@@ -55,7 +55,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Height="15"
-                                    Margin="10,0,5,0"
+                                    Margin="10,0,10,0"
                                     VerticalAlignment="Center"
                                     Background="{DynamicResource ProgressBarBackGroundBrush}"
                                     BorderThickness="0"
@@ -64,7 +64,7 @@
                                     Value="{Binding PercentDone, Mode=OneWay}" />
                                 <Image
                                     Height="15"
-                                    Margin="10,0,5,0"
+                                    Margin="10,0,10,0"
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     Stretch="Fill">
@@ -83,7 +83,7 @@
                                     Grid.Row="0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
-                                    Text="100%" />
+                                    Text="{Binding PercentDone,Converter={StaticResource PointToPercent}}" />
 
                               
                               
@@ -116,7 +116,7 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Status, Converter={StaticResource TI_StateConverter}}" />
 
@@ -128,7 +128,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Downloaded, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
 
@@ -140,7 +140,7 @@
                                     <TextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding DownloadSpeed, Converter={StaticResource BytesToUserFriendlySpeed}, ConverterParameter=true}" />
 
@@ -152,7 +152,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding DownloadLimit}" />
 
@@ -164,7 +164,7 @@
                                     <TextBlock
                                         Grid.Row="4"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Seeds}" />
                                 </Grid>
@@ -188,7 +188,7 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Error}" />
 
@@ -200,7 +200,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Uploaded, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
 
@@ -212,7 +212,7 @@
                                     <TextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding UploadSpeed, Converter={StaticResource BytesToUserFriendlySpeed}, ConverterParameter=true}" />
 
@@ -224,7 +224,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding UploadLimit}" />
 
@@ -236,7 +236,7 @@
                                     <TextBlock
                                         Grid.Row="4"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding PeersCount}" />
                                 </Grid>
@@ -260,7 +260,7 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Remaining, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
 
@@ -272,7 +272,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Wasted}" />
 
@@ -284,7 +284,7 @@
                                     <TextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Ratio}" />
 
@@ -296,21 +296,10 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding MaxPeers}" />
 
-                                    <TextBlock
-                                        Grid.Row="4"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Right"
-                                        Text="{lex:LocText MI_LastActive}" />
-                                    <TextBlock
-                                        Grid.Row="4"
-                                        Grid.Column="1"
-                                        Margin="3,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding LastActive}" />
                                 </Grid>
                             </Grid>
                             <Separator Margin="0,10" />
@@ -339,7 +328,7 @@
                                     <csControls:LinkableTextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         CopyOnly="True"
                                         Cursor="Hand"
@@ -355,7 +344,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}" />
 
@@ -368,7 +357,7 @@
                                     <csControls:LinkableTextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         CopyOnly="True"
                                         Cursor="Hand"
@@ -382,7 +371,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding AddedOn, StringFormat=dd MMMM yyyy HH:mm}" />
 
@@ -394,7 +383,7 @@
                                     <csControls:LinkableTextBlock
                                         Grid.Row="4"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         CopyOnly="True"
                                         Cursor="Hand"
@@ -423,7 +412,7 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding CreatedOn, StringFormat=dd MMMM yyyy HH:mm}" />
 
@@ -435,7 +424,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding PiecesString}" />
 
@@ -447,7 +436,7 @@
                                     <csControls:LinkableTextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         CopyOnly="False"
                                         Cursor="Hand"
@@ -462,7 +451,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding CompletedOn, StringFormat=dd MMMM yyyy HH:mm}" />
                                 </Grid>
@@ -522,7 +511,7 @@
                                             Height="12"
                                             RenderOptions.BitmapScalingMode="HighQuality"
                                             Source="{Binding Address, Converter={StaticResource IpToCountry}}" />
-                                        <TextBlock Margin="3,0,0,0" Text="{Binding Address}" />
+                                        <TextBlock Margin="5,0,0,0" Text="{Binding Address}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

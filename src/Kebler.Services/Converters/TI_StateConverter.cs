@@ -22,6 +22,7 @@ namespace Kebler.Services.Converters
                 {
                     0 => Strings.TI_Status_Stopped,
                     1 => Strings.TI_Status_CheckPending,
+                    2 => Strings.TI_Status_Checking,
                     3 => Strings.TI_Status_download_pending,
                     4 => Strings.TI_Status_Downloading,
                     5 => Strings.TI_Status_SeedPending,
