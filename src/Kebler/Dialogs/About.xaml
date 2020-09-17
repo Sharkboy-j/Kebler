@@ -75,7 +75,7 @@
             TextOptions.TextFormattingMode="Ideal"
             TextOptions.TextHintingMode="Animated"
             TextOptions.TextRenderingMode="ClearType">
-            <Run Text="Design where copied from" />
+            <Run Text="Design were copied from" />
             <Hyperlink
                 Foreground="#FF3E9FF8"
                 NavigateUri="https://fork.dev/"

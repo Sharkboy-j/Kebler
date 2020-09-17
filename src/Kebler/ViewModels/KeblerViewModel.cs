@@ -380,21 +380,26 @@ namespace Kebler.ViewModels
 
         public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
         {
+            SelectedTorrent = inf;
+
             try
             {
-                _moreInfoCancelTokeSource?.Cancel();
-                _moreInfoCancelTokeSource = new CancellationTokenSource();
+              
 
-                await Task.Delay(250, _moreInfoCancelTokeSource.Token);
-
-                if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                    return;
-
-                SelectedTorrent = inf;
 
                 if (obj != null)
                 {
                     SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
+
+                    _moreInfoCancelTokeSource?.Cancel();
+                    _moreInfoCancelTokeSource = new CancellationTokenSource();
+
+                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+
+                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                        return;
+
+
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
                     await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
@@ -1364,10 +1369,19 @@ namespace Kebler.ViewModels
 
         }
 
-        public void Properties()
+        public void Properties(object obj)
         {
-            var asd = SelectedTorrents.Select(x => x.Id).ToArray();
-            manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, asd));
+            if (obj != null && obj is TorrentInfo tr)
+            {
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,new[]{ tr.Id }));
+            }
+            else
+            {
+                var asd = SelectedTorrents.Select(x => x.Id).ToArray();
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, asd));
+            }
+
+           
         }
 
         public void CopyMagnet()

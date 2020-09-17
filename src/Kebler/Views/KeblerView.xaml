@@ -434,7 +434,7 @@
                 Name="TorrentsDataGrid"
                 Grid.Row="0"
                 Grid.Column="2"
-                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties()]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
                 x:FieldModifier="public"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
@@ -502,7 +502,7 @@
                         <MenuItem cal:Message.Attach="Rename" Header="{lex:LocText QA_Rename}" />
                         <Separator />
                         <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:LocText QA_CopyMagnet}" />
-                        <MenuItem cal:Message.Attach="Properties" Header="{lex:LocText QA_Properties}" />
+                        <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:LocText QA_Properties}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
