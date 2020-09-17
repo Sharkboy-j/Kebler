@@ -862,6 +862,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove tracker.
+        /// </summary>
+        public static string MoreInfo_DeleteTrackerBtn {
+            get {
+                return ResourceManager.GetString("MoreInfo_DeleteTrackerBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
         public static string MoreInfo_FilesTab {
@@ -1087,6 +1096,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy magnet link.
+        /// </summary>
+        public static string QA_CopyMagnet {
+            get {
+                return ResourceManager.GetString("QA_CopyMagnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Bottom.
         /// </summary>
         public static string QA_MoveBot {
@@ -1146,6 +1164,15 @@ namespace Kebler.Resources {
         public static string QA_Priority {
             get {
                 return ResourceManager.GetString("QA_Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        public static string QA_Properties {
+            get {
+                return ResourceManager.GetString("QA_Properties", resourceCulture);
             }
         }
         
@@ -1506,6 +1533,69 @@ namespace Kebler.Resources {
         public static string Title_AddTorrentDialog {
             get {
                 return ResourceManager.GetString("Title_AddTorrentDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum download speed:.
+        /// </summary>
+        public static string TP_MaximumDownloadSp {
+            get {
+                return ResourceManager.GetString("TP_MaximumDownloadSp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum upload speed:.
+        /// </summary>
+        public static string TP_MaximumUploadSp {
+            get {
+                return ResourceManager.GetString("TP_MaximumUploadSp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peer limit:.
+        /// </summary>
+        public static string TP_PeerLimit {
+            get {
+                return ResourceManager.GetString("TP_PeerLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties:.
+        /// </summary>
+        public static string TP_Properties {
+            get {
+                return ResourceManager.GetString("TP_Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seed ratio:.
+        /// </summary>
+        public static string TP_SeedRatio {
+            get {
+                return ResourceManager.GetString("TP_SeedRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop seeding when inactive for:.
+        /// </summary>
+        public static string TP_StopSeed {
+            get {
+                return ResourceManager.GetString("TP_StopSeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to torrents selected.
+        /// </summary>
+        public static string TP_TorrentsSelected {
+            get {
+                return ResourceManager.GetString("TP_TorrentsSelected", resourceCulture);
             }
         }
     }

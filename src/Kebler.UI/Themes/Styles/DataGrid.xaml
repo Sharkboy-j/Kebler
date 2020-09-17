@@ -42,6 +42,7 @@
         <Setter Property="Foreground" Value="{DynamicResource DataGrid.Row.ForegroundBrush}" />
         <Setter Property="Height" Value="27" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />

@@ -92,6 +92,17 @@
                 cal:Message.Attach="Rename"
                 Header="{lex:LocText QA_Rename}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+            <Separator />
+            <MenuItem
+                cal:Message.Attach="Properties"
+                Header="{lex:LocText QA_Properties}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+
+            <MenuItem
+                cal:Message.Attach="Properties"
+                Header="{lex:LocText QA_Properties}"
+                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+
         </MenuItem>
         <MenuItem
             Name="LangMenu"

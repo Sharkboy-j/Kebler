@@ -434,13 +434,14 @@
                 Name="TorrentsDataGrid"
                 Grid.Row="0"
                 Grid.Column="2"
-                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties()]"
                 x:FieldModifier="public"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
                 CanUserSortColumns="True"
                 HorizontalScrollBarVisibility="Disabled"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+
                 SelectedIndex="{Binding TorrentDataGridSelectedIndex, Mode=OneWayToSource}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsConnected, FallbackValue=Visible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -499,6 +500,9 @@
                         <MenuItem cal:Message.Attach="Verify" Header="{lex:LocText QA_Verify}" />
                         <MenuItem cal:Message.Attach="SetLoc" Header="{lex:LocText QA_SetLoc}" />
                         <MenuItem cal:Message.Attach="Rename" Header="{lex:LocText QA_Rename}" />
+                        <Separator />
+                        <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:LocText QA_CopyMagnet}" />
+                        <MenuItem cal:Message.Attach="Properties" Header="{lex:LocText QA_Properties}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>

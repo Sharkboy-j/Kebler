@@ -14,7 +14,7 @@
         /// <summary>
         /// Maximum download speed (KBps)
         /// </summary>
-        public int? DownloadLimit
+        public long? DownloadLimit
         {
             get => GetValue<int?>("downloadLimit");
             set => this["downloadLimit"] = value;
@@ -113,7 +113,7 @@
         /// <summary>
         /// Maximum upload speed (KBps)
         /// </summary>
-        public int? UploadLimit
+        public long? UploadLimit
         {
             get => GetValue<int?>("uploadLimit");
             set => this["uploadLimit"] = value;
@@ -157,13 +157,6 @@
             get => GetValue<uint[]>("files-unwanted");
             set => this["files-unwanted"] = value;
         }
-
-        //TODO: Add Props
-        //"files-wanted"        | array      indices of file(s) to download
-        //public [] FilesWanted;
-
-        //"files-unwanted"      | array      indices of file(s) to not download
-        //public [] FilesUnwanted;
 
         //"trackerReplace"      | array      pairs of <trackerId/new announce URLs>
         //public [] trackerReplace;

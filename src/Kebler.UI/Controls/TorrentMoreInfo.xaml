@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
+    xmlns:cm="http://caliburnmicro.com"
     d:DesignHeight="450"
     d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -475,7 +476,7 @@
                     CanUserSortColumns="True"
                     HorizontalScrollBarVisibility="Auto"
                     ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                    SelectionMode="Single">
+                    SelectionMode="Extended">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn
@@ -491,6 +492,12 @@
                             Binding="{Binding SeederCount, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:LocText MoreInfo_Trackers_Seeds}" />
                     </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem cm:Message.Attach="DeleteTracker"
+                                      Header="{lex:LocText MoreInfo_DeleteTrackerBtn}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
             </TabItem>
 
