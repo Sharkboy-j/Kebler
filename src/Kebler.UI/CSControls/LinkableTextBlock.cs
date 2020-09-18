@@ -85,7 +85,7 @@ namespace Kebler.UI.CSControls
         {
             var txt = sender as LinkableTextBlock;
             var bs = sender as TextBlock;
-            var result = Uri.TryCreate(txt.Text, UriKind.RelativeOrAbsolute, out var uriResult)
+            var result = Uri.TryCreate(txt.Text, UriKind.Relative, out var uriResult)
                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
             if (txt.SureLink || result)
