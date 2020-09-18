@@ -418,5 +418,31 @@
                 };
             }
         }
+
+        public static string[] WORK
+        {
+            get
+            {
+                return new[]
+                {
+                    #region ALL FIELDS
+                    NAME,
+                    ID,
+                    ADDED_DATE,
+                    HASH_STRING,
+                    RATE_DOWNLOAD,
+                    RATE_UPLOAD,
+                    RECHECK,
+                    PERCENT_DONE,
+                    UPLOADED_EVER,
+                    STATUS,
+                    TRACKER_STATS,
+                    DOWNLOAD_DIR,
+                    FILES,
+                    MAGNET_LINK
+                    #endregion
+                };
+            }
+        }
     }
 }

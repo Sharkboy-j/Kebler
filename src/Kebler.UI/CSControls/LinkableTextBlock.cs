@@ -43,13 +43,28 @@ namespace Kebler.UI.CSControls
 
         private bool isLink = false;
 
+
+
+
+
+
+
+        private static object CoerceText(DependencyObject d, object baseValue)
+        {
+            return null;
+        }
+
         static LinkableTextBlock()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(LinkableTextBlock),
-                new FrameworkPropertyMetadata(typeof(LinkableTextBlock)));
 
-            TextProperty.OverrideMetadata(typeof(LinkableTextBlock),
-                new FrameworkPropertyMetadata(TextPropertyChanged));
+            var defaultMetadata = TextBox.TextProperty.GetMetadata(typeof(TextBlock));
+
+            LinkableTextBlock.TextProperty.OverrideMetadata(typeof(LinkableTextBlock), new FrameworkPropertyMetadata(
+            string.Empty, FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+            TextPropertyChanged,
+            defaultMetadata.CoerceValueCallback,
+            true,
+            System.Windows.Data.UpdateSourceTrigger.PropertyChanged));
         }
 
 
@@ -70,7 +85,7 @@ namespace Kebler.UI.CSControls
         {
             var txt = sender as LinkableTextBlock;
             var bs = sender as TextBlock;
-            var result = Uri.TryCreate(txt.Text, UriKind.Absolute, out var uriResult)
+            var result = Uri.TryCreate(txt.Text, UriKind.RelativeOrAbsolute, out var uriResult)
                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
             if (txt.SureLink || result)

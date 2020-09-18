@@ -213,7 +213,7 @@ namespace Kebler.Models.Torrent
         public long UploadedEver { get; set; }
 
         [JsonProperty(TorrentFields.UPLOAD_LIMIT)]
-        public int UploadLimit { get; set; }
+        public long UploadLimit { get; set; }
 
         [JsonProperty(TorrentFields.UPLOAD_LIMITED)]
         public bool UploadLimited { get; set; }

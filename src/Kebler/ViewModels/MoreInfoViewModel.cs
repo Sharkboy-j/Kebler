@@ -72,7 +72,10 @@ namespace Kebler.ViewModels
 
         private DateTime _addedOn,_createdOn, _completedOn;
 
-
+        public void DeleteTracker()
+        {
+            var selectedItems = TrackerStats.Where(i => i.IsSelected).ToList();
+        }
 
         public BindableCollection<TransmissionTorrentTrackerStats> TrackerStats
         {

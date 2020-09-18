@@ -64,26 +64,7 @@ namespace Kebler.ViewModels
 
             SelectedCat = CategoriesList.First();
 
-            WorkingParams = new[]
-            {
-                TorrentFields.NAME,
-                TorrentFields.ID,
-                TorrentFields.ADDED_DATE,
-                TorrentFields.HASH_STRING,
-                TorrentFields.RATE_DOWNLOAD,
-                TorrentFields.RATE_UPLOAD,
-                TorrentFields.RECHECK,
-                TorrentFields.PERCENT_DONE,
-                TorrentFields.UPLOADED_EVER,
-                TorrentFields.STATUS,
-                TorrentFields.TRACKER_STATS,
-                TorrentFields.DOWNLOAD_DIR,
-                TorrentFields.FILES,
-            };
 
-
-
-            ApplyConfig();
             App.Instance.KeblerVM = this;
 
 
@@ -94,7 +75,7 @@ namespace Kebler.ViewModels
             _view = view as KeblerView;
             if (_view != null)
                 _view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
-
+            ApplyConfig();
             base.OnViewAttached(view, context);
         }
 
@@ -359,14 +340,14 @@ namespace Kebler.ViewModels
         {
             try
             {
-                //MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-                //MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+                _view.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+                _view.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
-                //CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
-                //MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
-                //Width = ConfigService.Instanse.MainWindowWidth;
-                //Height = ConfigService.Instanse.MainWindowHeight;
-                //WindowState = ConfigService.Instanse.MainWindowState;
+                _view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
+                //_view.MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                _view.Width = ConfigService.Instanse.MainWindowWidth;
+                _view.Height = ConfigService.Instanse.MainWindowHeight;
+                _view.WindowState = ConfigService.Instanse.MainWindowState;
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }
             catch (Exception ex)
@@ -399,21 +380,26 @@ namespace Kebler.ViewModels
 
         public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
         {
+            SelectedTorrent = inf;
+
             try
             {
-                _moreInfoCancelTokeSource?.Cancel();
-                _moreInfoCancelTokeSource = new CancellationTokenSource();
+              
 
-                await Task.Delay(250, _moreInfoCancelTokeSource.Token);
-
-                if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                    return;
-
-                SelectedTorrent = inf;
 
                 if (obj != null)
                 {
                     SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
+
+                    _moreInfoCancelTokeSource?.Cancel();
+                    _moreInfoCancelTokeSource = new CancellationTokenSource();
+
+                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+
+                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                        return;
+
+
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
                     await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
@@ -639,7 +625,7 @@ namespace Kebler.ViewModels
 
                             _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Stats)).Value;
 
-                            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(WorkingParams, _cancelTokenSource.Token), Strings.MW_StatusText_Torrents)).Value;
+                            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(TorrentFields.WORK, _cancelTokenSource.Token), Strings.MW_StatusText_Torrents)).Value;
                             _settings = (await Get(_transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token), Strings.MW_StatusText_Settings)).Value;
                             ParseSettings();
                             ParseStats();
@@ -1383,6 +1369,25 @@ namespace Kebler.ViewModels
 
         }
 
+        public void Properties(object obj)
+        {
+            if (obj != null && obj is TorrentInfo tr)
+            {
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,new[]{ tr.Id }));
+            }
+            else
+            {
+                var asd = SelectedTorrents.Select(x => x.Id).ToArray();
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, asd));
+            }
+
+           
+        }
+
+        public void CopyMagnet()
+        {
+            Clipboard.SetText(SelectedTorrent.MagnetLink);
+        }
 
 
 
@@ -1464,7 +1469,6 @@ namespace Kebler.ViewModels
 
         private StatusCategory _selectedCat;
         private int _selectedCategoryIndex = -1;
-        private string[] WorkingParams;
         private List<Server> _servers;
         private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
         private Task _checkerTask;

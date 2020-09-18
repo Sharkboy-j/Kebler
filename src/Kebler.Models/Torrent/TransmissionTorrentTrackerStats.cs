@@ -99,5 +99,14 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("seederCount")]
         public int SeederCount { get; set; }
+
+
+        private bool _isSelected;
+        [JsonIgnore]
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => Set(ref _isSelected, value);
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace Kebler
             container.Singleton<DialogBoxViewModel>();
             container.Singleton<MessageBoxViewModel>();
             container.Singleton<TaskBarIconViewModel>();
+            container.Singleton<TorrentPropsViewModel>();
 
         }
 

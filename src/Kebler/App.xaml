@@ -43,6 +43,7 @@
             <conv:PercentToUserFriendlyConvertor x:Key="PercentToUserFriendlyConvertor" />
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
             <conv:PointToPercent x:Key="PointToPercent" />
+            <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

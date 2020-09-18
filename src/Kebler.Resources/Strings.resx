@@ -600,4 +600,34 @@
   <data name="TI_Progress" xml:space="preserve">
     <value>Progress:</value>
   </data>
+  <data name="TP_Properties" xml:space="preserve">
+    <value>Properties:</value>
+  </data>
+  <data name="TP_MaximumDownloadSp" xml:space="preserve">
+    <value>Maximum download speed:</value>
+  </data>
+  <data name="TP_MaximumUploadSp" xml:space="preserve">
+    <value>Maximum upload speed:</value>
+  </data>
+  <data name="TP_PeerLimit" xml:space="preserve">
+    <value>Peer limit:</value>
+  </data>
+  <data name="TP_SeedRatio" xml:space="preserve">
+    <value>Seed ratio:</value>
+  </data>
+  <data name="TP_StopSeed" xml:space="preserve">
+    <value>Stop seeding when inactive for:</value>
+  </data>
+  <data name="QA_Properties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="TP_TorrentsSelected" xml:space="preserve">
+    <value>torrents selected</value>
+  </data>
+  <data name="QA_CopyMagnet" xml:space="preserve">
+    <value>Copy magnet link</value>
+  </data>
+  <data name="MoreInfo_DeleteTrackerBtn" xml:space="preserve">
+    <value>Remove tracker</value>
+  </data>
 </root>
