@@ -47,11 +47,9 @@ namespace Kebler.Update
                 var module = Process.GetCurrentProcess()?.MainModule;
                 var path = module?.FileName;
 
+                Log($"Current Path: {path}");
 
-
-                Log($"Current Path: {Const.Strings.KeblerExepath}");
-
-                if (path.Equals(Const.Strings.KeblerExepath))
+                if (path.Equals(Const.Strings.KeblerRoamingFolder))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
