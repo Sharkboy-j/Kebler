@@ -22,7 +22,6 @@ namespace Kebler.Update
 
         App()
         {
-            CreateShortcut();
             Instance = this;
             Log("Start App");
 
@@ -49,18 +48,18 @@ namespace Kebler.Update
 
                 Log($"Current Path: {path}");
 
-                if (path.Equals(Const.Strings.KeblerRoamingFolder))
+                if (path.Equals(Const.Strings.InstallerExePath))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
-                    System.IO.File.Copy(Const.Strings.KeblerExepath, temp, true);
+                    System.IO.File.Copy(Const.Strings.InstallerExePath, temp, true);
                     Process.Start(temp);
                     Log("Started Temp");
                     Current.Shutdown(0);
                 }
                 else
                 {
-                    Log("Go for Update");
+                    Log($"Go for Update from {path}");
 
                     Console.WriteLine("CheckUpdate");
                     HasUpdate();
