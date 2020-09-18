@@ -43,13 +43,28 @@ namespace Kebler.UI.CSControls
 
         private bool isLink = false;
 
+
+
+
+
+
+
+        private static object CoerceText(DependencyObject d, object baseValue)
+        {
+            return null;
+        }
+
         static LinkableTextBlock()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(LinkableTextBlock),
-                new FrameworkPropertyMetadata(typeof(LinkableTextBlock)));
 
-            TextProperty.OverrideMetadata(typeof(LinkableTextBlock),
-                new FrameworkPropertyMetadata(TextPropertyChanged));
+            var defaultMetadata = TextBox.TextProperty.GetMetadata(typeof(TextBlock));
+
+            LinkableTextBlock.TextProperty.OverrideMetadata(typeof(LinkableTextBlock), new FrameworkPropertyMetadata(
+            string.Empty, FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+            TextPropertyChanged,
+            defaultMetadata.CoerceValueCallback,
+            true,
+            System.Windows.Data.UpdateSourceTrigger.PropertyChanged));
         }
 
 

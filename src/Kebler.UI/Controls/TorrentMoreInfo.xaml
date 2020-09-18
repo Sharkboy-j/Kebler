@@ -334,7 +334,7 @@
                                         CopyOnly="True"
                                         Cursor="Hand"
                                         SureLink="True"
-                                        Text="{Binding Path}"
+                                        Text="{Binding Path,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"
                                         TextTrimming="CharacterEllipsis" />
 
                                     <TextBlock

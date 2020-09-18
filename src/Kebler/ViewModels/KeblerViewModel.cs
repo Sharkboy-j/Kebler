@@ -344,7 +344,7 @@ namespace Kebler.ViewModels
                 _view.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
                 _view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
-                _view.MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                //_view.MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
                 _view.Width = ConfigService.Instanse.MainWindowWidth;
                 _view.Height = ConfigService.Instanse.MainWindowHeight;
                 _view.WindowState = ConfigService.Instanse.MainWindowState;
