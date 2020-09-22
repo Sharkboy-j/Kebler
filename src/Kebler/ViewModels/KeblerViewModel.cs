@@ -465,9 +465,9 @@ namespace Kebler.ViewModels
         }
 
 
-        private void UpdateMoreInfoPosition(bool val)
+        private void UpdateMoreInfoPosition(bool hide)
         {
-            if (val)
+            if (hide)
             {
                 _view.MoreInfoColumn.MinHeight = 202D;
                 _view.MoreInfoColumn.Height = ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight) : new GridLength(ConfigService.Instanse.MoreInfoHeight);
