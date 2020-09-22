@@ -542,6 +542,7 @@
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Grid.Column="1"
+                cal:Message.Attach="[Event DragCompleted] = [Action SaveConfig]"
                 DragCompleted="DragCompleted"
                 Focusable="False"
                 Style="{DynamicResource VerticalGridSplitter}" />

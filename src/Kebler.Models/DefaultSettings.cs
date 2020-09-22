@@ -6,6 +6,7 @@ namespace Kebler.Models
 {
     public class DefaultSettings
     {
+        public const double MoreInfoColumnMaxHeight = 282D;
         public int SortType { get; set; } = 0;
         public string SortVal { get; set; } = nameof(TorrentInfo.UploadedEver);
         public CultureInfo Language { get; set; } = new CultureInfo("en");

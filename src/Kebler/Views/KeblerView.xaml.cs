@@ -18,9 +18,7 @@ namespace Kebler.Views
 
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            ConfigService.Instanse.CategoriesWidth = CategoriesColumn.ActualWidth;
-            ConfigService.Instanse.MoreInfoHeight = MoreInfoColumn.ActualHeight;
-            ConfigService.Save();
+            (this.DataContext as Kebler.ViewModels.KeblerViewModel).SaveConfig();
         }
 
         private void CustomizableWindow_Activated(object sender, System.EventArgs e)

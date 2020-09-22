@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -75,8 +76,8 @@ namespace Kebler.ViewModels
             _view = view as KeblerView;
             if (_view != null)
                 _view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
-            ApplyConfig();
             base.OnViewAttached(view, context);
+            ApplyConfig();
         }
 
         private async void FileTreeViewControl_OnFileStatusUpdate(uint[] wanted, uint[] unwanted, bool status)
@@ -357,7 +358,7 @@ namespace Kebler.ViewModels
             }
         }
 
-        private void SaveConfig()
+        public void SaveConfig()
         {
             //var size = new StringBuilder();
             //foreach (var column in TorrentsDataGrid.Columns)
@@ -366,12 +367,14 @@ namespace Kebler.ViewModels
             //}
 
 
-            //ConfigService.Instanse.MainWindowHeight = ActualHeight;
-            //ConfigService.Instanse.MainWindowWidth = ActualWidth;
-            //ConfigService.Instanse.MainWindowState = WindowState;
+            ConfigService.Instanse.MainWindowHeight = _view.ActualHeight;
+            ConfigService.Instanse.MainWindowWidth = _view.ActualWidth;
+            ConfigService.Instanse.MainWindowState = _view.WindowState;
+            ConfigService.Instanse.CategoriesWidth = _view.CategoriesColumn.Width.Value;
+            ConfigService.Instanse.MoreInfoHeight = _view.MoreInfoColumn.Height.Value;
             //ConfigService.Instanse.ColumnSizes = size.ToString().TrimEnd(',');
 
-            //ConfigService.Save();
+            ConfigService.Save();
         }
         #endregion
 
@@ -467,8 +470,8 @@ namespace Kebler.ViewModels
             if (val)
             {
                 _view.MoreInfoColumn.MinHeight = 202D;
-                _view.MoreInfoColumn.Height = new GridLength(_oldMoreInfoColumnHeight);
-                _view.MoreInfoColumn.MaxHeight = 500D;
+                _view.MoreInfoColumn.Height = ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight) : new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                _view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
             }
             else
             {
