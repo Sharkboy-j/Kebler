@@ -8,8 +8,9 @@
     Title="Update"
     Width="238"
     Height="100"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
+    WindowStyle="SingleBorderWindow"
     mc:Ignorable="d">
     <Grid>
         <ProgressBar
