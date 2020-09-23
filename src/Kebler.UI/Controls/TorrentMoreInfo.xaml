@@ -2,21 +2,21 @@
     x:Class="Kebler.UI.Controls.TorrentMoreInfo"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
     xmlns:csControls="clr-namespace:Kebler.UI.CSControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converters="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
-    xmlns:cm="http://caliburnmicro.com"
     d:DesignHeight="450"
     d:DesignWidth="800"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Focusable="False"
-    xmlns:cal="http://www.caliburnproject.org"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:TI_StateConverter x:Key="TI_StateConverter" />
@@ -27,7 +27,7 @@
                 <Grid Margin="10,5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Orientation="Vertical">
-                        
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -36,22 +36,22 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
-                                    <RowDefinition Height="3"/>
+                                    <RowDefinition Height="3" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock
-                                    Grid.Column="0"
                                     Grid.Row="0"
+                                    Grid.Column="0"
                                     Padding="0"
-                                    VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
                                     Text="{lex:LocText TI_Progress}" />
                                 <TextBlock
-                                    Grid.Column="0"
                                     Grid.Row="2"
-                                    VerticalAlignment="Center"
+                                    Grid.Column="0"
                                     Padding="0"
                                     HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
                                     Text="{lex:LocText TI_Pieces}" />
 
                                 <ProgressBar
@@ -66,10 +66,10 @@
                                     Maximum="1"
                                     Value="{Binding PercentDone, Mode=OneWay}" />
                                 <Image
-                                    Height="15"
-                                    Margin="10,0,10,0"
                                     Grid.Row="2"
                                     Grid.Column="1"
+                                    Height="15"
+                                    Margin="10,0,10,0"
                                     Stretch="Fill">
                                     <Image.Source>
                                         <MultiBinding Converter="{StaticResource PieceToImage}">
@@ -81,15 +81,15 @@
 
 
                                 <TextBlock
-                                    Grid.Column="2"
-                                    Grid.RowSpan="3"
                                     Grid.Row="0"
-                                    VerticalAlignment="Center"
+                                    Grid.RowSpan="3"
+                                    Grid.Column="2"
                                     HorizontalAlignment="Left"
-                                    Text="{Binding PercentDone,Converter={StaticResource PointToPercent}}" />
+                                    VerticalAlignment="Center"
+                                    Text="{Binding PercentDone, Converter={StaticResource PointToPercent}}" />
 
-                              
-                              
+
+
                             </Grid>
 
                             <Separator Margin="0,10" />
@@ -336,7 +336,7 @@
                                         CopyOnly="True"
                                         Cursor="Hand"
                                         SureLink="True"
-                                        Text="{Binding Path,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"
+                                        Text="{Binding Path, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
                                         TextTrimming="CharacterEllipsis" />
 
                                     <TextBlock
@@ -476,9 +476,9 @@
                     AutoGenerateColumns="False"
                     CanUserResizeColumns="True"
                     CanUserSortColumns="True"
-                    SelectedItemsList="{Binding SelectedTrackers,UpdateSourceTrigger=PropertyChanged}"
                     HorizontalScrollBarVisibility="Auto"
                     ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                    SelectedItemsList="{Binding SelectedTrackers, UpdateSourceTrigger=PropertyChanged}"
                     SelectionMode="Extended">
                     <DataGrid.Columns>
                         <DataGridTextColumn
@@ -496,9 +496,7 @@
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem cal:Message.Attach="DeleteTracker"
-                                      Header="{lex:LocText MoreInfo_DeleteTrackerBtn}" >
-                            </MenuItem>
+                            <MenuItem cal:Message.Attach="DeleteTracker" Header="{lex:LocText MoreInfo_DeleteTrackerBtn}" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </csControls:MDataGrid>

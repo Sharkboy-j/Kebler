@@ -48,11 +48,11 @@ namespace Kebler.Update
 
                 Log($"Current Path: {path}");
 
-                if (path.Equals(Const.Strings.InstallerExePath))
+                if (path.Equals(Const.ConstStrings.InstallerExePath))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
-                    System.IO.File.Copy(Const.Strings.InstallerExePath, temp, true);
+                    System.IO.File.Copy(Const.ConstStrings.InstallerExePath, temp, true);
                     Process.Start(temp);
                     Log("Started Temp");
                     Current.Shutdown(0);
@@ -86,12 +86,12 @@ namespace Kebler.Update
 
         static KeyValuePair<Version, Uri> GetVersion()
         {
-            var pattern = string.Concat(Regex.Escape(Const.Strings.GitHubRepo),
+            var pattern = string.Concat(Regex.Escape(Const.ConstStrings.GitHubRepo),
                 @"\/releases\/download\/*\/[0-9]+.[0-9]+.[0-9]+.[0-9].*\.zip");
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
             var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo,
+            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.ConstStrings.GitHubRepo,
                 "/releases/latest"));
             var wrs = wrq.GetResponse();
 
@@ -131,7 +131,7 @@ namespace Kebler.Update
             else
             {
 
-                if (System.IO.File.Exists(Const.Strings.KeblerExepath))
+                if (System.IO.File.Exists(Const.ConstStrings.KeblerExepath))
                 {
                     var v = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
                     if (latest.Key > v)
@@ -159,7 +159,7 @@ namespace Kebler.Update
         public void CreateShortcut()
         {
             var lnkFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
-            Shortcut.Create(lnkFileName, Const.Strings.KeblerExepath,
+            Shortcut.Create(lnkFileName, Const.ConstStrings.KeblerExepath,
                 null, null, "Kebler", null, null);
         }
 
