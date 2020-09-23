@@ -1,23 +1,22 @@
 ﻿<window:CustomizableWindow
-        xmlns:window="clr-namespace:Kebler.UI.CSControls.Window"
-
     x:Class="Kebler.UI.Dialogs.RemoveListDialogView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kebler.UI.Dialogs"
-        mc:Ignorable="d"
-        xmlns:cal="http://www.caliburnproject.org"
-
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="clr-namespace:Kebler.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:local="clr-namespace:Kebler.UI.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:window="clr-namespace:Kebler.UI.CSControls.Window"
+    Title="RemoveListDialogView"
     Width="520"
     Height="240"
-    WindowStartupLocation="CenterOwner"
-            xmlns:lex="http://wpflocalizeextension.codeplex.com" xmlns:controls="clr-namespace:Kebler.UI.Controls"
-        lex:LocalizeDictionary.DesignCulture="en"
+    lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="RemoveListDialogView" >
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
     <Grid Background="{DynamicResource Window.BackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -97,20 +96,19 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
-           
+
                 <Button
                     Grid.Column="1"
                     Width="Auto"
                     Padding="10,0,10,0"
-                    cal:Message.Attach="No"
                     HorizontalAlignment="Center"
+                    cal:Message.Attach="No"
                     Content="{lex:Loc BTNS_No}" />
                 <Button
                     Grid.Column="3"
                     Padding="10,0,10,0"
-                                        cal:Message.Attach="Yes"
-
                     HorizontalAlignment="Center"
+                    cal:Message.Attach="Yes"
                     Content="{lex:LocText BTNS_Yes}"
                     Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
             </Grid>
