@@ -48,12 +48,13 @@ namespace Kebler.Update
 
                 Log($"Current Path: {path}");
 
-                if (path.Equals(Const.Strings.InstallerExePath))
+                if (!path.Equals(Const.Strings.InstallerExePath))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
-                    System.IO.File.Copy(Const.Strings.InstallerExePath, temp, true);
-                    Process.Start(temp);
+                    System.IO.File.Copy(Const.Strings.InstallerExePath, $"{temp}.exe", true);
+
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {temp}.exe") { CreateNoWindow = true });
                     Log("Started Temp");
                     Current.Shutdown(0);
                 }
