@@ -630,4 +630,7 @@
   <data name="MoreInfo_DeleteTrackerBtn" xml:space="preserve">
     <value>Remove tracker</value>
   </data>
+  <data name="DialogBox_RemoveTracker" xml:space="preserve">
+    <value>Are you sure to remove tracker:</value>
+  </data>
 </root>

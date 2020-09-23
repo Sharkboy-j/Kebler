@@ -484,6 +484,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure to remove tracker:.
+        /// </summary>
+        public static string DialogBox_RemoveTracker {
+            get {
+                return ResourceManager.GetString("DialogBox_RemoveTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {

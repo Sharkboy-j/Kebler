@@ -454,7 +454,7 @@ namespace Kebler.ViewModels
                     var torrent = answ.Torrents.FirstOrDefault();
                     if (torrent != null)
                     {
-                        MoreInfoView.Update(torrent);
+                        MoreInfoView.Update(torrent,_transmissionClient);
                     }
                     return;
                 }

@@ -1,9 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentPeers
+    public class TransmissionTorrentPeers : IEqualityComparer, IEqualityComparer<TransmissionTorrentPeers>
     {
         [JsonProperty("address")]
         public string Address { get; set; }
@@ -49,5 +53,57 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("rateToPeer")]
         public int RateToPeer { get; set; }
+
+        public void Set(string propertyName, object value)
+        {
+            var myType = typeof(TransmissionTorrentPeers);
+            var myPropInfo = myType.GetProperty(propertyName);
+            myPropInfo?.SetValue(this, value, null);
+
+        }
+        public object Get(string propertyName)
+        {
+
+            var myType = typeof(TransmissionTorrentPeers);
+            var myPropInfo = myType.GetProperty(propertyName);
+            return myPropInfo?.GetValue(this, null);
+        }
+
+
+        public void Update(TransmissionTorrentPeers peer)
+        {
+            foreach (var propertyInfo in this.GetType().GetProperties(
+                                                  BindingFlags.Public
+                                                  | BindingFlags.Instance))
+            {
+                this.Set(propertyInfo.Name, peer.Get(propertyInfo.Name));
+            }
+        }
+
+        public new bool Equals(object x, object y)
+        {
+            if (x is TransmissionTorrentPeers _x && y is TransmissionTorrentPeers _y)
+                return Equals(_x, _y);
+            return false;
+        }
+
+        public int GetHashCode(object obj)
+        {
+            if (obj is TransmissionTorrentPeers _o)
+                return GetHashCode(_o);
+            return base.GetHashCode();
+        }
+
+        public bool Equals([AllowNull] TransmissionTorrentPeers x, [AllowNull] TransmissionTorrentPeers y)
+        {
+            return x.Address.Equals(y.Address)
+                && x.ClientName.Equals(y.ClientName)
+                && x.Port.Equals(y.Port);
+        }
+
+        public int GetHashCode([DisallowNull] TransmissionTorrentPeers obj)
+        {
+            return ($"{obj.Address}{obj.Port}{obj.ClientName}").GetHashCode();
+        }
     }
 }

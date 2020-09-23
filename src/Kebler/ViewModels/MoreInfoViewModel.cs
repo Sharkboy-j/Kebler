@@ -1,22 +1,43 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using Kebler.Models.Torrent;
 using Kebler.Resources;
 using Kebler.Services;
+using Kebler.TransmissionCore;
 
 namespace Kebler.ViewModels
 {
     public class MoreInfoViewModel : PropertyChangedBase
     {
-    
+        public static TransmissionClient _client;
+        
+        public uint[] id;
+        private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
 
+        private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
+            new BindableCollection<TransmissionTorrentTrackerStats>();
 
-        public void Update(TorrentInfo torrent)
+        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
+        private bool _loading, _isMore;
+        private double _percentDone;
+        private int _selectedCount, _maxPeers;
+        private TorrentInfo _ti;
+        private int _status, _piecesCount;
+        private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
+        private string _downloadLimit, _uploadLimit, _seeds, _error, _peersCount, _wasted, _ratio,
+            _path, _hash, _magnet, _comment, _pieces, _piecesString;
+
+        private DateTime _addedOn, _createdOn, _completedOn;
+        private IList _selectedTrackers;
+
+        public void Update(TorrentInfo torrent,TransmissionClient client)
         {
+            _client = client;
             _ti = torrent;
             FilesTree.UpdateFilesTree(_ti);
-            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
 
             Pieces = _ti.Pieces;
             PiecesCount = _ti.PieceCount;
@@ -50,31 +71,36 @@ namespace Kebler.ViewModels
             CreatedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DateCreated).UtcDateTime.ToLocalTime();
             CompletedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DoneDate).UtcDateTime.ToLocalTime();
             Comment = _ti.Comment;
-            PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize,true)}";
+            PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize, true)}";
 
+            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
 
+            
+        }
+        public async void DeleteTracker()
+        {
+            var ids = id;
+            var rm = SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.ID).ToArray();
+
+            var mgr = IoC.Get<IWindowManager>();
+            var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(Strings.DialogBox_RemoveTracker, SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.announce)));
+
+            if (result == true)
+            {
+                await _client.TorrentSetAsync(new Models.Torrent.Args.TorrentSettings()
+                {
+                    IDs = ids,
+                    TrackerRemove = rm
+                }, new System.Threading.CancellationToken());
+            }
         }
 
-        public uint[] id;
-        private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
 
-        private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
-            new BindableCollection<TransmissionTorrentTrackerStats>();
-        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
-        private bool _loading, _isMore;
-        private double _percentDone;
-        private int _selectedCount, _maxPeers;
-        private TorrentInfo _ti;
-        private int _status, _piecesCount;
-        private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
-        private string _downloadLimit, _uploadLimit, _seeds, _error, _peersCount, _wasted, _ratio,
-            _path, _hash, _magnet, _comment, _pieces, _piecesString;
 
-        private DateTime _addedOn,_createdOn, _completedOn;
-
-        public void DeleteTracker()
+        public IList SelectedTrackers
         {
-            var selectedItems = TrackerStats.Where(i => i.IsSelected).ToList();
+            get => _selectedTrackers;
+            set => Set(ref _selectedTrackers, value);
         }
 
         public BindableCollection<TransmissionTorrentTrackerStats> TrackerStats

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Caliburn.Micro;
 using Kebler.Services;
+using Kebler.UI.Dialogs;
 using Kebler.ViewModels;
 
 namespace Kebler
@@ -14,6 +16,7 @@ namespace Kebler
 
         public Bootstrapper()
         {
+            ViewLocator.AddNamespaceMapping("Kebler.ViewModels", new[] { "Kebler.Views", "Kebler.UI.Dialogs" });
             Initialize();
         }
 
@@ -30,6 +33,8 @@ namespace Kebler
             container.Singleton<MessageBoxViewModel>();
             container.Singleton<TaskBarIconViewModel>();
             container.Singleton<TorrentPropsViewModel>();
+            container.Singleton<RemoveListDialogViewModel>();
+
 
         }
 
@@ -62,6 +67,13 @@ namespace Kebler
         protected override void BuildUp(object instance)
         {
             container.BuildUp(instance);
+        }
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            var assemblies = base.SelectAssemblies().ToList();
+            assemblies.Add(typeof(RemoveListDialogView).GetTypeInfo().Assembly);
+
+            return assemblies;
         }
     }
 }

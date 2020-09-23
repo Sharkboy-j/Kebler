@@ -15,6 +15,8 @@
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Focusable="False"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:TI_StateConverter x:Key="TI_StateConverter" />
@@ -470,14 +472,14 @@
             </TabItem>
 
             <TabItem Header="{lex:LocText MoreInfo_Trackers}">
-                <DataGrid
+                <csControls:MDataGrid
                     AutoGenerateColumns="False"
                     CanUserResizeColumns="True"
                     CanUserSortColumns="True"
+                    SelectedItemsList="{Binding SelectedTrackers,UpdateSourceTrigger=PropertyChanged}"
                     HorizontalScrollBarVisibility="Auto"
                     ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Extended">
-
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"
@@ -494,11 +496,12 @@
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem cm:Message.Attach="DeleteTracker"
-                                      Header="{lex:LocText MoreInfo_DeleteTrackerBtn}" />
+                            <MenuItem cal:Message.Attach="DeleteTracker"
+                                      Header="{lex:LocText MoreInfo_DeleteTrackerBtn}" >
+                            </MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
-                </DataGrid>
+                </csControls:MDataGrid>
             </TabItem>
 
             <TabItem Header="{lex:LocText MoreInfo_Peers}">
