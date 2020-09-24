@@ -55,7 +55,19 @@ namespace Kebler
         {
             if (File.Exists(Const.Strings.InstallerExePath))
             {
-                Process.Start(Const.Strings.InstallerExePath);
+                using (Process process = new Process())
+                {
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.FileName = Const.Strings.InstallerExePath;
+                    info.UseShellExecute = true;
+                    info.CreateNoWindow = true;
+
+                    process.StartInfo = info;
+                    process.EnableRaisingEvents = false;
+                    process.Start();
+                }
+
+                //Process.Start(Const.Strings.InstallerExePath);
                 Application.Current.Shutdown(0);
             }
             else

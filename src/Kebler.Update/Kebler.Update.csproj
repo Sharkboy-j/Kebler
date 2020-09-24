@@ -5,11 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Installer</AssemblyName>
-    <AssemblyVersion>1.01.01.01</AssemblyVersion>
-    <FileVersion>1.01.01.01</FileVersion>
     <ApplicationIcon>Kebler.ico</ApplicationIcon>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Deterministic>false</Deterministic>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
   </PropertyGroup>
@@ -21,5 +22,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<Compile Include="..\AssemblyInfo.cs">
+			<Link>Properties\AssemblyInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
 </Project>
