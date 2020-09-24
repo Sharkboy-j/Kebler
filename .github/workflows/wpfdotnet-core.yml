@@ -87,7 +87,7 @@ jobs:
       with: 
         AI_PATH: src/AssemblyInfo.cs
 
-    -name: Next Step
+    - name: Next Step
       run: echo "${{ steps.get_version.outputs.ASSEMBLY_VERSION }}"
 
     - name: TEST
