@@ -29,6 +29,8 @@ namespace Kebler
                 var curretn = Assembly.GetExecutingAssembly().GetName().Version;
                 var server = GetServerVersion();
 
+                Log.Debug($"Current {curretn} Serv {server}");
+
                 var result = curretn < server.Key;
                 App.Instance.IsUpdateReady = result;
                 if (result)
