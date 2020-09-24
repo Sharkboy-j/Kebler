@@ -81,6 +81,11 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
+    - id: make_version_string
+      uses: sandersaares-actions/make-version-string@master
+      with:
+        assemblyInfoPath: src/AssemblyInfo.cs
+
     - name: TEST
       run: dotnet test src/Kebler.sln
 
@@ -98,11 +103,6 @@ jobs:
 
     - name: Installer
       run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
-
-    - run: |
-         del src\publish\*.pdb /F /Q
-         del src\publish\RELEASE\*.pdb /F /Q
-      shell: cmd
 
     - name: dir
       run: dir src\publish
