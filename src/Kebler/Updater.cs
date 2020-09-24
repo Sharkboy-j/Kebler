@@ -53,12 +53,12 @@ namespace Kebler
 
         public static void InstallUpdates()
         {
-            if (File.Exists(Const.Strings.InstallerExePath))
+            if (File.Exists(Const.ConstStrings.InstallerExePath))
             {
                 using (Process process = new Process())
                 {
                     ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = Const.Strings.InstallerExePath;
+                    info.FileName = Const.ConstStrings.InstallerExePath;
                     info.UseShellExecute = true;
                     info.CreateNoWindow = true;
 
@@ -68,12 +68,12 @@ namespace Kebler
                 }
 
                 //Process.Start(Const.Strings.InstallerExePath);
-                Application.Current.Shutdown(0);
+                Application.Current.Shutdown();
             }
             else
             {
                 var mgr = new WindowManager();
-                mgr.ShowDialogAsync(new MessageBoxViewModel($"{Const.Strings.InstallerExeName} not found. Try redownload app", string.Empty, Models.Enums.MessageBoxDilogButtons.Ok, true));
+                mgr.ShowDialogAsync(new MessageBoxViewModel($"{Const.ConstStrings.InstallerExeName} not found. Try redownload app", string.Empty, Models.Enums.MessageBoxDilogButtons.Ok, true));
             }
 
         }
@@ -81,10 +81,10 @@ namespace Kebler
 
         static KeyValuePair<Version, Uri> GetServerVersion()
         {
-            var pattern = string.Concat(Regex.Escape(Const.Strings.GitHubRepo), Const.Strings.GithubRegex);
+            var pattern = string.Concat(Regex.Escape(Const.ConstStrings.GitHubRepo), Const.ConstStrings.GithubRegex);
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo, "/releases/latest"));
+            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.ConstStrings.GitHubRepo, "/releases/latest"));
             var wrs = wrq.GetResponse();
 
             using var sr = new StreamReader(wrs.GetResponseStream());

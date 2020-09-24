@@ -26,7 +26,7 @@ namespace Kebler.Models.Torrent
         public TransmissionTorrentFiles(long pLen, params string[] fullPath)
         {
             Length = pLen;
-            Name = System.IO.Path.Combine(fullPath);
+            Name = Path.Combine(fullPath);
         }
     }
 }

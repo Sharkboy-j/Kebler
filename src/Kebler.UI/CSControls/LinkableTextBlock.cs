@@ -59,7 +59,7 @@ namespace Kebler.UI.CSControls
 
             var defaultMetadata = TextBox.TextProperty.GetMetadata(typeof(TextBlock));
 
-            LinkableTextBlock.TextProperty.OverrideMetadata(typeof(LinkableTextBlock), new FrameworkPropertyMetadata(
+            TextProperty.OverrideMetadata(typeof(LinkableTextBlock), new FrameworkPropertyMetadata(
             string.Empty, FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
             TextPropertyChanged,
             defaultMetadata.CoerceValueCallback,

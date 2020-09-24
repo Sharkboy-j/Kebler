@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kebler.Const;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -22,22 +23,22 @@ namespace Kebler.Update
 
         App()
         {
-            Instance = this;
-            Log("Start App");
+            //Instance = this;
+            //Log("Start App");
 
-            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
-            {
-                process.Kill();
-                Log("Killed kebler");
-            }
+            //foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
+            //{
+            //    process.Kill();
+            //    Log("Killed kebler");
+            //}
 
-            var current = Process.GetCurrentProcess();
-            foreach (var process in Process.GetProcessesByName("Installer"))
-            {
-                if (process.Id == current.Id) continue;
-                process.Kill();
-                Log("Killed installer");
-            }
+            //var current = Process.GetCurrentProcess();
+            //foreach (var process in Process.GetProcessesByName(ConstStrings.InstallerName))
+            //{
+            //    if (process.Id == current.Id) continue;
+            //    process.Kill();
+            //    Log("Killed installer");
+            //}
 
 
 
@@ -48,15 +49,30 @@ namespace Kebler.Update
 
                 Log($"Current Path: {path}");
 
-                if (path.Equals(Const.Strings.InstallerExePath))
+                if (path.Equals(ConstStrings.InstallerExePath))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
-                    System.IO.File.Copy(Const.Strings.InstallerExePath, $"{temp}.exe", true);
+                    File.Copy(ConstStrings.InstallerExePath, $"{temp}.exe", true);
 
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {temp}.exe") { CreateNoWindow = true });
+                    //Process.Start(new ProcessStartInfo("cmd", $"/c start {temp}.exe") { CreateNoWindow = true });
+
+                    using (Process process = new Process())
+                    {
+                        ProcessStartInfo info = new ProcessStartInfo
+                        {
+                            FileName = $"{temp}.exe",
+                            UseShellExecute = true,
+                            CreateNoWindow = true
+                        };
+
+                        process.StartInfo = info;
+                        process.EnableRaisingEvents = false;
+                        process.Start();
+                    }
+
                     Log("Started Temp");
-                    Current.Shutdown(0);
+                    return;
                 }
                 else
                 {
@@ -64,7 +80,7 @@ namespace Kebler.Update
 
                     Console.WriteLine("CheckUpdate");
                     HasUpdate();
-                    Current.Shutdown(0);
+                    Current.Shutdown();
                 }
             }
             catch (Exception ex)
@@ -74,7 +90,7 @@ namespace Kebler.Update
                 ss.Append(ex);
                 ss.Append(ex.StackTrace);
                 new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
-                Current.Shutdown(0);
+                Current.Shutdown();
             }
 
         }
@@ -87,12 +103,12 @@ namespace Kebler.Update
 
         static KeyValuePair<Version, Uri> GetVersion()
         {
-            var pattern = string.Concat(Regex.Escape(Const.Strings.GitHubRepo),
+            var pattern = string.Concat(Regex.Escape(ConstStrings.GitHubRepo),
                 @"\/releases\/download\/*\/[0-9]+.[0-9]+.[0-9]+.[0-9].*\.zip");
 
             var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
             var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.Strings.GitHubRepo,
+            var wrq = WebRequest.Create(string.Concat("https://github.com", ConstStrings.GitHubRepo,
                 "/releases/latest"));
             var wrs = wrq.GetResponse();
 
@@ -132,7 +148,7 @@ namespace Kebler.Update
             else
             {
 
-                if (System.IO.File.Exists(Const.Strings.KeblerExepath))
+                if (File.Exists(ConstStrings.KeblerExepath))
                 {
                     var v = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
                     if (latest.Key > v)
@@ -159,8 +175,8 @@ namespace Kebler.Update
 
         public void CreateShortcut()
         {
-            var lnkFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
-            Shortcut.Create(lnkFileName, Const.Strings.KeblerExepath,
+            var lnkFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
+            Shortcut.Create(lnkFileName, ConstStrings.KeblerExepath,
                 null, null, "Kebler", null, null);
         }
 

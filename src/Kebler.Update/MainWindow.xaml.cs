@@ -61,11 +61,11 @@ namespace Kebler.Update
             File.Move(tempfile, pth);
 
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
-            zip.ExtractToDirectory(Const.Strings.KeblerRoamingFolder, true);
+            zip.ExtractToDirectory(Const.ConstStrings.KeblerRoamingFolder, true);
 
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = Const.Strings.KeblerExepath,
+                FileName = Const.ConstStrings.KeblerExepath,
             };
             App.Instance.CreateShortcut();
             Process.Start(processStartInfo);

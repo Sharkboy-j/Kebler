@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Kebler.Const
 {
-    public static class Strings
+    public static class ConstStrings
     {
         public const string GitHubRepo = "/JeremiSharkboy/Kebler";
 
