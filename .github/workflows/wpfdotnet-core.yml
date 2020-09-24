@@ -81,10 +81,14 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
-    - id: make_version_string
-      uses: sandersaares-actions/make-version-string@master
-      with:
-        assemblyInfoPath: src/AssemblyInfo.cs
+    - name: AssemblyInfo Version
+      id: get_version
+      uses: jasondavis303/assembly-info-version@v1.0.1
+      with: 
+        AI_PATH: src/AssemblyInfo.cs
+
+    -name: Next Step
+      run: echo "${{ steps.get_version.outputs.ASSEMBLY_VERSION }}"
 
     - name: TEST
       run: dotnet test src/Kebler.sln
