@@ -48,7 +48,7 @@ namespace Kebler.Update
 
                 Log($"Current Path: {path}");
 
-                if (!path.Equals(Const.Strings.InstallerExePath))
+                if (path.Equals(Const.Strings.InstallerExePath))
                 {
                     Log("Try start from Temp");
                     var temp = Path.GetTempFileName();
