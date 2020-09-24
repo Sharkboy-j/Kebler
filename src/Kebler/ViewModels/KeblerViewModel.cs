@@ -386,7 +386,7 @@ namespace Kebler.ViewModels
 
             try
             {
-              
+
 
 
                 if (obj != null)
@@ -453,7 +453,7 @@ namespace Kebler.ViewModels
                     var torrent = answ.Torrents.FirstOrDefault();
                     if (torrent != null)
                     {
-                        MoreInfoView.Update(torrent,_transmissionClient);
+                        MoreInfoView.Update(torrent, _transmissionClient);
                     }
                     return;
                 }
@@ -960,7 +960,7 @@ namespace Kebler.ViewModels
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         var ct = Categories.Count(x => x.FolderName == itm.FolderName);
-                        if (ct <=0)
+                        if (ct <= 0)
                         {
                             Categories.Add(itm);
                         }
@@ -976,7 +976,7 @@ namespace Kebler.ViewModels
                                 $"{itm.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
                             Categories.Add(itm);
                         }
-                        
+
                     });
                 }
             }
@@ -1375,7 +1375,7 @@ namespace Kebler.ViewModels
         {
             if (obj != null && obj is TorrentInfo tr)
             {
-                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,new[]{ tr.Id }));
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }));
             }
             else
             {
@@ -1383,7 +1383,7 @@ namespace Kebler.ViewModels
                 manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, asd));
             }
 
-           
+
         }
 
         public void CopyMagnet()
@@ -1440,7 +1440,7 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow,_settings);
+                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow, _settings);
 
                     if (dialog.ShowDialog() == false)
                         return;
