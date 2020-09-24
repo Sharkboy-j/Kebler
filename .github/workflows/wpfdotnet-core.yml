@@ -40,8 +40,6 @@ name: Main
 
 on:
   push:
-    tags:
-      - '*.*.*'
     
 jobs:
 
@@ -69,10 +67,6 @@ jobs:
 
     - name: submodules-init
       uses: snickerbockers/submodules-init@v4
-
-    - name: Get tag
-      id: tag
-      uses: dawidd6/action-get-tag@v1
       
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
@@ -122,7 +116,7 @@ jobs:
       shell: bash
       run: |
         # Define some variables for things we need
-        release_name="${{steps.tag.outputs.tag}}"
+        release_name="${{ steps.get_version.outputs.ASSEMBLY_VERSION }}"
 
         # Build everything
         # dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
@@ -136,8 +130,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{steps.tag.outputs.tag}}
-        release_name: ${{steps.tag.outputs.tag}}
+        tag_name: ${{ steps.get_version.outputs.ASSEMBLY_VERSION }}
+        release_name: ${{ steps.get_version.outputs.ASSEMBLY_VERSION }}
         draft: false
         prerelease: false
         
@@ -147,8 +141,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{steps.create_release.outputs.upload_url}} 
-        asset_path: ./${{steps.tag.outputs.tag}}.zip
-        asset_name: Release ${{steps.tag.outputs.tag}}.zip
+        asset_path: ./${{ steps.get_version.outputs.ASSEMBLY_VERSION }}.zip
+        asset_name: Release ${{ steps.get_version.outputs.ASSEMBLY_VERSION }}.zip
         asset_content_type: application/zip
 
     # - name: Upload Portable86
