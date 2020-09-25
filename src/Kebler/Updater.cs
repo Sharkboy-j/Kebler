@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
+using Kebler.Services;
 
 namespace Kebler
 {
@@ -26,14 +27,14 @@ namespace Kebler
             Log.Info("Check updates");
             try
             {
-                var curretn = Assembly.GetExecutingAssembly().GetName().Version;
-                var server = GetServerVersion();
+                var current = Assembly.GetExecutingAssembly().GetName().Version;
+                var result = await Check(Const.ConstStrings.GITHUB_USER, nameof(Kebler), current);
 
-                Log.Debug($"Current {curretn} Serv {server}");
 
-                var result = curretn < server.Key;
-                App.Instance.IsUpdateReady = result;
-                if (result)
+                Log.Info($"Current {current} Serv {result.Item2}");
+
+                App.Instance.IsUpdateReady = result.Item1;
+                if (result.Item1)
                 {
                     var mgr = new WindowManager();
                     var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel("New update is ready. Install it?", string.Empty, Models.Enums.MessageBoxDilogButtons.YesNo, true));
@@ -52,24 +53,42 @@ namespace Kebler
         }
 
 
+        static bool FileInUse(string path)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    //seems okay
+                }
+                return false;
+            }
+            catch
+            {
+                return true;
+            }
+        }
 
         public static void InstallUpdates()
         {
-            if (File.Exists(Const.ConstStrings.InstallerExePath))
+            if (!FileInUse(Const.ConstStrings.InstallerExePath))
             {
+                Directory.CreateDirectory(Const.ConstStrings.TempInstallerFolder);
+                File.Copy(Const.ConstStrings.InstallerExePath, Const.ConstStrings.TempInstallerExePath,true);
+
                 using (Process process = new Process())
                 {
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = Const.ConstStrings.InstallerExePath;
+                    var info = new ProcessStartInfo();
+                    info.FileName = Const.ConstStrings.TempInstallerExePath;
                     info.UseShellExecute = true;
                     info.CreateNoWindow = true;
+                    info.RedirectStandardOutput = false;
+                    info.RedirectStandardError = false;
 
                     process.StartInfo = info;
                     process.EnableRaisingEvents = false;
                     process.Start();
                 }
-
-                //Process.Start(Const.Strings.InstallerExePath);
                 Application.Current.Shutdown();
             }
             else
@@ -80,39 +99,14 @@ namespace Kebler
 
         }
 
-
-        static KeyValuePair<Version, Uri> GetServerVersion()
+        public static async Task<(bool, Version)> Check(string user, string repository, Version currentVersion)
         {
-            var pattern = string.Concat(Regex.Escape(Const.ConstStrings.GitHubRepo), Const.ConstStrings.GithubRegex);
+            var gitHub = new GitHubApi();
+            var latestReleaseJson = await gitHub.GetLatestReleaseJSONAsync(user, repository);
+            var version = GitHubApi.ExtractVersion(latestReleaseJson);
 
-            var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            var wrq = WebRequest.Create(string.Concat("https://github.com", Const.ConstStrings.GitHubRepo, "/releases/latest"));
-            var wrs = wrq.GetResponse();
+            return (currentVersion < version, version);
 
-            using var sr = new StreamReader(wrs.GetResponseStream());
-            string line;
-            while (null != (line = sr.ReadLine()))
-            {
-                if (string.IsNullOrEmpty(line))
-                    continue;
-                //if (!Uri.TryCreate(line, UriKind.Absolute, out var u))
-                //    continue;
-
-
-                var match = urlMatcher.Match(line);
-                if (match.Success)
-                {
-                    var uri = new Uri(string.Concat("https://github.com", match.Value));
-
-
-                    var vs = match.Value.LastIndexOf("/Release");
-                    var sa = match.Value.Substring(vs + 9).Split('.', '/');
-                    var v = new Version(int.Parse(sa[0]), int.Parse(sa[1]), int.Parse(sa[2]), int.Parse(sa[3]));
-                    return new KeyValuePair<Version, Uri>(v, uri);
-                }
-            }
-
-            return new KeyValuePair<Version, Uri>(null, null);
         }
     }
 }

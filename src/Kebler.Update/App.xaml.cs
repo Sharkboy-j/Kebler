@@ -8,13 +8,16 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Threading;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using Kebler.Services;
 
 namespace Kebler.Update
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    /// 
+
     public partial class App : Application
     {
 
@@ -23,25 +26,6 @@ namespace Kebler.Update
 
         App()
         {
-            //Instance = this;
-            //Log("Start App");
-
-            //foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
-            //{
-            //    process.Kill();
-            //    Log("Killed kebler");
-            //}
-
-            //var current = Process.GetCurrentProcess();
-            //foreach (var process in Process.GetProcessesByName(ConstStrings.InstallerName))
-            //{
-            //    if (process.Id == current.Id) continue;
-            //    process.Kill();
-            //    Log("Killed installer");
-            //}
-
-
-
             try
             {
                 var module = Process.GetCurrentProcess()?.MainModule;
@@ -52,16 +36,14 @@ namespace Kebler.Update
                 if (path.Equals(ConstStrings.InstallerExePath))
                 {
                     Log("Try start from Temp");
-                    var temp = Path.GetTempFileName();
-                    File.Copy(ConstStrings.InstallerExePath, $"{temp}.exe", true);
-
-                    //Process.Start(new ProcessStartInfo("cmd", $"/c start {temp}.exe") { CreateNoWindow = true });
+                    Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
+                    File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
 
                     using (Process process = new Process())
                     {
                         ProcessStartInfo info = new ProcessStartInfo
                         {
-                            FileName = $"{temp}.exe",
+                            FileName = ConstStrings.TempInstallerExePath,
                             UseShellExecute = true,
                             CreateNoWindow = true
                         };
@@ -80,7 +62,6 @@ namespace Kebler.Update
 
                     Console.WriteLine("CheckUpdate");
                     HasUpdate();
-                    Current.Shutdown();
                 }
             }
             catch (Exception ex)
@@ -101,59 +82,36 @@ namespace Kebler.Update
             BUILDER.Append(msg + Environment.NewLine);
         }
 
-        static KeyValuePair<Version, Uri> GetVersion()
-        {
-            var pattern = string.Concat(Regex.Escape(ConstStrings.GitHubRepo),
-                @"\/releases\/download\/*\/[0-9]+.[0-9]+.[0-9]+.[0-9].*\.zip");
-
-            var urlMatcher = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            var result = new Dictionary<Version, Uri>();
-            var wrq = WebRequest.Create(string.Concat("https://github.com", ConstStrings.GitHubRepo,
-                "/releases/latest"));
-            var wrs = wrq.GetResponse();
-
-            using var sr = new StreamReader(wrs.GetResponseStream());
-            string line;
-            while (null != (line = sr.ReadLine()))
-            {
-                var match = urlMatcher.Match(line);
-                if (match.Success)
-                {
-                    var uri = new Uri(string.Concat("https://github.com", match.Value));
-
-
-                    var vs = match.Value.LastIndexOf("/Release", StringComparison.Ordinal);
-                    var sa = match.Value.Substring(vs + 9).Split('.', '/');
-                    var v = new Version(int.Parse(sa[0]), int.Parse(sa[1]), int.Parse(sa[2]), int.Parse(sa[3]));
-                    return new KeyValuePair<Version, Uri>(v, uri);
-                }
-            }
-
-            return new KeyValuePair<Version, Uri>(null, null);
-        }
-
         public void HasUpdate()
         {
-            var latest = GetVersion();
-            Log($"Server: {latest.Key}|{latest.Value}");
-
             var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            var current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+
+
+            var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
+            Log($"Current {current} Serv {result.Item2}");
+
             Log($"Env Path: {getEnv}");
+
+
             if (getEnv == null)
             {
-                var wd = new MainWindow(latest.Value);
+                var updateUrl = UpdaterApi.GetlatestUri();
+
+                var wd = new MainWindow(new Uri(updateUrl));
                 wd.ShowDialog();
                 Current.Shutdown(0);
             }
             else
             {
+                var updateUrl = UpdaterApi.GetlatestUri();
 
                 if (File.Exists(ConstStrings.KeblerExepath))
                 {
-                    var v = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
-                    if (latest.Key > v)
+                    if (result.Item2 > current)
                     {
-                        var wd = new MainWindow(latest.Value);
+
+                        var wd = new MainWindow(new Uri(updateUrl));
                         wd.ShowDialog();
                         Current.Shutdown(0);
                     }
@@ -166,7 +124,7 @@ namespace Kebler.Update
                 }
                 else
                 {
-                    var wd = new MainWindow(latest.Value);
+                    var wd = new MainWindow(new Uri(updateUrl));
                     wd.ShowDialog();
                     Current.Shutdown(0);
                 }
@@ -177,118 +135,8 @@ namespace Kebler.Update
         {
             var lnkFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
             Shortcut.Create(lnkFileName, ConstStrings.KeblerExepath,
-                null, null, "Kebler", null, null);
+                null, null, nameof(Kebler), null, null);
         }
 
-    }
-
-    public class Shortcut
-    {
-        public static void Create(string fileName, string targetPath, string arguments, string workingDirectory, string description, string hotkey, string iconPath)
-        {
-            IWshShortcut shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, m_shell, new object[] { fileName });
-            shortcut.Description = description;
-            shortcut.TargetPath = targetPath;
-            if (!string.IsNullOrEmpty(iconPath))
-                shortcut.IconLocation = iconPath;
-            shortcut.Save();
-        }
-
-        private static Type m_type = Type.GetTypeFromProgID("WScript.Shell");
-        private static object m_shell = Activator.CreateInstance(m_type);
-
-        [ComImport, TypeLibType((short)0x1040), Guid("F935DC23-1CF0-11D0-ADB9-00C04FD58A0B")]
-        private interface IWshShortcut
-        {
-            [DispId(0)]
-            string FullName
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0)]
-                get;
-            }
-
-            [DispId(0x3e8)]
-            string Arguments
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3e8)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3e8)]
-                set;
-            }
-
-            [DispId(0x3e9)]
-            string Description
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3e9)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3e9)]
-                set;
-            }
-
-            [DispId(0x3ea)]
-            string Hotkey
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ea)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ea)]
-                set;
-            }
-
-            [DispId(0x3eb)]
-            string IconLocation
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3eb)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3eb)]
-                set;
-            }
-
-            [DispId(0x3ec)]
-            string RelativePath
-            {
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ec)]
-                set;
-            }
-
-            [DispId(0x3ed)]
-            string TargetPath
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ed)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ed)]
-                set;
-            }
-
-            [DispId(0x3ee)] int WindowStyle { [DispId(0x3ee)] get; [param: In] [DispId(0x3ee)] set; }
-
-            [DispId(0x3ef)]
-            string WorkingDirectory
-            {
-                [return: MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ef)]
-                get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
-                [DispId(0x3ef)]
-                set;
-            }
-
-            [TypeLibFunc((short)0x40), DispId(0x7d0)]
-            void Load([In, MarshalAs(UnmanagedType.BStr)] string PathLink);
-
-            [DispId(0x7d1)]
-            void Save();
-        }
     }
 }

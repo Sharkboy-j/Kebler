@@ -5,11 +5,7 @@ namespace Kebler.Const
 {
     public static class ConstStrings
     {
-        public const string GitHubRepo = "/JeremiSharkboy/Kebler";
-
-        public const string GithubRegex =
-            @"\/releases\/download\/[0-9]\.[0-9]\.[0-9]\.[0-9]\/[R][e][l][e][a][s][e].[0-9]\.[0-9]\.[0-9]\.[0-9]\.zip";
-
+        public const string GITHUB_USER = "JeremiSharkboy";
 
         public static string KeblerRoamingFolder =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));
@@ -23,5 +19,9 @@ namespace Kebler.Const
         public static string InstallerName = $"Installer";
         public static string InstallerExeName = $"Installer.exe";
         public static string InstallerExePath = Path.Combine(KeblerRoamingFolder, InstallerExeName);
+
+        public static string TempInstallerFolder = Path.Combine(Path.GetTempPath(), nameof(Kebler));
+        public static string TempInstallerExePath = Path.Combine(TempInstallerFolder, InstallerExeName);
+
     }
 }
