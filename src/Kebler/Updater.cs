@@ -28,7 +28,7 @@ namespace Kebler
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
-                var result = await Check(Const.ConstStrings.GITHUB_USER, nameof(Kebler), current);
+                var result = await UpdaterApi.CheckAsync(Const.ConstStrings.GITHUB_USER, nameof(Kebler), current);
 
 
                 Log.Info($"Current {current} Serv {result.Item2}");
@@ -71,42 +71,25 @@ namespace Kebler
 
         public static void InstallUpdates()
         {
-            if (!FileInUse(Const.ConstStrings.InstallerExePath))
-            {
-                Directory.CreateDirectory(Const.ConstStrings.TempInstallerFolder);
-                File.Copy(Const.ConstStrings.InstallerExePath, Const.ConstStrings.TempInstallerExePath,true);
+            Directory.CreateDirectory(Const.ConstStrings.TempInstallerFolder);
+            File.Copy(Const.ConstStrings.InstallerExePath, Const.ConstStrings.TempInstallerExePath, true);
 
-                using (Process process = new Process())
-                {
-                    var info = new ProcessStartInfo();
-                    info.FileName = Const.ConstStrings.TempInstallerExePath;
-                    info.UseShellExecute = true;
-                    info.CreateNoWindow = true;
-                    info.RedirectStandardOutput = false;
-                    info.RedirectStandardError = false;
-
-                    process.StartInfo = info;
-                    process.EnableRaisingEvents = false;
-                    process.Start();
-                }
-                Application.Current.Shutdown();
-            }
-            else
+            using (Process process = new Process())
             {
-                var mgr = new WindowManager();
-                mgr.ShowDialogAsync(new MessageBoxViewModel($"{Const.ConstStrings.InstallerExeName} not found. Try redownload app", string.Empty, Models.Enums.MessageBoxDilogButtons.Ok, true));
+                var info = new ProcessStartInfo();
+                info.FileName = Const.ConstStrings.TempInstallerExePath;
+                info.UseShellExecute = true;
+                info.CreateNoWindow = true;
+                info.RedirectStandardOutput = false;
+                info.RedirectStandardError = false;
+
+                process.StartInfo = info;
+                process.EnableRaisingEvents = false;
+                process.Start();
             }
+            Application.Current.Shutdown();
 
         }
 
-        public static async Task<(bool, Version)> Check(string user, string repository, Version currentVersion)
-        {
-            var gitHub = new GitHubApi();
-            var latestReleaseJson = await gitHub.GetLatestReleaseJSONAsync(user, repository);
-            var version = GitHubApi.ExtractVersion(latestReleaseJson);
-
-            return (currentVersion < version, version);
-
-        }
     }
 }
