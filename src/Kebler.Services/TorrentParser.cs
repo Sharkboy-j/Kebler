@@ -8,7 +8,6 @@ using Kebler.Models.Torrent;
 
 namespace Kebler.Services
 {
-
     public class TorrentParser
     {
 
@@ -263,40 +262,7 @@ namespace Kebler.Services
     }
 
     #region Types
-    //public class TransmissionFile
-    //{
-    //    public int FirstPiece { get; }
-
-    //    public long Length { get; }
-
-    //    public string Name { get; }
-
-    //    public string Path { get; }
-
-    //    public FileInfo Info { get; }
-
-    //    public long PieceLength { get; }
-
-
-    //    public TransmissionFile(long size, int pStart, int pLen, params string[] fullPath)
-    //    {
-    //        Length = size < 0 ? 0 : size;
-    //        FirstPiece = pStart;
-    //        PieceLength = pLen;
-    //        Path = System.IO.Path.Combine(fullPath);
-    //        Info = new FileInfo(Path);
-
-    //        var num = Path.LastIndexOf("\\", StringComparison.Ordinal);
-    //        if (num <= 0)
-    //        {
-    //            Name = Path;
-    //            Path = "";
-    //            return;
-    //        }
-    //        Name = Path.Substring(num + 1);
-    //        Path = Path.Substring(0, num);
-    //    }
-    //}
+   
 
     public class TransmissionValue
     {

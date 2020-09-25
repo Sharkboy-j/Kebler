@@ -215,7 +215,7 @@ namespace Kebler.ViewModels
 
         public void Settings()
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.SETTINGS_FILENAME}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") { CreateNoWindow = true });
         }
 
         public void Preferences()

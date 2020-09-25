@@ -78,7 +78,7 @@ namespace Kebler.Services
         {
             try
             {
-                ConfigurationObj = Configuration.LoadFromFile(ConstStrings.SETTINGS_FILENAME);
+                ConfigurationObj = Configuration.LoadFromFile(ConstStrings.CONFIGPATH);
                 Instanse = ConfigurationObj[nameof(DefaultSettings)].ToObject<DefaultSettings>();
             }
             catch (Exception e)

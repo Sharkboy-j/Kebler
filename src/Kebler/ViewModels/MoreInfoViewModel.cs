@@ -35,6 +35,7 @@ namespace Kebler.ViewModels
 
         public void Update(TorrentInfo torrent,TransmissionClient client)
         {
+       
             _client = client;
             _ti = torrent;
             FilesTree.UpdateFilesTree(_ti);
