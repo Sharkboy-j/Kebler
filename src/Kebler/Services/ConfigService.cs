@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Kebler.Const;
 using Kebler.Models;
 using log4net;
 using SharpConfig;
@@ -8,12 +9,10 @@ namespace Kebler.Services
 {
     public static class ConfigService
     {
-        private const string CONFIG_FILE_NAME = "settings.config";
         private static readonly ILog Log = LogManager.GetLogger(typeof(ConfigService));
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;
-        public static string CONFIG_NAME = Path.Combine(Data.GetDataPath().FullName, CONFIG_FILE_NAME);
 
         private static object _sync = new object();
 
@@ -24,7 +23,7 @@ namespace Kebler.Services
                 ConfigurationObj.Clear();
                 ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));
 
-                ConfigurationObj.SaveToFile(CONFIG_NAME);
+                ConfigurationObj.SaveToFile(ConstStrings.CONFIGPATH);
             }
         }
 
@@ -53,7 +52,7 @@ namespace Kebler.Services
 
             ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));
 
-            ConfigurationObj.SaveToFile(CONFIG_NAME);
+            ConfigurationObj.SaveToFile(ConstStrings.CONFIGPATH);
 
             // var p = Configuration[nameof(DefaultSettings)].ToObject<DefaultSettings>();
         }
@@ -62,7 +61,7 @@ namespace Kebler.Services
         {
             try
             {
-                ConfigurationObj = Configuration.LoadFromFile(CONFIG_NAME);
+                ConfigurationObj = Configuration.LoadFromFile(ConstStrings.CONFIGPATH);
                 Log.Info("Configuration exists");
                 return true;
             }
@@ -79,7 +78,7 @@ namespace Kebler.Services
         {
             try
             {
-                ConfigurationObj = Configuration.LoadFromFile(CONFIG_NAME);
+                ConfigurationObj = Configuration.LoadFromFile(ConstStrings.SETTINGS_FILENAME);
                 Instanse = ConfigurationObj[nameof(DefaultSettings)].ToObject<DefaultSettings>();
             }
             catch (Exception e)

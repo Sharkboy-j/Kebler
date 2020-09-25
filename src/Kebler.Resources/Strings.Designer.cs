@@ -1096,6 +1096,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New update is ready. Install it?.
+        /// </summary>
+        public static string NewUpdate {
+            get {
+                return ResourceManager.GetString("NewUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
         public static string QA_AddTorrent {

@@ -16,6 +16,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using Kebler.Const;
 using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Models.Torrent;
@@ -214,7 +215,7 @@ namespace Kebler.ViewModels
 
         public void Settings()
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConfigService.CONFIG_NAME}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.SETTINGS_FILENAME}") { CreateNoWindow = true });
         }
 
         public void Preferences()

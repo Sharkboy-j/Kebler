@@ -633,4 +633,7 @@
   <data name="DialogBox_RemoveTracker" xml:space="preserve">
     <value>Are you sure to remove tracker:</value>
   </data>
+  <data name="NewUpdate" xml:space="preserve">
+    <value>New update is ready. Install it?</value>
+  </data>
 </root>

@@ -15,6 +15,7 @@ using System.Windows;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
 using Kebler.Services;
+using Kebler.Resources;
 
 namespace Kebler
 {
@@ -37,7 +38,7 @@ namespace Kebler
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel("New update is ready. Install it?", string.Empty, Models.Enums.MessageBoxDilogButtons.YesNo, true));
+                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(Strings.NewUpdate, string.Empty, Models.Enums.MessageBoxDilogButtons.YesNo, true));
                     if (dialogres == true)
                     {
                         InstallUpdates();
@@ -50,23 +51,6 @@ namespace Kebler
                 Log.Error(ex);
             }
 
-        }
-
-
-        static bool FileInUse(string path)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
-                {
-                    //seems okay
-                }
-                return false;
-            }
-            catch
-            {
-                return true;
-            }
         }
 
         public static void InstallUpdates()
