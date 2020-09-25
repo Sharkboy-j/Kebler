@@ -8,11 +8,9 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Rectangle
-                        Margin="2"
-                        SnapsToDevicePixels="true"
+                        Margin="2" SnapsToDevicePixels="true"
                         Stroke="{DynamicResource Item.SelectedActive.Background}"
-                        StrokeDashArray="1 2"
-                        StrokeThickness="1" />
+                        StrokeDashArray="1 2" StrokeThickness="1" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -91,8 +89,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
                     <Border
-                        x:Name="Bd"
-                        Padding="1"
+                        x:Name="Bd" Padding="1"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
@@ -128,9 +125,7 @@
                         </Grid.RowDefinitions>
                         <DockPanel Margin="{TemplateBinding Control.Padding}">
                             <ScrollViewer
-                                DockPanel.Dock="Top"
-                                Focusable="false"
-                                HorizontalScrollBarVisibility="Hidden"
+                                DockPanel.Dock="Top" Focusable="false" HorizontalScrollBarVisibility="Hidden"
                                 VerticalScrollBarVisibility="Hidden">
                                 <GridViewHeaderRowPresenter
                                     Margin="0"
@@ -154,48 +149,38 @@
                             <ScrollContentPresenter
                                 x:Name="PART_ScrollContentPresenter"
                                 CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
-                                CanHorizontallyScroll="false"
-                                CanVerticallyScroll="false"
+                                CanHorizontallyScroll="false" CanVerticallyScroll="false"
                                 Content="{TemplateBinding ContentControl.Content}"
                                 ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
                                 KeyboardNavigation.DirectionalNavigation="Local"
                                 SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                         </DockPanel>
                         <ScrollBar
-                            x:Name="PART_HorizontalScrollBar"
-                            Grid.Row="1"
-                            Cursor="Arrow"
+                            x:Name="PART_HorizontalScrollBar" Grid.Row="1" Cursor="Arrow"
                             Maximum="{TemplateBinding ScrollViewer.ScrollableWidth}"
-                            Minimum="0"
-                            Orientation="Horizontal"
+                            Minimum="0" Orientation="Horizontal"
                             Style="{DynamicResource HorizontalScrollBarStyle}"
                             ViewportSize="{TemplateBinding ScrollViewer.ViewportWidth}"
                             Visibility="{TemplateBinding ScrollViewer.ComputedHorizontalScrollBarVisibility}"
                             Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                         <ScrollBar
-                            x:Name="PART_VerticalScrollBar"
-                            Grid.Column="1"
-                            Cursor="Arrow"
+                            x:Name="PART_VerticalScrollBar" Grid.Column="1" Cursor="Arrow"
                             Maximum="{TemplateBinding ScrollViewer.ScrollableHeight}"
-                            Minimum="0"
-                            Orientation="Vertical"
+                            Minimum="0" Orientation="Vertical"
                             Style="{DynamicResource VerticalScrollBarStyle}"
                             ViewportSize="{TemplateBinding ScrollViewer.ViewportHeight}"
                             Visibility="{TemplateBinding ScrollViewer.ComputedVerticalScrollBarVisibility}"
                             Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                         <DockPanel
-                            Grid.Row="1"
-                            Grid.Column="1"
+                            Grid.Row="1" Grid.Column="1"
                             Background="{DynamicResource ScrollViewerBackground}"
                             LastChildFill="false">
                             <Rectangle
-                                Width="1"
-                                DockPanel.Dock="Left"
+                                Width="1" DockPanel.Dock="Left"
                                 Fill="{DynamicResource ScrollBar.Static.Background}"
                                 Visibility="{TemplateBinding ScrollViewer.ComputedVerticalScrollBarVisibility}" />
                             <Rectangle
-                                Height="1"
-                                DockPanel.Dock="Top"
+                                Height="1" DockPanel.Dock="Top"
                                 Fill="{DynamicResource ScrollBar.Static.Background}"
                                 Visibility="{TemplateBinding ScrollViewer.ComputedHorizontalScrollBarVisibility}" />
                         </DockPanel>
@@ -216,8 +201,7 @@
                         Padding="{TemplateBinding Control.Padding}"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
-                        BorderThickness="0"
-                        SnapsToDevicePixels="true">
+                        BorderThickness="0" SnapsToDevicePixels="true">
                         <GridViewRowPresenter
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
@@ -258,12 +242,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
                     <Border
-                        x:Name="Bd"
-                        Padding="0"
+                        x:Name="Bd" Padding="0"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
-                        BorderThickness="0"
-                        SnapsToDevicePixels="true">
+                        BorderThickness="0" SnapsToDevicePixels="true">
                         <ScrollViewer
                             Padding="{TemplateBinding Control.Padding}"
                             Focusable="false"
@@ -366,8 +348,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
                     <Border
-                        Name="Bd"
-                        Padding="0"
+                        Name="Bd" Padding="0"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
@@ -391,18 +372,14 @@
                                                     </Grid.RowDefinitions>
                                                     <ScrollContentPresenter Grid.Column="0" />
                                                     <ScrollBar
-                                                        Name="PART_VerticalScrollBar"
-                                                        Grid.Row="0"
-                                                        Grid.Column="1"
+                                                        Name="PART_VerticalScrollBar" Grid.Row="0" Grid.Column="1"
                                                         Maximum="{TemplateBinding ScrollableHeight}"
                                                         Style="{DynamicResource VerticalScrollBarStyle}"
                                                         ViewportSize="{TemplateBinding ViewportHeight}"
                                                         Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                                         Value="{TemplateBinding VerticalOffset}" />
                                                     <ScrollBar
-                                                        Name="PART_HorizontalScrollBar"
-                                                        Grid.Row="1"
-                                                        Grid.Column="1"
+                                                        Name="PART_HorizontalScrollBar" Grid.Row="1" Grid.Column="1"
                                                         Maximum="{TemplateBinding ScrollableWidth}"
                                                         Orientation="Horizontal"
                                                         Style="{DynamicResource HorizontalScrollBarStyle}"
@@ -436,9 +413,7 @@
                     <Border
                         x:Name="Bd"
                         Padding="{TemplateBinding Control.Padding}"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
+                        Background="Transparent" BorderBrush="Transparent" BorderThickness="0"
                         SnapsToDevicePixels="true">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
@@ -461,8 +436,7 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Padding="{TemplateBinding Control.Padding}" Background="Transparent">
                         <Rectangle
-                            Width="1"
-                            HorizontalAlignment="Center"
+                            Width="1" HorizontalAlignment="Center"
                             Fill="{TemplateBinding Control.Background}" />
                     </Border>
                 </ControlTemplate>
@@ -494,8 +468,7 @@
                                 </Grid.RowDefinitions>
                                 <Border Grid.RowSpan="2" Padding="{TemplateBinding Control.Padding}">
                                     <ContentPresenter
-                                        Name="HeaderContent"
-                                        Margin="0,0,0,1"
+                                        Name="HeaderContent" Margin="0,0,0,1"
                                         HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                         VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                                         RecognizesAccessKey="true"

@@ -17,14 +17,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border
-                        Width="16"
-                        Height="16"
-                        Padding="0"
+                        Width="16" Height="16" Padding="0"
                         Background="Transparent">
                         <Path
-                            x:Name="ExpandPath"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
+                            x:Name="ExpandPath" HorizontalAlignment="Center" VerticalAlignment="Center"
                             Data="M 0,0 L 0,7 5,3.5 Z"
                             Fill="{TemplateBinding Control.Background}" />
                     </Border>
@@ -63,9 +59,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <ToggleButton
-                                x:Name="ExpandCollapseToggleButton"
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
+                                x:Name="ExpandCollapseToggleButton" Grid.Column="1" VerticalAlignment="Center"
                                 IsChecked="{Binding IsExpanded}"
                                 Style="{StaticResource ExpandCollapseToggleStyle}"
                                 Visibility="{Binding ShowExpander, Converter={StaticResource BooleanToVisibility}}" />
@@ -117,16 +111,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type multiTreeView:MultiselectionTreeView}">
                     <Border
-                        x:Name="Bd"
-                        Padding="0"
+                        x:Name="Bd" Padding="0"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
                         SnapsToDevicePixels="true">
                         <ScrollViewer
                             Padding="{TemplateBinding Control.Padding}"
-                            Background="Transparent"
-                            Focusable="false">
+                            Background="Transparent" Focusable="false">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Border>
@@ -167,8 +159,7 @@
                         Padding="{TemplateBinding Control.Padding}"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
-                        BorderThickness="0"
-                        SnapsToDevicePixels="true">
+                        BorderThickness="0" SnapsToDevicePixels="true">
                         <GridViewRowPresenter
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
@@ -208,16 +199,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type multiTreeView:MultiselectionTreeView}">
                     <Border
-                        x:Name="Bd"
-                        Padding="0"
+                        x:Name="Bd" Padding="0"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
                         SnapsToDevicePixels="true">
                         <ScrollViewer
                             Padding="{TemplateBinding Control.Padding}"
-                            Background="Transparent"
-                            Focusable="false"
+                            Background="Transparent" Focusable="false"
                             Style="{DynamicResource ListViewWithGridViewScrollViewerStyle}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                         </ScrollViewer>
@@ -256,15 +245,12 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <ToggleButton
-                                x:Name="ExpandCollapseToggleButton"
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
+                                x:Name="ExpandCollapseToggleButton" Grid.Column="1" VerticalAlignment="Center"
                                 IsChecked="{Binding IsExpanded}"
                                 Style="{StaticResource ExpandCollapseToggleStyle}"
                                 Visibility="{Binding ShowExpander, Converter={StaticResource BooleanToVisibility}}" />
                             <GridViewRowPresenter
-                                Grid.Column="2"
-                                Margin="0"
+                                Grid.Column="2" Margin="0"
                                 HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                                 SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />

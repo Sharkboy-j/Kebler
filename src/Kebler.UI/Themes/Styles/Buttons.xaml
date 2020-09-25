@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Kebler.UI">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:Kebler.UI">
     <Style TargetType="{x:Type Button}">
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
         <Setter Property="Background" Value="{DynamicResource Button.Static.Background}" />
@@ -30,8 +29,7 @@
                             Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Focusable="false"
-                            RecognizesAccessKey="true"
+                            Focusable="false" RecognizesAccessKey="true"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                             <FrameworkElement.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -93,18 +91,15 @@
                                 <RowDefinition Height="2" />
                             </Grid.RowDefinitions>
                             <Image
-                                Name="img"
-                                Grid.Row="1"
+                                Name="img" Grid.Row="1"
                                 Width="{TemplateBinding controls:ToolBarButton.PathWidth}"
                                 Height="{TemplateBinding controls:ToolBarButton.PathHeight}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Source="{TemplateBinding controls:ToolBarButton.ImageSource}"
-                                Stretch="Fill"
-                                Visibility="Visible" />
+                                Stretch="Fill" Visibility="Visible" />
                             <Path
-                                Name="path"
-                                Grid.Row="1"
+                                Name="path" Grid.Row="1"
                                 Width="{TemplateBinding controls:ToolBarButton.PathWidth}"
                                 Height="{TemplateBinding controls:ToolBarButton.PathHeight}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -113,12 +108,9 @@
                                 Fill="{TemplateBinding Foreground}"
                                 Focusable="false"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                Stretch="Fill"
-                                Visibility="Collapsed" />
+                                Stretch="Fill" Visibility="Collapsed" />
                             <TextBlock
-                                Grid.Row="2"
-                                Margin="0,2,0,0"
-                                VerticalAlignment="Center"
+                                Grid.Row="2" Margin="0,2,0,0" VerticalAlignment="Center"
                                 Style="{DynamicResource ToolBarButtonTitle}"
                                 Text="{TemplateBinding controls:ToolBarButton.Title}" />
                         </Grid>

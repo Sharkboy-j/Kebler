@@ -8,11 +8,9 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Rectangle
-                        Margin="14,0,0,0"
-                        SnapsToDevicePixels="true"
+                        Margin="14,0,0,0" SnapsToDevicePixels="true"
                         Stroke="{DynamicResource Window.BorderBrush}"
-                        StrokeDashArray="1 2"
-                        StrokeThickness="1" />
+                        StrokeDashArray="1 2" StrokeThickness="1" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -27,19 +25,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <Grid
-                        Name="templateRoot"
-                        Background="Transparent"
-                        SnapsToDevicePixels="true">
+                        Name="templateRoot" Background="Transparent" SnapsToDevicePixels="true">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Border
-                            Name="checkBoxBorder"
-                            Grid.Column="0"
-                            Width="14"
-                            Height="14"
-                            Margin="1"
+                            Name="checkBoxBorder" Grid.Column="0" Width="14"
+                            Height="14" Margin="1"
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                             Background="{TemplateBinding Control.Background}"
@@ -47,27 +40,22 @@
                             BorderThickness="{TemplateBinding Control.BorderThickness}">
                             <Grid x:Name="markGrid">
                                 <Path
-                                    x:Name="optionMark"
-                                    Margin="1"
+                                    x:Name="optionMark" Margin="1"
                                     Data="{DynamicResource OptionMarkGeomentry}"
                                     Fill="{DynamicResource OptionMark.Static.Glyph}"
-                                    Opacity="0"
-                                    Stretch="None" />
+                                    Opacity="0" Stretch="None" />
                                 <Rectangle
-                                    x:Name="indeterminateMark"
-                                    Margin="2"
+                                    x:Name="indeterminateMark" Margin="2"
                                     Fill="{DynamicResource OptionMark.Static.Glyph}"
                                     Opacity="0" />
                             </Grid>
                         </Border>
                         <ContentPresenter
-                            Name="contentPresenter"
-                            Grid.Column="1"
+                            Name="contentPresenter" Grid.Column="1"
                             Margin="{TemplateBinding Control.Padding}"
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                            Focusable="false"
-                            RecognizesAccessKey="true"
+                            Focusable="false" RecognizesAccessKey="true"
                             SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                     </Grid>
                     <ControlTemplate.Triggers>

@@ -15,9 +15,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <Grid
-                        x:Name="templateRoot"
-                        ClipToBounds="True"
-                        KeyboardNavigation.TabNavigation="Local"
+                        x:Name="templateRoot" ClipToBounds="True" KeyboardNavigation.TabNavigation="Local"
                         SnapsToDevicePixels="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition x:Name="ColumnDefinition0" />
@@ -30,22 +28,16 @@
 
                         <!--  header background  -->
                         <TabPanel
-                            Name="HeaderPanel"
-                            Grid.Row="0"
-                            Grid.Column="0"
+                            Name="HeaderPanel" Grid.Row="0" Grid.Column="0"
                             Panel.ZIndex="1"
                             Background="{TemplateBinding Background}"
-                            IsItemsHost="True"
-                            KeyboardNavigation.TabIndex="1" />
+                            IsItemsHost="True" KeyboardNavigation.TabIndex="1" />
                         <Border
-                            Name="ContentPanel"
-                            Grid.Row="1"
-                            Grid.Column="0"
+                            Name="ContentPanel" Grid.Row="1" Grid.Column="0"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            KeyboardNavigation.DirectionalNavigation="Contained"
-                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2"
                             KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter
                                 x:Name="PART_SelectedContentHost"
@@ -110,24 +102,17 @@
                 <ControlTemplate TargetType="{x:Type TabItem}">
 
                     <Grid
-                        Name="templateRoot"
-                        Height="26"
-                        Background="Transparent"
-                        TextOptions.TextFormattingMode="Display"
-                        TextOptions.TextRenderingMode="ClearType">
+                        Name="templateRoot" Height="26" Background="Transparent"
+                        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
                         <Border
                             Name="selectionBorder"
                             BorderBrush="{DynamicResource TabItem.Selected.Border}"
-                            BorderThickness="0,0,0,1"
-                            Visibility="Collapsed" />
+                            BorderThickness="0,0,0,1" Visibility="Collapsed" />
                         <ContentPresenter
                             Name="contentPresenter"
                             Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            ContentSource="Header"
-                            Focusable="False"
-                            RecognizesAccessKey="True"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header"
+                            Focusable="False" RecognizesAccessKey="True"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Grid>
                     <ControlTemplate.Triggers>

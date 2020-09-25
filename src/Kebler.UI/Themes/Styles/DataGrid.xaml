@@ -24,12 +24,9 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="True" UseLayoutRounding="True">
                         <ContentPresenter
-                            Margin="5,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
+                            Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -51,13 +48,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
                     <Border
-                        x:Name="DGR_Border"
-                        Margin="0"
+                        x:Name="DGR_Border" Margin="0"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="True" UseLayoutRounding="True">
                         <SelectiveScrollingGrid>
                             <SelectiveScrollingGrid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -72,13 +67,11 @@
                                 ItemsPanel="{TemplateBinding ItemsPanel}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             <DataGridDetailsPresenter
-                                Grid.Row="1"
-                                Grid.Column="1"
+                                Grid.Row="1" Grid.Column="1"
                                 SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                 Visibility="{TemplateBinding DetailsVisibility}" />
                             <DataGridRowHeader
-                                Grid.RowSpan="2"
-                                SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
+                                Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
                                 Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                         </SelectiveScrollingGrid>
                     </Border>
@@ -99,12 +92,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
                     <Border
-                        Name="Bg"
-                        Padding="3,0,3,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="Transparent"
-                        UseLayoutRounding="True">
+                        Name="Bg" Padding="3,0,3,0" HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" Background="Transparent" UseLayoutRounding="True">
                         <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
@@ -177,22 +166,16 @@
                                         </DataGridColumnHeadersPresenter>
 
                                         <ScrollContentPresenter
-                                            x:Name="PART_ScrollContentPresenter"
-                                            Grid.Row="1"
-                                            Grid.Column="0"
+                                            x:Name="PART_ScrollContentPresenter" Grid.Row="1" Grid.Column="0"
                                             Grid.ColumnSpan="2"
                                             CanContentScroll="{TemplateBinding CanContentScroll}"
-                                            CanHorizontallyScroll="False"
-                                            CanVerticallyScroll="False"
+                                            CanHorizontallyScroll="False" CanVerticallyScroll="False"
                                             Content="{TemplateBinding Content}"
                                             ContentStringFormat="{TemplateBinding ContentStringFormat}"
                                             ContentTemplate="{TemplateBinding ContentTemplate}" />
                                         <ScrollBar
-                                            x:Name="PART_VerticalScrollBar"
-                                            Grid.Row="1"
-                                            Grid.Column="1"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Right"
+                                            x:Name="PART_VerticalScrollBar" Grid.Row="1" Grid.Column="1"
+                                            Margin="0,0,0,0" HorizontalAlignment="Right"
                                             Maximum="{TemplateBinding ScrollableHeight}"
                                             Orientation="Vertical"
                                             Style="{DynamicResource VerticalScrollBarStyle}"
@@ -200,9 +183,7 @@
                                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                             Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                         <Grid
-                                            Grid.Row="1"
-                                            Grid.Column="1"
-                                            Margin="0,0,17,0"
+                                            Grid.Row="1" Grid.Column="1" Margin="0,0,17,0"
                                             VerticalAlignment="Bottom">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}" />
@@ -210,8 +191,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <ScrollBar
-                                                Name="PART_HorizontalScrollBar"
-                                                Grid.Column="1"
+                                                Name="PART_HorizontalScrollBar" Grid.Column="1"
                                                 Maximum="{TemplateBinding ScrollableWidth}"
                                                 Orientation="Horizontal"
                                                 Style="{DynamicResource HorizontalScrollBarStyle}"
@@ -230,7 +210,5 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ctrl:MDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
-       
-    </Style>
+    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type ctrl:MDataGrid}" />
 </ResourceDictionary>

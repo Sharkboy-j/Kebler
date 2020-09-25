@@ -42,9 +42,7 @@
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
                         SnapsToDevicePixels="true">
                         <ScrollViewer
-                            Name="PART_ContentHost"
-                            Focusable="false"
-                            HorizontalScrollBarVisibility="Hidden"
+                            Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden"
                             VerticalScrollBarVisibility="Hidden" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -151,9 +149,7 @@
                         BorderThickness="{TemplateBinding Control.BorderThickness}"
                         SnapsToDevicePixels="true">
                         <ScrollViewer
-                            x:Name="PART_ContentHost"
-                            Focusable="false"
-                            HorizontalScrollBarVisibility="Hidden"
+                            x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden"
                             VerticalScrollBarVisibility="Hidden" />
                     </Border>
                     <ControlTemplate.Triggers>
