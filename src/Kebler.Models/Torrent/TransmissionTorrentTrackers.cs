@@ -16,6 +16,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("tier")]
         public int Tier { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         //~TransmissionTorrentTrackers()

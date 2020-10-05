@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,8 +13,15 @@ namespace Kebler.ViewModels
 {
     public class TorrentPropsViewModel : Screen
     {
+        private readonly TransmissionClient _transmissionClient;
+        private Visibility _isBusy;
+        private long _maxDownSp, _maxUpSp;
+        private bool _MXD_Bool, _MXU_Bool, _SeedR_Bool, _StopSeed_Bool;
+        private string _name;
+        private int _peerLimit, _stopSeed;
+        private double _seedRation;
         public uint[] tors;
-        private TransmissionClient _transmissionClient;
+
         public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids)
         {
             _transmissionClient = transmissionClient;
@@ -26,7 +31,8 @@ namespace Kebler.ViewModels
             {
                 try
                 {
-                    var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), tors);
+                    var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS,
+                        new CancellationToken(), tors);
                     if (Application.Current.Dispatcher.HasShutdownStarted)
                         return;
 
@@ -50,65 +56,8 @@ namespace Kebler.ViewModels
                 {
                     IsBusy = Visibility.Collapsed;
                 }
-
             });
         }
-
-        public void Cancel()
-        {
-            TryCloseAsync();
-        }
-
-        public async void Save()
-        {
-            try
-            {
-                await _transmissionClient.TorrentSetAsync(new TorrentSettings()
-                {
-                    DownloadLimited = MXD_Bool,
-                    UploadLimited = MXU_Bool,
-                    DownloadLimit = MaxDownSp,
-                    UploadLimit = MaxUpSp,
-                    SeedRatioLimit = SeedRation,
-                    SeedIdleLimit = StopSeed,
-                    IDs = tors,
-                    PeerLimit = this.PeerLimit
-
-                }, new CancellationToken());
-                await TryCloseAsync();
-            }
-            catch (Exception ex)
-            {
-                //ignore
-            }
-            finally
-            {
-                IsBusy = Visibility.Collapsed;
-            }
-
-        }
-
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            if (view is DependencyObject dependencyObject)
-            {
-                var thisWindow = Window.GetWindow(dependencyObject);
-                if (thisWindow != null)
-                {
-                    thisWindow.Owner = Application.Current.MainWindow;
-                }
-            }
-
-            base.OnViewAttached(view, context);
-        }
-
-        private Visibility _isBusy;
-        private string _name;
-        private int _peerLimit, _stopSeed;
-        private double _seedRation;
-        private long _maxDownSp, _maxUpSp;
-        private bool _MXD_Bool, _MXU_Bool, _SeedR_Bool, _StopSeed_Bool;
 
         public Visibility IsBusy
         {
@@ -153,8 +102,6 @@ namespace Kebler.ViewModels
         }
 
 
-
-
         public bool MXD_Bool
         {
             get => _MXD_Bool;
@@ -179,5 +126,48 @@ namespace Kebler.ViewModels
             set => Set(ref _StopSeed_Bool, value);
         }
 
+        public void Cancel()
+        {
+            TryCloseAsync();
+        }
+
+        public async void Save()
+        {
+            try
+            {
+                await _transmissionClient.TorrentSetAsync(new TorrentSettings
+                {
+                    DownloadLimited = MXD_Bool,
+                    UploadLimited = MXU_Bool,
+                    DownloadLimit = MaxDownSp,
+                    UploadLimit = MaxUpSp,
+                    SeedRatioLimit = SeedRation,
+                    SeedIdleLimit = StopSeed,
+                    IDs = tors,
+                    PeerLimit = PeerLimit
+                }, new CancellationToken());
+                await TryCloseAsync();
+            }
+            catch (Exception ex)
+            {
+                //ignore
+            }
+            finally
+            {
+                IsBusy = Visibility.Collapsed;
+            }
+        }
+
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            if (view is DependencyObject dependencyObject)
+            {
+                var thisWindow = Window.GetWindow(dependencyObject);
+                if (thisWindow != null) thisWindow.Owner = Application.Current.MainWindow;
+            }
+
+            base.OnViewAttached(view, context);
+        }
     }
 }

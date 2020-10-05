@@ -1,20 +1,21 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
+using Kebler.Models.Torrent.Common;
+using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
 using LiteDB;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Media;
-using Kebler.Dialogs;
-using Kebler.Models.Torrent.Common;
 
 namespace Kebler.ViewModels
 {
@@ -34,17 +35,13 @@ namespace Kebler.ViewModels
         }
 
 
-
         protected override void OnViewAttached(object view, object context)
         {
             _view = view as IConnectionManager;
             if (view is DependencyObject dependencyObject)
             {
                 var thisWindow = Window.GetWindow(dependencyObject);
-                if (thisWindow != null)
-                {
-                    thisWindow.Owner = Application.Current.MainWindow;
-                }
+                if (thisWindow != null) thisWindow.Owner = Application.Current.MainWindow;
             }
 
             base.OnViewAttached(view, context);
@@ -66,7 +63,8 @@ namespace Kebler.ViewModels
 
         public void Add()
         {
-            var server = new Server { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
+            var server = new Server
+                {Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false};
             _dbServersList.Insert(server);
 
             Log.Info($"Add new Server {server}");
@@ -88,10 +86,8 @@ namespace Kebler.ViewModels
             var result = StorageRepository.GetServersList().Delete(SelectedServer.Id);
             Log.Info($"RemoveResult: {result}");
             if (!result)
-            {
                 //TODO: Add string 
                 MessageBoxViewModel.ShowDialog("RemoveErrorContent", manager);
-            }
 
             var ind = ServerIndex -= 1;
 
@@ -108,12 +104,13 @@ namespace Kebler.ViewModels
 
         public void Save()
         {
-
             Log.Info($"Try save Server {SelectedServer}");
 
             if (ValidateServer(SelectedServer, out var error))
             {
-                SelectedServer.Password = SelectedServer.AskForPassword ? string.Empty : SecureStorage.EncryptString(_view.pwd.Password);
+                SelectedServer.Password = SelectedServer.AskForPassword
+                    ? string.Empty
+                    : SecureStorage.EncryptString(_view.pwd.Password);
 
                 var res = _dbServersList.Upsert(SelectedServer);
                 Log.Info($"UpsertResult: {res}, Error: {error}");
@@ -122,11 +119,10 @@ namespace Kebler.ViewModels
             else
             {
                 Log.Error($"SaveError: {error}");
-                System.Windows.MessageBox.Show(error.ToString());
+                MessageBox.Show(error.ToString());
             }
 
             _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
-
         }
 
         public void Cancel()
@@ -153,28 +149,23 @@ namespace Kebler.ViewModels
 
         private async Task<bool> CheckResponse(TransmissionResponse resp)
         {
-
             if (resp.WebException != null)
             {
                 //TODO: to IWindowManager manager = new WindowManager();
                 var msg = resp.WebException.Status switch
                 {
-                    System.Net.WebExceptionStatus.NameResolutionFailure => $"{Resources.Strings.EX_Host} '{SelectedServer.FullUriPath}'",
+                    WebExceptionStatus.NameResolutionFailure =>
+                        $"{Strings.EX_Host} '{SelectedServer.FullUriPath}'",
                     _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
                 };
 
 
-
-
-                await MessageBoxViewModel.ShowDialog(msg, manager, Resources.Strings.Error, Enums.MessageBoxDilogButtons.Ok);
+                await MessageBoxViewModel.ShowDialog(msg, manager, Strings.Error);
 
                 return false;
             }
 
-            if (resp.CustomException != null)
-            {
-                return false;
-            }
+            if (resp.CustomException != null) return false;
             return true;
         }
 
@@ -185,25 +176,26 @@ namespace Kebler.ViewModels
             string pswd = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new DialogBoxViewModel(Resources.Strings.DialogBox_EnterPWD, string.Empty, true);
+                var dialog = new DialogBoxViewModel(Strings.DialogBox_EnterPWD, string.Empty, true);
                 var res = await manager.ShowDialogAsync(dialog);
                 if (res == false)
                 {
                     IsTesting = false;
                     return;
                 }
+
                 pswd = dialog.Value;
             }
 
             var result = await TesConnection(pswd);
 
             ConnectStatusResult = result
-                ? Resources.Strings.CM_TestConnectionGood
-                : Resources.Strings.CM_TestConnectionBad;
+                ? Strings.CM_TestConnectionGood
+                : Strings.CM_TestConnectionBad;
 
-            ConnectStatusColor = (result
-                ? new SolidColorBrush { Color = Colors.Green }
-                : new SolidColorBrush { Color = Colors.Red });
+            ConnectStatusColor = result
+                ? new SolidColorBrush {Color = Colors.Green}
+                : new SolidColorBrush {Color = Colors.Red};
         }
 
         private async Task<bool> TesConnection(string pass)
@@ -250,17 +242,17 @@ namespace Kebler.ViewModels
 
     public partial class ConnectionManagerViewModel
     {
-        private IConnectionManager _view;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
-        private LiteCollection<Server> _dbServersList;
+        private readonly IWindowManager manager = new WindowManager();
         private TransmissionClient _client;
-        private BindableCollection<Server> _serverList = new BindableCollection<Server>();
-        private Server _selectedServer;
-        private int _serverIndex;
-        private bool _isTesting;
         private SolidColorBrush _connectStatusColor;
         private string _connectStatusResult;
-        IWindowManager manager = new WindowManager();
+        private LiteCollection<Server> _dbServersList;
+        private bool _isTesting;
+        private Server _selectedServer;
+        private int _serverIndex;
+        private BindableCollection<Server> _serverList = new BindableCollection<Server>();
+        private IConnectionManager _view;
 
 
         public BindableCollection<Server> ServerList
@@ -288,8 +280,6 @@ namespace Kebler.ViewModels
         }
 
 
-
-
         public SolidColorBrush ConnectStatusColor
         {
             get => _connectStatusColor;
@@ -302,5 +292,4 @@ namespace Kebler.ViewModels
             set => Set(ref _connectStatusResult, value);
         }
     }
-
 }

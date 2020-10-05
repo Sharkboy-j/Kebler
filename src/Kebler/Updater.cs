@@ -1,25 +1,21 @@
-﻿using Caliburn.Micro;
-using Kebler.UI.CSControls.MuliTreeView;
-using Kebler.ViewModels;
-using log4net;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using Kebler.Const;
+using Kebler.Models;
+using Kebler.Resources;
+using Kebler.Services;
+using Kebler.ViewModels;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
-using Kebler.Services;
-using Kebler.Resources;
 
 namespace Kebler
 {
-    static class Updater
+    internal static class Updater
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -29,7 +25,7 @@ namespace Kebler
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
-                var result = await UpdaterApi.CheckAsync(Const.ConstStrings.GITHUB_USER, nameof(Kebler), current);
+                var result = await UpdaterApi.CheckAsync(ConstStrings.GITHUB_USER, nameof(Kebler), current);
 
 
                 Log.Info($"Current {current} Serv {result.Item2}");
@@ -38,11 +34,9 @@ namespace Kebler
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(Strings.NewUpdate, string.Empty, Models.Enums.MessageBoxDilogButtons.YesNo, true));
-                    if (dialogres == true)
-                    {
-                        InstallUpdates();
-                    }
+                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(Strings.NewUpdate, string.Empty,
+                        Enums.MessageBoxDilogButtons.YesNo, true));
+                    if (dialogres == true) InstallUpdates();
                 }
             }
             catch (Exception ex)
@@ -50,18 +44,17 @@ namespace Kebler
                 App.Instance.IsUpdateReady = false;
                 Log.Error(ex);
             }
-
         }
 
         public static void InstallUpdates()
         {
-            Directory.CreateDirectory(Const.ConstStrings.TempInstallerFolder);
-            File.Copy(Const.ConstStrings.InstallerExePath, Const.ConstStrings.TempInstallerExePath, true);
+            Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
+            File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
 
             using (Process process = new Process())
             {
                 var info = new ProcessStartInfo();
-                info.FileName = Const.ConstStrings.TempInstallerExePath;
+                info.FileName = ConstStrings.TempInstallerExePath;
                 info.UseShellExecute = true;
                 info.CreateNoWindow = true;
                 info.RedirectStandardOutput = false;
@@ -71,9 +64,8 @@ namespace Kebler
                 process.EnableRaisingEvents = false;
                 process.Start();
             }
+
             Application.Current.Shutdown();
-
         }
-
     }
 }

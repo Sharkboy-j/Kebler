@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,21 +10,20 @@ using log4net;
 namespace Kebler.Dialogs
 {
     /// <summary>
-    /// Interaction logic for RemoveTorrentDialog.xaml
+    ///     Interaction logic for RemoveTorrentDialog.xaml
     /// </summary>
-    public partial class RemoveTorrentDialog 
+    public partial class RemoveTorrentDialog
     {
-        private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly CancellationToken _cancellationToken;
         private static readonly ILog Log = LogManager.GetLogger(typeof(RemoveTorrentDialog));
+        private readonly CancellationToken _cancellationToken;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly uint[] _toRemove;
         private readonly TransmissionClient _transmissionClient;
         public Enums.RemoveResult Result;
-        public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool)RemoveWithDataCheckBox.IsChecked;
-        public bool IsWorking { get; set; }
 
 
-        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient transmissionClient, bool witData = false)
+        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient transmissionClient,
+            bool witData = false)
         {
             InitializeComponent();
             Container.ItemsSource = names;
@@ -39,7 +37,8 @@ namespace Kebler.Dialogs
             DataContext = this;
         }
 
-
+        public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool) RemoveWithDataCheckBox.IsChecked;
+        public bool IsWorking { get; set; }
 
 
         private void Cancel(object sender, RoutedEventArgs e)
@@ -85,6 +84,5 @@ namespace Kebler.Dialogs
         {
             throw new Exception("Use ShowDialog instead of Show()");
         }
-
     }
 }

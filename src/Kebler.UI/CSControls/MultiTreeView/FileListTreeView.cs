@@ -9,7 +9,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
     public class FileListTreeView : MultiselectionTreeView
     {
         public static readonly string DragItemsFormat = "FileListItems";
-        public EventHandler<FileListTreeView.DropEventArgs> ItemsDrop;
+        public EventHandler<DropEventArgs> ItemsDrop;
 
         protected override void OnDragOver(DragEventArgs e)
         {
@@ -29,25 +29,26 @@ namespace Kebler.UI.CSControls.MuliTreeView
             e.Handled = true;
             e.Effects = DragDropEffects.Move;
             var files = data.CompactMap(x => !(x is FileListItem fileListItem) ? null : fileListItem.ChangedFile);
-            var itemsDrop = this.ItemsDrop;
+            var itemsDrop = ItemsDrop;
             itemsDrop?.Invoke(this, new DropEventArgs(files));
         }
 
         public class DropEventArgs : EventArgs
         {
-            public TorrentTreeFile[] Files { get; private set; }
-
             public DropEventArgs(TorrentTreeFile[] files)
             {
-                this.Files = files;
+                Files = files;
             }
+
+            public TorrentTreeFile[] Files { get; }
         }
     }
+
     public static class ex
     {
         public static TResult[] CompactMap<TSource, TResult>(
-     this TSource[] source,
-     Func<TSource, TResult> selector)
+            this TSource[] source,
+            Func<TSource, TResult> selector)
         {
             var resultList = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; ++index)
@@ -56,6 +57,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
                 if (result != null)
                     resultList.Add(result);
             }
+
             return resultList.ToArray();
         }
     }

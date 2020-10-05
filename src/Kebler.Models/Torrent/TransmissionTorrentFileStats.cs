@@ -13,6 +13,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         //~TransmissionTorrentFileStats()

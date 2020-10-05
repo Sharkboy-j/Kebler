@@ -5,6 +5,5 @@
         public string Language { get; set; }
 
         public uint SelectedServer { get; set; }
-
     }
 }

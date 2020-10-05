@@ -54,22 +54,22 @@ namespace Kebler.Test
         [Test]
         public void CatExcept()
         {
-            var first = new List<FolderCategory>()
+            var first = new List<FolderCategory>
             {
-                new FolderCategory("/download/"),//
+                new FolderCategory("/download/"), //
                 new FolderCategory("/download/Films"),
-                new FolderCategory("/download/Films/4K"),//
+                new FolderCategory("/download/Films/4K"), //
                 new FolderCategory("/download/Serials"),
-                new FolderCategory("/download/data/Films"),//
-                new FolderCategory("/download/data/Films/download"),//
+                new FolderCategory("/download/data/Films"), //
+                new FolderCategory("/download/data/Films/download") //
             };
 
-            var second = new List<FolderCategory>()
+            var second = new List<FolderCategory>
             {
                 new FolderCategory("/download/data/Films"),
                 new FolderCategory("/download/Films/4K"),
                 new FolderCategory("/download/"),
-                new FolderCategory("/download/data/Films/download"),
+                new FolderCategory("/download/data/Films/download")
             };
 
 
@@ -80,7 +80,6 @@ namespace Kebler.Test
             Assert.IsTrue(result.Count() == 2);
             Assert.IsTrue(f);
             Assert.IsTrue(s);
-
 
 
             Assert.Pass();

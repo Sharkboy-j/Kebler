@@ -22,6 +22,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("fromTracker")]
         public int FromTracker { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         //~TransmissionTorrentPeersFrom()

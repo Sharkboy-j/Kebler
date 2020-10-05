@@ -62,7 +62,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
             return condition;
         }
 
-       
+
         [DebuggerStepThrough]
         [Conditional("DEBUG")]
         public static void AssertIsMainThread()

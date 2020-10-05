@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.UI.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window"
     Title="RemoveListDialogView"
@@ -58,7 +57,8 @@
                     BorderBrush="{DynamicResource TextBox.Static.Border}"
                     BorderThickness="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl Background="{DynamicResource TextBox.Static.Background}" ItemsSource="{Binding Names}">
+                        <ItemsControl Background="{DynamicResource TextBox.Static.Background}"
+                                      ItemsSource="{Binding Names}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem

@@ -9,7 +9,7 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            return value != null && (bool) value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -23,7 +23,7 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && (bool)value ? Visibility.Collapsed : Visibility.Visible;
+            return value != null && (bool) value ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,7 +36,7 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && !(bool)value;
+            return value != null && !(bool) value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

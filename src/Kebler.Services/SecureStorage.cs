@@ -9,11 +9,13 @@ namespace Kebler.Services
     public static class SecureStorage
     {
         /// <summary>
-        /// Yeah! YEah! Fucking usefull!! I know. STFU
+        ///     Yeah! YEah! Fucking usefull!! I know. STFU
         /// </summary>
-        #region sdsdsdsd
-        private const string Entropy = "#X$DRCFT&V *YGBUHIOKMHN(UGBYFVTCRRDTFV YG(UH)IJOK_MJ)IN(HвUBGYTV^R%C%CRv6btynumi0nju9yb8TV&C&TYGB";
 
+        #region sdsdsdsd
+
+        private const string Entropy =
+            "#X$DRCFT&V *YGBUHIOKMHN(UGBYFVTCRRDTFV YG(UH)IJOK_MJ)IN(HвUBGYTV^R%C%CRv6btynumi0nju9yb8TV&C&TYGB";
 
 
         public static string EncryptString(string data)
@@ -78,10 +80,7 @@ namespace Kebler.Services
         private static SecureString SecureString(string input)
         {
             var secure = new SecureString();
-            foreach (var c in input)
-            {
-                secure.AppendChar(c);
-            }
+            foreach (var c in input) secure.AppendChar(c);
 
             secure.MakeReadOnly();
             return secure;

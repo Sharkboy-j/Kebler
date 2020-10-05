@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using Kebler.Models.Torrent;
 
 namespace Kebler.Services.Converters
 {
@@ -21,7 +20,7 @@ namespace Kebler.Services.Converters
                     var piecesGraphic = Utils.CreatePiecesBitmap(count, pices);
                     if (piecesGraphic != null)
                     {
-                        var ret = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                        var ret = Imaging.CreateBitmapSourceFromHBitmap(
                             piecesGraphic.GetHbitmap(),
                             IntPtr.Zero,
                             Int32Rect.Empty,
@@ -30,6 +29,7 @@ namespace Kebler.Services.Converters
                     }
                 }
             }
+
             return null;
         }
 

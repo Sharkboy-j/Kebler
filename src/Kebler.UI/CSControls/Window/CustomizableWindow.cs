@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -7,7 +6,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Shell;
-
 
 namespace Kebler.UI.CSControls.Window
 {
@@ -19,85 +17,61 @@ namespace Kebler.UI.CSControls.Window
     [TemplatePart(Name = PartNameWindowHeader, Type = typeof(FrameworkElement))]
     public class CustomizableWindow : System.Windows.Window
     {
-
-        public static readonly DependencyProperty HeaderHeightProperty = DependencyProperty.Register(nameof(HeaderHeight), typeof(double), typeof(CustomizableWindow), new PropertyMetadata(22.0));
-        public static readonly DependencyProperty FullScreenProperty = DependencyProperty.Register(nameof(FullScreen), typeof(bool), typeof(CustomizableWindow), new PropertyMetadata(false, OnFullScreenChanged));
-        public static readonly DependencyProperty HeaderVisibilityProperty = DependencyProperty.Register(nameof(HeaderVisibility), typeof(Visibility), typeof(CustomizableWindow), new PropertyMetadata(Visibility.Visible));
-        public static readonly DependencyProperty HideMinimizeMaximizeButtonsProperty = DependencyProperty.Register(nameof(HideMinimizeMaximizeButtons), typeof(bool), typeof(CustomizableWindow), new PropertyMetadata(false));
-        public static readonly DependencyProperty IsTitleVisibleProperty = DependencyProperty.Register(nameof(IsTitleVisible), typeof(bool), typeof(CustomizableWindow), new PropertyMetadata(false));
-        public static readonly DependencyProperty ShowHeaderLineProperty = DependencyProperty.Register(nameof(ShowHeaderLine), typeof(bool), typeof(CustomizableWindow), new PropertyMetadata(false));
-
         protected const string PartNameWindowHeader = "PART_WindowHeader";
         protected const string PartNameCloseButton = "PART_CloseButton";
         protected const string PartNameRestoreButton = "PART_RestoreButton";
         protected const string PartNameMinimizeButton = "PART_MinimizeButton";
         protected const string PartNameMaximizeButton = "PART_MaximizeButton";
-        private FrameworkElement _templatePartWindowHeader;
-        private Button _closeButton;
-        private Button _minimizeButton;
-        private Button _maximizeButton;
-        private Button _restoreButton;
+
+        public static readonly DependencyProperty HeaderHeightProperty =
+            DependencyProperty.Register(nameof(HeaderHeight), typeof(double), typeof(CustomizableWindow),
+                new PropertyMetadata(22.0));
+
+        public static readonly DependencyProperty FullScreenProperty = DependencyProperty.Register(nameof(FullScreen),
+            typeof(bool), typeof(CustomizableWindow), new PropertyMetadata(false, OnFullScreenChanged));
+
+        public static readonly DependencyProperty HeaderVisibilityProperty =
+            DependencyProperty.Register(nameof(HeaderVisibility), typeof(Visibility), typeof(CustomizableWindow),
+                new PropertyMetadata(Visibility.Visible));
+
+        public static readonly DependencyProperty HideMinimizeMaximizeButtonsProperty =
+            DependencyProperty.Register(nameof(HideMinimizeMaximizeButtons), typeof(bool), typeof(CustomizableWindow),
+                new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsTitleVisibleProperty =
+            DependencyProperty.Register(nameof(IsTitleVisible), typeof(bool), typeof(CustomizableWindow),
+                new PropertyMetadata(false));
+
+        public static readonly DependencyProperty ShowHeaderLineProperty =
+            DependencyProperty.Register(nameof(ShowHeaderLine), typeof(bool), typeof(CustomizableWindow),
+                new PropertyMetadata(false));
+
         private readonly Thickness _padding;
         private Thickness _borderThickness;
-        private double _tempHeaderHeight;
-        private WindowState _tempWindowState;
+        private Button _closeButton;
         private bool _fullScreen;
-
-
-
-        public double HeaderHeight
-        {
-            get => (double)GetValue(HeaderHeightProperty);
-            private set => SetValue(HeaderHeightProperty, value);
-        }
-
-        public bool FullScreen
-        {
-            get => (bool)GetValue(FullScreenProperty);
-            set => SetValue(FullScreenProperty, value);
-        }
-
-        public bool ShowHeaderLine
-        {
-            get => (bool)GetValue(ShowHeaderLineProperty);
-            set => SetValue(ShowHeaderLineProperty, value);
-        }
-
-        public Visibility HeaderVisibility
-        {
-            get => (Visibility)GetValue(HeaderVisibilityProperty);
-            set => SetValue(HeaderVisibilityProperty, value);
-        }
-
-        public bool HideMinimizeMaximizeButtons
-        {
-            get => (bool)GetValue(HideMinimizeMaximizeButtonsProperty);
-            set => SetValue(HideMinimizeMaximizeButtonsProperty, value);
-        }
-
-        public bool IsTitleVisible
-        {
-            get => (bool)GetValue(IsTitleVisibleProperty);
-            set => SetValue(IsTitleVisibleProperty, value);
-        }
-
-        private static Thickness WindowMaximizedPadding => new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8);
+        private Button _maximizeButton;
+        private Button _minimizeButton;
+        private Button _restoreButton;
+        private double _tempHeaderHeight;
+        private FrameworkElement _templatePartWindowHeader;
+        private WindowState _tempWindowState;
 
         static CustomizableWindow()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomizableWindow), new FrameworkPropertyMetadata(typeof(CustomizableWindow)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomizableWindow),
+                new FrameworkPropertyMetadata(typeof(CustomizableWindow)));
         }
 
-        public CustomizableWindow() : base()
+        public CustomizableWindow()
         {
             SetResourceReference(StyleProperty, typeof(CustomizableWindow));
-            var chrome = new WindowChrome()
+            var chrome = new WindowChrome
             {
                 CornerRadius = new CornerRadius(),
                 GlassFrameThickness = new Thickness(0.0, 0.0, 0.0, 1.0),
                 UseAeroCaptionButtons = false,
-                ResizeBorderThickness = new Thickness(5),
-
+                ResizeBorderThickness = new Thickness(5)
             };
             BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(nameof(HeaderHeight))
             {
@@ -107,6 +81,46 @@ namespace Kebler.UI.CSControls.Window
             _padding = Padding;
             Loaded += Onload;
         }
+
+
+        public double HeaderHeight
+        {
+            get => (double) GetValue(HeaderHeightProperty);
+            private set => SetValue(HeaderHeightProperty, value);
+        }
+
+        public bool FullScreen
+        {
+            get => (bool) GetValue(FullScreenProperty);
+            set => SetValue(FullScreenProperty, value);
+        }
+
+        public bool ShowHeaderLine
+        {
+            get => (bool) GetValue(ShowHeaderLineProperty);
+            set => SetValue(ShowHeaderLineProperty, value);
+        }
+
+        public Visibility HeaderVisibility
+        {
+            get => (Visibility) GetValue(HeaderVisibilityProperty);
+            set => SetValue(HeaderVisibilityProperty, value);
+        }
+
+        public bool HideMinimizeMaximizeButtons
+        {
+            get => (bool) GetValue(HideMinimizeMaximizeButtonsProperty);
+            set => SetValue(HideMinimizeMaximizeButtonsProperty, value);
+        }
+
+        public bool IsTitleVisible
+        {
+            get => (bool) GetValue(IsTitleVisibleProperty);
+            set => SetValue(IsTitleVisibleProperty, value);
+        }
+
+        private static Thickness WindowMaximizedPadding =>
+            new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8);
 
 
         protected override void OnContentRendered(EventArgs e)
@@ -155,9 +169,12 @@ namespace Kebler.UI.CSControls.Window
 
         public virtual void Onload(object sender1, RoutedEventArgs e1)
         {
-            CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, (sender2, e2) => WindowState = WindowState.Minimized));
-            CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, (sender2, e2) => WindowState = WindowState.Maximized));
-            CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, (sender2, e2) => WindowState = WindowState.Normal));
+            CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand,
+                (sender2, e2) => WindowState = WindowState.Minimized));
+            CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand,
+                (sender2, e2) => WindowState = WindowState.Maximized));
+            CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand,
+                (sender2, e2) => WindowState = WindowState.Normal));
             CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, (sender2, e2) => Close()));
             _borderThickness = BorderThickness;
             _tempHeaderHeight = HeaderHeight;
@@ -166,6 +183,7 @@ namespace Kebler.UI.CSControls.Window
                 BorderThickness = new Thickness();
                 _tempHeaderHeight += 8.0;
             }
+
             _tempWindowState = WindowState;
             SwitchIsFullScreen(_fullScreen);
             if (WindowState != WindowState.Maximized)
@@ -194,6 +212,7 @@ namespace Kebler.UI.CSControls.Window
                         _restoreButton.Show();
                         break;
                 }
+
                 switch (ResizeMode)
                 {
                     case ResizeMode.NoResize:
@@ -210,11 +229,11 @@ namespace Kebler.UI.CSControls.Window
         }
 
         private IntPtr HwndSourceHook(
-          IntPtr hwnd,
-          int msg,
-          IntPtr wparam,
-          IntPtr lparam,
-          ref bool handled)
+            IntPtr hwnd,
+            int msg,
+            IntPtr wparam,
+            IntPtr lparam,
+            ref bool handled)
         {
             switch (msg)
             {
@@ -227,20 +246,23 @@ namespace Kebler.UI.CSControls.Window
                     Padding = WindowState == WindowState.Maximized ? WindowMaximizedPadding : _padding;
                     break;
             }
+
             return IntPtr.Zero;
         }
 
         private static void OnFullScreenChanged(
-          DependencyObject d,
-          DependencyPropertyChangedEventArgs e)
+            DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
         {
-            ((CustomizableWindow)d).SwitchIsFullScreen((bool)e.NewValue);
+            ((CustomizableWindow) d).SwitchIsFullScreen((bool) e.NewValue);
         }
 
         private void SwitchIsFullScreen(bool isFullScreen)
         {
             if (_templatePartWindowHeader == null)
+            {
                 _fullScreen = isFullScreen;
+            }
             else if (isFullScreen)
             {
                 _tempHeaderHeight = HeaderHeight;

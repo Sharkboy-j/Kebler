@@ -43,7 +43,8 @@
                             BorderBrush="{TemplateBinding Control.BorderBrush}"
                             BorderThickness="{TemplateBinding Control.BorderThickness}"
                             SnapsToDevicePixels="true">
-                            <Grid Margin="{TemplateBinding Control.Padding}" LayoutTransform="{DynamicResource LayoutScaleTransform}">
+                            <Grid Margin="{TemplateBinding Control.Padding}"
+                                  LayoutTransform="{DynamicResource LayoutScaleTransform}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
@@ -82,25 +83,29 @@
                                                 Name="PART_MinimizeButton"
                                                 Command="SystemCommands.MinimizeWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
-                                                <Path Data="{StaticResource MinimizeGeometry}" Style="{DynamicResource WindowPathStyle}" />
+                                                <Path Data="{StaticResource MinimizeGeometry}"
+                                                      Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
                                                 Name="PART_RestoreButton"
                                                 Command="SystemCommands.RestoreWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
-                                                <Path Data="{StaticResource RestoreGeometry}" Style="{DynamicResource WindowPathStyle}" />
+                                                <Path Data="{StaticResource RestoreGeometry}"
+                                                      Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
                                                 Name="PART_MaximizeButton"
                                                 Command="SystemCommands.MaximizeWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
-                                                <Path Data="{StaticResource MaximizeGeometry}" Style="{DynamicResource WindowPathStyle}" />
+                                                <Path Data="{StaticResource MaximizeGeometry}"
+                                                      Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
                                                 Name="PART_CloseButton"
                                                 Command="SystemCommands.CloseWindowCommand"
                                                 Style="{DynamicResource WindowCloseButton}">
-                                                <Path Data="{StaticResource CloseGeometry}" Style="{DynamicResource WindowCloseButtonPathStyle}" />
+                                                <Path Data="{StaticResource CloseGeometry}"
+                                                      Style="{DynamicResource WindowCloseButtonPathStyle}" />
                                             </Button>
                                         </StackPanel>
                                     </Grid>
@@ -124,7 +129,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <viewModels:KeblerViewModel x:Key="KeblerViewModel"/>
+        <viewModels:KeblerViewModel x:Key="KeblerViewModel" />
     </window:CustomizableWindow.Resources>
     <Grid Background="{DynamicResource DataGrid.BackgroundBrush}">
         <Grid.RowDefinitions>
@@ -220,7 +225,8 @@
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
-                                <Grid Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Grid
+                                    Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
@@ -262,7 +268,6 @@
                                     Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                             </StackPanel>
                         </Grid>
-
 
 
                     </Grid>
@@ -515,7 +520,8 @@
                 Orientation="Vertical"
                 Visibility="{Binding IsConnected, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Collapsed}">
                 <Image Width="150" Source="/Kebler.UI;component/Icons/Kebler_dark_512x512.png" />
-                <controls:LoadingRing Margin="0,5,0,0" Visibility="{Binding IsConnecting, FallbackValue=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <controls:LoadingRing Margin="0,5,0,0"
+                                      Visibility="{Binding IsConnecting, FallbackValue=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <Button
                     Width="70"
                     Margin="0,10,0,0"

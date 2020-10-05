@@ -17,7 +17,6 @@ namespace Kebler.Services.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (int.TryParse(value.ToString(), out var val))
-            {
                 return val switch
                 {
                     0 => Strings.TI_Status_Stopped,
@@ -27,9 +26,8 @@ namespace Kebler.Services.Converters
                     4 => Strings.TI_Status_Downloading,
                     5 => Strings.TI_Status_SeedPending,
                     6 => Strings.TI_Status_Seeding,
-                    _ => string.Empty,
-                };   
-            }
+                    _ => string.Empty
+                };
             return string.Empty;
         }
 

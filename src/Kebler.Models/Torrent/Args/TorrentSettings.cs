@@ -3,7 +3,7 @@
     public class TorrentSettings : ArgumentsBase
     {
         /// <summary>
-        /// This torrent's bandwidth tr_priority_t
+        ///     This torrent's bandwidth tr_priority_t
         /// </summary>
         public int? BandwidthPriority
         {
@@ -12,7 +12,7 @@
         }
 
         /// <summary>
-        /// Maximum download speed (KBps)
+        ///     Maximum download speed (KBps)
         /// </summary>
         public long? DownloadLimit
         {
@@ -21,7 +21,7 @@
         }
 
         /// <summary>
-        /// Download limit is honored
+        ///     Download limit is honored
         /// </summary>
         public bool? DownloadLimited
         {
@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// Session upload limits are honored
+        ///     Session upload limits are honored
         /// </summary>
         public bool? HonorsSessionLimits
         {
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// Torrent id array
+        ///     Torrent id array
         /// </summary>
         public uint[] IDs
         {
@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// New location of the torrent's content
+        ///     New location of the torrent's content
         /// </summary>
         public string Location
         {
@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// Maximum number of peers
+        ///     Maximum number of peers
         /// </summary>
         public int? PeerLimit
         {
@@ -66,7 +66,7 @@
         }
 
         /// <summary>
-        /// Position of this torrent in its queue [0...n)
+        ///     Position of this torrent in its queue [0...n)
         /// </summary>
         public int? QueuePosition
         {
@@ -75,7 +75,7 @@
         }
 
         /// <summary>
-        /// Torrent-level number of minutes of seeding inactivity
+        ///     Torrent-level number of minutes of seeding inactivity
         /// </summary>
         public int? SeedIdleLimit
         {
@@ -84,7 +84,7 @@
         }
 
         /// <summary>
-        /// Which seeding inactivity to use
+        ///     Which seeding inactivity to use
         /// </summary>
         public int? SeedIdleMode
         {
@@ -93,7 +93,7 @@
         }
 
         /// <summary>
-        /// Torrent-level seeding ratio
+        ///     Torrent-level seeding ratio
         /// </summary>
         public double? SeedRatioLimit
         {
@@ -102,7 +102,7 @@
         }
 
         /// <summary>
-        /// Which ratio to use. 
+        ///     Which ratio to use.
         /// </summary>
         public int? SeedRatioMode
         {
@@ -111,7 +111,7 @@
         }
 
         /// <summary>
-        /// Maximum upload speed (KBps)
+        ///     Maximum upload speed (KBps)
         /// </summary>
         public long? UploadLimit
         {
@@ -120,7 +120,7 @@
         }
 
         /// <summary>
-        /// Upload limit is honored
+        ///     Upload limit is honored
         /// </summary>
         public bool? UploadLimited
         {
@@ -129,18 +129,18 @@
         }
 
         /// <summary>
-        /// Strings of announce URLs to add
+        ///     Strings of announce URLs to add
         /// </summary>
-		public string[] TrackerAdd
+        public string[] TrackerAdd
         {
             get => GetValue<string[]>("trackerAdd");
             set => this["trackerAdd"] = value;
         }
 
         /// <summary>
-        /// Ids of trackers to remove
+        ///     Ids of trackers to remove
         /// </summary>
-		public int[] TrackerRemove
+        public int[] TrackerRemove
         {
             get => GetValue<int[]>("trackerRemove");
             set => this["trackerRemove"] = value;
@@ -173,18 +173,16 @@
 
         public object Get(string propertyName)
         {
-
             var myType = typeof(TorrentSettings);
             var myPropInfo = myType.GetProperty(propertyName);
             return myPropInfo?.GetValue(this, null);
         }
+
         public void Set(string propertyName, object value)
         {
             var myType = typeof(TorrentInfo);
             var myPropInfo = myType.GetProperty(propertyName);
             myPropInfo?.SetValue(this, value, null);
-
         }
-
     }
 }

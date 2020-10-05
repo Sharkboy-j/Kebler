@@ -5,7 +5,6 @@ namespace Kebler.Models.Torrent.Entity
 {
     public class Units : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         [JsonProperty("speed-units")]
         public string[] SpeedUnits { get; set; }
 
@@ -23,5 +22,7 @@ namespace Kebler.Models.Torrent.Entity
 
         [JsonProperty("memory-bytes")]
         public int? MemoryBytes { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

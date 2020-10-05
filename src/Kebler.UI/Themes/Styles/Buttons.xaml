@@ -40,20 +40,28 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefault" Value="True">
-                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource AccentBrush}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush"
+                                    Value="{DynamicResource AccentBrush}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Border.Background" Value="{DynamicResource Button.MouseOver.Background}" />
-                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource Button.MouseOver.Border}" />
+                            <Setter TargetName="border" Property="Border.Background"
+                                    Value="{DynamicResource Button.MouseOver.Background}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush"
+                                    Value="{DynamicResource Button.MouseOver.Border}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Border.Background" Value="{DynamicResource Button.Pressed.Background}" />
-                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource Button.Pressed.Border}" />
+                            <Setter TargetName="border" Property="Border.Background"
+                                    Value="{DynamicResource Button.Pressed.Background}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush"
+                                    Value="{DynamicResource Button.Pressed.Border}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Border.Background" Value="{DynamicResource Button.Disabled.Background}" />
-                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{DynamicResource Button.Disabled.Border}" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{DynamicResource Button.Disabled.Foreground}" />
+                            <Setter TargetName="border" Property="Border.Background"
+                                    Value="{DynamicResource Button.Disabled.Background}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush"
+                                    Value="{DynamicResource Button.Disabled.Border}" />
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground"
+                                    Value="{DynamicResource Button.Disabled.Foreground}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -121,12 +129,16 @@
                             <Setter TargetName="img" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ToolBarButton.MouseOver.Background}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ToolBarButton.MouseOver.Border}" />
+                            <Setter TargetName="border" Property="Background"
+                                    Value="{DynamicResource ToolBarButton.MouseOver.Background}" />
+                            <Setter TargetName="border" Property="BorderBrush"
+                                    Value="{DynamicResource ToolBarButton.MouseOver.Border}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ToolBarButton.Pressed.Background}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ToolBarButton.Pressed.Border}" />
+                            <Setter TargetName="border" Property="Background"
+                                    Value="{DynamicResource ToolBarButton.Pressed.Background}" />
+                            <Setter TargetName="border" Property="BorderBrush"
+                                    Value="{DynamicResource ToolBarButton.Pressed.Border}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="border" Property="Opacity" Value="0.6" />

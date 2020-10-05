@@ -3,7 +3,7 @@
 namespace Kebler.Update
 {
     /// <summary>
-    /// Interaction logic for EXCEPTIONWINDOW.xaml
+    ///     Interaction logic for EXCEPTIONWINDOW.xaml
     /// </summary>
     public partial class EXCEPTIONWINDOW : Window
     {

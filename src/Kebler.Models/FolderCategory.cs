@@ -6,26 +6,22 @@ namespace Kebler.Models
     [DebuggerDisplay("{FolderName}")]
     public class FolderCategory
     {
+        public readonly DirectoryInfo Dir;
+
         public FolderCategory(string fullPath)
         {
-            _nativePath = NormalizePath(fullPath);
-            Dir = new DirectoryInfo(_nativePath);
+            FullPath = NormalizePath(fullPath);
+            Dir = new DirectoryInfo(FullPath);
         }
 
-        private readonly string _nativePath;
-
         public string FolderName => Dir.Name;
-        public string FullPath => _nativePath;
-        public readonly DirectoryInfo Dir;
+        public string FullPath { get; }
 
         public string Title { get; set; }
 
         public override bool Equals(object obj)
         {
-            if (obj is FolderCategory cat)
-            {
-                return cat._nativePath.Equals(this._nativePath);
-            }
+            if (obj is FolderCategory cat) return cat.FullPath.Equals(FullPath);
             return false;
         }
 
@@ -34,7 +30,7 @@ namespace Kebler.Models
         {
             unchecked
             {
-                var hashCode = _nativePath.GetHashCode();
+                var hashCode = FullPath.GetHashCode();
                 hashCode = (hashCode * 397) ^ hashCode;
                 return hashCode;
             }
@@ -42,16 +38,14 @@ namespace Kebler.Models
 
         public static string NormalizePath(string path)
         {
-            if (!Path.EndsInDirectorySeparator(path))
-            {
-                path = $"{path}{Path.AltDirectorySeparatorChar}";
-            }
-            
+            if (!Path.EndsInDirectorySeparator(path)) path = $"{path}{Path.AltDirectorySeparatorChar}";
+
             return path;
         }
+
         public override string ToString()
         {
-            return $"'{_nativePath}'";
+            return $"'{FullPath}'";
         }
     }
 

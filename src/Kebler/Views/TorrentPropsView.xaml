@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:Kebler.Services.Helpers"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
     Title="TorrentPropsView"
@@ -228,10 +227,8 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{lex:Loc  MoreInfo_Trackers}" >
-                            <Grid>
-
-                            </Grid>
+                        <TabItem Header="{lex:Loc  MoreInfo_Trackers}">
+                            <Grid />
                         </TabItem>
                     </TabControl>
                 </StackPanel>

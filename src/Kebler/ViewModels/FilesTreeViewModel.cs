@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Caliburn.Micro;
 using Kebler.Models.Interfaces;
 using Kebler.Models.Torrent;
@@ -12,6 +11,7 @@ namespace Kebler.ViewModels
     public class FilesTreeViewModel : PropertyChangedBase, IFilesTreeView
     {
         private MultiselectionTreeViewItem _files = new MultiselectionTreeViewItem();
+
         public MultiselectionTreeViewItem Files
         {
             get => _files;
@@ -19,7 +19,6 @@ namespace Kebler.ViewModels
         }
 
         public Thickness Border { get; set; } = new Thickness(0);
-
 
 
         public uint[] getFilesWantedStatus(bool status)
@@ -30,6 +29,7 @@ namespace Kebler.ViewModels
                 var ids = get(tm, status);
                 merge(ref output, ref ids, out output);
             }
+
             return output;
         }
 
@@ -47,7 +47,6 @@ namespace Kebler.ViewModels
             if (Node.HasChildren)
             {
                 foreach (var item in Node.Children)
-                {
                     if (item.HasChildren)
                     {
                         var ids = get(item, search);
@@ -62,7 +61,6 @@ namespace Kebler.ViewModels
                             //dd.Add(item.IndexPattern);
                         }
                     }
-                }
             }
             else
             {
@@ -80,10 +78,9 @@ namespace Kebler.ViewModels
 
         public void UpdateFilesTree(TorrentInfo torrent)
         {
-
             var items = createTree(ref torrent);
 
-            var newItems = new MultiselectionTreeViewItem { IsExpanded = true };
+            var newItems = new MultiselectionTreeViewItem {IsExpanded = true};
             newItems.Children.Add(items);
 
             Files = newItems;
@@ -91,13 +88,9 @@ namespace Kebler.ViewModels
 
         private static MultiselectionTreeViewItem createTree(ref TorrentInfo torrent)
         {
-
-            var root = new MultiselectionTreeViewItem { Title = torrent.Name };
+            var root = new MultiselectionTreeViewItem {Title = torrent.Name};
             foreach (var itm in torrent.Files)
-            {
                 itm.Name = itm.Name.Replace(torrent.Name, string.Empty).TrimStart('/', '\\');
-            }
-
 
 
             var count = 0U;
@@ -117,7 +110,6 @@ namespace Kebler.ViewModels
 
         private static void createNodes(ref MultiselectionTreeViewItem root, string file, uint index, bool wanted)
         {
-
             file = file.Replace('/', '\\');
             var dirs = file.Split('\\');
 
@@ -132,7 +124,7 @@ namespace Kebler.ViewModels
                 if (last.Children.All(x => x.Title != pathPart))
                 {
                     //if not found children
-                    var pth = new MultiselectionTreeViewItem { Title = pathPart, IsExpanded = true };
+                    var pth = new MultiselectionTreeViewItem {Title = pathPart, IsExpanded = true};
 
                     //this will put all dirs into priority pos
                     last.Children.Insert(i == dirs.Length - 1 ? last.Children.Count : 0, pth);
@@ -146,7 +138,6 @@ namespace Kebler.ViewModels
 
             last.IndexPattern = index;
             last.IsChecked = wanted;
-
         }
     }
 }

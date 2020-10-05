@@ -17,29 +17,29 @@ namespace Kebler.UI.CSControls.Window
 
         [DllImport("user32.dll")]
         private static extern IntPtr MonitorFromRect(
-          [In] ref RECT lprc,
-          uint dwFlags);
+            [In] ref RECT lprc,
+            uint dwFlags);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetMonitorInfo(
-          IntPtr hMonitor,
-          ref MONITORINFO lpmi);
+            IntPtr hMonitor,
+            ref MONITORINFO lpmi);
 
         [DllImport("user32.dll")]
         private static extern bool SetWindowPlacement(
-          IntPtr hWnd,
-          [In] ref WINDOWPLACEMENT lpwndpl);
+            IntPtr hWnd,
+            [In] ref WINDOWPLACEMENT lpwndpl);
 
         [DllImport("user32.dll")]
         private static extern bool GetWindowPlacement(
-          IntPtr hWnd,
-          out WINDOWPLACEMENT lpwndpl);
+            IntPtr hWnd,
+            out WINDOWPLACEMENT lpwndpl);
 
         [DllImport("shell32.dll", CallingConvention = CallingConvention.StdCall)]
         private static extern uint SHAppBarMessage(
-          int dwMessage,
-          ref APPBARDATA pData);
+            int dwMessage,
+            ref APPBARDATA pData);
 
         [DllImport("user32.dll")]
         private static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
@@ -50,7 +50,8 @@ namespace Kebler.UI.CSControls.Window
             var hMonitor = MonitorFromRect(ref windowPlacement.normalPosition, 2U);
             var monitorinfo = new MONITORINFO {cbSize = (uint) Marshal.SizeOf(typeof(MONITORINFO))};
             ref var local = ref monitorinfo;
-            if (GetMonitorInfo(hMonitor, ref local) && !RectanglesIntersect(windowPlacement.normalPosition, monitorinfo.rcMonitor))
+            if (GetMonitorInfo(hMonitor, ref local) &&
+                !RectanglesIntersect(windowPlacement.normalPosition, monitorinfo.rcMonitor))
                 windowPlacement.normalPosition = PlaceOnScreen(monitorinfo.rcMonitor, windowPlacement.normalPosition);
             SetWindowPlacement(new WindowInteropHelper(window).Handle, ref windowPlacement);
         }
@@ -62,7 +63,8 @@ namespace Kebler.UI.CSControls.Window
             var top = placement.normalPosition.Top;
             var num1 = placement.normalPosition.Bottom - placement.normalPosition.Top;
             var num2 = placement.normalPosition.Right - placement.normalPosition.Left;
-            return new WindowLocationState((double)left, (double)top, (double)num2, (double)num1, window.WindowState);
+            return new WindowLocationState(left, top, num2, num1,
+                window.WindowState);
         }
 
         public static WindowLocationState GetWindowLocationStateX(this System.Windows.Window window)
@@ -71,15 +73,17 @@ namespace Kebler.UI.CSControls.Window
             var unitX = 0;
             var unitY = 0;
             if (window.WindowState != WindowState.Maximized)
-                TransformFromPixels((Visual)window, (double)placement.normalPosition.Left, (double)placement.normalPosition.Top, out unitX, out unitY);
+                TransformFromPixels(window, placement.normalPosition.Left,
+                    placement.normalPosition.Top, out unitX, out unitY);
             var actualWidth = window.ActualWidth;
             var actualHeight = window.ActualHeight;
-            return new WindowLocationState((double)unitX, (double)unitY, actualWidth, actualHeight, window.WindowState);
+            return new WindowLocationState(unitX, unitY, actualWidth, actualHeight,
+                window.WindowState);
         }
 
         public static void GetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
         {
-            var structure = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+            var structure = (MINMAXINFO) Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
             var hMonitor = MonitorFromWindow(hwnd, 2);
             if (structure != null && AutoHideEnabled())
             {
@@ -92,7 +96,8 @@ namespace Kebler.UI.CSControls.Window
                 structure.ptMaxSize.X = Math.Abs(rcWork.Right - rcWork.Left);
                 structure.ptMaxSize.Y = Math.Abs(rcWork.Bottom - rcWork.Top - 1);
             }
-            Marshal.StructureToPtr<MINMAXINFO>(structure, lParam, true);
+
+            Marshal.StructureToPtr(structure, lParam, true);
         }
 
         public static bool AutoHideEnabled()
@@ -102,57 +107,56 @@ namespace Kebler.UI.CSControls.Window
         }
 
         public static void TransformFromPixels(
-          Visual visual,
-          double pixelX,
-          double pixelY,
-          out int unitX,
-          out int unitY)
+            Visual visual,
+            double pixelX,
+            double pixelY,
+            out int unitX,
+            out int unitY)
         {
             var presentationSource = PresentationSource.FromVisual(visual);
             Matrix transformToDevice;
             if (presentationSource != null)
-            {
                 transformToDevice = presentationSource.CompositionTarget.TransformToDevice;
-            }
             else
-            {
                 using (var hwndSource = new HwndSource(new HwndSourceParameters()))
+                {
                     transformToDevice = hwndSource.CompositionTarget.TransformToDevice;
-            }
-            unitX = (int)(pixelX / transformToDevice.M11);
-            unitY = (int)(pixelY / transformToDevice.M22);
+                }
+
+            unitX = (int) (pixelX / transformToDevice.M11);
+            unitY = (int) (pixelY / transformToDevice.M22);
         }
 
         public static void TransformToPixels(
-          Visual visual,
-          double unitX,
-          double unitY,
-          out int pixelX,
-          out int pixelY)
+            Visual visual,
+            double unitX,
+            double unitY,
+            out int pixelX,
+            out int pixelY)
         {
             var presentationSource = PresentationSource.FromVisual(visual);
             Matrix transformToDevice;
             if (presentationSource != null)
-            {
                 transformToDevice = presentationSource.CompositionTarget.TransformToDevice;
-            }
             else
-            {
                 using (var hwndSource = new HwndSource(new HwndSourceParameters()))
+                {
                     transformToDevice = hwndSource.CompositionTarget.TransformToDevice;
-            }
-            pixelX = (int)(transformToDevice.M11 * unitX);
-            pixelY = (int)(transformToDevice.M22 * unitY);
+                }
+
+            pixelX = (int) (transformToDevice.M11 * unitX);
+            pixelY = (int) (transformToDevice.M22 * unitY);
         }
 
         private static WINDOWPLACEMENT ToWindowPlacement(
-          WindowLocationState state)
+            WindowLocationState state)
         {
-            return new WINDOWPLACEMENT()
+            return new WINDOWPLACEMENT
             {
                 minPosition = new POINT(-1, -1),
                 maxPosition = new POINT(-1, -1),
-                normalPosition = new RECT((int)state.Left, (int)state.Top, (int)(state.Left + state.Width), (int)(state.Top + state.Height)),
+                normalPosition = new RECT((int) state.Left, (int) state.Top, (int) (state.Left + state.Width),
+                    (int) (state.Top + state.Height)),
                 length = Marshal.SizeOf(typeof(WINDOWPLACEMENT)),
                 flags = 0,
                 showCmd = ToShowCmd(state.WindowState)
@@ -167,15 +171,15 @@ namespace Kebler.UI.CSControls.Window
         }
 
         private static bool RectanglesIntersect(
-          RECT a,
-          RECT b)
+            RECT a,
+            RECT b)
         {
-            return a.Left <= b.Right && a.Right >= b.Left && (a.Top <= b.Bottom && a.Bottom >= b.Top);
+            return a.Left <= b.Right && a.Right >= b.Left && a.Top <= b.Bottom && a.Bottom >= b.Top;
         }
 
         private static RECT PlaceOnScreen(
-          RECT monitorRect,
-          RECT windowRect)
+            RECT monitorRect,
+            RECT windowRect)
         {
             var num1 = monitorRect.Right - monitorRect.Left;
             var num2 = monitorRect.Bottom - monitorRect.Top;
@@ -195,6 +199,7 @@ namespace Kebler.UI.CSControls.Window
                 windowRect.Right = monitorRect.Right;
                 windowRect.Left = windowRect.Right - num3;
             }
+
             if (windowRect.Bottom < monitorRect.Top)
             {
                 var num3 = windowRect.Bottom - windowRect.Top;
@@ -211,11 +216,12 @@ namespace Kebler.UI.CSControls.Window
                 windowRect.Bottom = monitorRect.Bottom;
                 windowRect.Top = windowRect.Bottom - num3;
             }
+
             return windowRect;
         }
 
         private static WINDOWPLACEMENT GetPlacement(
-          IntPtr windowHandle)
+            IntPtr windowHandle)
         {
             var lpwndpl = new WINDOWPLACEMENT();
             GetWindowPlacement(windowHandle, out lpwndpl);
@@ -274,11 +280,11 @@ namespace Kebler.UI.CSControls.Window
         [StructLayout(LayoutKind.Sequential)]
         private class MINMAXINFO
         {
-            public POINT ptReserved;
-            public POINT ptMaxSize;
             public POINT ptMaxPosition;
-            public POINT ptMinTrackSize;
+            public POINT ptMaxSize;
             public POINT ptMaxTrackSize;
+            public POINT ptMinTrackSize;
+            public POINT ptReserved;
         }
 
         private struct APPBARDATA

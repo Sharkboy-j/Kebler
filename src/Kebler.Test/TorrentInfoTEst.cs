@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Kebler.Test
 {
-    class TorrentInfoTest
+    internal class TorrentInfoTest
     {
         [Test]
         public void TorrentEquals_true()
@@ -49,9 +49,9 @@ namespace Kebler.Test
         {
             var torrents = new List<TorrentInfo>
             {
-                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First" },
-                new TorrentInfo(2) {HashString = "sadasdasdas", Name = "Second" },
-                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third" }
+                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First"},
+                new TorrentInfo(2) {HashString = "sadasdasdas", Name = "Second"},
+                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third"}
             };
             return torrents;
         }
@@ -60,8 +60,8 @@ namespace Kebler.Test
         {
             var torrents = new List<TorrentInfo>
             {
-                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First" },
-                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third" }
+                new TorrentInfo(1) {HashString = "wsvgbh", Name = "First"},
+                new TorrentInfo(3) {HashString = "asdasdasd", Name = "Third"}
             };
             return torrents;
         }

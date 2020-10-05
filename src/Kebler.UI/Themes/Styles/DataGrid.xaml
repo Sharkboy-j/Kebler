@@ -4,7 +4,6 @@
     xmlns:ctrl="clr-namespace:Kebler.UI.CSControls">
 
 
-
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="{DynamicResource DataGrid.Header.BackgroundBrush}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -106,7 +105,9 @@
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=IsKeyboardFocusWithin}" Value="False" />
+                    <Condition
+                        Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=IsKeyboardFocusWithin}"
+                        Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
                     <Setter Property="Foreground" Value="{DynamicResource DataGrid.Row.ForegroundBrush}" />
@@ -155,9 +156,11 @@
                                             <RowDefinition Height="22" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1">
+                                        <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"
+                                                                        Grid.Column="1">
                                             <DataGridColumnHeadersPresenter.Visibility>
-                                                <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
+                                                <Binding Path="HeadersVisibility"
+                                                         RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
                                                     <Binding.ConverterParameter>
                                                         <DataGridHeadersVisibility>Column</DataGridHeadersVisibility>
                                                     </Binding.ConverterParameter>
@@ -186,7 +189,8 @@
                                             Grid.Row="1" Grid.Column="1" Margin="0,0,17,0"
                                             VerticalAlignment="Bottom">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}" />
+                                                <ColumnDefinition
+                                                    Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
 

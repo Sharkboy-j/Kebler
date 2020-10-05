@@ -1,59 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Kebler.Models;
 
 namespace Kebler.ViewModels
 {
-    public class BoxViewModel: Screen
+    public class BoxViewModel : Screen
     {
-        public bool Result;
-        private double _minWidth;
         private string _message;
-        private bool _yesVisible, _noVisible, _cancelVisible, _okVisible,
-            _okDefault, _yesDefault, _logoVisibility;
-     
+        private double _minWidth;
 
+        private bool _yesVisible,
+            _noVisible,
+            _cancelVisible,
+            _okVisible,
+            _okDefault,
+            _yesDefault,
+            _logoVisibility;
 
-        protected void ShowButtons(Enums.MessageBoxDilogButtons buttons)
-        {
-            switch (buttons)
-            {
-                case (Enums.MessageBoxDilogButtons.Ok):
-                {
-                    OkVisible = true;
-                    YesDefault = true;
-                    break;
-                }
-                case (Enums.MessageBoxDilogButtons.OkCancel):
-                {
-                    OkVisible = CancelVisible = true;
-                    OkDefault = true;
-                    break;
-                }
-                case (Enums.MessageBoxDilogButtons.YesNo):
-                {
-                    YesVisible = NoVisible = true;
-                    YesDefault = true;
-                    break;
-                }
-            }
-        }
-
-
-        public virtual void OkYes()
-        {
-            Result = true;
-            base.TryCloseAsync(true);
-        }
-
-        public virtual void NoCancel()
-        {
-            Result = false;
-            base.TryCloseAsync(false);
-        }
-
+        public bool Result;
 
 
         public double MinWidth
@@ -111,5 +74,42 @@ namespace Kebler.ViewModels
         }
 
 
+        protected void ShowButtons(Enums.MessageBoxDilogButtons buttons)
+        {
+            switch (buttons)
+            {
+                case Enums.MessageBoxDilogButtons.Ok:
+                {
+                    OkVisible = true;
+                    YesDefault = true;
+                    break;
+                }
+                case Enums.MessageBoxDilogButtons.OkCancel:
+                {
+                    OkVisible = CancelVisible = true;
+                    OkDefault = true;
+                    break;
+                }
+                case Enums.MessageBoxDilogButtons.YesNo:
+                {
+                    YesVisible = NoVisible = true;
+                    YesDefault = true;
+                    break;
+                }
+            }
+        }
+
+
+        public virtual void OkYes()
+        {
+            Result = true;
+            base.TryCloseAsync(true);
+        }
+
+        public virtual void NoCancel()
+        {
+            Result = false;
+            base.TryCloseAsync(false);
+        }
     }
 }

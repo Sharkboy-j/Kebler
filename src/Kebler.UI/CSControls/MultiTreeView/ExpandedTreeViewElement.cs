@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Kebler.UI.CSControls.MuliTreeView
 {
     public class ExpandedTreeViewElement
     {
+        public ExpandedTreeViewElement(string name, ExpandedTreeViewElement[] children)
+        {
+            Name = name;
+            Children = children;
+        }
+
         public string Name { get; }
 
         public ExpandedTreeViewElement[] Children { get; }
-
-        public ExpandedTreeViewElement(string name, ExpandedTreeViewElement[] children)
-        {
-            this.Name = name;
-            this.Children = children;
-        }
 
         public static class Coder
         {
@@ -28,7 +28,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
             }
 
             private static ExpandedTreeViewElement[] DecodeExpandedTreeViewElementArray(
-              JArray jsonArray)
+                JArray jsonArray)
             {
                 if (jsonArray == null)
                     return null;
@@ -39,6 +39,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
                     if (expandedTreeViewElement != null)
                         expandedTreeViewElementList.Add(expandedTreeViewElement);
                 }
+
                 return expandedTreeViewElementList.ToArray();
             }
 
@@ -46,15 +47,15 @@ namespace Kebler.UI.CSControls.MuliTreeView
             {
                 if (element == null)
                     return null;
-                return new JObject()
+                return new JObject
                 {
                     {
-                      "Name",
-                       new JValue(element.Name)
+                        "Name",
+                        new JValue(element.Name)
                     },
                     {
-                      "Children",
-                       EncodeEncodeExpandedTreeViewElementArray(element.Children)
+                        "Children",
+                        EncodeEncodeExpandedTreeViewElementArray(element.Children)
                     }
                 };
             }
@@ -70,6 +71,7 @@ namespace Kebler.UI.CSControls.MuliTreeView
                     if (jobject != null)
                         jarray.Add(jobject);
                 }
+
                 return jarray;
             }
         }

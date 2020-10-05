@@ -14,11 +14,11 @@ namespace Kebler.Services
 
         public static DefaultSettings Instanse;
 
-        private static object _sync = new object();
+        private static readonly object _sync = new object();
 
         public static void Save()
         {
-            lock(_sync)
+            lock (_sync)
             {
                 ConfigurationObj.Clear();
                 ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));
@@ -32,16 +32,12 @@ namespace Kebler.Services
             lock (_sync)
             {
                 if (IsExist())
-                {
                     LoadConfigurationFromFile();
-                }
                 else
-                {
                     CreateNewConfig();
-                }
             }
-            Log.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
 
+            Log.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
         }
 
         private static void CreateNewConfig()
@@ -70,8 +66,6 @@ namespace Kebler.Services
                 Log.Info("Configuration file not found");
                 return false;
             }
-
-
         }
 
         private static void LoadConfigurationFromFile()
@@ -86,7 +80,6 @@ namespace Kebler.Services
                 Log.Error(e.ToString());
                 CreateNewConfig();
             }
-
         }
 
 
@@ -111,6 +104,5 @@ namespace Kebler.Services
 
             return text;
         }
-
     }
 }

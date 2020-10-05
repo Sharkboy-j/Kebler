@@ -16,8 +16,5 @@
         Background="Transparent"
         CanUserAddRows="True"
         IsReadOnly="False"
-        ItemsSource="{Binding Preferences, Mode=TwoWay}">
-
-     
-    </DataGrid>
+        ItemsSource="{Binding Preferences, Mode=TwoWay}" />
 </window:DialogWindow>

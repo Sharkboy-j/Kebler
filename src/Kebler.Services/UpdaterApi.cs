@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Kebler.Services
 {
     public static class UpdaterApi
     {
-        static JObject latestReleaseJson;
+        private static JObject latestReleaseJson;
+
         public static async Task<(bool, Version)> CheckAsync(string user, string repository, Version currentVersion)
         {
             try
@@ -19,12 +18,10 @@ namespace Kebler.Services
 
                 return (currentVersion < version, version);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return (false,new Version());
+                return (false, new Version());
             }
-          
-
         }
 
         public static (bool, Version) Check(string user, string repository, Version currentVersion)
@@ -41,8 +38,6 @@ namespace Kebler.Services
             {
                 return (false, new Version());
             }
-
-
         }
 
         public static string GetlatestUri()

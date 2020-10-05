@@ -7,11 +7,11 @@ namespace Kebler.UI.CSControls.MuliTreeView
     {
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetCursorPos(ref MouseHelper.Win32Point pt);
+        private static extern bool GetCursorPos(ref Win32Point pt);
 
         public static Point GetMousePosition()
         {
-            var pt = new MouseHelper.Win32Point();
+            var pt = new Win32Point();
             GetCursorPos(ref pt);
             return new Point(pt.X, pt.Y);
         }

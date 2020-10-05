@@ -58,7 +58,8 @@
                 Header="{lex:Loc  QA_RemoveData}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <Separator />
-            <MenuItem Header="{lex:Loc  QA_Queue}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
+            <MenuItem Header="{lex:Loc  QA_Queue}"
+                      IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
                 <MenuItem
                     cal:Message.Attach="MoveTop"
                     Header="{lex:Loc  QA_MoveTop}"

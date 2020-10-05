@@ -12,12 +12,12 @@ namespace Kebler.Models.Tree
     [DebuggerDisplay("{Title}")]
     public class MultiselectionTreeViewItem : FlattenerNode, INotifyPropertyChanged
     {
+        private MultiselectionTreeViewItemCollection _children;
+        private bool? _isChecked = true;
         private bool _isExpanded = true;
         private bool _isHidden;
         private bool _isSelected;
-        private bool? _isChecked = true;
-
-        private MultiselectionTreeViewItemCollection _children;
+        public uint IndexPattern;
 
         public MultiselectionTreeViewItem ParentItem { get; private set; }
 
@@ -48,8 +48,6 @@ namespace Kebler.Models.Tree
         //    Notifyparent(value);
 
         //    if (!HasChildren) return;
-
-
 
 
         //    foreach (var child in _children)
@@ -97,6 +95,7 @@ namespace Kebler.Models.Tree
                             _isChecked = true;
                         return true;
                     }
+
                     status = _children.All(x => x.IsChecked == false);
 
                     if (status)
@@ -105,12 +104,13 @@ namespace Kebler.Models.Tree
                             _isChecked = false;
                         return false;
                     }
+
                     if (_isChecked != null)
                         _isChecked = null;
                     return null;
                 }
-                return _isChecked;
 
+                return _isChecked;
             }
             set
             {
@@ -119,15 +119,26 @@ namespace Kebler.Models.Tree
                 _isChecked = value;
 
                 if (_children != null && _children.Count > 0)
-                {
                     foreach (var child in _children)
                         child.IsChecked = value;
-                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked)));
 
                 NotifyParent();
             }
         }
+
+        public bool HasChildren => _children != null && _children.Count > 0;
+
+        public int Level => ParentItem?.Level + 1 ?? 0;
+        public virtual bool IsFocusable => true;
+
+        public string Title { get; set; }
+
+
+        public MultiselectionTreeViewItemCollection Children =>
+            _children ??= new MultiselectionTreeViewItemCollection(this);
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyParent()
         {
@@ -139,8 +150,6 @@ namespace Kebler.Models.Tree
             }
         }
 
-        public bool HasChildren => _children != null && _children.Count > 0;
-
         private void UpdateChildIsVisible(bool updateFlattener)
         {
             if (_children == null || _children.Count <= 0)
@@ -150,18 +159,6 @@ namespace Kebler.Models.Tree
             foreach (var child in _children)
                 child.UpdateIsVisible(parentIsVisibleAndExpanded, updateFlattener);
         }
-
-        public int Level => ParentItem?.Level + 1 ?? 0;
-        public uint IndexPattern;
-        public virtual bool IsFocusable => true;
-
-        public string Title { get; set; }
-
-
-
-        public MultiselectionTreeViewItemCollection Children => _children ??= new MultiselectionTreeViewItemCollection(this);
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -234,7 +231,9 @@ namespace Kebler.Models.Tree
                 child.IsHidden = child.AreAllChildrenHidden();
             }
             else
+            {
                 child.IsHidden = !flag;
+            }
         }
 
         internal void EnsureChildrenFiltered(string filterString)
@@ -258,18 +257,19 @@ namespace Kebler.Models.Tree
 
         protected virtual bool MatchFilter(string filterString)
         {
-            return string.IsNullOrEmpty(filterString) || Title.IndexOf(filterString, StringComparison.OrdinalIgnoreCase) != -1;
+            return string.IsNullOrEmpty(filterString) ||
+                   Title.IndexOf(filterString, StringComparison.OrdinalIgnoreCase) != -1;
         }
 
         protected internal virtual void OnChildrenChanged(NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null)
-            {
                 foreach (MultiselectionTreeViewItem oldItem in e.OldItems)
                 {
                     oldItem.ParentItem = null;
                     var multiselectionTreeViewItem = oldItem;
-                    while (multiselectionTreeViewItem._children != null && multiselectionTreeViewItem._children.Count > 0)
+                    while (multiselectionTreeViewItem._children != null &&
+                           multiselectionTreeViewItem._children.Count > 0)
                         multiselectionTreeViewItem = multiselectionTreeViewItem._children.Last();
                     List<MultiselectionTreeViewItem> multiselectionTreeViewItemList = null;
                     var index = 0;
@@ -278,11 +278,12 @@ namespace Kebler.Models.Tree
                         index = GetVisibleIndexForNode(oldItem);
                         multiselectionTreeViewItemList = oldItem.VisibleDescendantsAndSelf().ToList();
                     }
+
                     RemoveNodes(oldItem, multiselectionTreeViewItem);
                     if (multiselectionTreeViewItemList != null)
                         GetListRoot()._treeFlattener?.NodesRemoved(index, multiselectionTreeViewItemList);
                 }
-            }
+
             if (e.NewItems != null)
             {
                 var multiselectionTreeViewItem = e.NewStartingIndex == 0 ? null : _children[e.NewStartingIndex - 1];
@@ -290,16 +291,20 @@ namespace Kebler.Models.Tree
                 {
                     newItem.ParentItem = this;
                     newItem.UpdateIsVisible(IsVisible && IsExpanded, false);
-                    for (; multiselectionTreeViewItem != null; multiselectionTreeViewItem = multiselectionTreeViewItem._children.Last())
+                    for (;
+                        multiselectionTreeViewItem != null;
+                        multiselectionTreeViewItem = multiselectionTreeViewItem._children.Last())
                     {
                         var count = multiselectionTreeViewItem._children?.Count;
-                        if (!(count.GetValueOrDefault() > 0 & count.HasValue))
+                        if (!((count.GetValueOrDefault() > 0) & count.HasValue))
                             break;
                     }
+
                     InsertNodeAfter(multiselectionTreeViewItem ?? this, newItem);
                     multiselectionTreeViewItem = newItem;
                     if (newItem.IsVisible)
-                        GetListRoot()._treeFlattener?.NodesInserted(GetVisibleIndexForNode(newItem), newItem.VisibleDescendantsAndSelf());
+                        GetListRoot()._treeFlattener?.NodesInserted(GetVisibleIndexForNode(newItem),
+                            newItem.VisibleDescendantsAndSelf());
                 }
             }
 
@@ -334,6 +339,7 @@ namespace Kebler.Models.Tree
                         flattenerNode.OnIsVisibleChanged();
                 }
             }
+
             if (!(updateFlattener & flag))
                 return;
             var treeFlattener1 = GetListRoot()._treeFlattener;
@@ -343,7 +349,5 @@ namespace Kebler.Models.Tree
             foreach (var flattenerNode in VisibleDescendantsAndSelf())
                 flattenerNode.OnIsVisibleChanged();
         }
-
-
     }
 }

@@ -1,22 +1,21 @@
-﻿using Kebler.Models.Torrent.Common;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
+using Kebler.Models.Torrent.Common;
 using log4net;
 using Expression = System.Linq.Expressions.Expression;
-using System.Text;
 
 namespace Kebler
 {
-
     public static class LocalExtensions
     {
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
+            if (((FrameworkElement) templateFrameworkElement).TemplatedParent is Window window) action(window);
         }
 
         public static IntPtr GetWindowHandle(this Window window)

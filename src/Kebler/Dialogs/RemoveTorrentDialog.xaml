@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
     Width="520"
     Height="240"

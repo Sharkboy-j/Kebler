@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Caliburn.Micro;
 using Kebler.Models.Torrent;
+using Kebler.Models.Torrent.Args;
 using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
@@ -12,91 +13,40 @@ namespace Kebler.ViewModels
 {
     public class MoreInfoViewModel : PropertyChangedBase
     {
-        public static TransmissionClient _client;
-        
-        public uint[] id;
+        private static TransmissionClient? _client;
+
+        private DateTime _addedOn, _createdOn, _completedOn;
+        private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
+
+        private string? _downloadLimit,
+            _uploadLimit,
+            _seeds,
+            _error,
+            _peersCount,
+            _wasted,
+            _ratio,
+            _path,
+            _hash,
+            _magnet,
+            _comment,
+            _pieces,
+            _piecesString;
+
         private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
+        private bool _loading, _isMore;
+
+
+        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
+        private double _percentDone;
+        private int _selectedCount, _maxPeers;
+        private IList? _selectedTrackers;
+        private int _status, _piecesCount;
+        private TorrentInfo? _ti;
 
         private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
             new BindableCollection<TransmissionTorrentTrackerStats>();
 
-        
-        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
-        private bool _loading, _isMore;
-        private double _percentDone;
-        private int _selectedCount, _maxPeers;
-        private TorrentInfo _ti;
-        private int _status, _piecesCount;
-        private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
-        private string _downloadLimit, _uploadLimit, _seeds, _error, _peersCount, _wasted, _ratio,
-            _path, _hash, _magnet, _comment, _pieces, _piecesString;
-
-        private DateTime _addedOn, _createdOn, _completedOn;
-        private IList _selectedTrackers;
-
-        public void Update(TorrentInfo torrent,TransmissionClient client)
-        {
-       
-            _client = client;
-            _ti = torrent;
-            FilesTree.UpdateFilesTree(_ti);
-
-            Pieces = _ti.Pieces;
-            PiecesCount = _ti.PieceCount;
-            PercentDone = _ti.PercentDone;
-
-
-            Peers = _ti.Peers;
-            Status = _ti.Status;
-            Downloaded = _ti.DownloadedEver;
-            DownloadSpeed = _ti.RateDownload;
-            DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
-            Seeds = $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
-            PeersCount = $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
-
-            Error = Utils.GetErrorString(_ti);
-            Uploaded = _ti.UploadedEver;
-            UploadSpeed = _ti.RateUpload;
-            UploadLimit = _ti.UploadLimited ? _ti.UploadLimit.ToString() : "-";
-
-            Remaining = _ti.LeftUntilDone;
-            Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
-            Ratio = $"{_ti.UploadRatio}";
-            MaxPeers = _ti.MaxConnectedPeers;
-
-            Path = $"{_ti.DownloadDir}{_ti.Name}";
-            Size = _ti.TotalSize;
-            Hash = _ti.HashString;
-            AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();
-            MagnetLink = _ti.MagnetLink;
-
-            CreatedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DateCreated).UtcDateTime.ToLocalTime();
-            CompletedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DoneDate).UtcDateTime.ToLocalTime();
-            Comment = _ti.Comment;
-            PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize, true)}";
-
-            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
-
-            
-        }
-        public async void DeleteTracker()
-        {
-            var ids = id;
-            var rm = SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.ID).ToArray();
-
-            var mgr = IoC.Get<IWindowManager>();
-            var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(Strings.DialogBox_RemoveTracker, SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.announce)));
-
-            if (result == true)
-            {
-                await _client.TorrentSetAsync(new Models.Torrent.Args.TorrentSettings()
-                {
-                    IDs = ids,
-                    TrackerRemove = rm
-                }, new System.Threading.CancellationToken());
-            }
-        }
-
+        public uint[]? id;
 
 
         public IList SelectedTrackers
@@ -122,30 +72,29 @@ namespace Kebler.ViewModels
             get => _filesTree;
             set => Set(ref _filesTree, value);
         }
+
         public bool Loading
         {
             get => _loading;
             set => Set(ref _loading, value);
         }
+
         public bool IsMore
         {
             get => _isMore;
             set => Set(ref _isMore, value);
         }
+
         public int SelectedCount
         {
             get => _selectedCount;
             set => Set(ref _selectedCount, value);
         }
+
         public double PercentDone
         {
             get => _percentDone;
             set => Set(ref _percentDone, value);
-        }
-
-        public void Clear()
-        {
-            FilesTree.Files = null;
         }
 
         public int Status
@@ -190,6 +139,7 @@ namespace Kebler.ViewModels
             get => _error;
             set => Set(ref _error, value);
         }
+
         public long UploadSpeed
         {
             get => _uploadSpeed;
@@ -268,6 +218,7 @@ namespace Kebler.ViewModels
             get => _createdOn;
             set => Set(ref _createdOn, value);
         }
+
         public DateTime CompletedOn
         {
             get => _completedOn;
@@ -294,10 +245,78 @@ namespace Kebler.ViewModels
             get => _piecesCount;
             set => Set(ref _piecesCount, value);
         }
+
         public string PiecesString
         {
             get => _piecesString;
             set => Set(ref _piecesString, value);
+        }
+
+        public void Update(TorrentInfo torrent, TransmissionClient client)
+        {
+            _client = client;
+            _ti = torrent;
+            FilesTree.UpdateFilesTree(_ti);
+
+            Pieces = _ti.Pieces;
+            PiecesCount = _ti.PieceCount;
+            PercentDone = _ti.PercentDone;
+
+
+            Peers = _ti.Peers;
+            Status = _ti.Status;
+            Downloaded = _ti.DownloadedEver;
+            DownloadSpeed = _ti.RateDownload;
+            DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
+            Seeds =
+                $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
+            PeersCount =
+                $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
+
+            Error = Utils.GetErrorString(_ti);
+            Uploaded = _ti.UploadedEver;
+            UploadSpeed = _ti.RateUpload;
+            UploadLimit = _ti.UploadLimited ? _ti.UploadLimit.ToString() : "-";
+
+            Remaining = _ti.LeftUntilDone;
+            Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
+            Ratio = $"{_ti.UploadRatio}";
+            MaxPeers = _ti.MaxConnectedPeers;
+
+            Path = $"{_ti.DownloadDir}{_ti.Name}";
+            Size = _ti.TotalSize;
+            Hash = _ti.HashString;
+            AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();
+            MagnetLink = _ti.MagnetLink;
+
+            CreatedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DateCreated).UtcDateTime.ToLocalTime();
+            CompletedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DoneDate).UtcDateTime.ToLocalTime();
+            Comment = _ti.Comment;
+            PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize, true)}";
+
+            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
+        }
+
+        public async void DeleteTracker()
+        {
+            var ids = id;
+            var rm = SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.ID).ToArray();
+
+            var mgr = IoC.Get<IWindowManager>();
+            var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(Strings.DialogBox_RemoveTracker,
+                SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.announce)));
+
+            if (result == true)
+                await _client.TorrentSetAsync(new TorrentSettings
+                {
+                    IDs = ids,
+                    TrackerRemove = rm
+                }, new CancellationToken());
+        }
+
+        public void Clear()
+        {
+            FilesTree.Files = null;
         }
     }
 }

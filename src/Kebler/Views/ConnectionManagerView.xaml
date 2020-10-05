@@ -209,7 +209,8 @@
                                     Grid.Row="6"
                                     Grid.Column="3"
                                     IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}">
-                                    <PasswordBox Name="ServerPasswordBox" IsEnabled="{Binding IsChecked, ElementName=AskPass, Converter={StaticResource ReverseBoolToBoolConverter}}" />
+                                    <PasswordBox Name="ServerPasswordBox"
+                                                 IsEnabled="{Binding IsChecked, ElementName=AskPass, Converter={StaticResource ReverseBoolToBoolConverter}}" />
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -298,7 +299,6 @@
 
                 </Grid>
             </Border>
-
 
 
         </Grid>
