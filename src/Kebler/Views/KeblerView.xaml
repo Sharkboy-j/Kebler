@@ -10,6 +10,7 @@
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
     xmlns:ui11="clr-namespace:Kebler.Views"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
+    xmlns:viewModels="clr-namespace:Kebler.ViewModels"
     Title="{Binding HeaderTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"
     Width="850"
     Height="600"
@@ -27,6 +28,7 @@
     Style="{DynamicResource MainWindowStyle}"
     WindowStartupLocation="CenterScreen"
     WindowState="{Binding State}"
+    d:DataContext="{DynamicResource KeblerViewModel}"
     mc:Ignorable="d">
     <window:CustomizableWindow.Resources>
         <Style
@@ -122,7 +124,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
+        <viewModels:KeblerViewModel x:Key="KeblerViewModel"/>
     </window:CustomizableWindow.Resources>
     <Grid Background="{DynamicResource DataGrid.BackgroundBrush}">
         <Grid.RowDefinitions>
@@ -154,7 +156,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ui:ToolBarButton
-                        Title="{lex:LocText QA_AddTorrent}"
+                        Title="{lex:Loc QA_AddTorrent}"
                         Grid.Column="1"
                         Margin="0,2"
                         cal:Message.Attach="Add"
@@ -165,7 +167,7 @@
 
                     <StackPanel Grid.Column="3" Orientation="Horizontal">
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_ResumeAll}"
+                            Title="{lex:Loc QA_ResumeAll}"
                             Margin="0,2"
                             cal:Message.Attach="StartAll"
                             Data="{StaticResource Icon.Resume}"
@@ -173,7 +175,7 @@
                             PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_PauseAll}"
+                            Title="{lex:Loc QA_PauseAll}"
                             Margin="0,2"
                             cal:Message.Attach="PauseAll"
                             Data="{StaticResource Icon.Pause}"
@@ -181,7 +183,7 @@
                             PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_Slow}"
+                            Title="{lex:Loc QA_Slow}"
                             Margin="0,2"
                             cal:Message.Attach="Slow"
                             ImageSource="{Binding IsSlowModeEnabled, Converter={StaticResource BoolToSlowImageConveter}}"
@@ -218,7 +220,7 @@
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
-                                <Grid Visibility="{Binding IsDoingStuffReverse, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Grid Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
@@ -277,7 +279,7 @@
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
 
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_Resume}"
+                            Title="{lex:Loc QA_Resume}"
                             Margin="0,2"
                             cal:Message.Attach="Start"
                             Data="{StaticResource Icon.Resume}"
@@ -286,7 +288,7 @@
                             Style="{StaticResource ToolBarButton}" />
 
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_Pause}"
+                            Title="{lex:Loc QA_Pause}"
                             Margin="0,2"
                             cal:Message.Attach="Pause"
                             Data="{StaticResource Icon.Pause}"
@@ -300,7 +302,7 @@
                         Orientation="Horizontal">
 
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_Remove}"
+                            Title="{lex:Loc QA_Remove}"
                             Margin="0,2"
                             cal:Message.Attach="Remove"
                             Data="{StaticResource Icon.Remove}"
@@ -309,7 +311,7 @@
                             Style="{StaticResource ToolBarButton}" />
 
                         <ui:ToolBarButton
-                            Title="{lex:LocText QA_RemoveData}"
+                            Title="{lex:Loc QA_RemoveData}"
                             Margin="0,2"
                             cal:Message.Attach="RemoveWithData"
                             Data="{StaticResource Icon.RemoveData}"
@@ -441,8 +443,6 @@
                 CanUserSortColumns="True"
                 HorizontalScrollBarVisibility="Disabled"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-
-                SelectedIndex="{Binding TorrentDataGridSelectedIndex, Mode=OneWayToSource}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsConnected, FallbackValue=Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                 <DataGrid.Columns>
@@ -485,24 +485,24 @@
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem cal:Message.Attach="Start" Header="{lex:LocText QA_Resume}" />
-                        <MenuItem cal:Message.Attach="Pause" Header="{lex:LocText QA_Pause}" />
-                        <MenuItem cal:Message.Attach="Remove" Header="{lex:LocText QA_Remove}" />
-                        <MenuItem cal:Message.Attach="RemoveWithData" Header="{lex:LocText QA_RemoveData}" />
+                        <MenuItem cal:Message.Attach="Start" Header="{lex:Loc QA_Resume}" />
+                        <MenuItem cal:Message.Attach="Pause" Header="{lex:Loc QA_Pause}" />
+                        <MenuItem cal:Message.Attach="Remove" Header="{lex:Loc QA_Remove}" />
+                        <MenuItem cal:Message.Attach="RemoveWithData" Header="{lex:Loc QA_RemoveData}" />
                         <Separator />
-                        <MenuItem Header="{lex:LocText QA_Queue}">
-                            <MenuItem cal:Message.Attach="MoveTop" Header="{lex:LocText QA_MoveTop}" />
-                            <MenuItem cal:Message.Attach="MoveUp" Header="{lex:LocText QA_MoveUp}" />
-                            <MenuItem cal:Message.Attach="MoveDown" Header="{lex:LocText QA_MoveDown}" />
-                            <MenuItem cal:Message.Attach="MoveBot" Header="{lex:LocText QA_MoveBot}" />
+                        <MenuItem Header="{lex:Loc QA_Queue}">
+                            <MenuItem cal:Message.Attach="MoveTop" Header="{lex:Loc QA_MoveTop}" />
+                            <MenuItem cal:Message.Attach="MoveUp" Header="{lex:Loc QA_MoveUp}" />
+                            <MenuItem cal:Message.Attach="MoveDown" Header="{lex:Loc QA_MoveDown}" />
+                            <MenuItem cal:Message.Attach="MoveBot" Header="{lex:Loc QA_MoveBot}" />
                         </MenuItem>
-                        <MenuItem cal:Message.Attach="Reannounce" Header="{lex:LocText QA_Reannounce}" />
-                        <MenuItem cal:Message.Attach="Verify" Header="{lex:LocText QA_Verify}" />
-                        <MenuItem cal:Message.Attach="SetLoc" Header="{lex:LocText QA_SetLoc}" />
-                        <MenuItem cal:Message.Attach="Rename" Header="{lex:LocText QA_Rename}" />
+                        <MenuItem cal:Message.Attach="Reannounce" Header="{lex:Loc QA_Reannounce}" />
+                        <MenuItem cal:Message.Attach="Verify" Header="{lex:Loc QA_Verify}" />
+                        <MenuItem cal:Message.Attach="SetLoc" Header="{lex:Loc QA_SetLoc}" />
+                        <MenuItem cal:Message.Attach="Rename" Header="{lex:Loc QA_Rename}" />
                         <Separator />
-                        <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:LocText QA_CopyMagnet}" />
-                        <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:LocText QA_Properties}" />
+                        <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:Loc QA_CopyMagnet}" />
+                        <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:Loc QA_Properties}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
@@ -520,7 +520,7 @@
                     Width="70"
                     Margin="0,10,0,0"
                     cal:Message.Attach="Retry"
-                    Content="{lex:LocText RetryConnection}"
+                    Content="{lex:Loc RetryConnection}"
                     IsDefault="True"
                     Visibility="{Binding IsErrorOccuredWhileConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=false}" />
             </StackPanel>

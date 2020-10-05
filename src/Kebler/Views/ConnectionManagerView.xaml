@@ -6,7 +6,7 @@
     xmlns:controls1="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
-    Title="{lex:LocText CM_Title}"
+    Title="{lex:Loc  CM_Title}"
     Width="520"
     Height="450"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -40,7 +40,7 @@
                 SelectedIndex="0"
                 TabStripPlacement="Top"
                 Visibility="{Binding SelectedServer, Converter={StaticResource ObjectToVisibilityConverter}}">
-                <TabItem Header="{lex:LocText CM_Tab_General}">
+                <TabItem Header="{lex:Loc  CM_Tab_General}">
                     <Grid Background="#FF2D2D30" Grid.IsSharedSizeScope="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10" />
@@ -61,7 +61,7 @@
 
                             <TextBlock
                                 FontSize="15"
-                                Text="{lex:LocText CM_LanSection}"
+                                Text="{lex:Loc  CM_LanSection}"
                                 TextAlignment="Left" />
                             <Grid Margin="0,10,0,0">
                                 <Grid.ColumnDefinitions>
@@ -84,7 +84,7 @@
                                 <TextBlock
                                     Grid.Column="1"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_ServerTitle}" />
+                                    Text="{lex:Loc  CM_ServerTitle}" />
                                 <TextBox
                                     Grid.Row="0"
                                     Grid.Column="3"
@@ -96,7 +96,7 @@
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_ServerHost}" />
+                                    Text="{lex:Loc  CM_ServerHost}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="3"
@@ -110,7 +110,7 @@
                                     Grid.Row="4"
                                     Grid.Column="1"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_ServerPort}" />
+                                    Text="{lex:Loc  CM_ServerPort}" />
                                 <TextBox
                                     Grid.Row="4"
                                     Grid.Column="3"
@@ -124,7 +124,7 @@
                                     Grid.Row="6"
                                     Grid.Column="1"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_RPCPath}" />
+                                    Text="{lex:Loc  CM_RPCPath}" />
 
                                 <TextBox
                                     Grid.Row="6"
@@ -137,12 +137,11 @@
                                 <CheckBox
                                     Grid.Row="8"
                                     Grid.Column="3"
-                                    Grid.ColumnSpan="3"
                                     Height="25"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Center"
-                                    Content="{lex:LocText CM_SSLEnabled}"
+                                    Content="{lex:Loc  CM_SSLEnabled}"
                                     FontSize="13"
                                     Foreground="White"
                                     IsChecked="{Binding SelectedServer.SslEnabled}" />
@@ -151,7 +150,7 @@
                             <TextBlock
                                 Margin="0,5,0,0"
                                 FontSize="15"
-                                Text="{lex:LocText CM_AuthSection}"
+                                Text="{lex:Loc  CM_AuthSection}"
                                 TextAlignment="Left" />
                             <Grid Margin="0,10,0,0">
                                 <Grid.ColumnDefinitions>
@@ -173,7 +172,7 @@
                                     Name="AuthEnabled"
                                     Grid.Column="3"
                                     VerticalAlignment="Center"
-                                    Content="{lex:LocText CM_IsAuthEnabled}"
+                                    Content="{lex:Loc  CM_IsAuthEnabled}"
                                     IsChecked="{Binding SelectedServer.AuthEnabled, FallbackValue=False}"
                                     IsEnabled="{Binding IsSelectedServerTabEnabled}" />
 
@@ -182,7 +181,7 @@
                                     Grid.Column="1"
                                     IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_Login}" />
+                                    Text="{lex:Loc  CM_Login}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="3"
@@ -196,7 +195,7 @@
                                     Grid.Row="4"
                                     Grid.Column="3"
                                     VerticalContentAlignment="Center"
-                                    Content="{lex:LocText CM_AskForPassword}"
+                                    Content="{lex:Loc  CM_AskForPassword}"
                                     IsChecked="{Binding SelectedServer.AskForPassword, FallbackValue=False}"
                                     IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}" />
 
@@ -205,7 +204,7 @@
                                     Grid.Column="1"
                                     IsEnabled="{Binding IsChecked, ElementName=AuthEnabled}"
                                     Style="{DynamicResource CMTextBox}"
-                                    Text="{lex:LocText CM_PSWD}" />
+                                    Text="{lex:Loc  CM_PSWD}" />
                                 <Grid
                                     Grid.Row="6"
                                     Grid.Column="3"
@@ -225,7 +224,7 @@
                             <Button
                                 HorizontalAlignment="Left"
                                 cal:Message.Attach="Test"
-                                Content="{lex:LocText CM_TestConnection}"
+                                Content="{lex:Loc  CM_TestConnection}"
                                 IsEnabled="{Binding IsTesting, Converter={StaticResource ReverseBoolToBoolConverter}}" />
                             <Label
                                 Grid.Column="1"
@@ -244,11 +243,11 @@
                             <Button
                                 Grid.Column="2"
                                 cal:Message.Attach="Cancel"
-                                Content="{lex:LocText CM_Cancel}" />
+                                Content="{lex:Loc  CM_Cancel}" />
                             <Button
                                 Grid.Column="3"
                                 cal:Message.Attach="Save"
-                                Content="{lex:LocText CM_Ok}"
+                                Content="{lex:Loc  CM_Ok}"
                                 IsDefault="True" />
                         </Grid>
                     </Grid>

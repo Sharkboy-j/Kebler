@@ -43,9 +43,11 @@ namespace Kebler.ViewModels
 
 
     {
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IEventAggregator? _eventAggregator;
 
-
+        public KeblerViewModel()
+        {}
+        
 
         public KeblerViewModel(IEventAggregator eventAggregator)
         {
@@ -67,8 +69,6 @@ namespace Kebler.ViewModels
 
 
             App.Instance.KeblerVM = this;
-
-
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -1470,36 +1470,76 @@ namespace Kebler.ViewModels
         private BindableCollection<TorrentInfo> _torrentList = new BindableCollection<TorrentInfo>();
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
 
-        private StatusCategory _selectedCat;
+        private StatusCategory? _selectedCat;
         private int _selectedCategoryIndex = -1;
-        private List<Server> _servers;
+        private List<Server>? _servers;
         private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
-        private Task _checkerTask;
+        private Task? _checkerTask;
         private DateTimeOffset _longActionTimeStart;
         private bool _isLongTaskRunning;
-        public TransmissionClient _transmissionClient;
+        public TransmissionClient? _transmissionClient;
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
         private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
-        private Task _whileCycleTask;
-        private Task _whileCycleMoreInfoTask;
-        private SessionInfo _sessionInfo;
-        private Statistic _stats;
+        private Task? _whileCycleTask;
+        private Task? _whileCycleMoreInfoTask;
+        private SessionInfo? _sessionInfo;
+        private Statistic? _stats;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
-        public SessionSettings _settings;
+        public SessionSettings? _settings;
         public bool _isConnecting, _isDoingStuff, _isConnected, _isErrorOccuredWhileConnecting, _isSlowModeEnabled;
         private object _syncTorrentList = new object();
         private Enums.Categories _filterCategory;
-        private string _isConnectedStatusText, _longStatusText, _downloadSpeed, _uploadSpeed, _filterText;
-        private Server _SelectedServer, _ConnectedServer;
+        private string? _isConnectedStatusText;
+        private string? _longStatusText;
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        private string _downloadSpeed;
+        
+        
+        
+        
+        
+        
+        
+        private string? _uploadSpeed;
+        private string? _filterText;
+        private Server? _SelectedServer;
+        private Server? _ConnectedServer;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
-        private TorrentInfo _selectedTorrent;
-        private uint[] selectedIDs;
-        private HotKey[] RegisteredKeys;
+        private TorrentInfo? _selectedTorrent;
+        private uint[]? selectedIDs;
+        private HotKey[]? RegisteredKeys;
         private object syncObjKeys = new object();
-        private KeblerView _view;
+        private KeblerView? _view;
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
         private int _selectedFolderIndex;
-        private FolderCategory _selectedFolder;
+        private FolderCategory? _selectedFolder;
         private WindowState _state;
         private List<Server> ServersList
         {

@@ -45,7 +45,7 @@
                         Background="Transparent"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
-                        <TabItem Header="{lex:LocText CM_Tab_General}">
+                        <TabItem Header="{lex:Loc  CM_Tab_General}">
                             <Grid Background="#FF2D2D30" Grid.IsSharedSizeScope="True">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10" />
@@ -219,16 +219,16 @@
                                     <Button
                                         Grid.Column="2"
                                         cm:Message.Attach="Cancel"
-                                        Content="{lex:LocText CM_Cancel}" />
+                                        Content="{lex:Loc  CM_Cancel}" />
                                     <Button
                                         Grid.Column="3"
                                         cm:Message.Attach="Save"
-                                        Content="{lex:LocText CM_Ok}"
+                                        Content="{lex:Loc  CM_Ok}"
                                         IsDefault="True" />
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{lex:LocText MoreInfo_Trackers}" >
+                        <TabItem Header="{lex:Loc  MoreInfo_Trackers}" >
                             <Grid>
 
                             </Grid>
@@ -251,7 +251,7 @@
                         FontSize="15"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:LocText ATD_RetrievingSettings}"
+                        Text="{lex:Loc  ATD_RetrievingSettings}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextRenderingMode="ClearType" />

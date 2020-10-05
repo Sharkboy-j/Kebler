@@ -20,6 +20,7 @@ namespace Kebler.ViewModels
         private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
             new BindableCollection<TransmissionTorrentTrackerStats>();
 
+        
         private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
         private bool _loading, _isMore;
         private double _percentDone;
