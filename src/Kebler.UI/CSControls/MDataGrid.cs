@@ -1,39 +1,40 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Kebler.UI.CSControls
 {
-    public class MDataGrid : System.Windows.Controls.DataGrid
+    public class MDataGrid : DataGrid
     {
         public MDataGrid()
         {
             SelectionChanged += MDataGrid_SelectionChanged;
         }
 
-        private void MDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void MDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.SelectedItemsList = this.SelectedItems;
-
+            SelectedItemsList = SelectedItems;
         }
 
         #region SelectedItemsList
 
         public IList SelectedItemsList
         {
-            get { return (IList)GetValue(SelectedItemsListProperty); }
-            set { SetValue(SelectedItemsListProperty, value); }
+            get => (IList) GetValue(SelectedItemsListProperty);
+            set => SetValue(SelectedItemsListProperty, value);
         }
 
         public static readonly DependencyProperty SelectedItemsListProperty =
-                DependencyProperty.Register(nameof(SelectedItemsList), typeof(IList), typeof(MDataGrid), new FrameworkPropertyMetadata(
-            new List<object>(), FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-            null,
-            null,
-            true,
-            System.Windows.Data.UpdateSourceTrigger.PropertyChanged));
+            DependencyProperty.Register(nameof(SelectedItemsList), typeof(IList), typeof(MDataGrid),
+                new FrameworkPropertyMetadata(
+                    new List<object>(),
+                    FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    null,
+                    null,
+                    true,
+                    UpdateSourceTrigger.PropertyChanged));
 
         #endregion
     }

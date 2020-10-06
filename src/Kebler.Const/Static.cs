@@ -16,7 +16,7 @@ namespace Kebler.Const
         public static string KeblerExepath =
             Path.Combine(KeblerAppFolderPath, $"{nameof(Kebler)}.exe");
 
-        public static string InstallerName = $"Installer";
+        public static string InstallerName = "Installer";
         public static string InstallerExeName = $"{InstallerName}.exe";
         public static string InstallerExePath = Path.Combine(KeblerRoamingFolder, InstallerExeName);
 
@@ -29,10 +29,7 @@ namespace Kebler.Const
         {
             var dir = new DirectoryInfo(KeblerRoamingFolder);
 
-            if (!dir.Exists)
-            {
-                dir.Create();
-            }
+            if (!dir.Exists) dir.Create();
             return dir;
         }
     }

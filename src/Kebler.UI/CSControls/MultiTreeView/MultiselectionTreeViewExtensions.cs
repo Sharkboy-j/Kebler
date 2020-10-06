@@ -7,7 +7,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
     public static class MultiselectionTreeViewExtensions
     {
         public static ExpandedTreeViewElement GetExpandedItems(
-          this MultiselectionTreeView treeView)
+            this MultiselectionTreeView treeView)
         {
             var rootItem = treeView.RootItem;
             return rootItem != null ? GetExpandedItems(rootItem) : null;
@@ -34,8 +34,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
         }
 
         public static void SetExpandedItems(
-          this MultiselectionTreeView treeView,
-          ExpandedTreeViewElement root)
+            this MultiselectionTreeView treeView,
+            ExpandedTreeViewElement root)
         {
             if (root == null)
                 return;
@@ -44,11 +44,10 @@ namespace Kebler.UI.CSControls.MultiTreeView
         }
 
         private static void SetExpandedItems(
-          MultiselectionTreeViewItem treeViewItem,
-          ExpandedTreeViewElement childToExpand)
+            MultiselectionTreeViewItem treeViewItem,
+            ExpandedTreeViewElement childToExpand)
         {
             foreach (var child1 in treeViewItem.Children)
-            {
                 if (child1.Title == childToExpand.Name)
                 {
                     child1.IsExpanded = true;
@@ -56,18 +55,15 @@ namespace Kebler.UI.CSControls.MultiTreeView
                         SetExpandedItems(child1, child2);
                     break;
                 }
-            }
         }
 
         private static ExpandedTreeViewElement GetExpandedItems(
-          MultiselectionTreeViewItem item)
+            MultiselectionTreeViewItem item)
         {
             var expandedTreeViewElementList = new List<ExpandedTreeViewElement>();
             foreach (var child in item.Children)
-            {
                 if (child.IsExpanded)
                     expandedTreeViewElementList.Add(GetExpandedItems(child));
-            }
             return new ExpandedTreeViewElement(item.Title, expandedTreeViewElementList.ToArray());
         }
     }

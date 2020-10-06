@@ -20,6 +20,7 @@
     <RepositoryUrl>https://github.com/JeremiSharkboy/Kebler</RepositoryUrl>
     <NoWin32Manifest>true</NoWin32Manifest>
     <Configurations>Debug;Release;Portable</Configurations>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

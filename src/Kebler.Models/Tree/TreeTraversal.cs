@@ -29,6 +29,7 @@ namespace Kebler.Models.Tree
                         if (objs != null)
                             stack.Push(objs.GetEnumerator());
                     }
+
                     stack.Pop().Dispose();
                 }
             }

@@ -11,6 +11,7 @@ namespace Kebler.Services.Converters
     {
         private static readonly CountryIdToFlagImageSourceConverter Flags = new CountryIdToFlagImageSourceConverter();
         private static readonly GeoService Geo;
+
         static IpToCountry()
         {
             var builder = new GeoServiceBuilder();
@@ -20,8 +21,8 @@ namespace Kebler.Services.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var vl = Geo.ResolveCountry((string)value);
-            var img = Flags.Convert(vl,null,null,null);
+            var vl = Geo.ResolveCountry((string) value);
+            var img = Flags.Convert(vl, null, null, null);
             return img;
         }
 

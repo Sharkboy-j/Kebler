@@ -8,8 +8,8 @@ namespace Kebler.Models.Tree
 {
     public class MultiselectionTreeViewItemCollection : IList<MultiselectionTreeViewItem>, INotifyCollectionChanged
     {
-        private List<MultiselectionTreeViewItem> _items = new List<MultiselectionTreeViewItem>();
         private readonly MultiselectionTreeViewItem _parent;
+        private List<MultiselectionTreeViewItem> _items = new List<MultiselectionTreeViewItem>();
 
         public MultiselectionTreeViewItemCollection(MultiselectionTreeViewItem parent)
         {
@@ -22,8 +22,8 @@ namespace Kebler.Models.Tree
             set
             {
                 _items[index] = value;
-                RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this, index));
-
+                RaiseCollectionChanged(
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this, index));
             }
         }
 
@@ -34,19 +34,21 @@ namespace Kebler.Models.Tree
         public void Add(MultiselectionTreeViewItem item)
         {
             _items.Add(item);
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, _items.Count - 1));
+            RaiseCollectionChanged(
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, _items.Count - 1));
         }
 
         public void Clear()
         {
             var items = _items;
             _items = new List<MultiselectionTreeViewItem>();
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, 0));
+            RaiseCollectionChanged(
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, 0));
         }
 
         public bool Contains(MultiselectionTreeViewItem item)
         {
-            return _items.Any(x=>x.Equals(item));
+            return _items.Any(x => x.Equals(item));
         }
 
         public void CopyTo(MultiselectionTreeViewItem[] array, int arrayIndex)
@@ -67,7 +69,8 @@ namespace Kebler.Models.Tree
         public void Insert(int index, MultiselectionTreeViewItem item)
         {
             _items.Insert(index, item);
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            RaiseCollectionChanged(
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
         }
 
         public bool Remove(MultiselectionTreeViewItem item)
@@ -84,7 +87,8 @@ namespace Kebler.Models.Tree
         {
             var multiselectionTreeViewItem = _items[index];
             _items.RemoveAt(index);
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, multiselectionTreeViewItem, index));
+            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                multiselectionTreeViewItem, index));
         }
 
         IEnumerator IEnumerable.GetEnumerator()

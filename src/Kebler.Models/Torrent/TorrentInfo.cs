@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Kebler.Models.Torrent.Attributes;
 using Newtonsoft.Json;
@@ -30,14 +27,12 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.BANDWIDTH_PRIORITY)]
         public int BandwidthPriority { get; set; }
 
-        [JsonProperty(TorrentFields.COMMENT)]
-        public string Comment { get; set; }
+        [JsonProperty(TorrentFields.COMMENT)] public string Comment { get; set; }
 
         [JsonProperty(TorrentFields.CORRUPT_EVER)]
         public int CorruptEver { get; set; }
 
-        [JsonProperty(TorrentFields.CREATOR)]
-        public string Creator { get; set; }
+        [JsonProperty(TorrentFields.CREATOR)] public string Creator { get; set; }
 
         [JsonProperty(TorrentFields.DATE_CREATED)]
         [SetIgnore]
@@ -61,20 +56,16 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.DOWNLOAD_LIMITED)]
         public bool DownloadLimited { get; set; }
 
-        [JsonProperty(TorrentFields.ERROR)]
-        public int Error { get; set; }
+        [JsonProperty(TorrentFields.ERROR)] public int Error { get; set; }
 
         [JsonProperty(TorrentFields.ERROR_STRING)]
         public string ErrorString { get; set; }
 
-        [JsonProperty(TorrentFields.ETA)]
-        public int ETA { get; set; }
+        [JsonProperty(TorrentFields.ETA)] public int ETA { get; set; }
 
-        [JsonProperty(TorrentFields.ETA_IDLE)]
-        public int ETAIdle { get; set; }
+        [JsonProperty(TorrentFields.ETA_IDLE)] public int ETAIdle { get; set; }
 
-        [JsonProperty(TorrentFields.FILES)]
-        public TransmissionTorrentFiles[] Files { get; set; }
+        [JsonProperty(TorrentFields.FILES)] public TransmissionTorrentFiles[] Files { get; set; }
 
         [JsonProperty(TorrentFields.FILE_STATS)]
         public TransmissionTorrentFileStats[] FileStats { get; set; }
@@ -115,14 +106,12 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.METADATA_PERCENT_COMPLETE)]
         public double MetadataPercentComplete { get; set; }
 
-        [JsonProperty(TorrentFields.NAME)]
-        public string Name { get; set; }
+        [JsonProperty(TorrentFields.NAME)] public string Name { get; set; }
 
         [JsonProperty(TorrentFields.PEER_LIMIT)]
         public int PeerLimit { get; set; }
 
-        [JsonProperty(TorrentFields.PEERS)]
-        public TransmissionTorrentPeers[] Peers { get; set; }
+        [JsonProperty(TorrentFields.PEERS)] public TransmissionTorrentPeers[] Peers { get; set; }
 
         [JsonProperty(TorrentFields.PEERS_CONNECTED)]
         public int PeersConnected { get; set; }
@@ -136,8 +125,7 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.PERCENT_DONE)]
         public double PercentDone { get; set; }
 
-        [JsonProperty(TorrentFields.PIECES)]
-        public string Pieces { get; set; }
+        [JsonProperty(TorrentFields.PIECES)] public string Pieces { get; set; }
 
         [JsonProperty(TorrentFields.PIECE_COUNT)]
         public int PieceCount { get; set; }
@@ -157,7 +145,7 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.RATE_UPLOAD)]
         public int RateUpload { get; set; }
 
-        [JsonProperty(TorrentFields.RECHECK)]
+        [JsonProperty(TorrentFields.RECHECK)] 
         public double RecheckProgress { get; set; }
 
         [JsonProperty(TorrentFields.SECONDS_DOWNLOADING)]
@@ -197,7 +185,7 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.STATUS)]
         public int Status { get; set; }
 
-        [JsonProperty(TorrentFields.TRACKERS)]
+        [JsonProperty(TorrentFields.TRACKERS)] 
         public TransmissionTorrentTrackers[] Trackers { get; set; }
 
         [JsonProperty(TorrentFields.TRACKER_STATS)]
@@ -221,14 +209,18 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.UPLOAD_RATIO)]
         public double UploadRatio { get; set; }
 
-        [JsonProperty(TorrentFields.WANTED)]
-        public bool[] Wanted { get; set; }
+        [JsonProperty(TorrentFields.WANTED)] public bool[] Wanted { get; set; }
 
         [JsonProperty(TorrentFields.WEB_SEEDS)]
         public string[] Webseeds { get; set; }
 
         [JsonProperty(TorrentFields.WEB_SEEDS_SENDING_TO_US)]
         public int WebseedsSendingToUs { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Status.CompareTo(((TorrentInfo) obj).Status);
+        }
 
         public override string ToString()
         {
@@ -240,11 +232,10 @@ namespace Kebler.Models.Torrent
             var myType = typeof(TorrentInfo);
             var myPropInfo = myType.GetProperty(propertyName);
             myPropInfo?.SetValue(this, value, null);
-
         }
+
         public object Get(string propertyName)
         {
-
             var myType = typeof(TorrentInfo);
             var myPropInfo = myType.GetProperty(propertyName);
             return myPropInfo?.GetValue(this, null);
@@ -254,10 +245,8 @@ namespace Kebler.Models.Torrent
         public override bool Equals(object obj)
         {
             if (obj != null && obj is TorrentInfo torrentInfo)
-            {
                 return torrentInfo.Id == Id &&
-                    torrentInfo.HashString == HashString;
-            }
+                       torrentInfo.HashString == HashString;
             return false;
         }
 
@@ -271,48 +260,20 @@ namespace Kebler.Models.Torrent
             }
         }
 
-        public int CompareTo(object obj)
-        {
-            return Status.CompareTo(((TorrentInfo)obj).Status);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         #region parser
 
         public class TransmissionValue
         {
-            public object Value { get; }
-
-            public DataType Type { get; }
-
             public TransmissionValue(DataType dType, object dValue)
             {
                 Type = dType;
                 Value = dValue;
             }
+
+            public object Value { get; }
+
+            public DataType Type { get; }
         }
 
         public enum DataType
@@ -331,7 +292,8 @@ namespace Kebler.Models.Torrent
         private readonly Dictionary<string, TransmissionValue> _root;
 
         [JsonIgnore]
-        public Dictionary<string, TransmissionValue> Info => _root["info"].Value as Dictionary<string, TransmissionValue>;
+        public Dictionary<string, TransmissionValue> Info =>
+            _root["info"].Value as Dictionary<string, TransmissionValue>;
 
         public static bool TryParse(byte[] bytes, out TorrentInfo torrentParser)
         {
@@ -351,14 +313,12 @@ namespace Kebler.Models.Torrent
         {
             using (_reader = new BinaryReader(new MemoryStream(data), Encoding.UTF8))
             {
-                if (_reader.ReadChar() != 'd')
-                {
-                    throw new Exception("Torrent File Error");
-                }
+                if (_reader.ReadChar() != 'd') throw new Exception("Torrent File Error");
                 _root = parseDict();
                 //var ShaHash = GetShaHash();
                 Files = GetFiles();
                 Name = Info.FindText("name");
+                Trackers = GetTrackers();
             }
         }
 
@@ -368,10 +328,7 @@ namespace Kebler.Models.Torrent
             while (_reader.PeekChar() != 101)
             {
                 var str = parseString();
-                if (str == "info")
-                {
-                    _infoStart = _reader.BaseStream.Position;
-                }
+                if (str == "info") _infoStart = _reader.BaseStream.Position;
                 if (str != "pieces")
                 {
                     var tVal = ProcessVal();
@@ -381,12 +338,11 @@ namespace Kebler.Models.Torrent
                 {
                     strs.Add(str, parseByte());
                 }
-                if (str != "info")
-                {
-                    continue;
-                }
+
+                if (str != "info") continue;
                 _infoEnd = _reader.BaseStream.Position - _infoStart;
             }
+
             _reader.Read();
             return strs;
         }
@@ -414,16 +370,19 @@ namespace Kebler.Models.Torrent
                 _reader.Read();
                 return new TransmissionValue(DataType.Dictionary, parseDict());
             }
+
             if (str == "l")
             {
                 _reader.Read();
                 return new TransmissionValue(DataType.List, parseList());
             }
+
             if (str == "i")
             {
                 _reader.Read();
                 return new TransmissionValue(DataType.Int, parseNum());
             }
+
             return new TransmissionValue(DataType.String, parseString());
         }
 
@@ -431,10 +390,7 @@ namespace Kebler.Models.Torrent
         private List<TransmissionValue> parseList()
         {
             var tVals = new List<TransmissionValue>();
-            while (char.ConvertFromUtf32(_reader.PeekChar()) != "e")
-            {
-                tVals.Add(ProcessVal());
-            }
+            while (char.ConvertFromUtf32(_reader.PeekChar()) != "e") tVals.Add(ProcessVal());
             _reader.Read();
             return tVals;
         }
@@ -445,8 +401,8 @@ namespace Kebler.Models.Torrent
             do
             {
                 str = str.Append(char.ConvertFromUtf32(_reader.Read()));
-            }
-            while (char.ConvertFromUtf32(_reader.PeekChar()) != "e");
+            } while (char.ConvertFromUtf32(_reader.PeekChar()) != "e");
+
             _reader.Read();
             return long.Parse(str.ToString());
         }
@@ -457,8 +413,8 @@ namespace Kebler.Models.Torrent
             do
             {
                 str.Append(char.ConvertFromUtf32(_reader.Read()));
-            }
-            while (char.ConvertFromUtf32(_reader.PeekChar()) != ":");
+            } while (char.ConvertFromUtf32(_reader.PeekChar()) != ":");
+
             _reader.Read();
             var numArray = _reader.ReadBytes(int.Parse(str.ToString()));
             return Encoding.UTF8.GetString(numArray);
@@ -469,40 +425,60 @@ namespace Kebler.Models.Torrent
             var tFiles = new List<TransmissionTorrentFiles>();
             if (!Info.ContainsKey("files"))
             {
-                tFiles.Add(new TransmissionTorrentFiles((long)Info["length"].Value, (string)Info["name"].Value));
-                TotalSize = (long)Info["length"].Value;
+                tFiles.Add(new TransmissionTorrentFiles((long) Info["length"].Value, (string) Info["name"].Value));
+                TotalSize = (long) Info["length"].Value;
             }
             else
             {
                 long citem = 0;
-                var v = (List<TransmissionValue>)Info["files"].Value;
+                var v = (List<TransmissionValue>) Info["files"].Value;
                 foreach (var tVal in v)
                 {
                     var PieceLengthval = Info.FindNumber("piece length");
-                    var strs = (Dictionary<string, TransmissionValue>)tVal.Value;
-                    var pieceLength = (int)(citem / PieceLengthval) + 1;
-                    citem = citem + (long)strs["length"].Value;
-                    var num = (int)(citem / PieceLengthval) + 2 - pieceLength;
-                    tFiles.Add(new TransmissionTorrentFiles((long)strs["length"].Value, ((List<TransmissionValue>)strs["path"].Value).Select(c => c.Value as string).ToArray()));
+                    var strs = (Dictionary<string, TransmissionValue>) tVal.Value;
+                    var pieceLength = (int) (citem / PieceLengthval) + 1;
+                    citem = citem + (long) strs["length"].Value;
+                    var num = (int) (citem / PieceLengthval) + 2 - pieceLength;
+                    tFiles.Add(new TransmissionTorrentFiles((long) strs["length"].Value,
+                        ((List<TransmissionValue>) strs["path"].Value).Select(c => c.Value as string).ToArray()));
                 }
+
                 TotalSize = citem;
             }
+
             return tFiles.Where(c => !c.Name.StartsWith("_____padding_file")).ToArray();
         }
+        
+        private TransmissionTorrentTrackers[] GetTrackers()
+        {
+            if (!_root.ContainsKey("announce-list"))
+            {
+                return new TransmissionTorrentTrackers[0];
+            }
+            var strs = new List<string>();
+            foreach (var item in (List<TransmissionValue>)_root["announce-list"].Value)
+            {
+                foreach (var tVal in (List<TransmissionValue>)item.Value)
+                {
+                    var str = (string)tVal.Value;
+                    if (strs.Contains(str))
+                    {
+                        continue;
+                    }
+                    strs.Add(str);
+                }
+            }
+            return strs.Select(tr => new TransmissionTorrentTrackers() {announce = tr}).ToArray();
+        }
         #endregion
-
-
     }
 
     internal static class TorrentExt
     {
         internal static T Find<T>(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
         {
-            if (!dictToSearch.ContainsKey(key))
-            {
-                return default(T);
-            }
-            return (T)dictToSearch[key].Value;
+            if (!dictToSearch.ContainsKey(key)) return default;
+            return (T) dictToSearch[key].Value;
         }
 
         internal static long FindNumber(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
@@ -518,4 +494,3 @@ namespace Kebler.Models.Torrent
 
     //TODO: Separate "remove" and "active" torrents in "torrentsGet"
 }
-

@@ -12,9 +12,9 @@ namespace Kebler.UI.CSControls.MultiTreeView
 {
     public class TreeViewControlItem : ListViewItem
     {
+        private DragAdorner _adorner;
         private Point _startPoint;
         private bool _wasSelected;
-        private DragAdorner _adorner;
 
         public MultiselectionTreeViewItem Node => DataContext as MultiselectionTreeViewItem;
 
@@ -36,6 +36,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
                 if (Template != null)
                     UpdateTemplate();
             }
+
             if (oldNode == null)
                 return;
             oldNode.PropertyChanged -= Node_PropertyChanged;
@@ -74,7 +75,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
             if (!IsMouseCaptured)
                 return;
             var position = e.GetPosition(null);
-            if (Math.Abs(position.X - _startPoint.X) < SystemParameters.MinimumHorizontalDragDistance && Math.Abs(position.Y - _startPoint.Y) < SystemParameters.MinimumVerticalDragDistance)
+            if (Math.Abs(position.X - _startPoint.X) < SystemParameters.MinimumHorizontalDragDistance &&
+                Math.Abs(position.Y - _startPoint.Y) < SystemParameters.MinimumVerticalDragDistance)
                 return;
             _adorner = new DragAdorner(this, e.GetPosition(this));
             if (_adorner == null)
@@ -83,7 +85,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
             if (adornerLayer == null)
                 return;
             adornerLayer.Add(_adorner);
-            Node.StartDrag(this, ParentTreeView.GetTopLevelSelection().ToArray<MultiselectionTreeViewItem>());
+            Node.StartDrag(this, ParentTreeView.GetTopLevelSelection().ToArray());
             adornerLayer.Remove(_adorner);
         }
 

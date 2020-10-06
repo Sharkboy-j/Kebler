@@ -18,7 +18,7 @@ namespace Kebler.SI
         {
             using var memoryStream = new MemoryStream(data);
             var obj = Formatter.Deserialize(memoryStream);
-            return (T)obj;
+            return (T) obj;
         }
     }
 }

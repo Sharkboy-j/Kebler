@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Kebler.Models.Torrent;
 
@@ -9,7 +10,6 @@ namespace Kebler.Services
 {
     public static class Utils
     {
-
         //public static void LogServers<T>(this List<T> serverList)
         //{
         //    if (serverList.Count == 0)
@@ -54,7 +54,7 @@ namespace Kebler.Services
             }
             else
             {
-                return showEmpty ? $"0 KB" : string.Empty;
+                return showEmpty ? "0 KB" : string.Empty;
             }
 
             size = Math.Round(length / SelSize, 2);
@@ -64,7 +64,6 @@ namespace Kebler.Services
 
         public static string ToPrettyFormat(this TimeSpan span)
         {
-
             if (span == TimeSpan.Zero) return "0 minutes";
 
             var sb = new StringBuilder();
@@ -77,7 +76,6 @@ namespace Kebler.Services
             if (span.Seconds > 0)
                 sb.AppendFormat("{0} s", span.Seconds);
             return sb.ToString();
-
         }
 
 
@@ -85,19 +83,18 @@ namespace Kebler.Services
         {
             if (string.IsNullOrEmpty(ti.ErrorString))
             {
-                var lastAnnounceSucceeded =  ti.TrackerStats.All(x => x.LastAnnounceSucceeded == false);
+                var lastAnnounceSucceeded = ti.TrackerStats.All(x => x.LastAnnounceSucceeded == false);
                 if (lastAnnounceSucceeded)
                 {
-                    var txtError = ti.TrackerStats.FirstOrDefault(x => !string.IsNullOrEmpty(x.LastAnnounceResult))?.LastAnnounceResult;
+                    var txtError = ti.TrackerStats.FirstOrDefault(x => !string.IsNullOrEmpty(x.LastAnnounceResult))
+                        ?.LastAnnounceResult;
                     return txtError;
                 }
 
                 return string.Empty;
             }
-            else
-            {
-                return ti.ErrorString;
-            }
+
+            return ti.ErrorString;
         }
 
         public static Bitmap CreatePiecesBitmap(int pieceCount, string piecesString)
@@ -113,8 +110,9 @@ namespace Kebler.Services
 
 
                 var rowCount = 100;
-                var result = new Bitmap(pieceCount, rowCount, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                var bitmapData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
+                var result = new Bitmap(pieceCount, rowCount, PixelFormat.Format24bppRgb);
+                var bitmapData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height),
+                    ImageLockMode.WriteOnly, result.PixelFormat);
                 var rowPixels = new byte[bitmapData.Stride];
 
 
@@ -129,13 +127,10 @@ namespace Kebler.Services
                 for (var i = 0; i < pieceCount; i++)
                 {
                     // read bit at specific place in byte array (since each bit represents piece status, piece #0 is at first array index but is bit #7 in the byte)
-                    var pieceLoaded = (pieces[i / 8] & (1 << 7 - i % 8)) != 0;
+                    var pieceLoaded = (pieces[i / 8] & (1 << (7 - i % 8))) != 0;
                     if (pieceLoaded)
-                    {
                         //piecesDone++;
                         insertPixel(i, 0, 122, 204); //blue
-
-                    }
                     else
                         insertPixel(i, 50, 50, 50); //gray
                 }
@@ -143,8 +138,9 @@ namespace Kebler.Services
                 for (var i = 0; i < rowCount; i++)
                     unsafe
                     {
-                        var rowStart = ((byte*)bitmapData.Scan0.ToPointer() + i * bitmapData.Stride);
-                        System.Runtime.InteropServices.Marshal.Copy(rowPixels, 0, new IntPtr(rowStart), rowPixels.Length);
+                        var rowStart = (byte*) bitmapData.Scan0.ToPointer() + i * bitmapData.Stride;
+                        Marshal.Copy(rowPixels, 0, new IntPtr(rowStart),
+                            rowPixels.Length);
                     }
 
                 // PiecesDone = piecesDone;
@@ -156,6 +152,5 @@ namespace Kebler.Services
                 return null;
             }
         }
-
     }
 }

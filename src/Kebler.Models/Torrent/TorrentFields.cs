@@ -3,337 +3,337 @@
     public static class TorrentFields
     {
         /// <summary>
-        /// activityDate
+        ///     activityDate
         /// </summary>
         public const string ACTIVITY_DATE = "activityDate";
 
         /// <summary>
-        /// addedDate
+        ///     addedDate
         /// </summary>
         public const string ADDED_DATE = "addedDate";
 
         /// <summary>
-        /// bandwidthPriority
+        ///     bandwidthPriority
         /// </summary>
         public const string BANDWIDTH_PRIORITY = "bandwidthPriority";
 
         /// <summary>
-        /// comment
+        ///     comment
         /// </summary>
         public const string COMMENT = "comment";
 
         /// <summary>
-        /// corruptEver
+        ///     corruptEver
         /// </summary>
         public const string CORRUPT_EVER = "corruptEver";
 
         /// <summary>
-        /// creator
+        ///     creator
         /// </summary>
         public const string CREATOR = "creator";
 
         /// <summary>
-        /// dateCreated
+        ///     dateCreated
         /// </summary>
         public const string DATE_CREATED = "dateCreated";
 
         /// <summary>
-        /// desiredAvailable
+        ///     desiredAvailable
         /// </summary>
         public const string DESIRED_AVAILABLE = "desiredAvailable";
 
         /// <summary>
-        /// doneDate
+        ///     doneDate
         /// </summary>
         public const string DONE_DATE = "doneDate";
 
         /// <summary>
-        /// downloadDir
+        ///     downloadDir
         /// </summary>
         public const string DOWNLOAD_DIR = "downloadDir";
 
         /// <summary>
-        /// downloadedEver
+        ///     downloadedEver
         /// </summary>
         public const string DOWNLOADED_EVER = "downloadedEver";
 
         /// <summary>
-        /// downloadLimit
+        ///     downloadLimit
         /// </summary>
         public const string DOWNLOAD_LIMIT = "downloadLimit";
 
         /// <summary>
-        /// downloadLimited
+        ///     downloadLimited
         /// </summary>
         public const string DOWNLOAD_LIMITED = "downloadLimited";
 
         /// <summary>
-        /// error
+        ///     error
         /// </summary>
         public const string ERROR = "error";
 
         /// <summary>
-        /// errorString
+        ///     errorString
         /// </summary>
         public const string ERROR_STRING = "errorString";
 
         /// <summary>
-        /// eta
+        ///     eta
         /// </summary>
         public const string ETA = "eta";
 
         /// <summary>
-        /// etaIdle
+        ///     etaIdle
         /// </summary>
         public const string ETA_IDLE = "etaIdle";
 
         /// <summary>
-        /// files
+        ///     files
         /// </summary>
         public const string FILES = "files";
 
         /// <summary>
-        /// fileStats
+        ///     fileStats
         /// </summary>
         public const string FILE_STATS = "fileStats";
 
         /// <summary>
-        /// hashString
+        ///     hashString
         /// </summary>
         public const string HASH_STRING = "hashString";
 
         /// <summary>
-        /// haveUnchecked
+        ///     haveUnchecked
         /// </summary>
         public const string HAVE_UNCHECKED = "haveUnchecked";
 
         /// <summary>
-        /// haveValid
+        ///     haveValid
         /// </summary>
         public const string HAVE_VALID = "haveValid";
 
         /// <summary>
-        /// honorsSessionLimits
+        ///     honorsSessionLimits
         /// </summary>
         public const string HONORS_SESSION_LIMITS = "honorsSessionLimits";
 
         /// <summary>
-        /// id
+        ///     id
         /// </summary>
         public const string ID = "id";
 
         /// <summary>
-        /// isFinished
+        ///     isFinished
         /// </summary>
         public const string IS_FINISHED = "isFinished";
 
         /// <summary>
-        /// isPrivate
+        ///     isPrivate
         /// </summary>
         public const string IS_PRIVATE = "isPrivate";
 
         /// <summary>
-        /// isStalled
+        ///     isStalled
         /// </summary>
         public const string IS_STALLED = "isStalled";
 
         /// <summary>
-        /// leftUntilDone
+        ///     leftUntilDone
         /// </summary>
         public const string LEFT_UNTIL_DONE = "leftUntilDone";
 
         /// <summary>
-        /// magnetLink
+        ///     magnetLink
         /// </summary>
         public const string MAGNET_LINK = "magnetLink";
 
         /// <summary>
-        /// manualAnnounceTime
+        ///     manualAnnounceTime
         /// </summary>
         public const string MANUAL_ANNOUNCE_TIME = "manualAnnounceTime";
 
         /// <summary>
-        /// maxConnectedPeers
+        ///     maxConnectedPeers
         /// </summary>
         public const string MAX_CONNECTED_PEERS = "maxConnectedPeers";
 
         /// <summary>
-        /// metadataPercentComplete
+        ///     metadataPercentComplete
         /// </summary>
         public const string METADATA_PERCENT_COMPLETE = "metadataPercentComplete";
 
         /// <summary>
-        /// name
+        ///     name
         /// </summary>
         public const string NAME = "name";
 
         /// <summary>
-        /// peer-limit
+        ///     peer-limit
         /// </summary>
         public const string PEER_LIMIT = "peer-limit";
 
         /// <summary>
-        /// peers
+        ///     peers
         /// </summary>
         public const string PEERS = "peers";
 
         /// <summary>
-        /// peersConnected
+        ///     peersConnected
         /// </summary>
         public const string PEERS_CONNECTED = "peersConnected";
 
         /// <summary>
-        /// peersFrom
+        ///     peersFrom
         /// </summary>
         public const string PEERS_FROM = "peersFrom";
 
         /// <summary>
-        /// peersGettingFromUs
+        ///     peersGettingFromUs
         /// </summary>
         public const string PEERS_GETTING_FROM_US = "peersGettingFromUs";
 
         /// <summary>
-        /// peersSendingToUs
+        ///     peersSendingToUs
         /// </summary>
         public const string PEERS_SENDING_TO_US = "peersSendingToUs";
 
         /// <summary>
-        /// percentDone
+        ///     percentDone
         /// </summary>
         public const string PERCENT_DONE = "percentDone";
 
         /// <summary>
-        /// pieces
+        ///     pieces
         /// </summary>
         public const string PIECES = "pieces";
 
         /// <summary>
-        /// pieceCount
+        ///     pieceCount
         /// </summary>
         public const string PIECE_COUNT = "pieceCount";
 
         /// <summary>
-        /// pieceSize
+        ///     pieceSize
         /// </summary>
         public const string PIECE_SIZE = "pieceSize";
 
         /// <summary>
-        /// priorities
+        ///     priorities
         /// </summary>
         public const string PRIORITIES = "priorities";
 
         /// <summary>
-        /// queuePosition
+        ///     queuePosition
         /// </summary>
         public const string QUEUE_POSITION = "queuePosition";
 
         /// <summary>
-        /// rateDownload
+        ///     rateDownload
         /// </summary>
         public const string RATE_DOWNLOAD = "rateDownload";
 
         /// <summary>
-        /// rateUpload
+        ///     rateUpload
         /// </summary>
         public const string RATE_UPLOAD = "rateUpload";
 
         /// <summary>
-        /// secondsDownloading
+        ///     secondsDownloading
         /// </summary>
         public const string SECONDS_DOWNLOADING = "secondsDownloading";
 
         /// <summary>
-        /// secondsSeeding
+        ///     secondsSeeding
         /// </summary>
         public const string SECONDS_SEEDING = "secondsSeeding";
 
         /// <summary>
-        /// seedIdleLimit
+        ///     seedIdleLimit
         /// </summary>
         public const string SEED_IDLE_LIMIT = "seedIdleLimit";
 
         /// <summary>
-        /// seedIdleMode
+        ///     seedIdleMode
         /// </summary>
         public const string SEED_IDLE_MODE = "seedIdleMode";
 
         /// <summary>
-        /// seedRatioLimit
+        ///     seedRatioLimit
         /// </summary>
         public const string SEED_RATIO_LIMIT = "seedRatioLimit";
 
         /// <summary>
-        /// seedRatioMode
+        ///     seedRatioMode
         /// </summary>
         public const string SEED_RATIO_MODE = "seedRatioMode";
 
         /// <summary>
-        /// sizeWhenDone
+        ///     sizeWhenDone
         /// </summary>
         public const string SIZE_WHEN_DONE = "sizeWhenDone";
 
         /// <summary>
-        /// seedRatioLimit
+        ///     seedRatioLimit
         /// </summary>
         public const string START_DATE = "startDate";
 
         /// <summary>
-        /// status
+        ///     status
         /// </summary>
         public const string STATUS = "status";
 
         /// <summary>
-        /// trackers
+        ///     trackers
         /// </summary>
         public const string TRACKERS = "trackers";
 
         /// <summary>
-        /// seedRatioLimit
+        ///     seedRatioLimit
         /// </summary>
         public const string TRACKER_STATS = "trackerStats";
 
         /// <summary>
-        /// totalSize
+        ///     totalSize
         /// </summary>
         public const string TOTAL_SIZE = "totalSize";
 
         /// <summary>
-        /// torrentFile
+        ///     torrentFile
         /// </summary>
         public const string TORRENT_FILE = "torrentFile";
 
         /// <summary>
-        /// uploadedEver
+        ///     uploadedEver
         /// </summary>
         public const string UPLOADED_EVER = "uploadedEver";
 
         /// <summary>
-        /// uploadLimit
+        ///     uploadLimit
         /// </summary>
         public const string UPLOAD_LIMIT = "uploadLimit";
 
         /// <summary>
-        /// uploadLimited
+        ///     uploadLimited
         /// </summary>
         public const string UPLOAD_LIMITED = "uploadLimited";
 
         /// <summary>
-        /// uploadRatio
+        ///     uploadRatio
         /// </summary>
         public const string UPLOAD_RATIO = "uploadRatio";
 
         /// <summary>
-        /// wanted
+        ///     wanted
         /// </summary>
         public const string WANTED = "wanted";
 
         /// <summary>
-        /// webseeds
+        ///     webseeds
         /// </summary>
         public const string WEB_SEEDS = "webseeds";
 
         /// <summary>
-        /// webseedsSendingToUs
+        ///     webseedsSendingToUs
         /// </summary>
         public const string WEB_SEEDS_SENDING_TO_US = "webseedsSendingToUs";
 
@@ -346,6 +346,7 @@
                 return new[]
                 {
                     #region ALL FIELDS
+
                     ACTIVITY_DATE,
                     ADDED_DATE,
                     BANDWIDTH_PRIORITY,
@@ -372,7 +373,7 @@
                     ID,
                     IS_FINISHED,
                     IS_PRIVATE,
-                    IS_STALLED  ,
+                    IS_STALLED,
                     LEFT_UNTIL_DONE,
                     MAGNET_LINK,
                     MANUAL_ANNOUNCE_TIME,
@@ -414,6 +415,7 @@
                     WEB_SEEDS,
                     WEB_SEEDS_SENDING_TO_US,
                     RECHECK
+
                     #endregion
                 };
             }
@@ -426,6 +428,7 @@
                 return new[]
                 {
                     #region ALL FIELDS
+
                     NAME,
                     ID,
                     ADDED_DATE,
@@ -440,6 +443,7 @@
                     DOWNLOAD_DIR,
                     FILES,
                     MAGNET_LINK
+
                     #endregion
                 };
             }

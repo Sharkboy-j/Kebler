@@ -19,7 +19,7 @@ namespace Kebler.Models.Torrent.Args
 
         internal T GetValue<T>(string name)
         {
-            return Data.ContainsKey(name) ? (T)Data[name] : default;
+            return Data.ContainsKey(name) ? (T) Data[name] : default;
         }
     }
 }

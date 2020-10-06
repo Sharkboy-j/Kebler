@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +13,7 @@ namespace Kebler.TransmissionCore
             {
                 var response = await request.GetResponseAsync();
                 ct.ThrowIfCancellationRequested();
-                return (HttpWebResponse)response;
+                return (HttpWebResponse) response;
             }
         }
 

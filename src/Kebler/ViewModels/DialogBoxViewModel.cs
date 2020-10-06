@@ -5,10 +5,11 @@ namespace Kebler.ViewModels
 {
     public class DialogBoxViewModel : BoxViewModel
     {
-        public string Value;
-        private bool _showTextBox, _showPasswordBox;
         private string _dialogTextBoxText;
+        private bool _showTextBox, _showPasswordBox;
         private IDialogBox _view;
+        public string Value;
+
         public DialogBoxViewModel(string message, string boxHint, bool isPassword,
             Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
         {
@@ -29,18 +30,6 @@ namespace Kebler.ViewModels
             ShowButtons(buttons);
         }
 
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            _view = view as IDialogBox;
-            if (ShowPasswordBox)
-                _view?.PWD.Focus();
-            else
-                _view?.TBX.Focus();
-
-            base.OnViewAttached(view, context);
-        }
-
         public bool ShowTextBox
         {
             get => _showTextBox;
@@ -59,6 +48,18 @@ namespace Kebler.ViewModels
             set => Set(ref _dialogTextBoxText, value);
         }
 
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            _view = view as IDialogBox;
+            if (ShowPasswordBox)
+                _view?.PWD.Focus();
+            else
+                _view?.TBX.Focus();
+
+            base.OnViewAttached(view, context);
+        }
+
         public override void OkYes()
         {
             if (_showPasswordBox)
@@ -67,7 +68,9 @@ namespace Kebler.ViewModels
                 _view.PWD.Clear();
             }
             else
+            {
                 Value = _dialogTextBoxText;
+            }
 
             base.OkYes();
         }

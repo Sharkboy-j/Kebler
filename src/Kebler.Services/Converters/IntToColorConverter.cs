@@ -23,13 +23,13 @@ namespace Kebler.Services.Converters
 
             return torrInf switch
             {
-                -1 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#CA2327")),
-                1 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB4B3F1")),
-                2 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#B0CB73E1")),
-                0 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0FF9502")),
-                4 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#B01CADF8")),
-                6 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#B064DA38")),
-                _ => (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"))
+                -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#CA2327"),
+                1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#FFB4B3F1"),
+                2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B0CB73E1"),
+                0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#E0FF9502"),
+                4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B01CADF8"),
+                6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B064DA38"),
+                _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
             };
         }
 
@@ -47,13 +47,13 @@ namespace Kebler.Services.Converters
                 return null;
             return torrInf switch
             {
-                -1 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#40FF3B30")),
-                1 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#33B4B3F1")),
-                2 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#40CB73E1")),
-                0 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#40FF9502")),
-                4 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#401CADF8")),
-                6 => (SolidColorBrush)(new BrushConverter().ConvertFrom("#4064DA38")),
-                _ => (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"))
+                -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF3B30"),
+                1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#33B4B3F1"),
+                2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40CB73E1"),
+                0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF9502"),
+                4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#401CADF8"),
+                6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#4064DA38"),
+                _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
             };
         }
 

@@ -10,18 +10,6 @@ namespace Kebler.UI.CSControls.MultiTreeView
 {
     public class FileListItem : MultiselectionTreeViewItem
     {
-        public TorrentTreeFile ChangedFile { get; }
-
-        public ImageSource ChangeTypeIcon { get; }
-
-        public ImageSource FileTypeIcon { get; }
-
-        public bool IsDirectory => ChangedFile.IsDirectory;
-
-        public string FileName { get; }
-
-        public string FolderPath { get; }
-
         public FileListItem(TorrentTreeFile changedFile, string name, ImageSource fileTypeIcon)
         {
             ChangedFile = changedFile;
@@ -34,9 +22,22 @@ namespace Kebler.UI.CSControls.MultiTreeView
             FolderPath = Path.GetDirectoryName(name);
         }
 
+        public TorrentTreeFile ChangedFile { get; }
+
+        public ImageSource ChangeTypeIcon { get; }
+
+        public ImageSource FileTypeIcon { get; }
+
+        public bool IsDirectory => ChangedFile.IsDirectory;
+
+        public string FileName { get; }
+
+        public string FolderPath { get; }
+
         protected override bool MatchFilter(string filterString)
         {
-            return IsNullOrEmpty(filterString) || ChangedFile.FilePath.IndexOf(filterString, StringComparison.OrdinalIgnoreCase) != -1;
+            return IsNullOrEmpty(filterString) ||
+                   ChangedFile.FilePath.IndexOf(filterString, StringComparison.OrdinalIgnoreCase) != -1;
         }
 
         private static ImageSource GetChangeTypeIcon(TorrentTreeFile changedFile)
@@ -50,7 +51,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
         {
             try
             {
-                var num = (int)DragDrop.DoDragDrop(dragSource, GetDataObject(nodes), DragDropEffects.All);
+                var num = (int) DragDrop.DoDragDrop(dragSource, GetDataObject(nodes), DragDropEffects.All);
             }
             catch
             {

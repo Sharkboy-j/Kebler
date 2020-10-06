@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace Kebler.Models.Torrent.Attributes
 {

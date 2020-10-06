@@ -1,30 +1,19 @@
-﻿using Kebler.Const;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Threading;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
+using Kebler.Const;
 using Kebler.Services;
 
 namespace Kebler.Update
 {
-
     public partial class App : Application
     {
-
-        public StringBuilder BUILDER = new StringBuilder();
         public static App Instance;
+        public StringBuilder BUILDER = new StringBuilder();
 
-        App()
+        private App()
         {
             try
             {
@@ -39,9 +28,9 @@ namespace Kebler.Update
                     Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
                     File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
 
-                    using (Process process = new Process())
+                    using (var process = new Process())
                     {
-                        ProcessStartInfo info = new ProcessStartInfo
+                        var info = new ProcessStartInfo
                         {
                             FileName = ConstStrings.TempInstallerExePath,
                             UseShellExecute = true,
@@ -54,7 +43,6 @@ namespace Kebler.Update
                     }
 
                     Log("Started Temp");
-                    return;
                 }
                 else
                 {
@@ -73,7 +61,6 @@ namespace Kebler.Update
                 new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
                 Current.Shutdown();
             }
-
         }
 
 
@@ -110,7 +97,6 @@ namespace Kebler.Update
                 {
                     if (result.Item2 > current)
                     {
-
                         var wd = new MainWindow(new Uri(updateUrl));
                         wd.ShowDialog();
                         Current.Shutdown(0);
@@ -137,6 +123,5 @@ namespace Kebler.Update
             Shortcut.Create(lnkFileName, ConstStrings.KeblerExepath,
                 null, null, nameof(Kebler), null, null);
         }
-
     }
 }

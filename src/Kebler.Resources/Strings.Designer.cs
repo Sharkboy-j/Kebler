@@ -70,6 +70,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter announce URI.
+        /// </summary>
+        public static string AddTrackerTitile {
+            get {
+                return ResourceManager.GetString("AddTrackerTitile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string ATD_Add {
@@ -871,6 +880,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add tracker.
+        /// </summary>
+        public static string MoreInfo_AddTackerBtn {
+            get {
+                return ResourceManager.GetString("MoreInfo_AddTackerBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove tracker.
         /// </summary>
         public static string MoreInfo_DeleteTrackerBtn {
@@ -1308,15 +1326,6 @@ namespace Kebler.Resources {
         public static string RMT_Title {
             get {
                 return ResourceManager.GetString("RMT_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ssdfdsfdsfdsfs.
-        /// </summary>
-        public static string sdsd {
-            get {
-                return ResourceManager.GetString("sdsd", resourceCulture);
             }
         }
         

@@ -3,7 +3,7 @@
     public class NewTorrent : ArgumentsBase
     {
         /// <summary>
-        /// Pointer to a string of one or more cookies.
+        ///     Pointer to a string of one or more cookies.
         /// </summary>
         public string Cookies
         {
@@ -12,7 +12,7 @@
         }
 
         /// <summary>
-        /// Path to download the torrent to
+        ///     Path to download the torrent to
         /// </summary>
         public string DownloadDirectory
         {
@@ -21,7 +21,7 @@
         }
 
         /// <summary>
-		/// filename (relative to the server) or URL of the .torrent file (Priority than the metadata)
+        ///     filename (relative to the server) or URL of the .torrent file (Priority than the metadata)
         /// </summary>
         public string Filename
         {
@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// base64-encoded .torrent content
+        ///     base64-encoded .torrent content
         /// </summary>
         public string Metainfo
         {
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// if true, don't start the torrent
+        ///     if true, don't start the torrent
         /// </summary>
         public bool Paused
         {
@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// maximum number of peers
+        ///     maximum number of peers
         /// </summary>
         public int? PeerLimit
         {
@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// Torrent's bandwidth priority
+        ///     Torrent's bandwidth priority
         /// </summary>
         public int? BandwidthPriority
         {
@@ -66,7 +66,7 @@
         }
 
         /// <summary>
-        /// Indices of file(s) to download
+        ///     Indices of file(s) to download
         /// </summary>
         public uint[] FilesWanted
         {
@@ -75,7 +75,7 @@
         }
 
         /// <summary>
-        /// Indices of file(s) to download
+        ///     Indices of file(s) to download
         /// </summary>
         public uint[] FilesUnwanted
         {
@@ -84,7 +84,7 @@
         }
 
         /// <summary>
-        /// Indices of high-priority file(s)
+        ///     Indices of high-priority file(s)
         /// </summary>
         public int[] PriorityHigh
         {
@@ -93,7 +93,7 @@
         }
 
         /// <summary>
-        /// Indices of low-priority file(s)
+        ///     Indices of low-priority file(s)
         /// </summary>
         public int[] PriorityLow
         {
@@ -102,7 +102,7 @@
         }
 
         /// <summary>
-        /// Indices of normal-priority file(s)
+        ///     Indices of normal-priority file(s)
         /// </summary>
         public int[] PriorityNormal
         {

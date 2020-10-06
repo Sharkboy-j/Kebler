@@ -16,17 +16,26 @@ namespace Kebler.UI.CSControls.MultiTreeView
 {
     public class MultiselectionTreeView : ListView
     {
-        public static readonly DependencyProperty RootItemProperty = DependencyProperty.Register(nameof(RootItem), typeof(MultiselectionTreeViewItem), typeof(MultiselectionTreeView));
-        private ExpandedTreeViewElement _itemsToExpand;
+        public static readonly DependencyProperty RootItemProperty = DependencyProperty.Register(nameof(RootItem),
+            typeof(MultiselectionTreeViewItem), typeof(MultiselectionTreeView));
+
         private string _filterString;
         private FlattenerNode.Flattener _flattener;
-        public bool doNotScrollOnExpanding;
-        private bool _updatesLocked;
+
+        private ExpandedTreeViewElement _itemsToExpand;
         private TreeViewControlItem _previewNodeView;
+        private bool _updatesLocked;
+        public bool doNotScrollOnExpanding;
+
+        static MultiselectionTreeView()
+        {
+            VirtualizingStackPanel.VirtualizationModeProperty.OverrideMetadata(typeof(MultiselectionTreeView),
+                new FrameworkPropertyMetadata(VirtualizationMode.Recycling));
+        }
 
         public MultiselectionTreeViewItem RootItem
         {
-            get => (MultiselectionTreeViewItem)GetValue(RootItemProperty);
+            get => (MultiselectionTreeViewItem) GetValue(RootItemProperty);
             set => SetValue(RootItemProperty, value);
         }
 
@@ -47,7 +56,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
             {
                 if (_filterString == value)
                     return;
-                var num = !RememberExpandedItems || !string.IsNullOrEmpty(_filterString) ? 0 : (!string.IsNullOrEmpty(value) ? 1 : 0);
+                var num = !RememberExpandedItems || !string.IsNullOrEmpty(_filterString) ? 0 :
+                    !string.IsNullOrEmpty(value) ? 1 : 0;
                 var flag = RememberExpandedItems && !string.IsNullOrEmpty(_filterString) && string.IsNullOrEmpty(value);
                 _filterString = value;
                 if (num != 0)
@@ -60,14 +70,13 @@ namespace Kebler.UI.CSControls.MultiTreeView
                     _itemsToExpand = null;
                 }
                 else
+                {
                     RootItem.ExpandAllChildren();
+                }
             }
         }
 
-        static MultiselectionTreeView()
-        {
-            VirtualizingStackPanel.VirtualizationModeProperty.OverrideMetadata(typeof(MultiselectionTreeView), new FrameworkPropertyMetadata(VirtualizationMode.Recycling));
-        }
+        public MultiselectionTreeViewItem LastClickedItem { get; private set; }
 
         public void Refilter()
         {
@@ -133,8 +142,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
                         else if (originalSource.Node.ParentItem != null)
                             FocusNode(originalSource.Node.ParentItem);
                         e.Handled = true;
-                        break;
                     }
+
                     break;
                 case Key.Right:
                     if (originalSource != null && ItemsControlFromItemContainer(originalSource) == this)
@@ -144,10 +153,11 @@ namespace Kebler.UI.CSControls.MultiTreeView
                         else if (originalSource.Node.Children.Count > 0)
                             originalSource.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
                         e.Handled = true;
-                        break;
                     }
+
                     break;
             }
+
             if (e.Handled)
                 return;
             base.OnKeyDown(e);
@@ -156,17 +166,17 @@ namespace Kebler.UI.CSControls.MultiTreeView
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseRightButtonDown(e);
-            LastClickedItem = this.GetObjectAtPoint<TreeViewControlItem>(e.GetPosition(this)) as MultiselectionTreeViewItem;
+            LastClickedItem =
+                this.GetObjectAtPoint<TreeViewControlItem>(e.GetPosition(this)) as MultiselectionTreeViewItem;
         }
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {
-            LastClickedItem = this.GetObjectAtPoint<TreeViewControlItem>(e.GetPosition(this)) as MultiselectionTreeViewItem;
+            LastClickedItem =
+                this.GetObjectAtPoint<TreeViewControlItem>(e.GetPosition(this)) as MultiselectionTreeViewItem;
             base.OnMouseDoubleClick(e);
             LastClickedItem = null;
         }
-
-        public MultiselectionTreeViewItem LastClickedItem { get; private set; }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
@@ -184,7 +194,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
                 return;
             RootItem.IsExpanded = true;
             _flattener = new FlattenerNode.Flattener(RootItem);
-            _flattener.CollectionChanged += new NotifyCollectionChangedEventHandler(_flattener_CollectionChanged);
+            _flattener.CollectionChanged += _flattener_CollectionChanged;
             base.ItemsSource = _flattener;
         }
 
@@ -244,7 +254,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
             foreach (var ancestor in node.Ancestors())
                 ancestor.IsExpanded = true;
             doNotScrollOnExpanding = false;
-            ScrollIntoView((object)node);
+            ScrollIntoView((object) node);
         }
 
         public IDisposable LockUpdates()
@@ -265,22 +275,24 @@ namespace Kebler.UI.CSControls.MultiTreeView
                 return;
             List<MultiselectionTreeViewItem> multiselectionTreeViewItemList = null;
             foreach (MultiselectionTreeViewItem oldItem in e.OldItems)
-            {
                 if (oldItem.IsSelected)
                 {
                     if (multiselectionTreeViewItemList == null)
                         multiselectionTreeViewItemList = new List<MultiselectionTreeViewItem>();
                     multiselectionTreeViewItemList.Add(oldItem);
                 }
-            }
+
             if (_updatesLocked || multiselectionTreeViewItemList == null)
                 return;
-            UpdateFocusedNode(SelectedItems.Cast<MultiselectionTreeViewItem>().Except<MultiselectionTreeViewItem>(multiselectionTreeViewItemList).ToList<MultiselectionTreeViewItem>(), Math.Max(0, e.OldStartingIndex - 1));
+            UpdateFocusedNode(
+                SelectedItems.Cast<MultiselectionTreeViewItem>()
+                    .Except(multiselectionTreeViewItemList)
+                    .ToList(), Math.Max(0, e.OldStartingIndex - 1));
         }
 
         private void UpdateFocusedNode(
-          List<MultiselectionTreeViewItem> newSelection,
-          int topSelectedIndex)
+            List<MultiselectionTreeViewItem> newSelection,
+            int topSelectedIndex)
         {
             if (_updatesLocked)
                 return;
@@ -294,7 +306,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
         {
             var multiselectionTreeViewItems = SelectedItems.OfType<MultiselectionTreeViewItem>();
             var selectionHash = new HashSet<MultiselectionTreeViewItem>(multiselectionTreeViewItems);
-            return multiselectionTreeViewItems.Where<MultiselectionTreeViewItem>(item => item.Ancestors().All<MultiselectionTreeViewItem>(a => !selectionHash.Contains(a)));
+            return multiselectionTreeViewItems.Where(item =>
+                item.Ancestors().All(a => !selectionHash.Contains(a)));
         }
 
         protected override void OnDragEnter(DragEventArgs e)
@@ -358,16 +371,14 @@ namespace Kebler.UI.CSControls.MultiTreeView
         }
 
         private DropTarget GetDropTarget(
-          TreeViewControlItem item,
-          DragEventArgs e)
+            TreeViewControlItem item,
+            DragEventArgs e)
         {
             var dropTargetList = BuildDropTargets(item, e);
             var y = e.GetPosition(item).Y;
             foreach (var dropTarget in dropTargetList)
-            {
                 if (dropTarget.Y >= y)
                     return dropTarget;
-            }
             return null;
         }
 
@@ -381,12 +392,15 @@ namespace Kebler.UI.CSControls.MultiTreeView
             var num2 = actualHeight / 2.0;
             var num3 = actualHeight - num1;
             if (targets.Count == 2)
+            {
                 targets[0].Y = num2;
+            }
             else if (targets.Count == 3)
             {
                 targets[0].Y = num1;
                 targets[1].Y = num3;
             }
+
             if (targets.Count > 0)
                 targets[targets.Count - 1].Y = actualHeight;
             return targets;
@@ -400,7 +414,7 @@ namespace Kebler.UI.CSControls.MultiTreeView
             var dropEffect = node.GetDropEffect(e, index);
             if (dropEffect == DragDropEffects.None)
                 return;
-            var dropTarget = new DropTarget()
+            var dropTarget = new DropTarget
             {
                 Item = item,
                 Node = node,
@@ -410,7 +424,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
             targets.Add(dropTarget);
         }
 
-        private static void GetNodeAndIndex(TreeViewControlItem item, out MultiselectionTreeViewItem node, out int index)
+        private static void GetNodeAndIndex(TreeViewControlItem item, out MultiselectionTreeViewItem node,
+            out int index)
         {
             node = item.Node;
             index = node.Children.Count;
@@ -419,7 +434,8 @@ namespace Kebler.UI.CSControls.MultiTreeView
         private void ShowPreview(TreeViewControlItem item)
         {
             _previewNodeView = item;
-            _previewNodeView.Background = Application.Current.TryFindResource("TreeViewItem.SelectedInactive.Background") as Brush;
+            _previewNodeView.Background =
+                Application.Current.TryFindResource("TreeViewItem.SelectedInactive.Background") as Brush;
         }
 
         private void HidePreview()
@@ -432,11 +448,11 @@ namespace Kebler.UI.CSControls.MultiTreeView
 
         private class DropTarget
         {
-            public TreeViewControlItem Item;
-            public double Y;
-            public MultiselectionTreeViewItem Node;
-            public int Index;
             public DragDropEffects Effect;
+            public int Index;
+            public TreeViewControlItem Item;
+            public MultiselectionTreeViewItem Node;
+            public double Y;
         }
 
         private class UpdateLock : IDisposable

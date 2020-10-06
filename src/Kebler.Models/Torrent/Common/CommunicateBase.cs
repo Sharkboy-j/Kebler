@@ -6,19 +6,17 @@ namespace Kebler.Models.Torrent.Common
     public abstract class CommunicateBase
     {
         /// <summary>
-        /// Data
+        ///     Data
         /// </summary>
-        [JsonProperty("arguments")]
-        public Dictionary<string, object> Arguments;
+        [JsonProperty("arguments")] public Dictionary<string, object> Arguments;
 
         /// <summary>
-        /// Number (id)
+        ///     Number (id)
         /// </summary>
-        [JsonProperty("tag")]
-        public int Tag;
+        [JsonProperty("tag")] public int Tag;
 
         /// <summary>
-        /// Convert to JSON string
+        ///     Convert to JSON string
         /// </summary>
         /// <returns></returns>
         public virtual string ToJson()
@@ -27,7 +25,7 @@ namespace Kebler.Models.Torrent.Common
         }
 
         /// <summary>
-        /// Deserialize to class
+        ///     Deserialize to class
         /// </summary>
         /// <returns></returns>
         public T Deserialize<T>()

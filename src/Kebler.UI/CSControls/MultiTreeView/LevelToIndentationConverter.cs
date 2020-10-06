@@ -17,10 +17,10 @@ namespace Kebler.UI.CSControls.MuliTreeView
         }
 
         public object ConvertBack(
-          object value,
-          Type targetType,
-          object parameter,
-          CultureInfo culture)
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture)
         {
             throw new NotSupportedException();
         }

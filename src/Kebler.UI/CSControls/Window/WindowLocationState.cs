@@ -4,6 +4,20 @@ namespace Kebler.UI.CSControls.Window
 {
     public class WindowLocationState
     {
+        public WindowLocationState(
+            double left,
+            double top,
+            double width,
+            double height,
+            WindowState windowState)
+        {
+            Left = left;
+            Top = top;
+            Width = width;
+            Height = height;
+            WindowState = windowState;
+        }
+
         public double Left { get; }
 
         public double Top { get; }
@@ -13,19 +27,5 @@ namespace Kebler.UI.CSControls.Window
         public double Height { get; }
 
         public WindowState WindowState { get; }
-
-        public WindowLocationState(
-            double left,
-            double top,
-            double width,
-            double height,
-            WindowState windowState)
-        {
-            this.Left = left;
-            this.Top = top;
-            this.Width = width;
-            this.Height = height;
-            this.WindowState = windowState;
-        }
     }
 }

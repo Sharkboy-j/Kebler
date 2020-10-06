@@ -1,29 +1,28 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Kebler.UI.CSControls.MuliTreeView
 {
     public static class ItemsControlExtensions
     {
-        public static object GetObjectAtPoint<ItemContainer>(this ItemsControl control, Point p) where ItemContainer : DependencyObject
+        public static object GetObjectAtPoint<ItemContainer>(this ItemsControl control, Point p)
+            where ItemContainer : DependencyObject
         {
             var containerAtPoint = control.GetContainerAtPoint<ItemContainer>(p);
             return containerAtPoint == null ? null : control.ItemContainerGenerator.ItemFromContainer(containerAtPoint);
         }
 
         public static ItemContainer GetContainerAtPoint<ItemContainer>(
-          this ItemsControl control,
-          Point p)
-          where ItemContainer : DependencyObject
+            this ItemsControl control,
+            Point p)
+            where ItemContainer : DependencyObject
         {
             var hitTestResult = VisualTreeHelper.HitTest(control, p);
             if (hitTestResult == null)
-                return default(ItemContainer);
+                return default;
             var reference = hitTestResult.VisualHit;
             while (VisualTreeHelper.GetParent(reference) != null && !(reference is ItemContainer))
                 reference = VisualTreeHelper.GetParent(reference);

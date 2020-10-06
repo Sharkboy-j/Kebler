@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Kebler.Services
 {
     public class Shortcut
     {
-        public static void Create(string fileName, string targetPath, string arguments, string workingDirectory, string description, string hotkey, string iconPath)
+        private static readonly Type m_type = Type.GetTypeFromProgID("WScript.Shell");
+        private static readonly object m_shell = Activator.CreateInstance(m_type);
+
+        public static void Create(string fileName, string targetPath, string arguments, string workingDirectory,
+            string description, string hotkey, string iconPath)
         {
-            IWshShortcut shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, m_shell, new object[] { fileName });
+            var shortcut = (IWshShortcut) m_type.InvokeMember("CreateShortcut",
+                BindingFlags.InvokeMethod, null, m_shell, new object[] {fileName});
             shortcut.Description = description;
             shortcut.TargetPath = targetPath;
             if (!string.IsNullOrEmpty(iconPath))
@@ -17,10 +21,9 @@ namespace Kebler.Services
             shortcut.Save();
         }
 
-        private static Type m_type = Type.GetTypeFromProgID("WScript.Shell");
-        private static object m_shell = Activator.CreateInstance(m_type);
-
-        [ComImport, TypeLibType((short)0x1040), Guid("F935DC23-1CF0-11D0-ADB9-00C04FD58A0B")]
+        [ComImport]
+        [TypeLibType(0x1040)]
+        [Guid("F935DC23-1CF0-11D0-ADB9-00C04FD58A0B")]
         private interface IWshShortcut
         {
             [DispId(0)]
@@ -37,7 +40,8 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3e8)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3e8)]
                 set;
             }
@@ -48,7 +52,8 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3e9)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3e9)]
                 set;
             }
@@ -59,7 +64,8 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ea)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ea)]
                 set;
             }
@@ -70,7 +76,8 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3eb)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3eb)]
                 set;
             }
@@ -78,7 +85,8 @@ namespace Kebler.Services
             [DispId(0x3ec)]
             string RelativePath
             {
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ec)]
                 set;
             }
@@ -89,12 +97,21 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ed)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ed)]
                 set;
             }
 
-            [DispId(0x3ee)] int WindowStyle { [DispId(0x3ee)] get; [param: In] [DispId(0x3ee)] set; }
+            [DispId(0x3ee)]
+            int WindowStyle
+            {
+                [DispId(0x3ee)]
+                get;
+                [param: In]
+                [DispId(0x3ee)]
+                set;
+            }
 
             [DispId(0x3ef)]
             string WorkingDirectory
@@ -102,13 +119,15 @@ namespace Kebler.Services
                 [return: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ef)]
                 get;
-                [param: In, MarshalAs(UnmanagedType.BStr)]
+                [param: In]
+                [param: MarshalAs(UnmanagedType.BStr)]
                 [DispId(0x3ef)]
                 set;
             }
 
-            [TypeLibFunc((short)0x40), DispId(0x7d0)]
-            void Load([In, MarshalAs(UnmanagedType.BStr)] string PathLink);
+            [TypeLibFunc(0x40)]
+            [DispId(0x7d0)]
+            void Load([In] [MarshalAs(UnmanagedType.BStr)] string PathLink);
 
             [DispId(0x7d1)]
             void Save();

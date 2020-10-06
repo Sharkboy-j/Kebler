@@ -16,7 +16,7 @@ namespace Kebler
 
         public Bootstrapper()
         {
-            ViewLocator.AddNamespaceMapping("Kebler.ViewModels", new[] { "Kebler.Views", "Kebler.UI.Dialogs" });
+            ViewLocator.AddNamespaceMapping("Kebler.ViewModels", new[] {"Kebler.Views", "Kebler.UI.Dialogs"});
             Initialize();
         }
 
@@ -34,21 +34,16 @@ namespace Kebler
             container.Singleton<TaskBarIconViewModel>();
             container.Singleton<TorrentPropsViewModel>();
             container.Singleton<RemoveListDialogViewModel>();
-
-
         }
 
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             if (string.IsNullOrEmpty(ConfigService.Instanse.Language.Name))
-            {
                 LocalizationManager.CurrentCulture = LocalizationManager.CultureList[0];
-            }
             else
-            {
-                LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x => x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
-            }
+                LocalizationManager.CurrentCulture = LocalizationManager.CultureList.First(x =>
+                    x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
 
             await DisplayRootViewFor<KeblerViewModel>();
             await Updater.CheckUpdates();
@@ -68,6 +63,7 @@ namespace Kebler
         {
             container.BuildUp(instance);
         }
+
         protected override IEnumerable<Assembly> SelectAssemblies()
         {
             var assemblies = base.SelectAssemblies().ToList();

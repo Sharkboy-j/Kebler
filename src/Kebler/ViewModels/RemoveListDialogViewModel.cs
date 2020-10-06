@@ -1,16 +1,22 @@
-﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Kebler.ViewModels
 {
     public class RemoveListDialogViewModel : BaseScreen
     {
+        private IEnumerable<string> _names;
+
         public RemoveListDialogViewModel(string title, IEnumerable<string> names)
         {
             Title = title;
             Names = names;
+        }
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        public IEnumerable<string> Names
+        {
+            get => _names;
+            set => Set(ref _names, value);
         }
 
         public void No()
@@ -22,14 +28,5 @@ namespace Kebler.ViewModels
         {
             TryCloseAsync(true);
         }
-
-        public IEnumerable<string> _names;
-
-        public IEnumerable<string> Names
-        {
-            get => _names;
-            set => Set(ref _names, value);
-        }
-
     }
 }

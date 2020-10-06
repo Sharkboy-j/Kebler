@@ -12,21 +12,21 @@ namespace Kebler.Services
 {
     public static class LocalizationManager
     {
-        static List<CultureInfo> _cultureList;
-        static readonly ILog Log = LogManager.GetLogger(typeof(LocalizationManager));
+        private static List<CultureInfo> _cultureList;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LocalizationManager));
+
+        private static CultureInfo _currentCulture;
 
         public static List<CultureInfo> CultureList
         {
             get
             {
                 if (_cultureList == null)
-                {
                     _cultureList = new List<CultureInfo>
                     {
                         new CultureInfo("en"),
                         new CultureInfo("ru")
                     };
-                }
                 return _cultureList;
             }
         }
@@ -44,7 +44,8 @@ namespace Kebler.Services
 
                     var ea = IoC.Get<IEventAggregator>();
 
-                    ea.PublishOnUIThreadAsync(new Messages.LocalizationCultureChangesMessage { Culture = CurrentCulture });
+                    ea.PublishOnUIThreadAsync(new Messages.LocalizationCultureChangesMessage
+                        {Culture = CurrentCulture});
 
                     SetCurrentThreadCulture(CurrentCulture);
                     //App.Instance.LangChangedNotify();
@@ -53,13 +54,9 @@ namespace Kebler.Services
                 catch (Exception ex)
                 {
                     Log.Error(ex);
-
                 }
-
             }
         }
-        static CultureInfo _currentCulture;
-
 
 
         public static void SetCurrentThreadCulture(CultureInfo culture = null)
@@ -69,7 +66,8 @@ namespace Kebler.Services
                 if (culture == null) culture = CurrentCulture;
 
                 Thread.CurrentThread.CurrentUICulture = culture;
-                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culture.TwoLetterISOLanguageName);
+                Thread.CurrentThread.CurrentCulture =
+                    CultureInfo.CreateSpecificCulture(culture.TwoLetterISOLanguageName);
 
                 CultureInfo.DefaultThreadCurrentCulture = culture;
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -81,12 +79,6 @@ namespace Kebler.Services
             {
                 Log.Error(ex);
             }
-
-
-
         }
-
-
-
     }
 }

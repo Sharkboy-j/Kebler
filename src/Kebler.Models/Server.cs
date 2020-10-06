@@ -5,8 +5,9 @@ using Newtonsoft.Json;
 
 namespace Kebler.Models
 {
-    public class Server: PropertyChangedBase
+    public class Server : PropertyChangedBase
     {
+        private bool _sslEnabled = true;
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
 
@@ -21,7 +22,6 @@ namespace Kebler.Models
         public bool AuthEnabled { get; set; } = false;
         public bool AskForPassword { get; set; } = false;
 
-        private bool _sslEnabled = true;
         public bool SslEnabled
         {
             get => _sslEnabled;
@@ -31,12 +31,7 @@ namespace Kebler.Models
         public string RpcPath { get; set; } = @"/transmission/rpc";
 
         [BsonIgnore]
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this,Formatting.Indented);
-        }
-
-        [BsonIgnore,JsonIgnore]
+        [JsonIgnore]
         public string FullUriPath
         {
             get
@@ -55,12 +50,15 @@ namespace Kebler.Models
         }
 
         [BsonIgnore]
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        [BsonIgnore]
         public override bool Equals(object obj)
         {
-            if (obj != null && obj is Server srv)
-            {
-                return srv.Id == Id;
-            }
+            if (obj != null && obj is Server srv) return srv.Id == Id;
             return false;
         }
 

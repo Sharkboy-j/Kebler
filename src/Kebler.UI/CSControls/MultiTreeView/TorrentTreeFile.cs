@@ -7,10 +7,10 @@ namespace Kebler.UI.CSControls.MultiTreeView
     {
         public TorrentTreeFile(string filePath)
         {
-            this.FilePath = filePath;
+            FilePath = filePath;
         }
 
-   
+
         //public string OldFilePath { get; }
 
         public string FilePath { get; }

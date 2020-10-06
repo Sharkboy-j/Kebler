@@ -6,11 +6,8 @@ namespace Kebler.Services
     {
         internal static T Find<T>(this Dictionary<string, TransmissionValue> dictToSearch, string key)
         {
-            if (!dictToSearch.ContainsKey(key))
-            {
-                return default(T);
-            }
-            return (T)dictToSearch[key].Value;
+            if (!dictToSearch.ContainsKey(key)) return default;
+            return (T) dictToSearch[key].Value;
         }
 
         internal static long FindNumber(this Dictionary<string, TransmissionValue> dictToSearch, string key)

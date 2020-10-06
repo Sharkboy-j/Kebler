@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Windows;
 
 namespace Kebler.UI.CSControls.Window
@@ -25,6 +24,5 @@ namespace Kebler.UI.CSControls.Window
         {
             throw new Exception("Use ShowDialog instead of Show()");
         }
-
     }
 }

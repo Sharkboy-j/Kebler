@@ -8,11 +8,8 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (parameter != null && bool.TryParse(parameter.ToString(), out var para))
-            {
-                return GetSizeString(System.Convert.ToInt64(value),para);
-            }
+                return GetSizeString(System.Convert.ToInt64(value), para);
 
             return GetSizeString(System.Convert.ToInt64(value));
         }
@@ -21,7 +18,8 @@ namespace Kebler.Services.Converters
         {
             throw new NotImplementedException();
         }
-        public static string GetSizeString(long length, bool showEmpty=false)
+
+        public static string GetSizeString(long length, bool showEmpty = false)
         {
             long B = 0, KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
             double size = length;
@@ -50,13 +48,12 @@ namespace Kebler.Services.Converters
             }
             else
             {
-                return showEmpty ? $"0 KB/s" : string.Empty;
+                return showEmpty ? "0 KB/s" : string.Empty;
             }
 
             size = Math.Round(length / SelSize, 2);
 
             return $"{size} {suffix}/s";
         }
-
     }
 }

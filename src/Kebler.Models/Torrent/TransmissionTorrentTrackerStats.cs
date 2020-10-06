@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Caliburn.Micro;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentTrackerStats : PropertyChangedBase, IEqualityComparer, IEqualityComparer<TransmissionTorrentTrackerStats>
+    public class TransmissionTorrentTrackerStats : PropertyChangedBase, IEqualityComparer,
+        IEqualityComparer<TransmissionTorrentTrackerStats>
     {
         private string _announce;
         private int _announceState;
@@ -103,23 +103,10 @@ namespace Kebler.Models.Torrent
         [JsonProperty("seederCount")]
         public int SeederCount { get; set; }
 
-
-
-        public override bool Equals(object obj)
-        {
-            if (obj is TransmissionTorrentTrackerStats st)
-            {
-                return Equals(this, st);
-            }
-            return false;
-        }
-
         public new bool Equals(object x, object y)
         {
             if (x is TransmissionTorrentTrackerStats _x && y is TransmissionTorrentTrackerStats _y)
-            {
                 return Equals(_x, _y);
-            }
             return false;
         }
 
@@ -139,46 +126,19 @@ namespace Kebler.Models.Torrent
 
         public bool Equals([AllowNull] TransmissionTorrentTrackerStats x, [AllowNull] TransmissionTorrentTrackerStats y)
         {
-            return x.ID == y.ID;
+            return x != null && y != null && x.ID == y.ID;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TransmissionTorrentTrackerStats st) return Equals(this, st);
+            return false;
         }
 
         public override int GetHashCode()
         {
-            return this.ID.GetHashCode();
+            return ID.GetHashCode();
         }
     }
-
-    public static class Help
-    {
-        public static void Update(this TransmissionTorrentTrackerStats current, TransmissionTorrentTrackerStats @new)
-        {
-            current.announce = @new.announce;
-            current.AnnounceState = @new.AnnounceState;
-            current.DownloadCount = @new.DownloadCount;
-            current.HasAnnounced = @new.HasAnnounced;
-            current.HasScraped = @new.HasScraped;
-            current.Host = @new.Host;
-            current.IsBackup = @new.IsBackup;
-            current.LastAnnouncePeerCount = @new.LastAnnouncePeerCount;
-            current.LastAnnounceResult = @new.LastAnnounceResult;
-            current.LastAnnounceSucceeded = @new.LastAnnounceSucceeded;
-            current.LastAnnounceStartTime = @new.LastAnnounceStartTime;
-            current.LastScrapeResult = @new.LastScrapeResult;
-            current.LastAnnounceTimedOut = @new.LastAnnounceTimedOut;
-            current.LastAnnounceTime = @new.LastAnnounceTime;
-            current.LastScrapeSucceeded = @new.LastScrapeSucceeded;
-            current.LastScrapeStartTime = @new.LastScrapeStartTime;
-            current.LastScrapeTimedOut = @new.LastScrapeTimedOut;
-            current.LastScrapeTime = @new.LastScrapeTime;
-            current.Scrape = @new.Scrape;
-            current.Tier = @new.Tier;
-            current.LeecherCount = @new.LeecherCount;
-            current.NextAnnounceTime = @new.NextAnnounceTime;
-            current.NextScrapeTime = @new.NextScrapeTime;
-            current.ScrapeState = @new.ScrapeState;
-            current.SeederCount = @new.SeederCount;
-        }
-    }
-
-
 }

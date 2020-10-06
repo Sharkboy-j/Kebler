@@ -7,21 +7,17 @@ using Kebler.Models.Interfaces;
 namespace Kebler.Views
 {
     /// <summary>
-    /// Interaction logic for ConnectionManagerView.xaml
+    ///     Interaction logic for ConnectionManagerView.xaml
     /// </summary>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public partial class ConnectionManagerView : IConnectionManager
     {
-
-
-        public PasswordBox pwd { get; }
-    
         public ConnectionManagerView()
         {
             InitializeComponent();
-            pwd = this.ServerPasswordBox;
+            pwd = ServerPasswordBox;
         }
 
-
+        public PasswordBox pwd { get; }
     }
 }

@@ -4,7 +4,6 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
 
-
     <Color x:Key="DataGrid.Header.BorderColor">#464646</Color>
     <Color x:Key="DataGrid.Header.BackgroundColor">Transparent</Color>
     <Color x:Key="DataGrid.Header.ForegroundColor">White</Color>
@@ -35,7 +34,6 @@
     <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
 
 
-
     <!--<Color x:Key="Window.BackgroundColor">#252525</Color>-->
     <Color x:Key="Window.BorderColor">#3BACED</Color>
     <Color x:Key="Window.BorderSeparatorColor">#464646</Color>
@@ -55,30 +53,6 @@
     <Color x:Key="Window.CloseButton.Static.BackgroundColor">Transparent</Color>
     <Color x:Key="Window.CloseButton.MouseOver.BackgroundColor">#FFE81123</Color>
     <Color x:Key="Window.CloseButton.Pressed.BackgroundColor">#F1707A</Color>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <Color x:Key="LabelColor">#E8E6E6</Color>

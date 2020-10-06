@@ -5,7 +5,6 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
@@ -16,25 +15,25 @@
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="NoCancel"
-            Content="{lex:LocText BTNS_No}"
+            Content="{lex:Loc  BTNS_No}"
             Visibility="{Binding NoVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="OkYes"
-            Content="{lex:LocText BTNS_Yes}"
+            Content="{lex:Loc  BTNS_Yes}"
             IsDefault="{Binding YesDefault}"
             Visibility="{Binding YesVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             cm:Message.Attach="NoCancel"
-            Content="{lex:LocText BTNS_Cancel}"
+            Content="{lex:Loc  BTNS_Cancel}"
             Visibility="{Binding CancelVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="OkYes"
-            Content="{lex:LocText BTNS_Ok}"
+            Content="{lex:Loc  BTNS_Ok}"
             IsDefault="{Binding OkDefault}"
             Visibility="{Binding OkVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
     </StackPanel>

@@ -1,15 +1,13 @@
-﻿using System.Linq;
-using System.Windows.Controls;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls.Primitives;
-using Kebler.Models.Torrent.Args;
-using Kebler.Services;
+using Kebler.ViewModels;
 
 namespace Kebler.Views
 {
     public partial class KeblerView
 
     {
-
         public KeblerView()
         {
             InitializeComponent();
@@ -18,18 +16,18 @@ namespace Kebler.Views
 
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            (this.DataContext as Kebler.ViewModels.KeblerViewModel).SaveConfig();
+            (DataContext as KeblerViewModel).SaveConfig();
         }
 
-        private void CustomizableWindow_Activated(object sender, System.EventArgs e)
+        private void CustomizableWindow_Activated(object sender, EventArgs e)
         {
-            this.ShowInTaskbar = true;
+            ShowInTaskbar = true;
         }
 
-        private void CustomizableWindow_Deactivated(object sender, System.EventArgs e)
+        private void CustomizableWindow_Deactivated(object sender, EventArgs e)
         {
-            if (this.WindowState == System.Windows.WindowState.Minimized)
-                this.ShowInTaskbar = false;
+            if (WindowState == WindowState.Minimized)
+                ShowInTaskbar = false;
         }
     }
 }

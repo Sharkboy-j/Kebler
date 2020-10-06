@@ -8,22 +8,14 @@ namespace Kebler.Services
 {
     public class HotKey : IDisposable
     {
-        private static Dictionary<int, HotKey> _dictHotKeyToCalBackProc;
-
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vlc);
-
-        [DllImport("user32.dll")]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-
         private const int WM_HOT_KEY = 0x0312;
-        private bool _disposed;
-        private readonly Key _key;
-        private readonly KeyModifier _modifire;
+        private static Dictionary<int, HotKey> _dictHotKeyToCalBackProc;
         private readonly Action _action;
         private readonly IntPtr _hWnd;
-        private  int _id;
+        private readonly Key _key;
+        private readonly KeyModifier _modifire;
+        private bool _disposed;
+        private int _id;
 
 
         public HotKey(Key key, KeyModifier keyModifiers, Action action, IntPtr wnd, bool register = true)
@@ -32,17 +24,27 @@ namespace Kebler.Services
             _key = key;
             _modifire = keyModifiers;
             _action = action;
-            if (register)
-            {
-                Register();
-            }
+            if (register) Register();
         }
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vlc);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         public bool Register()
         {
             var virtualKeyCode = KeyInterop.VirtualKeyFromKey(_key);
-            _id = virtualKeyCode + ((int)_modifire * 0x10000);
-            var result = RegisterHotKey(_hWnd, _id, (uint)_modifire, (uint)virtualKeyCode);
+            _id = virtualKeyCode + (int) _modifire * 0x10000;
+            var result = RegisterHotKey(_hWnd, _id, (uint) _modifire, (uint) virtualKeyCode);
 
             if (_dictHotKeyToCalBackProc == null)
             {
@@ -75,21 +77,11 @@ namespace Kebler.Services
             handled = true;
         }
 
-     
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
-       
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;
-            if (disposing)
-            {
-                Unregister();
-            }
+            if (disposing) Unregister();
             _disposed = true;
         }
     }

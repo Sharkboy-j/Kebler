@@ -2,20 +2,26 @@
     x:Class="Kebler.Views.TorrentPropsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:Kebler.Services.Helpers"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:local="clr-namespace:Kebler.Dialogs"
+    xmlns:cal="http://www.caliburnproject.org"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
+    xmlns:viewModels="clr-namespace:Kebler.ViewModels"
     Title="TorrentPropsView"
+    MinWidth="490"
+    MinHeight="345"
     Width="490"
     Height="345"
-    ResizeMode="NoResize"
+    ResizeMode="CanResize"
+    d:DataContext="{DynamicResource TorrentPropsViewModel}"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
+    <window:DialogWindow.Resources>
+        <viewModels:TorrentPropsViewModel x:Key="TorrentPropsViewModel" />
+    </window:DialogWindow.Resources>
     <Grid>
         <Grid>
             <Grid>
@@ -29,6 +35,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="10" />
                 </Grid.RowDefinitions>
                 <Image
@@ -45,7 +52,7 @@
                         Background="Transparent"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
-                        <TabItem Header="{lex:LocText CM_Tab_General}">
+                        <TabItem Header="{lex:Loc  CM_Tab_General}">
                             <Grid Background="#FF2D2D30" Grid.IsSharedSizeScope="True">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10" />
@@ -206,35 +213,70 @@
                                             Text="{Binding StopSeed}" />
                                     </Grid>
                                 </StackPanel>
-
-                                <Grid Grid.Row="2" Grid.Column="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-
-                                    <Button
-                                        Grid.Column="2"
-                                        cm:Message.Attach="Cancel"
-                                        Content="{lex:LocText CM_Cancel}" />
-                                    <Button
-                                        Grid.Column="3"
-                                        cm:Message.Attach="Save"
-                                        Content="{lex:LocText CM_Ok}"
-                                        IsDefault="True" />
-                                </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{lex:LocText MoreInfo_Trackers}" >
-                            <Grid>
+                        <TabItem Header="{lex:Loc  MoreInfo_Trackers}">
+                            <Grid >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="30" />
+                                    </Grid.RowDefinitions>
+                                    <ListView
+                                        DisplayMemberPath="announce"
+                                        BorderThickness="1,0,1,1"
+                                        ItemsSource="{Binding Trackers}"
+                                        SelectedIndex="{Binding TrackerIndex}"
+                                        SelectedValue="{Binding SelectedTracker}" >
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
+                                                <Setter Property="Height" Value="25"></Setter>
+                                                <Setter Property="Background" Value="Transparent"></Setter>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
 
+                                    <Border Grid.Row="1">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button
+                                                Width="30"
+                                                Height="25"
+                                                cal:Message.Attach="AddTracker"
+                                                Margin="1,0,0,0"
+                                                Content="+" />
+                                            <Button
+                                                Width="30"
+                                                cal:Message.Attach="DeleteTracker"
+                                                Height="25"
+                                                Margin="1,0,0,0"
+                                                Content="-"
+                                                IsEnabled="{Binding SelectedTracker, Converter={StaticResource ObjectToBoolConverter}}" />
+                                        </StackPanel>
+                                    </Border>
+
+
+                                </Grid>
                             </Grid>
                         </TabItem>
                     </TabControl>
                 </StackPanel>
+                <Grid Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="1"
+                        cal:Message.Attach="Cancel"
+                        Content="{lex:Loc  CM_Cancel}" />
+                    <Button
+                        Grid.Column="2"
+                        cal:Message.Attach="Save"
+                        Content="{lex:Loc  CM_Ok}"
+                        IsDefault="True" />
+                </Grid>
 
             </Grid>
             <Grid
@@ -251,7 +293,7 @@
                         FontSize="15"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:LocText ATD_RetrievingSettings}"
+                        Text="{lex:Loc  ATD_RetrievingSettings}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextRenderingMode="ClearType" />

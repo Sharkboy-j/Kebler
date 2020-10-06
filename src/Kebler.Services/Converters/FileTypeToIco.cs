@@ -13,16 +13,11 @@ namespace Kebler.Services.Converters
             if (value is string str)
             {
                 var dd = new FileInfo(str);
-                if (string.IsNullOrEmpty(dd.Extension))
-                {
-                    return Application.Current.FindResource("Icon.Folder");
-                }
-                else
-                {
-                    var t = $"Icon{dd.Extension.ToLower()}";
-                    var res = Application.Current.TryFindResource(t);
-                    return res ?? Application.Current.TryFindResource("Icon.File");
-                }
+                if (string.IsNullOrEmpty(dd.Extension)) return Application.Current.FindResource("Icon.Folder");
+
+                var t = $"Icon{dd.Extension.ToLower()}";
+                var res = Application.Current.TryFindResource(t);
+                return res ?? Application.Current.TryFindResource("Icon.File");
             }
 
             return null;

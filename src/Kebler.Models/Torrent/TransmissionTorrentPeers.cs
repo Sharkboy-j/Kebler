@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -54,32 +53,6 @@ namespace Kebler.Models.Torrent
         [JsonProperty("rateToPeer")]
         public int RateToPeer { get; set; }
 
-        public void Set(string propertyName, object value)
-        {
-            var myType = typeof(TransmissionTorrentPeers);
-            var myPropInfo = myType.GetProperty(propertyName);
-            myPropInfo?.SetValue(this, value, null);
-
-        }
-        public object Get(string propertyName)
-        {
-
-            var myType = typeof(TransmissionTorrentPeers);
-            var myPropInfo = myType.GetProperty(propertyName);
-            return myPropInfo?.GetValue(this, null);
-        }
-
-
-        public void Update(TransmissionTorrentPeers peer)
-        {
-            foreach (var propertyInfo in this.GetType().GetProperties(
-                                                  BindingFlags.Public
-                                                  | BindingFlags.Instance))
-            {
-                this.Set(propertyInfo.Name, peer.Get(propertyInfo.Name));
-            }
-        }
-
         public new bool Equals(object x, object y)
         {
             if (x is TransmissionTorrentPeers _x && y is TransmissionTorrentPeers _y)
@@ -97,13 +70,36 @@ namespace Kebler.Models.Torrent
         public bool Equals([AllowNull] TransmissionTorrentPeers x, [AllowNull] TransmissionTorrentPeers y)
         {
             return x.Address.Equals(y.Address)
-                && x.ClientName.Equals(y.ClientName)
-                && x.Port.Equals(y.Port);
+                   && x.ClientName.Equals(y.ClientName)
+                   && x.Port.Equals(y.Port);
         }
 
         public int GetHashCode([DisallowNull] TransmissionTorrentPeers obj)
         {
-            return ($"{obj.Address}{obj.Port}{obj.ClientName}").GetHashCode();
+            return $"{obj.Address}{obj.Port}{obj.ClientName}".GetHashCode();
+        }
+
+        public void Set(string propertyName, object value)
+        {
+            var myType = typeof(TransmissionTorrentPeers);
+            var myPropInfo = myType.GetProperty(propertyName);
+            myPropInfo?.SetValue(this, value, null);
+        }
+
+        public object Get(string propertyName)
+        {
+            var myType = typeof(TransmissionTorrentPeers);
+            var myPropInfo = myType.GetProperty(propertyName);
+            return myPropInfo?.GetValue(this, null);
+        }
+
+
+        public void Update(TransmissionTorrentPeers peer)
+        {
+            foreach (var propertyInfo in GetType().GetProperties(
+                BindingFlags.Public
+                | BindingFlags.Instance))
+                Set(propertyInfo.Name, peer.Get(propertyInfo.Name));
         }
     }
 }

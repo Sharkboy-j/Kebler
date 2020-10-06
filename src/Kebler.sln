@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{D36BD614-4964-4897-A2AB-A7817DF79B5E}"
 	ProjectSection(SolutionItems) = preProject
 		AssemblyInfo.cs = AssemblyInfo.cs
-		..\version.xml = ..\version.xml
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.UI", "Kebler.UI\Kebler.UI.csproj", "{60A962B5-6B74-40AF-A4E9-EE5126D41AE6}"

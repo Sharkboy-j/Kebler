@@ -1,12 +1,11 @@
-﻿using Kebler.Models.Torrent.Args;
-using Kebler.Models.Tree;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Kebler.Models.Torrent.Args;
 
 namespace Kebler.UI.Controls
 {
     /// <summary>
-    /// Interaction logic for TorrentMoreInfo.xaml
+    ///     Interaction logic for TorrentMoreInfo.xaml
     /// </summary>
     public partial class TorrentMoreInfo
     {
@@ -16,7 +15,5 @@ namespace Kebler.UI.Controls
         {
             InitializeComponent();
         }
-
-     
     }
 }

@@ -12,7 +12,7 @@ namespace Kebler.Services.Converters
             var res = (bool) value
                 ? Application.Current.FindResource("Icon.SnailColor")
                 : Application.Current.FindResource("Icon.SnailFill");
-           return res;
+            return res;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

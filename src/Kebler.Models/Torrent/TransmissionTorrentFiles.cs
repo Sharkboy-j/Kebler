@@ -1,12 +1,22 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
     public class TransmissionTorrentFiles : INotifyPropertyChanged
     {
+        [JsonConstructor]
+        public TransmissionTorrentFiles()
+        {
+        }
+
+        public TransmissionTorrentFiles(long pLen, params string[] fullPath)
+        {
+            Length = pLen;
+            Name = Path.Combine(fullPath);
+        }
+
         [JsonProperty("bytesCompleted")]
         public double BytesCompleted { get; set; }
 
@@ -15,18 +25,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
-
-        [JsonConstructor]
-        public TransmissionTorrentFiles()
-        {
-
-        }
-
-        public TransmissionTorrentFiles(long pLen, params string[] fullPath)
-        {
-            Length = pLen;
-            Name = Path.Combine(fullPath);
-        }
     }
 }

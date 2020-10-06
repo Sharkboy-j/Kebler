@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 
@@ -10,7 +9,7 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (object)(Visibility)((ResizeMode)value == ResizeMode.CanResizeWithGrip ? 0 : 2);
+            return (Visibility) ((ResizeMode) value == ResizeMode.CanResizeWithGrip ? 0 : 2);
         }
 
         public object ConvertBack(

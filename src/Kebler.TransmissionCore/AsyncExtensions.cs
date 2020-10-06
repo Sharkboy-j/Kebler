@@ -10,12 +10,10 @@ namespace Kebler.TransmissionCore
             try
             {
                 task.Wait();
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
-                if (e.InnerException != null)
-                {
-                    throw e.InnerException;
-                }
+                if (e.InnerException != null) throw e.InnerException;
 
                 throw e;
             }

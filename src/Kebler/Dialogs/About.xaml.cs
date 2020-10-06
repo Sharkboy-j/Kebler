@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
@@ -7,7 +6,7 @@ using System.Windows.Navigation;
 namespace Kebler.Dialogs
 {
     /// <summary>
-    /// Interaction logic for About.xaml
+    ///     Interaction logic for About.xaml
     /// </summary>
     public partial class About
     {
@@ -21,13 +20,10 @@ namespace Kebler.Dialogs
         public string Vers { get; set; }
 
 
-
-
         private void Open(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {e.Uri.AbsoluteUri}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {e.Uri.AbsoluteUri}") {CreateNoWindow = true});
             e.Handled = true;
         }
-
     }
 }
