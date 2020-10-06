@@ -80,6 +80,7 @@ namespace Kebler.UI.CSControls.Window
             WindowChrome.SetWindowChrome(this, chrome);
             _padding = Padding;
             Loaded += Onload;
+            RenderSize = new Size(250,250);
         }
 
 

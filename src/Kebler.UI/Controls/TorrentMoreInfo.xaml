@@ -494,6 +494,8 @@
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem cal:Message.Attach="DeleteTracker" Header="{lex:Loc  MoreInfo_DeleteTrackerBtn}" />
+                            <MenuItem cal:Message.Attach="AddTracker" Header="{lex:Loc  MoreInfo_AddTackerBtn}" />
+
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </csControls:MDataGrid>

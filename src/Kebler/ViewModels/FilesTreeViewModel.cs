@@ -90,7 +90,7 @@ namespace Kebler.ViewModels
         {
             var root = new MultiselectionTreeViewItem {Title = torrent.Name};
             foreach (var itm in torrent.Files)
-                itm.Name = itm.Name.Replace(torrent.Name, string.Empty).TrimStart('/', '\\');
+                itm.Name = itm.Name.TrimStart('/', '\\');
 
 
             var count = 0U;

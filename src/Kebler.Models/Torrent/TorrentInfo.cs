@@ -185,7 +185,8 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.STATUS)]
         public int Status { get; set; }
 
-        [JsonProperty(TorrentFields.TRACKERS)] public TransmissionTorrentTrackers[] Trackers { get; set; }
+        [JsonProperty(TorrentFields.TRACKERS)] 
+        public TransmissionTorrentTrackers[] Trackers { get; set; }
 
         [JsonProperty(TorrentFields.TRACKER_STATS)]
         public TransmissionTorrentTrackerStats[] TrackerStats { get; set; }

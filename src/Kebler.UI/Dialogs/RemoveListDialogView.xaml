@@ -109,6 +109,7 @@
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
                     cal:Message.Attach="Yes"
+                    IsDefault="True"
                     Content="{lex:Loc  BTNS_Yes}"
                     Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
             </Grid>

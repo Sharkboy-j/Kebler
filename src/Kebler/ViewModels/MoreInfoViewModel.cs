@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Caliburn.Micro;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
-using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
+using Microsoft.VisualBasic;
+using Strings = Kebler.Resources.Strings;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Kebler.ViewModels
 {
     public class MoreInfoViewModel : PropertyChangedBase
     {
+        #region Props
+
+          private static readonly log4net.ILog Log =
+            log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+
         private static TransmissionClient? _client;
 
         private DateTime _addedOn, _createdOn, _completedOn;
@@ -51,7 +60,7 @@ namespace Kebler.ViewModels
 
         public IList SelectedTrackers
         {
-            get => _selectedTrackers;
+            get => _selectedTrackers ?? new Collection();
             set => Set(ref _selectedTrackers, value);
         }
 
@@ -124,19 +133,19 @@ namespace Kebler.ViewModels
 
         public string DownloadLimit
         {
-            get => _downloadLimit;
+            get => _downloadLimit ?? string.Empty;
             set => Set(ref _downloadLimit, value);
         }
 
         public string Seeds
         {
-            get => _seeds;
+            get => _seeds?? string.Empty;
             set => Set(ref _seeds, value);
         }
 
         public string Error
         {
-            get => _error;
+            get => _error?? string.Empty;
             set => Set(ref _error, value);
         }
 
@@ -148,13 +157,13 @@ namespace Kebler.ViewModels
 
         public string UploadLimit
         {
-            get => _uploadLimit;
+            get => _uploadLimit?? string.Empty;
             set => Set(ref _uploadLimit, value);
         }
 
         public string PeersCount
         {
-            get => _peersCount;
+            get => _peersCount ?? string.Empty;
             set => Set(ref _peersCount, value);
         }
 
@@ -166,13 +175,13 @@ namespace Kebler.ViewModels
 
         public string Wasted
         {
-            get => _wasted;
+            get => _wasted ?? string.Empty;
             set => Set(ref _wasted, value);
         }
 
         public string Ratio
         {
-            get => _ratio;
+            get => _ratio ?? string.Empty;
             set => Set(ref _ratio, value);
         }
 
@@ -184,7 +193,7 @@ namespace Kebler.ViewModels
 
         public string Path
         {
-            get => _path;
+            get => _path ?? string.Empty;
             set => Set(ref _path, value);
         }
 
@@ -197,7 +206,7 @@ namespace Kebler.ViewModels
 
         public string Hash
         {
-            get => _hash;
+            get => _hash ?? string.Empty;
             set => Set(ref _hash, value);
         }
 
@@ -209,7 +218,7 @@ namespace Kebler.ViewModels
 
         public string MagnetLink
         {
-            get => _magnet;
+            get => _magnet ?? string.Empty;
             set => Set(ref _magnet, value);
         }
 
@@ -228,14 +237,14 @@ namespace Kebler.ViewModels
 
         public string Pieces
         {
-            get => _pieces;
+            get => _pieces ?? string.Empty;
             set => Set(ref _pieces, value);
         }
 
 
         public string Comment
         {
-            get => _comment;
+            get => _comment ?? string.Empty;
             set => Set(ref _comment, value);
         }
 
@@ -248,9 +257,12 @@ namespace Kebler.ViewModels
 
         public string PiecesString
         {
-            get => _piecesString;
+            get => _piecesString ?? string.Empty;
             set => Set(ref _piecesString, value);
         }
+
+        #endregion
+      
 
         public void Update(TorrentInfo torrent, TransmissionClient client)
         {
@@ -275,7 +287,6 @@ namespace Kebler.ViewModels
                     $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
                 PeersCount =
                     $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
-   
             }
 
             Error = Utils.GetErrorString(_ti);
@@ -305,18 +316,75 @@ namespace Kebler.ViewModels
         public async void DeleteTracker()
         {
             var ids = id;
-            var rm = SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.ID).ToArray();
+            var trackers = SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().ToList();
 
+            if (trackers.Any())
+            {
+                var mgr = IoC.Get<IWindowManager>();
+                var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(Strings.DialogBox_RemoveTracker,
+                    trackers.Select(x => x.announce)));
+
+                if (result == true && _client != null)
+                {
+                    var addRes =   await _client.TorrentSetAsync(new TorrentSettings
+                    {
+                        IDs = ids,
+                        TrackerRemove = trackers.Select(x=>x.ID).ToArray()
+                    }, new CancellationToken());
+
+                    if (addRes.Success)
+                    {
+                        foreach (var trac in trackers)
+                        {
+                            Log.Info($"Tracker removed: {trac.announce}");
+                        }
+                        TrackerStats.RemoveRange(trackers);
+                    }
+                    else
+                    {
+                        if (addRes.CustomException != null)
+                            Log.Error(addRes.CustomException);
+                        else if(addRes.WebException!=null)
+                            Log.Error(addRes.WebException);
+                        else 
+                            Log.Error("Unknown error while addind tracker");
+
+                    }
+                }
+            }
+        }
+
+        public async void AddTracker()
+        {
+            var ids = id;
             var mgr = IoC.Get<IWindowManager>();
-            var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(Strings.DialogBox_RemoveTracker,
-                SelectedTrackers.Cast<TransmissionTorrentTrackerStats>().Select(x => x.announce)));
 
-            if (result == true)
-                await _client.TorrentSetAsync(new TorrentSettings
+            var dialog = new DialogBoxViewModel(Strings.AddTrackerTitile, string.Empty, false);
+            var result = await mgr.ShowDialogAsync(dialog);
+
+            if (result == true && _client != null)
+            {
+                var addRes = await _client.TorrentSetAsync(new TorrentSettings
                 {
                     IDs = ids,
-                    TrackerRemove = rm
+                    TrackerAdd = new[] {dialog.Value}
                 }, new CancellationToken());
+
+                if (addRes.Success)
+                {
+                    Log.Info($"Tracker added: {dialog.Value}");
+                }
+                else
+                {
+                    if (addRes.CustomException != null)
+                        Log.Error(addRes.CustomException);
+                    else if(addRes.WebException!=null)
+                        Log.Error(addRes.WebException);
+                    else 
+                        Log.Error("Unknown error while addind tracker");
+
+                }
+            }
         }
 
         public void Clear()

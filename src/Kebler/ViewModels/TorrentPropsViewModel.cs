@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,16 @@ namespace Kebler.ViewModels
         private string _name;
         private int _peerLimit, _stopSeed;
         private double _seedRation;
-        public uint[] tors;
+        private uint[] tors;
+        private BindableCollection<TransmissionTorrentTrackers> _trackers;
+
+        private int _trackerIndex;
+        private TransmissionTorrentTrackers? _selectedTracker;
+
+
+        public TorrentPropsViewModel()
+        {
+        }
 
         public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids)
         {
@@ -36,9 +46,9 @@ namespace Kebler.ViewModels
                     if (Application.Current.Dispatcher.HasShutdownStarted)
                         return;
 
-                    if (answ != null)
+                    if (answ != null && answ.Torrents.Length > 0)
                     {
-                        var ti = answ.Torrents.FirstOrDefault();
+                        var ti = answ.Torrents.First();
                         Name = ids.Length > 1 ? $"{ids.Length} {Strings.TP_TorrentsSelected}" : ti?.Name;
                         MaxDownSp = ti.DownloadLimit;
                         MaxUpSp = ti.UploadLimit;
@@ -50,6 +60,8 @@ namespace Kebler.ViewModels
                         MXU_Bool = ti.UploadLimited;
                         //SeedR_Bool = ti.SeedRatioMode;
                         //StopSeed_Bool = ti.SeedIdleMode;
+
+                        Trackers = new BindableCollection<TransmissionTorrentTrackers>(ti.Trackers);
                     }
                 }
                 finally
@@ -57,6 +69,13 @@ namespace Kebler.ViewModels
                     IsBusy = Visibility.Collapsed;
                 }
             });
+        }
+
+
+        public BindableCollection<TransmissionTorrentTrackers> Trackers
+        {
+            get => _trackers;
+            set => Set(ref _trackers, value);
         }
 
         public Visibility IsBusy
@@ -126,10 +145,24 @@ namespace Kebler.ViewModels
             set => Set(ref _StopSeed_Bool, value);
         }
 
+        public int TrackerIndex
+        {
+            get => _trackerIndex;
+            set => Set(ref _trackerIndex, value);
+        }
+
+        public TransmissionTorrentTrackers? SelectedTracker
+        {
+            get => _selectedTracker;
+            set => Set(ref _selectedTracker, value);
+        }
+
+
         public void Cancel()
         {
             TryCloseAsync();
         }
+
 
         public async void Save()
         {
@@ -144,7 +177,9 @@ namespace Kebler.ViewModels
                     SeedRatioLimit = SeedRation,
                     SeedIdleLimit = StopSeed,
                     IDs = tors,
-                    PeerLimit = PeerLimit
+                    PeerLimit = PeerLimit,
+                    TrackerAdd = toAdd.ToArray(),
+                    TrackerRemove = toRm.ToArray()
                 }, new CancellationToken());
                 await TryCloseAsync();
             }
@@ -168,6 +203,41 @@ namespace Kebler.ViewModels
             }
 
             base.OnViewAttached(view, context);
+        }
+
+
+        public void DeleteTracker()
+        {
+            if (SelectedTracker != null)
+            {
+                var tr = SelectedTracker;
+                Trackers.Remove(tr);
+                toRm.Add(tr.ID);
+                toAdd.Remove(tr.announce);
+            }
+        }
+
+        private List<string> toAdd = new List<string>();
+        private List<int> toRm = new List<int>();
+
+        public async void AddTracker()
+        {
+            var mgr = IoC.Get<IWindowManager>();
+
+            var dialog = new DialogBoxViewModel(Strings.AddTrackerTitile, string.Empty, false);
+            var result = await mgr.ShowDialogAsync(dialog);
+
+            var maxId = Trackers.Max(x => x.ID) + 1;
+            var tracker = new TransmissionTorrentTrackers()
+            {
+                announce = dialog.Value,
+                ID = maxId
+            };
+            if (result == true && !Trackers.Contains(tracker))
+            {
+                Trackers.Add(tracker);
+                toAdd.Add(dialog.Value);
+            }
         }
     }
 }

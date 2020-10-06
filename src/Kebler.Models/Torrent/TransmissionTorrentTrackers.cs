@@ -21,7 +21,7 @@ namespace Kebler.Models.Torrent
         {
             if (obj is TransmissionTorrentTrackers tracker)
             {
-                if (tracker.announce.ToLower().Equals(this.announce.ToLower())) ;
+                return tracker.announce.ToLower().Equals(this.announce.ToLower());
             }
             return false;
         }

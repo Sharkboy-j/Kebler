@@ -322,16 +322,21 @@ namespace Kebler.ViewModels
         {
             lock (syncObjKeys)
             {
-                RegisteredKeys ??= new[]
+                if (_view != null)
                 {
-                    new HotKey(Key.C, KeyModifier.Ctrl, ShowConnectionManager, _view.GetWindowHandle()),
-                    new HotKey(Key.N, KeyModifier.Ctrl, Add, _view.GetWindowHandle()),
-                    new HotKey(Key.M, KeyModifier.Ctrl, AddMagnet, _view.GetWindowHandle()),
-                    new HotKey(Key.X, KeyModifier.Alt, Exit, _view.GetWindowHandle()),
-                    new HotKey(Key.F2, KeyModifier.None, Rename, _view.GetWindowHandle()),
-                    new HotKey(Key.Escape, KeyModifier.None, Unselect, _view.GetWindowHandle()),
-                    new HotKey(Key.F, KeyModifier.Ctrl, Find, _view.GetWindowHandle())
-                };
+                    RegisteredKeys ??= new[]
+                    {
+                        new HotKey(Key.C, KeyModifier.Ctrl, ShowConnectionManager, _view.GetWindowHandle()),
+                        new HotKey(Key.N, KeyModifier.Ctrl, Add, _view.GetWindowHandle()),
+                        new HotKey(Key.M, KeyModifier.Ctrl, AddMagnet, _view.GetWindowHandle()),
+                        new HotKey(Key.X, KeyModifier.Alt, Exit, _view.GetWindowHandle()),
+                        new HotKey(Key.F2, KeyModifier.None, Rename, _view.GetWindowHandle()),
+                        new HotKey(Key.Escape, KeyModifier.None, Unselect, _view.GetWindowHandle()),
+                        new HotKey(Key.F, KeyModifier.Ctrl, Find, _view.GetWindowHandle()),
+                        new HotKey(Key.Delete, KeyModifier.Shift, RemoveWithData, _view.GetWindowHandle()),
+                        new HotKey(Key.Delete, KeyModifier.None, Remove, _view.GetWindowHandle())
+                    };
+                }
             }
         }
 
@@ -339,8 +344,12 @@ namespace Kebler.ViewModels
         {
             lock (syncObjKeys)
             {
-                foreach (var key in RegisteredKeys) key.Dispose();
-                RegisteredKeys = null;
+                if (RegisteredKeys != null)
+                {
+                    foreach (var key in RegisteredKeys)
+                        key.Dispose();
+                    RegisteredKeys = null;
+                }
             }
         }
 
@@ -348,15 +357,21 @@ namespace Kebler.ViewModels
         {
             try
             {
-                _view.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-                _view.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+                if (_view != null)
+                {
+                    _view.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+                    _view.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
-                _view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
-                //_view.MoreInfoColumn.Height = new GridLength(ConfigService.Instanse.MoreInfoHeight);
-                _view.Width = ConfigService.Instanse.MainWindowWidth;
-                _view.Height = ConfigService.Instanse.MainWindowHeight;
-                _view.WindowState = ConfigService.Instanse.MainWindowState;
-                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+                    _view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
+                    _view.Width = ConfigService.Instanse.MainWindowWidth;
+                    _view.Height = ConfigService.Instanse.MainWindowHeight;
+                    _view.WindowState = ConfigService.Instanse.MainWindowState;
+                    RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+                }
+                else
+                {
+                    throw new Exception($" Filed '{nameof(_view)}' is null");
+                }
             }
             catch (Exception ex)
             {
@@ -464,20 +479,23 @@ namespace Kebler.ViewModels
 
         private void UpdateMoreInfoPosition(bool hide)
         {
-            if (hide)
+            if (_view != null)
             {
-                _view.MoreInfoColumn.MinHeight = 202D;
-                _view.MoreInfoColumn.Height =
-                    ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
-                        ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
-                        : new GridLength(ConfigService.Instanse.MoreInfoHeight);
-                _view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
-            }
-            else
-            {
-                _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
-                _view.MoreInfoColumn.MinHeight = 0;
-                _view.MoreInfoColumn.Height = new GridLength(0);
+                if (hide)
+                {
+                    _view.MoreInfoColumn.MinHeight = 202D;
+                    _view.MoreInfoColumn.Height =
+                        ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
+                            ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
+                            : new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                    //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
+                }
+                else
+                {
+                    _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
+                    _view.MoreInfoColumn.MinHeight = 0;
+                    _view.MoreInfoColumn.Height = new GridLength(0);
+                }
             }
         }
 
@@ -500,20 +518,20 @@ namespace Kebler.ViewModels
 
         private async Task<string> GetPassword()
         {
-            string dd = null;
+            string? passwordResult = null;
             await Execute.OnUIThreadAsync(async () =>
             {
                 var dialog = new DialogBoxViewModel(Strings.DialogBox_EnterPWD, string.Empty, true);
 
                 await manager.ShowDialogAsync(dialog);
 
-                dd = dialog.Value;
+                passwordResult = dialog.Value;
             });
 
-            if (dd == null)
+            if (passwordResult == null)
                 throw new TaskCanceledException();
 
-            return dd;
+            return passwordResult;
         }
 
         public void UpdateServers()
@@ -779,7 +797,6 @@ namespace Kebler.ViewModels
 
             lock (_syncTorrentList)
             {
-                var torrents = new List<TorrentInfo>(TorrentList);
                 //1: 'check pending',
                 //2: 'checking',
 
@@ -1254,12 +1271,14 @@ namespace Kebler.ViewModels
 
         private void RemoveTorrent(bool removeData = false)
         {
-            var toRemove = selectedIDs;
-            var dialog =
-                new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
-                    ref _transmissionClient, removeData) {Owner = Application.Current.MainWindow};
-            if ((bool) dialog.ShowDialog())
-                if (dialog.Result == Enums.RemoveResult.Ok)
+            if (selectedIDs != null && selectedIDs.Length > 0)
+            {
+                var toRemove = selectedIDs;
+                var dialog =
+                    new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
+                        ref _transmissionClient, removeData) {Owner = Application.Current.MainWindow};
+                
+                if (dialog.ShowDialog() == true && dialog.Result == Enums.RemoveResult.Ok)
                     lock (_syncTorrentList)
                     {
                         foreach (var rm in toRemove)
@@ -1270,8 +1289,10 @@ namespace Kebler.ViewModels
                             allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
                         }
 
-                        if (allTorrents.Clone() is TransmissionTorrents data) ProcessParsingTransmissionResponse(data);
+                        if (allTorrents.Clone() is TransmissionTorrents data)
+                            ProcessParsingTransmissionResponse(data);
                     }
+            }
         }
 
         private void OpenTorrent(IEnumerable<string> names)
@@ -1504,7 +1525,7 @@ namespace Kebler.ViewModels
 
         public string DownloadSpeed
         {
-            get => _downloadSpeed??string.Empty;
+            get => _downloadSpeed ?? string.Empty;
             set => Set(ref _downloadSpeed, value);
         }
 

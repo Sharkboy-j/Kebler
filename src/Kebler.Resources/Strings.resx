@@ -552,9 +552,6 @@
   <data name="TI_Status_CheckPending" xml:space="preserve">
     <value>Check pending</value>
   </data>
-  <data name="sdsd" xml:space="preserve">
-    <value>ssdfdsfdsfdsfs</value>
-  </data>
   <data name="TI_Status_download_pending" xml:space="preserve">
     <value>Downlaod pending</value>
   </data>
@@ -635,5 +632,11 @@
   </data>
   <data name="NewUpdate" xml:space="preserve">
     <value>New update is ready. Install it?</value>
+  </data>
+  <data name="MoreInfo_AddTackerBtn" xml:space="preserve">
+    <value>Add tracker</value>
+  </data>
+  <data name="AddTrackerTitile" xml:space="preserve">
+    <value>Enter announce URI</value>
   </data>
 </root>

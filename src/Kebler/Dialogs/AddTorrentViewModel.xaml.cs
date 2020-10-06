@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
@@ -16,8 +17,10 @@ using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
 using Kebler.ViewModels;
-using log4net;
 using Microsoft.Win32;
+using ILog = log4net.ILog;
+using LogManager = log4net.LogManager;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Kebler.Dialogs
@@ -110,7 +113,7 @@ namespace Kebler.Dialogs
             {
                 data = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
                 TorrentInfo.TryParse(data, out torrentInfo);
-                FilesTree.UpdateFilesTree(torrentInfo);
+                FilesTree?.UpdateFilesTree(torrentInfo);
             }
             catch (TaskCanceledException)
             {
@@ -133,110 +136,98 @@ namespace Kebler.Dialogs
                 {
                     //var dd = FilesTree.getFilesWantedStatus(false);
 
-                    var encodedData = Convert.ToBase64String(data);
-                    //string decodedString = Encoding.UTF8.GetString(filebytes);
-                    var newTorrent = new NewTorrent
+                    if (data != null)
                     {
-                        Metainfo = encodedData,
-                        Paused = !IsAutoStart,
-                        DownloadDirectory = DownlaodDir ?? settings.DownloadDirectory,
-                        PeerLimit = PeerLimit,
-                        FilesUnwanted = FilesTree.getFilesWantedStatus(false),
-                        FilesWanted = FilesTree.getFilesWantedStatus(true)
-                    };
-
-
-                    //Debug.WriteLine($"Start Adding torrentFileInfo {path}");
-
-                    Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
-
-                    while (true)
-                    {
-                        if (Dispatcher.HasShutdownStarted) return;
-                        try
+                        var encodedData = Convert.ToBase64String(data);
+                        //string decodedString = Encoding.UTF8.GetString(filebytes);
+                        var newTorrent = new NewTorrent
                         {
-                            cancellationToken.ThrowIfCancellationRequested();
-                            TorrentResult = await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
+                            Metainfo = encodedData,
+                            Paused = !IsAutoStart,
+                            DownloadDirectory = DownlaodDir ?? settings?.DownloadDirectory,
+                            PeerLimit = PeerLimit,
+                            FilesUnwanted = FilesTree?.getFilesWantedStatus(false),
+                            FilesWanted = FilesTree?.getFilesWantedStatus(true)
+                        };
 
-                            if (TorrentResult.Result == Enums.ReponseResult.Ok)
+
+                        //Debug.WriteLine($"Start Adding torrentFileInfo {path}");
+
+                        Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
+
+                        while (true)
+                        {
+                            if (Dispatcher.HasShutdownStarted) return;
+                            try
                             {
-                                switch (TorrentResult.Value.Status)
+                                cancellationToken.ThrowIfCancellationRequested();
+                                TorrentResult = await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
+
+                                if (TorrentResult.Result == Enums.ReponseResult.Ok)
                                 {
-                                    case Enums.AddTorrentStatus.Added:
+                                    switch (TorrentResult.Value.Status)
                                     {
-                                        Log.Info(
-                                            $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
-                                        IsWorking = false;
-
-                                        ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
-                                        ConfigService.Save();
-                                        Dispatcher.Invoke(() =>
+                                        case Enums.AddTorrentStatus.Added:
                                         {
-                                            DialogResult = true;
-                                            Close();
-                                        });
-                                        return;
-                                    }
-                                    case Enums.AddTorrentStatus.Duplicate:
-                                    {
-                                        Log.Info(
-                                            $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
+                                            Log.Info(
+                                                $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
+                                            IsWorking = false;
 
-                                        var getExistSettings =
-                                            await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, cancellationToken,
-                                                new[] {TorrentResult.Value.ID});
-
-
-                                        if (getExistSettings.Torrents.Length == 1)
-                                        {
-                                            var torrent = getExistSettings.Torrents.First();
-
-                                            var toAdd = new List<string>();
-                                            foreach (var tracker in torrentInfo.Trackers)
+                                            ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
+                                            ConfigService.Save();
+                                            Dispatcher.Invoke(() =>
                                             {
-                                                if (!torrent.Trackers.Contains(tracker))
-                                                {
-                                                    toAdd.Add(tracker.announce);
-                                                }
-                                            }
-                                            
-                                            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
-                                            {
-                                                IDs =  new []{TorrentResult.Value.ID},
-                                                TrackerAdd = toAdd.ToArray()
-                                            }, cancellationToken);
-                                            foreach (var tr in toAdd)
-                                            {
-                                                Log.Info($"Tracker added: {tr}'");
-                                            }
+                                                DialogResult = true;
+                                                Close();
+                                            });
+                                            return;
                                         }
-                                      
-                                        
-                                       
-                                        
-                                        Dispatcher.Invoke(() =>
+                                        case Enums.AddTorrentStatus.Duplicate:
                                         {
-                                            Result.Content = Strings.ATD_TorrentExist;
-                                            Result.Visibility = Visibility.Visible;
-                                        });
-                                        return;
+                                            Log.Info(
+                                                $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
+                                            
+                                            if (torrentInfo != null)
+                                            {
+                                                var toAdd = torrentInfo.Trackers.Select(tracker => tracker.announce).ToArray();
+
+                                                await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                                                {
+                                                    IDs =  new []{TorrentResult.Value.ID},
+                                                    TrackerAdd = toAdd
+                                                }, cancellationToken);
+                                                
+                                                foreach (var tr in toAdd)
+                                                {
+                                                    Log.Info($"Tracker added: {tr}'");
+                                                }
+                                                
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    DialogResult = true;
+                                                    Close();
+                                                });
+                                            }
+
+                                            return;
+                                        }
                                     }
                                 }
+                                else
+                                {
+                                    Log.Info(
+                                        $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{newTorrent.Filename}'");
+                                    await Task.Delay(100, cancellationToken);
+                                }
                             }
-                            else
+                            catch (OperationCanceledException)
                             {
-                                Log.Info(
-                                    $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{newTorrent.Filename}'");
-                                await Task.Delay(100, cancellationToken);
                             }
-                        }
-                        catch (OperationCanceledException)
-                        {
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex);
-                            return;
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex);
+                                return;
+                            }
                         }
                     }
                 }

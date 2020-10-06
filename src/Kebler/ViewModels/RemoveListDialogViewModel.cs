@@ -4,7 +4,7 @@ namespace Kebler.ViewModels
 {
     public class RemoveListDialogViewModel : BaseScreen
     {
-        public IEnumerable<string> _names;
+        private IEnumerable<string> _names;
 
         public RemoveListDialogViewModel(string title, IEnumerable<string> names)
         {
@@ -12,6 +12,7 @@ namespace Kebler.ViewModels
             Names = names;
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public IEnumerable<string> Names
         {
             get => _names;

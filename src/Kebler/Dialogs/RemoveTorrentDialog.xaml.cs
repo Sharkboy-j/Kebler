@@ -22,7 +22,7 @@ namespace Kebler.Dialogs
         public Enums.RemoveResult Result;
 
 
-        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient transmissionClient,
+        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient? transmissionClient,
             bool witData = false)
         {
             InitializeComponent();
