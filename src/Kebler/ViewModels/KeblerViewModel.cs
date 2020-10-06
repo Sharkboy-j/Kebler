@@ -280,16 +280,6 @@ namespace Kebler.ViewModels
 
             var items = _dbServersList?.FindAll() ?? new List<Server>();
 
-
-            //var ex = Excepted(items);
-
-
-            //foreach (var srv in ex)
-            //{
-            //    var first = Servers.First(x => ((Server)x.Tag).Equals(srv));
-            //    Servers.Remove(first);
-            //}
-
             Servers.Clear();
 
             foreach (var srv in items)
@@ -300,29 +290,6 @@ namespace Kebler.ViewModels
                 Servers.Add(dd);
             }
         }
-
-
-        //private bool Contains(Server srv)
-        //{
-        //    foreach (var item in Servers)
-        //    {
-        //        if (item is MenuItem mi && mi.Tag is Server serv)
-        //        {
-        //            if (serv.Equals(srv))
-        //                return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        //private List<Server> Excepted(IEnumerable<Server> list)
-        //{
-        //    var items = Servers.Select(x => (Server)x.Tag).ToList();
-
-        //    var itms = items.Except(list).ToList();
-
-        //    return itms;
-        //}
 
         private void srvClicked(object sender, RoutedEventArgs e)
         {
@@ -555,7 +522,7 @@ namespace Kebler.ViewModels
             _servers = servers.FindAll().ToList();
         }
 
-        public void InitConnection()
+        private void InitConnection()
         {
             if (IsConnected) return;
 
@@ -577,8 +544,6 @@ namespace Kebler.ViewModels
 
         private async void TryConnect()
         {
-            if (SelectedServer == null) return;
-
             Log.Info("Try initialize connection");
             IsErrorOccuredWhileConnecting = false;
             IsConnectedStatusText = Strings.MW_ConnectingText;
@@ -1386,18 +1351,16 @@ namespace Kebler.ViewModels
         private Server? _ConnectedServer;
 
 
-        private string _downloadSpeed;
         private Enums.Categories _filterCategory;
-        private string? _filterText;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private string? _isConnectedStatusText;
-        public bool _isConnecting, _isDoingStuff, _isConnected, _isErrorOccuredWhileConnecting, _isSlowModeEnabled;
+        private bool _isConnecting, _isDoingStuff, _isConnected, _isErrorOccuredWhileConnecting, _isSlowModeEnabled;
         private bool _isLongTaskRunning;
 
+        private string? _uploadSpeed, _downloadSpeed, _filterText, _longStatusText;
 
         private BindableCollection<MenuItem> _languages = new BindableCollection<MenuItem>();
         private DateTimeOffset _longActionTimeStart;
-        private string? _longStatusText;
         private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
 
@@ -1409,14 +1372,13 @@ namespace Kebler.ViewModels
         private TorrentInfo? _selectedTorrent;
         private List<Server>? _servers;
         private SessionInfo? _sessionInfo;
-        public SessionSettings? _settings;
+        private SessionSettings? _settings;
         private WindowState _state;
         private Statistic? _stats;
         private BindableCollection<TorrentInfo> _torrentList = new BindableCollection<TorrentInfo>();
-        public TransmissionClient? _transmissionClient;
+        private TransmissionClient? _transmissionClient;
 
 
-        private string? _uploadSpeed;
         private KeblerView? _view;
         private Task? _whileCycleMoreInfoTask;
         private Task? _whileCycleTask;
@@ -1489,7 +1451,7 @@ namespace Kebler.ViewModels
 
         public string IsConnectedStatusText
         {
-            get => _isConnectedStatusText;
+            get => _isConnectedStatusText ?? string.Empty;
             set => Set(ref _isConnectedStatusText, value);
         }
 
@@ -1530,7 +1492,7 @@ namespace Kebler.ViewModels
 
         public string LongStatusText
         {
-            get => _longStatusText;
+            get => _longStatusText ?? string.Empty;
             set => Set(ref _longStatusText, value);
         }
 
@@ -1542,19 +1504,19 @@ namespace Kebler.ViewModels
 
         public string DownloadSpeed
         {
-            get => _downloadSpeed;
+            get => _downloadSpeed??string.Empty;
             set => Set(ref _downloadSpeed, value);
         }
 
         public string UploadSpeed
         {
-            get => _uploadSpeed;
+            get => _uploadSpeed ?? string.Empty;
             set => Set(ref _uploadSpeed, value);
         }
 
         public string FilterText
         {
-            get => _filterText;
+            get => _filterText ?? string.Empty;
             set => Set(ref _filterText, value);
         }
 
@@ -1594,7 +1556,7 @@ namespace Kebler.ViewModels
             set => Set(ref _state, value);
         }
 
-        public string HeaderTitle
+        public static string HeaderTitle
         {
             get
             {

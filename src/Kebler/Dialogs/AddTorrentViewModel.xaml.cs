@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ using Kebler.TransmissionCore;
 using Kebler.ViewModels;
 using log4net;
 using Microsoft.Win32;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Kebler.Dialogs
 {
@@ -24,6 +27,8 @@ namespace Kebler.Dialogs
     /// </summary>
     public partial class AddTorrentView
     {
+
+        private TorrentInfo? torrentInfo;
         public AddTorrentView(string path, TransmissionClient transmissionClient, Window owner,
             SessionSettings settings) : base(owner)
         {
@@ -34,7 +39,7 @@ namespace Kebler.Dialogs
             cancellationToken = cancellationTokenSource.Token;
             IsAutoStart = true;
             this.settings = settings;
-
+            
             DownlaodDir = settings.DownloadDirectory;
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
@@ -104,8 +109,8 @@ namespace Kebler.Dialogs
             try
             {
                 data = await File.ReadAllBytesAsync(TorrentPath, cancellationToken);
-                TorrentInfo.TryParse(data, out var parsedTorrent);
-                FilesTree.UpdateFilesTree(parsedTorrent);
+                TorrentInfo.TryParse(data, out torrentInfo);
+                FilesTree.UpdateFilesTree(torrentInfo);
             }
             catch (TaskCanceledException)
             {
@@ -126,7 +131,7 @@ namespace Kebler.Dialogs
             {
                 try
                 {
-                    var dd = FilesTree.getFilesWantedStatus(false);
+                    //var dd = FilesTree.getFilesWantedStatus(false);
 
                     var encodedData = Convert.ToBase64String(data);
                     //string decodedString = Encoding.UTF8.GetString(filebytes);
@@ -177,6 +182,38 @@ namespace Kebler.Dialogs
                                         Log.Info(
                                             $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
 
+                                        var getExistSettings =
+                                            await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, cancellationToken,
+                                                new[] {TorrentResult.Value.ID});
+
+
+                                        if (getExistSettings.Torrents.Length == 1)
+                                        {
+                                            var torrent = getExistSettings.Torrents.First();
+
+                                            var toAdd = new List<string>();
+                                            foreach (var tracker in torrentInfo.Trackers)
+                                            {
+                                                if (!torrent.Trackers.Contains(tracker))
+                                                {
+                                                    toAdd.Add(tracker.announce);
+                                                }
+                                            }
+                                            
+                                            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                                            {
+                                                IDs =  new []{TorrentResult.Value.ID},
+                                                TrackerAdd = toAdd.ToArray()
+                                            }, cancellationToken);
+                                            foreach (var tr in toAdd)
+                                            {
+                                                Log.Info($"Tracker added: {tr}'");
+                                            }
+                                        }
+                                      
+                                        
+                                       
+                                        
                                         Dispatcher.Invoke(() =>
                                         {
                                             Result.Content = Strings.ATD_TorrentExist;
@@ -219,7 +256,6 @@ namespace Kebler.Dialogs
 
         private void AddTorrentDialog_OnClosing(object sender, CancelEventArgs e)
         {
-            FilesTree.Files = null;
             FilesTree = null;
             cancellationTokenSource?.Cancel();
             data = null;
@@ -227,6 +263,7 @@ namespace Kebler.Dialogs
             _torrentFileInfo = null;
             Loaded -= AddTorrentDialog_Loaded;
             DataContext = null;
+            torrentInfo = null;
             //GC.Collect();
             //GC.WaitForPendingFinalizers();
         }
@@ -238,9 +275,9 @@ namespace Kebler.Dialogs
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
-        private FileInfo _torrentFileInfo;
-        private byte[] data;
-        private SessionSettings settings;
+        private FileInfo? _torrentFileInfo;
+        private byte[]? data;
+        private SessionSettings? settings;
         public AddTorrentResponse TorrentResult;
 
 
@@ -252,6 +289,6 @@ namespace Kebler.Dialogs
         public int UploadLimit { get; set; }
         public bool IsAutoStart { get; set; }
 
-        public FilesTreeViewModel FilesTree { get; private set; } = new FilesTreeViewModel();
+        public FilesTreeViewModel? FilesTree { get; private set; } = new FilesTreeViewModel();
     }
 }

@@ -268,10 +268,15 @@ namespace Kebler.ViewModels
             Downloaded = _ti.DownloadedEver;
             DownloadSpeed = _ti.RateDownload;
             DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
-            Seeds =
-                $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
-            PeersCount =
-                $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
+
+            if (_ti.TrackerStats.Length > 0)
+            {
+                Seeds =
+                    $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
+                PeersCount =
+                    $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
+   
+            }
 
             Error = Utils.GetErrorString(_ti);
             Uploaded = _ti.UploadedEver;

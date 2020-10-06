@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TransmissionTorrentTrackers : INotifyPropertyChanged
+    public class TransmissionTorrentTrackers
     {
         [JsonProperty("announce")]
         public string announce { get; set; }
@@ -17,13 +17,18 @@ namespace Kebler.Models.Torrent
         [JsonProperty("tier")]
         public int Tier { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public override bool Equals(object? obj)
+        {
+            if (obj is TransmissionTorrentTrackers tracker)
+            {
+                if (tracker.announce.ToLower().Equals(this.announce.ToLower())) ;
+            }
+            return false;
+        }
 
-        //~TransmissionTorrentTrackers()
-        //{
-        //    announce = null;
-        //    Scrape = null;
-        //    PropertyChanged = null;
-        //}
+        public override int GetHashCode()
+        {
+            return announce.ToLower().GetHashCode();
+        }
     }
 }

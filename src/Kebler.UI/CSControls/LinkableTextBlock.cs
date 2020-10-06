@@ -68,18 +68,23 @@ namespace Kebler.UI.CSControls
 
         private static void TextPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            var txt = sender as LinkableTextBlock;
-            var bs = sender as TextBlock;
-            var result = Uri.TryCreate(txt.Text, UriKind.Relative, out var uriResult);
-
-            if (txt.SureLink || result)
+            if (sender is LinkableTextBlock LTB)
             {
-                txt.isLink = true;
-                SetForeground(sender, Brushes.DodgerBlue);
+                var bs = (TextBlock) sender;
+
+                if(string.IsNullOrEmpty(LTB.Text))
+                    return;
+            
+                var result = Uri.TryCreate(LTB.Text, UriKind.RelativeOrAbsolute, out var uriResult);
+
+                if (LTB.SureLink || result)
+                {
+                    LTB.isLink = true;
+                    SetForeground(sender, Brushes.DodgerBlue);
+                }
+
+                if (LTB.Text.Length > 0) bs.SetValue(TextProperty, LTB.Text); 
             }
-
-
-            if (txt.Text.Length > 0) bs.SetValue(TextProperty, txt.Text);
         }
     }
 }

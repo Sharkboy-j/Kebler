@@ -12,7 +12,7 @@ namespace Kebler.ViewModels
     {
         private MultiselectionTreeViewItem _files = new MultiselectionTreeViewItem();
 
-        public MultiselectionTreeViewItem Files
+        public MultiselectionTreeViewItem? Files
         {
             get => _files;
             set => Set(ref _files, value);

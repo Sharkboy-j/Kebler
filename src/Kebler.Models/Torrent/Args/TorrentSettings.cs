@@ -157,7 +157,7 @@
             get => GetValue<uint[]>("files-unwanted");
             set => this["files-unwanted"] = value;
         }
-
+        
         //"trackerReplace"      | array      pairs of <trackerId/new announce URLs>
         //public [] trackerReplace;
 

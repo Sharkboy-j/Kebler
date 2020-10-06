@@ -317,6 +317,7 @@ namespace Kebler.Models.Torrent
                 //var ShaHash = GetShaHash();
                 Files = GetFiles();
                 Name = Info.FindText("name");
+                Trackers = GetTrackers();
             }
         }
 
@@ -446,7 +447,28 @@ namespace Kebler.Models.Torrent
 
             return tFiles.Where(c => !c.Name.StartsWith("_____padding_file")).ToArray();
         }
-
+        
+        private TransmissionTorrentTrackers[] GetTrackers()
+        {
+            if (!_root.ContainsKey("announce-list"))
+            {
+                return new TransmissionTorrentTrackers[0];
+            }
+            var strs = new List<string>();
+            foreach (var item in (List<TransmissionValue>)_root["announce-list"].Value)
+            {
+                foreach (var tVal in (List<TransmissionValue>)item.Value)
+                {
+                    var str = (string)tVal.Value;
+                    if (strs.Contains(str))
+                    {
+                        continue;
+                    }
+                    strs.Add(str);
+                }
+            }
+            return strs.Select(tr => new TransmissionTorrentTrackers() {announce = tr}).ToArray();
+        }
         #endregion
     }
 
