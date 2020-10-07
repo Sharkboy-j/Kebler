@@ -13,7 +13,7 @@
                            Title="{Binding HeaderTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"
                            Width="850" Height="600" MinWidth="850"
                            MinHeight="600"
-                           cal:Message.Attach="[Event Closing] = [Action ClosingW];[Event Activated] = [Action ActivatedW];[Event Deactivated] = [Action DeactivatedW]"
+                           cal:Message.Attach="[Event Closing] = [Action ClosingW]"
                            d:DataContext="{DynamicResource KeblerViewModel}"
                            lex:LocalizeDictionary.DesignCulture="en"
                            lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
@@ -27,6 +27,18 @@
                            WindowStartupLocation="CenterScreen"
                            WindowState="{Binding State}"
                            mc:Ignorable="d">
+    <window:CustomizableWindow.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding UnselectCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding RenameCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+
+        <KeyBinding Modifiers="Control" Key="C" Command="{Binding ShowConnectionManagerCommand}"/>
+        <KeyBinding Modifiers="Control" Key="N" Command="{Binding AddCommand}"/>
+        <KeyBinding Modifiers="Control" Key="M" Command="{Binding AddMagnetCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="X" Command="{Binding ExitCommand}"/>
+        <KeyBinding Modifiers="Control" Key="F" Command="{Binding FindCommand}"/>
+        <KeyBinding Modifiers="Shift" Key="Delete" Command="{Binding RemoveWithDataCommand}"/>
+    </window:CustomizableWindow.InputBindings>
     <window:CustomizableWindow.Resources>
         <Style x:Key="MainWindowStyle"
                BasedOn="{StaticResource {x:Type window:CustomizableWindow}}"

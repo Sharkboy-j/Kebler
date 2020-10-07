@@ -316,42 +316,7 @@ namespace Kebler.ViewModels
 
         #endregion
 
-        #region Config&HotKeys
-
-        private void Init_HK()
-        {
-            lock (syncObjKeys)
-            {
-                if (_view != null)
-                {
-                    RegisteredKeys ??= new[]
-                    {
-                        new HotKey(Key.C, KeyModifier.Ctrl, ShowConnectionManager, _view.GetWindowHandle()),
-                        new HotKey(Key.N, KeyModifier.Ctrl, Add, _view.GetWindowHandle()),
-                        new HotKey(Key.M, KeyModifier.Ctrl, AddMagnet, _view.GetWindowHandle()),
-                        new HotKey(Key.X, KeyModifier.Alt, Exit, _view.GetWindowHandle()),
-                        new HotKey(Key.F2, KeyModifier.None, Rename, _view.GetWindowHandle()),
-                        new HotKey(Key.Escape, KeyModifier.None, Unselect, _view.GetWindowHandle()),
-                        new HotKey(Key.F, KeyModifier.Ctrl, Find, _view.GetWindowHandle()),
-                        new HotKey(Key.Delete, KeyModifier.Shift, RemoveWithData, _view.GetWindowHandle()),
-                        new HotKey(Key.Delete, KeyModifier.None, Remove, _view.GetWindowHandle())
-                    };
-                }
-            }
-        }
-
-        private void UnregisterHotKeys()
-        {
-            lock (syncObjKeys)
-            {
-                if (RegisteredKeys != null)
-                {
-                    foreach (var key in RegisteredKeys)
-                        key.Dispose();
-                    RegisteredKeys = null;
-                }
-            }
-        }
+        #region Config
 
         private void ApplyConfig()
         {
@@ -512,7 +477,7 @@ namespace Kebler.ViewModels
         public void Retry()
         {
             IsErrorOccuredWhileConnecting = false;
-            UpdateServers();
+            _servers = GetServers();
             InitConnection();
         }
 
@@ -534,17 +499,17 @@ namespace Kebler.ViewModels
             return passwordResult;
         }
 
-        public void UpdateServers()
+        private List<Server> GetServers()
         {
-            var servers = StorageRepository.GetServersList();
-            _servers = servers.FindAll().ToList();
+            var bdServers = StorageRepository.GetServersList();
+            return bdServers.FindAll().ToList();
         }
 
         private void InitConnection()
         {
             if (IsConnected) return;
 
-            UpdateServers();
+            _servers = GetServers();
 
 
             if (ServersList.Count > 0)
@@ -880,23 +845,23 @@ namespace Kebler.ViewModels
 
             //on itemSource update, datagrid lose focus for selected row. 
 
-            #region //♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
+            #region ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
 
             Execute.OnUIThread(() =>
             {
-                var tm = FocusManager.GetFocusedElement(_view);
-                if (_view.TorrentsDataGrid.IsFocused)
+                //var tm = FocusManager.GetFocusedElement(_view);
+                if (_view != null && _view.TorrentsDataGrid.IsFocused)
                     if (FocusManager.GetFocusedElement(_view) is DataGridCell)
                     {
                         var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
                         if (itm.Item == null) return;
 
                         var dd = GetDataGridCell(itm);
-                        if (dd != null) FocusManager.SetFocusedElement(_view, dd);
+                        FocusManager.SetFocusedElement(_view, dd);
                     }
             });
 
-            #endregion //♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
+            #endregion ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
         }
 
         public DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
@@ -988,12 +953,6 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel //WindowActins
     {
-        public void ActivatedW()
-        {
-            Init_HK();
-        }
-
-
         public void Exit()
         {
             TryCloseAsync();
@@ -1004,11 +963,6 @@ namespace Kebler.ViewModels
             SaveConfig();
 
             Log.Info("-----------Exit-----------");
-        }
-
-        public void DeactivatedW()
-        {
-            UnregisterHotKeys();
         }
 
         public void CatChange()
@@ -1025,6 +979,7 @@ namespace Kebler.ViewModels
 
             if (allTorrents.Clone() is TransmissionTorrents data) ProcessParsingTransmissionResponse(data);
         }
+
 
         public void Unselect()
         {
@@ -1263,6 +1218,7 @@ namespace Kebler.ViewModels
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void CopyMagnet()
         {
             Clipboard.SetText(SelectedTorrent.MagnetLink);
@@ -1277,7 +1233,7 @@ namespace Kebler.ViewModels
                 var dialog =
                     new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
                         ref _transmissionClient, removeData) {Owner = Application.Current.MainWindow};
-                
+
                 if (dialog.ShowDialog() == true && dialog.Result == Enums.RemoveResult.Ok)
                     lock (_syncTorrentList)
                     {
@@ -1295,7 +1251,7 @@ namespace Kebler.ViewModels
             }
         }
 
-        private void OpenTorrent(IEnumerable<string> names)
+        private async Task OpenTorrent(IEnumerable<string> names)
         {
             foreach (var item in names)
             {
@@ -1314,19 +1270,24 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentView(item, _transmissionClient, Application.Current.MainWindow,
-                        _settings);
+                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings);
 
-                    if (dialog.ShowDialog() == false)
-                        return;
+                    await manager.ShowDialogAsync(dialog);
 
-                    if (dialog.TorrentResult.Value.Status != Enums.AddTorrentStatus.Added) continue;
 
-                    TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                    if (dialog.Result == true)
                     {
-                        Name = dialog.TorrentResult.Value.Name,
-                        HashString = dialog.TorrentResult.Value.HashString
-                    });
+                        if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
+                            TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                            {
+                                Name = dialog.TorrentResult.Value.Name,
+                                HashString = dialog.TorrentResult.Value.HashString
+                            });
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -1335,14 +1296,22 @@ namespace Kebler.ViewModels
 
         public async void Slow()
         {
-            IsSlowModeEnabled = !IsSlowModeEnabled;
-            var resp = await _transmissionClient.SetSessionSettingsAsync(
-                new SessionSettings {AlternativeSpeedEnabled = !_settings.AlternativeSpeedEnabled},
-                _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (_transmissionClient != null)
+            {
+                IsSlowModeEnabled = !IsSlowModeEnabled;
+
+                var resp = await _transmissionClient.SetSessionSettingsAsync(
+                    new SessionSettings
+                    {
+                        AlternativeSpeedEnabled = !_settings?.AlternativeSpeedEnabled
+                    },
+                    _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
-        public void Add()
+        // ReSharper disable once MemberCanBePrivate.Global
+        public async void Add()
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -1353,7 +1322,7 @@ namespace Kebler.ViewModels
             if (openFileDialog.ShowDialog() != true)
                 return;
 
-            OpenTorrent(openFileDialog.FileNames);
+            await OpenTorrent(openFileDialog.FileNames);
         }
 
         #endregion
@@ -1410,13 +1379,20 @@ namespace Kebler.ViewModels
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
         private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
 
+
+        public ICommand ShowConnectionManagerCommand => new DelegateCommand(ShowConnectionManager);
+        public ICommand AddCommand => new DelegateCommand(Add);
+        public ICommand AddMagnetCommand => new DelegateCommand(AddMagnet);
+        public ICommand ExitCommand => new DelegateCommand(Exit);
+        public ICommand RenameCommand => new DelegateCommand(Rename);
+        public ICommand UnselectCommand => new DelegateCommand(Unselect);
+        public ICommand FindCommand => new DelegateCommand(Find);
+        public ICommand RemoveWithDataCommand => new DelegateCommand(RemoveWithData);
+        public ICommand RemoveCommand => new DelegateCommand(Remove);
+
         private List<Server> ServersList
         {
-            get
-            {
-                if (_servers == null) UpdateServers();
-                return _servers;
-            }
+            get { return _servers ??= GetServers(); }
         }
 
 

@@ -74,6 +74,6 @@
         BorderThickness="{Binding Border}"
         ItemTemplate="{StaticResource ListViewTemplate}"
         PreviewKeyDown="Trree_PreviewKeyDown"
-        RootItem="{Binding Files}"
+        RootItem="{Binding Files, UpdateSourceTrigger=PropertyChanged}"
         Style="{StaticResource FileListMultiselectionTreeViewDefaultStyle}" />
 </UserControl>

@@ -18,7 +18,7 @@ namespace Kebler.Services
 
                 return (currentVersion < version, version);
             }
-            catch (Exception ex)
+            catch
             {
                 return (false, new Version());
             }
@@ -34,7 +34,7 @@ namespace Kebler.Services
 
                 return (currentVersion < version, version);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (false, new Version());
             }

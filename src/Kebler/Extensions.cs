@@ -24,11 +24,7 @@ namespace Kebler
             return helper.Handle;
         }
 
-        public static bool IsNullOrEmpty(this IEnumerable This)
-        {
-            return null == This || false == This.GetEnumerator().MoveNext();
-        }
-
+      
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
         {
             return source.OrderBy(ToLambda<T>(propertyName));

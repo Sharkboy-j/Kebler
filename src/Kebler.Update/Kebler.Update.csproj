@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Installer</AssemblyName>
     <ApplicationIcon>Kebler.ico</ApplicationIcon>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 	<PropertyGroup>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>

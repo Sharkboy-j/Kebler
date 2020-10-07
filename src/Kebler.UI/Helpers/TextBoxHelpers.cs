@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Kebler.Services;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Kebler.Services.Helpers
+namespace Kebler.UI.Helpers
 {
     public class TextBoxHelpers
     {

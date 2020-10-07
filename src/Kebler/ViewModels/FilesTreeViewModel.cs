@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using BencodeNET.Torrents;
 using Caliburn.Micro;
 using Kebler.Models.Interfaces;
-using Kebler.Models.Torrent;
 using Kebler.Models.Tree;
+using TorrentInfo = Kebler.Models.Torrent.TorrentInfo;
 
 namespace Kebler.ViewModels
 {
@@ -75,7 +76,7 @@ namespace Kebler.ViewModels
             return output;
         }
 
-
+        [Obsolete("Use UpdateFilesTree(Torrent) instead of UpdateFilesTree(TorrentInfo)")]
         public void UpdateFilesTree(TorrentInfo torrent)
         {
             var items = createTree(ref torrent);
@@ -85,7 +86,96 @@ namespace Kebler.ViewModels
 
             Files = newItems;
         }
+        
+        public void UpdateFilesTree(Torrent torrent)
+        {
+            var items = createTree(torrent);
 
+            var newItems = new MultiselectionTreeViewItem {IsExpanded = true};
+            newItems.Children.Add(items);
+
+            Files = newItems;
+        }
+
+        public void Clear()
+        {
+            Files?.Children.Clear();
+        }
+
+        private static MultiselectionTreeViewItem createTree(Torrent torrent)
+        {
+            var root = new MultiselectionTreeViewItem {Title = torrent.DisplayName};
+            // foreach (var itm in torrent.Files)
+            //     itm.Name = itm.Name.TrimStart('/', '\\');
+
+
+            var count = 0U;
+
+            foreach (var file in torrent.Files)
+            {
+                createNodes(ref root, file, count, true);
+                count++;
+            }
+            
+            // for (uint i = 0; i < torrent.Files.Count(); i++)
+            // {
+            //     // if (torrent.FileStats != null)
+            //     //     createNodes(ref root, torrent.Files[i].Name, count, torrent.FileStats[i].Wanted);
+            //     // else
+            //     //     createNodes(ref root, torrent.Files[i].Name, count, true);
+            //     // createNodes(ref root, torrent.Files[i].Name, count, true);
+            //     // count++;
+            // }
+
+            return root;
+        }
+        private static void createNodes(ref MultiselectionTreeViewItem root, MultiFileInfo file, uint index, bool wanted)
+        {
+            var last = root;
+
+            for (var i = 0; i < file.Path.Count; i++)
+            {
+                var pathPart = file.Path[i];
+                if (string.IsNullOrEmpty(pathPart))
+                    continue;
+
+                if (last.Children.All(x => x.Title != pathPart))
+                {
+                    //if not found children
+                    var pth = new MultiselectionTreeViewItem {Title = pathPart, IsExpanded = true};
+
+                    //this will put all dirs into priority pos
+                    last.Children.Insert(i == file.Path.Count - 1 ? last.Children.Count : 0, pth);
+                    last = pth;
+                }
+                else
+                {
+                    last = last.Children.First(p => p.Title == pathPart);
+                }
+            }
+
+            last.IndexPattern = index;
+            last.IsChecked = wanted;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         private static MultiselectionTreeViewItem createTree(ref TorrentInfo torrent)
         {
             var root = new MultiselectionTreeViewItem {Title = torrent.Name};
@@ -106,7 +196,7 @@ namespace Kebler.ViewModels
 
             return root;
         }
-
+       
 
         private static void createNodes(ref MultiselectionTreeViewItem root, string file, uint index, bool wanted)
         {

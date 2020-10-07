@@ -274,7 +274,7 @@
     <value>Peers</value>
   </data>
   <data name="ATD_RetrievingSettings" xml:space="preserve">
-    <value>Retrieving Settings From Server</value>
+    <value>Loading</value>
   </data>
   <data name="MoreInfo_Peers_Encryption" xml:space="preserve">
     <value>Encryption</value>

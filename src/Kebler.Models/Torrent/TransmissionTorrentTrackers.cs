@@ -16,7 +16,7 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty("tier")]
         public int Tier { get; set; }
-
+#nullable enable
         public override bool Equals(object? obj)
         {
             if (obj is TransmissionTorrentTrackers tracker)
@@ -25,7 +25,7 @@ namespace Kebler.Models.Torrent
             }
             return false;
         }
-
+#nullable disable
         public override int GetHashCode()
         {
             return announce.ToLower().GetHashCode();

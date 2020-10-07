@@ -1,0 +1,3 @@
+[submodule "src/BencodeNET"]
+	path = src/BencodeNET
+	url = https://github.com/Krusen/BencodeNET.git

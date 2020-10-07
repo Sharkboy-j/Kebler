@@ -34,6 +34,7 @@ namespace Kebler
             container.Singleton<TaskBarIconViewModel>();
             container.Singleton<TorrentPropsViewModel>();
             container.Singleton<RemoveListDialogViewModel>();
+            container.Singleton<AddTorrentViewModel>();
         }
 
 

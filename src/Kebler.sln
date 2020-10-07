@@ -25,9 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Update", "Kebler.Upd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Const", "Kebler.Const\Kebler.Const.csproj", "{4765BE6F-DEB2-48D8-8BD1-215A36413A30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Resources", "Kebler.Resources\Kebler.Resources.csproj", "{7DB8A981-5847-4BE5-8FFF-2CF5D5D5B250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Resources", "Kebler.Resources\Kebler.Resources.csproj", "{7DB8A981-5847-4BE5-8FFF-2CF5D5D5B250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Services", "Kebler.Services\Kebler.Services.csproj", "{C1AA6630-FB2E-4710-99CA-AD0743D8D140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Services", "Kebler.Services\Kebler.Services.csproj", "{C1AA6630-FB2E-4710-99CA-AD0743D8D140}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET", "BencodeNET\BencodeNET\BencodeNET.csproj", "{F159F1D0-3F7A-470C-9F49-89D67F24EB10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET.Tests", "BencodeNET\BencodeNET.Tests\BencodeNET.Tests.csproj", "{5DD108E8-1905-491E-BE00-891271D65B62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -180,9 +186,41 @@ Global
 		{C1AA6630-FB2E-4710-99CA-AD0743D8D140}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
 		{C1AA6630-FB2E-4710-99CA-AD0743D8D140}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
 		{C1AA6630-FB2E-4710-99CA-AD0743D8D140}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug-NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug-NET35|Any CPU.Build.0 = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug-NET40|Any CPU.ActiveCfg = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Debug-NET40|Any CPU.Build.0 = Debug|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Portable|Any CPU.ActiveCfg = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Portable|Any CPU.Build.0 = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release-NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug-NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug-NET35|Any CPU.Build.0 = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug-NET40|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Debug-NET40|Any CPU.Build.0 = Debug|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Portable|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Portable|Any CPU.Build.0 = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release-NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release-NET35|Any CPU.Build.0 = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release-NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD108E8-1905-491E-BE00-891271D65B62}.Release-NET40|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F159F1D0-3F7A-470C-9F49-89D67F24EB10} = {F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}
+		{5DD108E8-1905-491E-BE00-891271D65B62} = {F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		RESX_ShowErrorsInErrorList = False

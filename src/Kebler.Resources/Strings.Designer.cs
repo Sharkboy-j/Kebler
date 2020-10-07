@@ -151,7 +151,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retrieving Settings From Server.
+        ///   Looks up a localized string similar to Loading.
         /// </summary>
         public static string ATD_RetrievingSettings {
             get {

@@ -36,7 +36,8 @@ namespace Kebler
                     var mgr = new WindowManager();
                     var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(Strings.NewUpdate, string.Empty,
                         Enums.MessageBoxDilogButtons.YesNo, true));
-                    if (dialogres == true) InstallUpdates();
+                    if (dialogres == true) 
+                        InstallUpdates();
                 }
             }
             catch (Exception ex)
@@ -53,12 +54,14 @@ namespace Kebler
 
             using (Process process = new Process())
             {
-                var info = new ProcessStartInfo();
-                info.FileName = ConstStrings.TempInstallerExePath;
-                info.UseShellExecute = true;
-                info.CreateNoWindow = true;
-                info.RedirectStandardOutput = false;
-                info.RedirectStandardError = false;
+                var info = new ProcessStartInfo
+                {
+                    FileName = ConstStrings.TempInstallerExePath,
+                    UseShellExecute = true,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false
+                };
 
                 process.StartInfo = info;
                 process.EnableRaisingEvents = false;

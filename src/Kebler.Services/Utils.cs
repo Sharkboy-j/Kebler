@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -23,6 +24,10 @@ namespace Kebler.Services
         //    }
         //    App.Log.Info(txt);
         //}
+        public static bool IsNullOrEmpty(this IEnumerable This)
+        {
+            return null == This || false == This.GetEnumerator().MoveNext();
+        }
 
         public static string GetSizeString(long length, bool showEmpty = false)
         {
@@ -127,7 +132,7 @@ namespace Kebler.Services
                 for (var i = 0; i < pieceCount; i++)
                 {
                     // read bit at specific place in byte array (since each bit represents piece status, piece #0 is at first array index but is bit #7 in the byte)
-                    var pieceLoaded = (pieces[i / 8] & (1 << (7 - i % 8))) != 0;
+                    var pieceLoaded = (pieces[i / 8] & (1<< (7  - i % 8))) != 0;
                     if (pieceLoaded)
                         //piecesDone++;
                         insertPixel(i, 0, 122, 204); //blue
@@ -147,7 +152,7 @@ namespace Kebler.Services
                 result.UnlockBits(bitmapData);
                 return result;
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return null;
             }
