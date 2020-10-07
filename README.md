@@ -26,10 +26,12 @@ Run `winget install Kebler` to install the latest version of Kebler Transmission
 - <kbd>Ctrl</kbd> + <kbd>C</kbd> : Connection manager
 - <kbd>Ctrl</kbd> + <kbd>N</kbd> : Add new torrent
 - <kbd>Ctrl</kbd> + <kbd>M</kbd> : Add magnet link
+- <kbd>Ctrl</kbd> + <kbd>F</kbd> : Find torrent
 - <kbd>Alt</kbd> + <kbd>X</kbd> : Exit
 - <kbd>F2</kbd> : Rename torrent
 - <kbd>Shift</kbd> + <kbd>Delete</kbd> : Remove torrent with <B>Data</B>
 - <kbd>Delete</kbd> : Remove torrent and save data on disk
+- <kbd>Escape</kbd> : Hide props
 ## License
 
 Copyright (c)2019 by JeremiSharkboy
