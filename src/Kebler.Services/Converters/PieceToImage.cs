@@ -9,15 +9,15 @@ namespace Kebler.Services.Converters
 {
     public class PieceToImage : IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] != null && values[1] != null)
             {
                 var pices = values[0] as string;
 
-                if (values[1] is int count && count > 1)
+                if (values[1] is int count && count > 1 && values[2] is double height && pices != null)
                 {
-                    var piecesGraphic = Utils.CreatePiecesBitmap(count, pices);
+                    var piecesGraphic = Utils.CreatePiecesBitmap(count, pices, height);
                     if (piecesGraphic != null)
                     {
                         var ret = Imaging.CreateBitmapSourceFromHBitmap(

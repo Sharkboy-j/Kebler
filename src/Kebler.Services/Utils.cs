@@ -102,59 +102,72 @@ namespace Kebler.Services
             return ti.ErrorString;
         }
 
-        public static Bitmap CreatePiecesBitmap(int pieceCount, string piecesString)
+        public static Bitmap CreatePiecesBitmap(int pieceCount, string _piecesBase64, double height)
         {
+            var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
+
+            Bitmap? bmp = new Bitmap(decodedPices.Length, (int)height);
+
             try
             {
-                //int piecesDone = 0;
 
-                if (pieceCount < 1)
-                    return null;
-
-                var pieces = Convert.FromBase64String(piecesString);
-
-
-                var rowCount = 100;
-                var result = new Bitmap(pieceCount, rowCount, PixelFormat.Format24bppRgb);
-                var bitmapData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height),
-                    ImageLockMode.WriteOnly, result.PixelFormat);
-                var rowPixels = new byte[bitmapData.Stride];
-
-
-                //yea yea yea, go further and call me idiot later @Shark
-                void insertPixel(int index, byte r, byte g, byte b)
+                using (Graphics g = Graphics.FromImage(bmp))
                 {
-                    rowPixels[index * 3] = b;
-                    rowPixels[index * 3 + 1] = g;
-                    rowPixels[index * 3 + 2] = r;
-                }
+                    int c_bit = 0, num_bits, bits_got;
+                    float bitsperrow = bmp.Width > 0 ? pieceCount / (float)bmp.Width : 0;
+                    float chunk_done;
 
-                for (var i = 0; i < pieceCount; i++)
-                {
-                    // read bit at specific place in byte array (since each bit represents piece status, piece #0 is at first array index but is bit #7 in the byte)
-                    var pieceLoaded = (pieces[i / 8] & (1<< (7  - i % 8))) != 0;
-                    if (pieceLoaded)
-                        //piecesDone++;
-                        insertPixel(i, 0, 122, 204); //blue
-                    else
-                        insertPixel(i, 50, 50, 50); //gray
-                }
-
-                for (var i = 0; i < rowCount; i++)
-                    unsafe
+                    if (bitsperrow > 0)
                     {
-                        var rowStart = (byte*) bitmapData.Scan0.ToPointer() + i * bitmapData.Stride;
-                        Marshal.Copy(rowPixels, 0, new IntPtr(rowStart),
-                            rowPixels.Length);
-                    }
+                        for (int n = 0; n < bmp.Width; n++)
+                        {
+                            num_bits = (int)(bitsperrow * (n + 1)) - c_bit;
+                            bits_got = 0;
+                            for (int i = 0; i < num_bits; i++)
+                            {
+                                if (BitGet(decodedPices, pieceCount, c_bit + i))
+                                    bits_got++;
+                            }
+                            if (num_bits > 0)
+                                chunk_done = (float)bits_got / (float)num_bits;
+                            else if (BitGet(decodedPices, pieceCount, c_bit))
+                                chunk_done = 1;
+                            else
+                                chunk_done = 0;
 
-                // PiecesDone = piecesDone;
-                result.UnlockBits(bitmapData);
-                return result;
+                            System.Drawing.Color fill;
+
+                            if (chunk_done == 1)
+                                fill = System.Drawing.Color.FromArgb(0, 122, 204);
+                            else
+                                fill = System.Drawing.Color.FromArgb(50, 50, 50);
+
+                            g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
+
+                            c_bit += num_bits;
+                        }
+                    }
+                }
             }
-            catch (Exception )
+            catch(Exception ex)
             {
-                return null;
+
+            }
+            return bmp;
+
+        }
+        private static bool BitGet(byte[] array, int len, int index)
+        {
+            if (index < 0 || index >= len)
+                throw new ArgumentOutOfRangeException();
+            try
+            {
+                return (array[index >> 3] & (1 << ((7 - index) & 7))) != 0;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }
