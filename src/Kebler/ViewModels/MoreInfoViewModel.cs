@@ -3,11 +3,14 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
 using Kebler.Services;
 using Kebler.TransmissionCore;
+using Kebler.Views;
 using Microsoft.VisualBasic;
 using Strings = Kebler.Resources.Strings;
 // ReSharper disable UnusedMember.Global
@@ -38,7 +41,7 @@ namespace Kebler.ViewModels
             _hash,
             _magnet,
             _comment,
-            _pieces,
+            _piecesBase64,
             _piecesString;
 
         private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
@@ -51,11 +54,12 @@ namespace Kebler.ViewModels
         private IList? _selectedTrackers;
         private int _status, _piecesCount;
         private TorrentInfo? _ti;
+        private Visibility _formsVisibility;
 
         private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
             new BindableCollection<TransmissionTorrentTrackerStats>();
 
-        public uint[]? id;
+        private uint[]? id;
 
 
         public IList SelectedTrackers
@@ -237,8 +241,8 @@ namespace Kebler.ViewModels
 
         public string Pieces
         {
-            get => _pieces ?? string.Empty;
-            set => Set(ref _pieces, value);
+            get => _piecesBase64 ?? string.Empty;
+            set => Set(ref _piecesBase64, value);
         }
 
 
@@ -261,56 +265,95 @@ namespace Kebler.ViewModels
             set => Set(ref _piecesString, value);
         }
 
-        #endregion
-      
+        public Visibility FormsVisibility
+        {
+            get => _formsVisibility;
+            set => Set(ref _formsVisibility, value);
+        }
 
-        public void Update(TorrentInfo torrent, TransmissionClient client)
+        #endregion
+
+
+        KeblerView view;
+
+        public MoreInfoViewModel(KeblerView view)
+        {
+           this.view = view;
+        }
+
+        public async Task Update(uint[] ids, TransmissionClient client)
         {
             _client = client;
-            _ti = torrent;
-            FilesTree.UpdateFilesTree(_ti);
-
-            Pieces = _ti.Pieces;
-            PiecesCount = _ti.PieceCount;
-            PercentDone = _ti.PercentDone;
+            this.id = ids;
 
 
-            Peers = _ti.Peers;
-            Status = _ti.Status;
-            Downloaded = _ti.DownloadedEver;
-            DownloadSpeed = _ti.RateDownload;
-            DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
+            Loading = true;
+            FormsVisibility = Visibility.Collapsed;
 
-            if (_ti.TrackerStats.Length > 0)
+            var answ = await client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
+
+            if(answ!=null && answ.Torrents.Length==1)
             {
-                Seeds =
-                    $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
-                PeersCount =
-                    $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
+                _ti = answ.Torrents.First();
+                FilesTree.UpdateFilesTree(_ti);
+
+                if (_piecesBase64 != _ti.Pieces)
+                {
+                    _piecesBase64 = _ti.Pieces;
+
+                    PiecesCount = _ti.PieceCount;
+                    PercentDone = _ti.PercentDone;
+
+                    var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
+                    view.MoreView.Pieces.Init(decodedPices, _ti.PieceCount, DonePices);
+                }
+
+
+
+
+                Peers = _ti.Peers;
+                Status = _ti.Status;
+                Downloaded = _ti.DownloadedEver;
+                DownloadSpeed = _ti.RateDownload;
+                DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
+
+                if (_ti.TrackerStats.Length > 0)
+                {
+                    Seeds =
+                        $"{_ti.PeersSendingToUs} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.SeederCount)} {Strings.TI_webSeedsConnected}";
+                    PeersCount =
+                        $"{_ti.PeersConnected} {Strings.TI_webSeedsOF} {_ti.TrackerStats.Max(x => x.LeecherCount)} {Strings.TI_webSeedsConnected}";
+                }
+
+                Error = Utils.GetErrorString(_ti);
+                Uploaded = _ti.UploadedEver;
+                UploadSpeed = _ti.RateUpload;
+                UploadLimit = _ti.UploadLimited ? _ti.UploadLimit.ToString() : "-";
+
+                Remaining = _ti.LeftUntilDone;
+                Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
+                Ratio = $"{_ti.UploadRatio}";
+                MaxPeers = _ti.MaxConnectedPeers;
+
+                Path = $"{_ti.DownloadDir}{_ti.Name}";
+                Size = _ti.TotalSize;
+                Hash = _ti.HashString;
+                AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();
+                MagnetLink = _ti.MagnetLink;
+
+                CreatedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DateCreated).UtcDateTime.ToLocalTime();
+                CompletedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DoneDate).UtcDateTime.ToLocalTime();
+                Comment = _ti.Comment;
+                PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize, true)}";
+
+                TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
             }
+            Loading = false;
+        }
 
-            Error = Utils.GetErrorString(_ti);
-            Uploaded = _ti.UploadedEver;
-            UploadSpeed = _ti.RateUpload;
-            UploadLimit = _ti.UploadLimited ? _ti.UploadLimit.ToString() : "-";
-
-            Remaining = _ti.LeftUntilDone;
-            Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
-            Ratio = $"{_ti.UploadRatio}";
-            MaxPeers = _ti.MaxConnectedPeers;
-
-            Path = $"{_ti.DownloadDir}{_ti.Name}";
-            Size = _ti.TotalSize;
-            Hash = _ti.HashString;
-            AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();
-            MagnetLink = _ti.MagnetLink;
-
-            CreatedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DateCreated).UtcDateTime.ToLocalTime();
-            CompletedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.DoneDate).UtcDateTime.ToLocalTime();
-            Comment = _ti.Comment;
-            PiecesString = $"{_ti.PieceCount} x {Utils.GetSizeString(_ti.PieceSize, true)}";
-
-            TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
+        private void DonePices()
+        {
+            FormsVisibility = Visibility.Visible;
         }
 
         public async void DeleteTracker()

@@ -1,6 +1,6 @@
 ﻿namespace Kebler.Services
 {
-   using System;
+  using System;
     using System.Diagnostics;
     using System.Windows.Input;
 
@@ -12,33 +12,21 @@
 
         #region Declarations
 
-        readonly Predicate<T> _canExecute;
-        readonly Action<T> _execute;
+        private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _execute;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class and the command can always be executed.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        public DelegateCommand(Action<T> execute)
-            : this(execute, null)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public DelegateCommand(Action<T> execute, Predicate<T> canExecute)
+        public DelegateCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
-
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -48,24 +36,14 @@
 
         public event EventHandler CanExecuteChanged
         {
-            add
-            {
-
-                if (_canExecute != null)
-                    CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-
-                if (_canExecute != null)
-                    CommandManager.RequerySuggested -= value;
-            }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null || _canExecute((T)parameter);
+            return _canExecute((T)parameter);
         }
 
         public void Execute(object parameter)
@@ -84,33 +62,21 @@
 
         #region Declarations
 
-        readonly Func<bool> _canExecute;
-        readonly Action _execute;
+        private readonly Func<bool> _canExecute;
+        private readonly Action _execute;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class and the command can always be executed.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        public DelegateCommand(Action execute)
-            : this(execute, null)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public DelegateCommand(Action execute, Func<bool> canExecute)
+        public DelegateCommand(Action execute, Func<bool> canExecute = null)
         {
-
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -120,24 +86,14 @@
 
         public event EventHandler CanExecuteChanged
         {
-            add
-            {
-
-                if (_canExecute != null)
-                    CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-
-                if (_canExecute != null)
-                    CommandManager.RequerySuggested -= value;
-            }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null || _canExecute();
+            return _canExecute();
         }
 
         public void Execute(object parameter)

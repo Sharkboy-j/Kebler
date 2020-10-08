@@ -53,14 +53,14 @@ namespace Kebler.ViewModels
             _eventAggregator.SubscribeOnPublishedThread(this);
             InitMenu();
 
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_AllTorrents, Cat = Enums.Categories.All});
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_AllTorrents, Cat = Enums.Categories.All });
             CategoriesList.Add(new StatusCategory
-                {Title = Strings.Cat_Downloading, Cat = Enums.Categories.Downloading});
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_Active, Cat = Enums.Categories.Active});
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_InActive, Cat = Enums.Categories.Inactive});
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_Ended, Cat = Enums.Categories.Ended});
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_Stopped, Cat = Enums.Categories.Stopped});
-            CategoriesList.Add(new StatusCategory {Title = Strings.Cat_Error, Cat = Enums.Categories.Error});
+            { Title = Strings.Cat_Downloading, Cat = Enums.Categories.Downloading });
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Active, Cat = Enums.Categories.Active });
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_InActive, Cat = Enums.Categories.Inactive });
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Ended, Cat = Enums.Categories.Ended });
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Stopped, Cat = Enums.Categories.Stopped });
+            CategoriesList.Add(new StatusCategory { Title = Strings.Cat_Error, Cat = Enums.Categories.Error });
 
             SelectedFolderIndex = -1;
 
@@ -91,7 +91,7 @@ namespace Kebler.ViewModels
 
         public Task HandleAsync(Messages.LocalizationCultureChangesMessage message, CancellationToken cancellationToken)
         {
-            foreach (var item in Languages) item.IsChecked = Equals((CultureInfo) item.Tag, message.Culture);
+            foreach (var item in Languages) item.IsChecked = Equals((CultureInfo)item.Tag, message.Culture);
 
             if (IsConnected)
                 IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
@@ -138,7 +138,10 @@ namespace Kebler.ViewModels
         {
             _view = view as KeblerView;
             if (_view != null)
+            {
                 _view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
+                MoreInfoView = new MoreInfoViewModel(_view);
+            }
             base.OnViewAttached(view, context);
             ApplyConfig();
         }
@@ -206,9 +209,9 @@ namespace Kebler.ViewModels
 
         private async void StoppdateingMoreInfoCycle()
         {
-            _moreInfoCancelTokeSource?.Cancel();
-            if (_whileCycleMoreInfoTask != null) await _whileCycleMoreInfoTask;
-            _whileCycleMoreInfoTask = null;
+            //_moreInfoCancelTokeSource?.Cancel();
+            //if (_whileCycleMoreInfoTask != null) await _whileCycleMoreInfoTask;
+            //_whileCycleMoreInfoTask = null;
 
             //Debug.WriteLine("Stopped");
         }
@@ -216,33 +219,33 @@ namespace Kebler.ViewModels
 
         private void StartUpdateingMoreInfoCycle()
         {
-            _moreInfoCancelTokeSource?.Cancel();
+            //_moreInfoCancelTokeSource?.Cancel();
 
-            _moreInfoCancelTokeSource = new CancellationTokenSource();
-            var token = _moreInfoCancelTokeSource.Token;
+            //_moreInfoCancelTokeSource = new CancellationTokenSource();
+            //var token = _moreInfoCancelTokeSource.Token;
 
-            _whileCycleMoreInfoTask = new Task(async () =>
-            {
-                try
-                {
-                    while (IsConnected && !token.IsCancellationRequested)
-                    {
-                        await PerformMoreInfoUpdate(token);
-                        await Task.Delay(ConfigService.Instanse.UpdateTime, token);
-                    }
-                }
-                catch (TaskCanceledException)
-                {
-                }
-                catch (Exception)
-                {
-                    //Log.Error(ex);
-                }
-            }, token);
+            //_whileCycleMoreInfoTask = new Task(async () =>
+            //{
+            //    try
+            //    {
+            //        while (IsConnected && !token.IsCancellationRequested)
+            //        {
+            //            await PerformMoreInfoUpdate(token);
+            //            await Task.Delay(ConfigService.Instanse.UpdateTime, token);
+            //        }
+            //    }
+            //    catch (TaskCanceledException)
+            //    {
+            //    }
+            //    catch (Exception)
+            //    {
+            //        //Log.Error(ex);
+            //    }
+            //}, token);
 
 
-            _whileCycleMoreInfoTask.Start();
-            //Debug.WriteLine("Started");
+            //_whileCycleMoreInfoTask.Start();
+            ////Debug.WriteLine("Started");
         }
 
 
@@ -252,7 +255,7 @@ namespace Kebler.ViewModels
         {
             foreach (var item in LocalizationManager.CultureList)
             {
-                var dd = new MenuItem {Header = item.EnglishName, Tag = item};
+                var dd = new MenuItem { Header = item.EnglishName, Tag = item };
                 dd.Click += langChanged;
                 dd.IsCheckable = true;
                 dd.IsChecked = Equals(Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName,
@@ -266,7 +269,7 @@ namespace Kebler.ViewModels
 
         public void Settings()
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") {CreateNoWindow = true});
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") { CreateNoWindow = true });
         }
 
         public void Preferences()
@@ -284,7 +287,7 @@ namespace Kebler.ViewModels
 
             foreach (var srv in items)
             {
-                var dd = new MenuItem {Header = srv.Title, Tag = srv};
+                var dd = new MenuItem { Header = srv.Title, Tag = srv };
                 dd.Click += srvClicked;
                 dd.IsCheckable = true;
                 Servers.Add(dd);
@@ -299,7 +302,7 @@ namespace Kebler.ViewModels
 
                 foreach (var item in Servers) item.IsChecked = false;
 
-                _eventAggregator.PublishOnUIThreadAsync(new Messages.ReconnectRequested {srv = srv});
+                _eventAggregator.PublishOnUIThreadAsync(new Messages.ReconnectRequested { srv = srv });
             }
         }
 
@@ -414,31 +417,17 @@ namespace Kebler.ViewModels
             }
 
             MoreInfoView.IsMore = false;
-            MoreInfoView.Loading = true;
+            await MoreInfoView.Update(selectedIDs, _transmissionClient);
+            //var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token,
+            //    MoreInfoView.id);
 
-            MoreInfoView.id = selectedIDs;
-            await PerformMoreInfoUpdate(token);
-
-            MoreInfoView.Loading = false;
-        }
-
-        private async Task PerformMoreInfoUpdate(CancellationToken token)
-        {
-            while (true)
-            {
-                var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token,
-                    MoreInfoView.id);
-                if (token.IsCancellationRequested || Application.Current.Dispatcher.HasShutdownStarted)
-                    return;
-                if (answ != null)
-                {
-                    var torrent = answ.Torrents.FirstOrDefault();
-                    if (torrent != null) MoreInfoView.Update(torrent, _transmissionClient);
-                    return;
-                }
-
-                await Task.Delay(100, token);
-            }
+            //if (token.IsCancellationRequested || Application.Current.Dispatcher.HasShutdownStarted)
+            //    return;
+            //if (answ != null)
+            //{
+            //    if (torrent != null) 
+            //    return;
+            //}
         }
 
 
@@ -725,7 +714,7 @@ namespace Kebler.ViewModels
         public void ParseSettings()
         {
             if (_settings?.AlternativeSpeedEnabled != null)
-                IsSlowModeEnabled = (bool) _settings.AlternativeSpeedEnabled;
+                IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
         }
 
         public void ParseStats()
@@ -867,7 +856,7 @@ namespace Kebler.ViewModels
         public DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
         {
             var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
-            return (DataGridCell) cellContent?.Parent;
+            return (DataGridCell)cellContent?.Parent;
         }
 
         public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
@@ -1068,7 +1057,7 @@ namespace Kebler.ViewModels
 
             var result = await manager.ShowDialogAsync(dialog);
 
-            if ((bool) result)
+            if ((bool)result)
                 await Task.Factory.StartNew(async () =>
                 {
                     var itms = selectedIDs;
@@ -1209,7 +1198,7 @@ namespace Kebler.ViewModels
         {
             if (obj != null && obj is TorrentInfo tr)
             {
-                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] {tr.Id}));
+                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }));
             }
             else
             {
@@ -1232,7 +1221,8 @@ namespace Kebler.ViewModels
                 var toRemove = selectedIDs;
                 var dialog =
                     new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
-                        ref _transmissionClient, removeData) {Owner = Application.Current.MainWindow};
+                        ref _transmissionClient, removeData)
+                    { Owner = Application.Current.MainWindow };
 
                 if (dialog.ShowDialog() == true && dialog.Result == Enums.RemoveResult.Ok)
                     lock (_syncTorrentList)
@@ -1369,7 +1359,7 @@ namespace Kebler.ViewModels
         private TransmissionClient? _transmissionClient;
 
 
-        private KeblerView? _view;
+        private static KeblerView? _view;
         private Task? _whileCycleMoreInfoTask;
         private Task? _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
@@ -1396,7 +1386,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public MoreInfoViewModel MoreInfoView { get; set; } = new MoreInfoViewModel();
+        public MoreInfoViewModel MoreInfoView { get; set; } = new MoreInfoViewModel(_view);
 
         public BindableCollection<FolderCategory> Categories
         {
@@ -1483,7 +1473,7 @@ namespace Kebler.ViewModels
             set
             {
                 Set(ref _ConnectedServer, value);
-                _eventAggregator.PublishOnUIThreadAsync(new Messages.ConnectedServerChanged {srv = value});
+                _eventAggregator.PublishOnUIThreadAsync(new Messages.ConnectedServerChanged { srv = value });
             }
         }
 
