@@ -350,13 +350,50 @@
             </TabItem>
             <TabItem Header="{lex:Loc MoreInfo_FilesTab}">
                 <local:FilesTreeView
-                    x:Name="FileTreeViewControl" x:FieldModifier="public"
-                    DataContext="{Binding FilesTree}"
-                    Focusable="False" />
+                    x:Name="FileTreeViewControl" x:FieldModifier="public" Focusable="False" />
             </TabItem>
 
             <TabItem Header="{lex:Loc MoreInfo_Trackers}">
-                <csControls:MDataGrid
+                <ListView
+                    ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                    SelectionMode="Extended"
+                    Style="{DynamicResource ListViewWithGridViewStyle}">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Name}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="Auto" MinWidth="100"
+                                                Text="{Binding announce, Mode=OneWay, NotifyOnTargetUpdated=True}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Status}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="Auto" MinWidth="100"
+                                                Text="{Binding LastAnnounceResult, Mode=OneWay, NotifyOnTargetUpdated=True}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Seeds}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="Auto" MinWidth="100"
+                                                Text="{Binding SeederCount, Mode=OneWay, NotifyOnTargetUpdated=True}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <!--<csControls:MDataGrid
                     AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserSortColumns="True"
                     HorizontalScrollBarVisibility="Auto"
                     ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
@@ -383,7 +420,7 @@
 
                         </ContextMenu>
                     </DataGrid.ContextMenu>
-                </csControls:MDataGrid>
+                </csControls:MDataGrid>-->
             </TabItem>
 
             <TabItem Header="{lex:Loc MoreInfo_Peers}">

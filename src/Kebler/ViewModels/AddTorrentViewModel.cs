@@ -44,15 +44,15 @@ namespace Kebler.ViewModels
         private Visibility _resultVisibility = Visibility.Collapsed,
             _loadingGridVisibility = Visibility.Collapsed;
 
-        private FilesTreeViewModel? _filesTree;
+        //private FilesTreeViewModel? _filesTree;
 
         // ReSharper disable once MemberCanBePrivate.Global
-        public FilesTreeViewModel FilesTree
-        {
-            // ReSharper disable once UnusedMember.Global
-            get => _filesTree ??= new FilesTreeViewModel();
-            set => Set(ref _filesTree, value);
-        }
+        //public FilesTreeViewModel FilesTree
+        //{
+        //    // ReSharper disable once UnusedMember.Global
+        //    get => _filesTree ??= new FilesTreeViewModel();
+        //    set => Set(ref _filesTree, value);
+        //}
 
         public string TorrentPath
         {
@@ -129,7 +129,7 @@ namespace Kebler.ViewModels
             }
 
             PeerLimit = ConfigService.Instanse.TorrentPeerLimit;
-            FilesTree.Border = new Thickness(1);
+            //FilesTree.Border = new Thickness(1);
 
             using var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             _torrent = new BencodeParser().Parse<Torrent>(file);
@@ -163,8 +163,8 @@ namespace Kebler.ViewModels
             {
                 if (_torrent != null)
                 {                  
-                    FilesTree?.Clear();
-                    FilesTree?.UpdateFilesTree(_torrent);
+                    //FilesTree?.Clear();
+                    //FilesTree?.UpdateFilesTree(_torrent);
                 }
             }
             catch (TaskCanceledException)
@@ -218,8 +218,8 @@ namespace Kebler.ViewModels
                         Paused = !IsAutoStart,
                         DownloadDirectory = DownlaodDir ?? settings?.DownloadDirectory,
                         PeerLimit = PeerLimit,
-                        FilesUnwanted = FilesTree?.getFilesWantedStatus(false),
-                        FilesWanted = FilesTree?.getFilesWantedStatus(true)
+                        //FilesUnwanted = FilesTree?.getFilesWantedStatus(false),
+                        //FilesWanted = FilesTree?.getFilesWantedStatus(true)
                     };
 
                     Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
@@ -317,7 +317,7 @@ namespace Kebler.ViewModels
 
         private void Closing()
         {
-            _filesTree = null;
+            //_filesTree = null;
             cancellationTokenSource?.Cancel();
             settings = null;
             _torrentFileInfo = null;

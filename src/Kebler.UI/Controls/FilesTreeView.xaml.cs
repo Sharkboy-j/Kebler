@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Kebler.Models.Interfaces;
-using Kebler.Models.Tree;
+using Kebler.Models;
+using Kebler.UI.CSControls.TreeListView;
 
 namespace Kebler.UI.Controls
 {
@@ -11,49 +12,74 @@ namespace Kebler.UI.Controls
     /// </summary>
     public partial class FilesTreeView
     {
-        public delegate void FileStatusUpdateHandler(uint[] wanted, uint[] unwanted, bool status);
 
         public FilesTreeView()
         {
             InitializeComponent();
+
         }
 
-        public event FileStatusUpdateHandler OnFileStatusUpdate;
-
-
-        private void FolderCheck_Click(object sender, RoutedEventArgs e)
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox chk)
+            if (sender is CheckBox chk && chk.Tag is TorrentFile trnt)
             {
-                if (Trree.SelectedItems.Count > 1)
-                    foreach (MultiselectionTreeViewItem item in Trree.SelectedItems)
-                        item.IsChecked = (bool) chk.IsChecked;
-                else
-                    Trree.UnselectAll();
-
-
-                var file = chk.Tag as MultiselectionTreeViewItem;
-                Trree.SelectAndFocus(file);
-
-
-                if (DataContext is IFilesTreeView dd)
-                    OnFileStatusUpdate?.Invoke(dd.getFilesWantedStatus(true), dd.getFilesWantedStatus(false),
-                        (bool) file.IsChecked);
+                Set(trnt, chk.IsChecked);
+                RecalParent(trnt);
+                tree.Items.Refresh();
             }
         }
 
+        void Set(TorrentFile trn, bool? val)
+        {
+            if (trn.Children.Count > 0)
+            {
+                foreach (var item in trn.Children)
+                {
+                    Set(item, val);
+                }
+            }
+            trn.Checked = val;
+        }
 
-        private void Trree_PreviewKeyDown(object sender, KeyEventArgs e)
+        void RecalParent(TorrentFile trn)
+        {
+            if (trn.Parent != null)
+            {
+                //allFalse
+                if (trn.Parent.Children.All(x => x.Checked == false))
+                {
+                    trn.Parent.Checked = false;
+                }
+                //allTrue
+                else if (trn.Parent.Children.All(x => x.Checked == true))
+                {
+                    trn.Parent.Checked = true;
+                }
+                else
+                {
+                    trn.Parent.Checked = null;
+                }
+                RecalParent(trn.Parent);
+            }
+        }
+
+        private void tree_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {
-                var val = ((MultiselectionTreeViewItem) Trree.SelectedValue).IsChecked;
+                if (tree.SelectedItem is TreeNode node && node.Tag is TorrentFile trnt)
+                {
+                    trnt.Checked = trnt.Checked == null ? false : !trnt.Checked;
+                    Set(trnt, trnt.Checked);
+                    RecalParent(trnt);
 
-                if (val == null)
-                    ((MultiselectionTreeViewItem) Trree.SelectedValue).IsChecked = false;
-                else
-                    ((MultiselectionTreeViewItem) Trree.SelectedValue).IsChecked = !val;
+                    tree.Items.Refresh();
+
+                }
             }
+
         }
+
+       
     }
 }

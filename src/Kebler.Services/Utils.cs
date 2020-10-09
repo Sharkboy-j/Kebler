@@ -57,9 +57,13 @@ namespace Kebler.Services
                 SelSize = KB;
                 suffix = nameof(KB);
             }
+            else if (length >= B)
+            {
+                return $"{size} {nameof(B)}";
+            }
             else
             {
-                return showEmpty ? "0 KB" : string.Empty;
+                return showEmpty ? $"0 {nameof(KB)}" : string.Empty;
             }
 
             size = Math.Round(length / SelSize, 2);

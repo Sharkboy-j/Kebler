@@ -33,6 +33,20 @@
     <Color x:Key="ForegroundColor.DimGray">#DADADA</Color>
     <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
 
+    <Color x:Key="ListView.BackgroundColor">#212224</Color>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!--<Color x:Key="Window.BackgroundColor">#252525</Color>-->
     <Color x:Key="Window.BorderColor">#3BACED</Color>

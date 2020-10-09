@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
+using Kebler.Models;
+using Kebler.Models.Interfaces;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
 using Kebler.Services;
@@ -22,8 +26,8 @@ namespace Kebler.ViewModels
     {
         #region Props
 
-          private static readonly log4net.ILog Log =
-            log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly log4net.ILog Log =
+          log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
         private static TransmissionClient? _client;
 
@@ -44,7 +48,6 @@ namespace Kebler.ViewModels
             _piecesBase64,
             _piecesString;
 
-        private FilesTreeViewModel _filesTree = new FilesTreeViewModel();
         private bool _loading, _isMore;
 
 
@@ -78,12 +81,6 @@ namespace Kebler.ViewModels
         {
             get => _peers;
             set => Set(ref _peers, value);
-        }
-
-        public FilesTreeViewModel FilesTree
-        {
-            get => _filesTree;
-            set => Set(ref _filesTree, value);
         }
 
         public bool Loading
@@ -143,13 +140,13 @@ namespace Kebler.ViewModels
 
         public string Seeds
         {
-            get => _seeds?? string.Empty;
+            get => _seeds ?? string.Empty;
             set => Set(ref _seeds, value);
         }
 
         public string Error
         {
-            get => _error?? string.Empty;
+            get => _error ?? string.Empty;
             set => Set(ref _error, value);
         }
 
@@ -161,7 +158,7 @@ namespace Kebler.ViewModels
 
         public string UploadLimit
         {
-            get => _uploadLimit?? string.Empty;
+            get => _uploadLimit ?? string.Empty;
             set => Set(ref _uploadLimit, value);
         }
 
@@ -278,7 +275,7 @@ namespace Kebler.ViewModels
 
         public MoreInfoViewModel(KeblerView view)
         {
-           this.view = view;
+            this.view = view;
         }
 
         public async Task Update(uint[] ids, TransmissionClient client)
@@ -292,10 +289,12 @@ namespace Kebler.ViewModels
 
             var answ = await client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
 
-            if(answ!=null && answ.Torrents.Length==1)
+            if (answ != null && answ.Torrents.Length == 1)
             {
                 _ti = answ.Torrents.First();
-                FilesTree.UpdateFilesTree(_ti);
+                view.MoreView.FileTreeViewControl.tree.Model = FilesModel.CreateTestModel(_ti);
+
+
 
                 if (_piecesBase64 != _ti.Pieces)
                 {
@@ -369,10 +368,10 @@ namespace Kebler.ViewModels
 
                 if (result == true && _client != null)
                 {
-                    var addRes =   await _client.TorrentSetAsync(new TorrentSettings
+                    var addRes = await _client.TorrentSetAsync(new TorrentSettings
                     {
                         IDs = ids,
-                        TrackerRemove = trackers.Select(x=>x.ID).ToArray()
+                        TrackerRemove = trackers.Select(x => x.ID).ToArray()
                     }, new CancellationToken());
 
                     if (addRes.Success)
@@ -387,9 +386,9 @@ namespace Kebler.ViewModels
                     {
                         if (addRes.CustomException != null)
                             Log.Error(addRes.CustomException);
-                        else if(addRes.WebException!=null)
+                        else if (addRes.WebException != null)
                             Log.Error(addRes.WebException);
-                        else 
+                        else
                             Log.Error("Unknown error while addind tracker");
 
                     }
@@ -410,7 +409,7 @@ namespace Kebler.ViewModels
                 var addRes = await _client.TorrentSetAsync(new TorrentSettings
                 {
                     IDs = ids,
-                    TrackerAdd = new[] {dialog.Value}
+                    TrackerAdd = new[] { dialog.Value }
                 }, new CancellationToken());
 
                 if (addRes.Success)
@@ -421,18 +420,123 @@ namespace Kebler.ViewModels
                 {
                     if (addRes.CustomException != null)
                         Log.Error(addRes.CustomException);
-                    else if(addRes.WebException!=null)
+                    else if (addRes.WebException != null)
                         Log.Error(addRes.WebException);
-                    else 
+                    else
                         Log.Error("Unknown error while addind tracker");
 
                 }
             }
         }
 
-        public void Clear()
+        //public void Clear()
+        //{
+        //    FilesTree.Files = null;
+        //}
+    }
+
+
+    public class FilesModel : ITreeModel
+    {
+
+        public static FilesModel CreateTestModel(TorrentInfo ti)
         {
-            FilesTree.Files = null;
+            var model = new FilesModel();
+            var p = new TorrentFile() { Name = ti.Name };
+
+
+            var counter = 0;
+            foreach (var item in ti.Files)
+            {
+                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted);
+
+                counter++;
+            }
+
+
+            model.Root.Children.Add(p.Children.First());
+            return model;
+        }
+
+        private static void createNodes(ref TorrentFile root, string[] file, long size, long done, bool check)
+        {
+            var last = root;
+
+            for (var i = 0; i < file.Length; i++)
+            {
+                var pathPart = file[i];
+                if (string.IsNullOrEmpty(pathPart))
+                    continue;
+
+                if (last.Children.All(x => x.Name != pathPart))
+                {
+                    //if not found children
+                    if (i + 1 == file.Length)
+                    {
+                        var pth = new TorrentFile(pathPart, size, done, check);
+                        pth.Parent = last;
+                        last.Children.Add(pth);
+                        last = pth;
+                        RecalParent(last);
+                    }
+                    else
+                    {
+                        var pth = new TorrentFile(pathPart);
+                        pth.Parent = last;
+                        last.Children.Add(pth);
+                        last = pth;
+                    }
+                }
+                else
+                {
+                    last = last.Children.First(p => p.Name == pathPart);
+                }
+            }
+        }
+
+        static void RecalParent(TorrentFile trn)
+        {
+            if (trn.Parent != null)
+            {
+                //allFalse
+                if (trn.Parent.Children.All(x => x.Checked == false))
+                {
+                    trn.Parent.Checked = false;
+                }
+                //allTrue
+                else if (trn.Parent.Children.All(x => x.Checked == true))
+                {
+                    trn.Parent.Checked = true;
+                }
+                else
+                {
+                    trn.Parent.Checked = null;
+                }
+                RecalParent(trn.Parent);
+            }
+        }
+
+
+        public TorrentFile Root { get; private set; }
+        public FilesModel()
+        {
+            Root = new TorrentFile();
+        }
+
+
+        public IEnumerable GetChildren(object parent)
+        {
+            if (parent == null)
+                parent = Root;
+            return (parent as TorrentFile).Children;
+        }
+
+        public bool HasChildren(object parent)
+        {
+            return (parent as TorrentFile).Children.Count > 0;
         }
     }
+
+
+
 }
