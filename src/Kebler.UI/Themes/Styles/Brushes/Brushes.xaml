@@ -40,6 +40,39 @@
     <SolidColorBrush x:Key="ForegroundBrush.DimGray" Color="{DynamicResource ForegroundColor.DimGray}" />
     <SolidColorBrush x:Key="ForegroundBrush.Gray" Color="{DynamicResource ForegroundColor.Gray}" />
 
+    <SolidColorBrush x:Key="ListView.Static.Background" Color="{DynamicResource ListView.BackgroundColor}" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <SolidColorBrush x:Key="LabelBrush" Color="{DynamicResource LabelColor}" />
     <SolidColorBrush x:Key="SecondaryLabelBrush" Color="{DynamicResource SecondaryLabelColor}" />

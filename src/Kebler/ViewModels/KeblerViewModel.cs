@@ -139,7 +139,7 @@ namespace Kebler.ViewModels
             _view = view as KeblerView;
             if (_view != null)
             {
-                _view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
+                //_view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
                 MoreInfoView = new MoreInfoViewModel(_view);
             }
             base.OnViewAttached(view, context);
@@ -411,7 +411,7 @@ namespace Kebler.ViewModels
             if (selectedIDs.Length != 1)
             {
                 MoreInfoView.IsMore = true;
-                MoreInfoView.Clear();
+                //MoreInfoView.Clear();
                 MoreInfoView.SelectedCount = selectedIDs.Length;
                 return;
             }
@@ -638,7 +638,7 @@ namespace Kebler.ViewModels
                     allTorrents = null;
                     TorrentList = new BindableCollection<TorrentInfo>();
                     IsConnected = false;
-                    Categories.Clear();
+                    Categories?.Clear();
                     IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
                     Log.Info("Disconnected from server");
                     if (requested)
@@ -834,23 +834,23 @@ namespace Kebler.ViewModels
 
             //on itemSource update, datagrid lose focus for selected row. 
 
-            #region ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
-
-            Execute.OnUIThread(() =>
-            {
-                //var tm = FocusManager.GetFocusedElement(_view);
-                if (_view != null && _view.TorrentsDataGrid.IsFocused)
-                    if (FocusManager.GetFocusedElement(_view) is DataGridCell)
-                    {
-                        var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
-                        if (itm.Item == null) return;
-
-                        var dd = GetDataGridCell(itm);
-                        FocusManager.SetFocusedElement(_view, dd);
-                    }
-            });
-
-            #endregion ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
+            // #region ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
+            //
+            // Execute.OnUIThread(() =>
+            // {
+            //     //var tm = FocusManager.GetFocusedElement(_view);
+            //     if (_view != null && _view.TorrentsDataGrid.IsFocused)
+            //         if (FocusManager.GetFocusedElement(_view) is DataGridCell)
+            //         {
+            //             var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
+            //             if (itm.Item == null) return;
+            //
+            //             var dd = GetDataGridCell(itm);
+            //             FocusManager.SetFocusedElement(_view, dd);
+            //         }
+            // });
+            //
+            // #endregion ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
         }
 
         public DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
@@ -975,16 +975,16 @@ namespace Kebler.ViewModels
             UpdateMoreInfoPosition(false);
             StoppdateingMoreInfoCycle();
 
-            Execute.OnUIThread(() =>
-            {
-                if (_view.TorrentsDataGrid.SelectionUnit != DataGridSelectionUnit.FullRow)
-                    _view.TorrentsDataGrid.SelectedCells.Clear();
-
-                if (_view.TorrentsDataGrid.SelectionMode != DataGridSelectionMode.Single) //if the Extended mode
-                    _view.TorrentsDataGrid.SelectedItems.Clear();
-                else
-                    _view.TorrentsDataGrid.SelectedItem = null;
-            });
+            // Execute.OnUIThread(() =>
+            // {
+            //     if (_view.TorrentsDataGrid.SelectionUnit != DataGridSelectionUnit.FullRow)
+            //         _view.TorrentsDataGrid.SelectedCells.Clear();
+            //
+            //     if (_view.TorrentsDataGrid.SelectionMode != DataGridSelectionMode.Single) //if the Extended mode
+            //         _view.TorrentsDataGrid.SelectedItems.Clear();
+            //     else
+            //         _view.TorrentsDataGrid.SelectedItem = null;
+            // });
         }
 
         public void ClearFilter()
@@ -1363,7 +1363,6 @@ namespace Kebler.ViewModels
         private Task? _whileCycleMoreInfoTask;
         private Task? _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
-        private HotKey[]? RegisteredKeys;
         private bool requested;
         private uint[]? selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];

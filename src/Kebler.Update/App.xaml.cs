@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Threading;
 using Kebler.Const;
 using Kebler.Services;
 
@@ -10,8 +11,7 @@ namespace Kebler.Update
 {
     public partial class App : Application
     {
-        public static App Instance;
-        public StringBuilder BUILDER = new StringBuilder();
+        public static StringBuilder BUILDER = new StringBuilder();
 
         private App()
         {
@@ -58,70 +58,100 @@ namespace Kebler.Update
                 ss.Append(ex.Message);
                 ss.Append(ex);
                 ss.Append(ex.StackTrace);
-                new EXCEPTIONWINDOW(ss.ToString()).ShowDialog();
+                Log($"{ss}");
+                File.AppendAllText("install.log", BUILDER.ToString());
                 Current.Shutdown();
             }
         }
 
-
-        public void Log(string msg)
+        public static void Log(string msg)
         {
             BUILDER.Append(msg + Environment.NewLine);
         }
 
         public void HasUpdate()
         {
-            var getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-            var current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+            string? getEnv = null;
+            Version? current = null;
 
+            //try find installed version
+            getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
 
-            var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
-            Log($"Current {current} Serv {result.Item2}");
-
-            Log($"Env Path: {getEnv}");
-
-
-            if (getEnv == null)
+            if (!string.IsNullOrEmpty(getEnv))
             {
-                var updateUrl = UpdaterApi.GetlatestUri();
+                Log($"We found old version on: {getEnv}");
 
-                var wd = new MainWindow(new Uri(updateUrl));
-                wd.ShowDialog();
-                Current.Shutdown(0);
-            }
-            else
-            {
-                var updateUrl = UpdaterApi.GetlatestUri();
-
-                if (File.Exists(ConstStrings.KeblerExepath))
+                if (File.Exists(getEnv))
                 {
+                    current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+                    Log($"Current version is: {current}");
+
+                    Log($"Okay. Try get server version (github version)");
+                    var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
+                    Log($"Server version is: {result.Item2}");
+
                     if (result.Item2 > current)
                     {
+                        Log($"So we have old version....");
+
+                        Log("Try get server version uri");
+                        var updateUrl = UpdaterApi.GetlatestUri();
+                        Log($"So here is: {updateUrl}");
+
                         var wd = new MainWindow(new Uri(updateUrl));
                         wd.ShowDialog();
                         Current.Shutdown(0);
                     }
                     else
                     {
-                        CreateShortcut();
                         Process.Start(getEnv);
                         Current.Shutdown(0);
                     }
                 }
                 else
                 {
-                    var wd = new MainWindow(new Uri(updateUrl));
-                    wd.ShowDialog();
-                    Current.Shutdown(0);
+                    startFree();
+
                 }
+            }
+            else
+            {
+                startFree();
             }
         }
 
-        public void CreateShortcut()
+        void startFree()
         {
-            var lnkFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kebler.lnk");
+            Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
+            var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
+            var updateUrl = UpdaterApi.GetlatestUri();
+
+            var wd = new MainWindow(new Uri(updateUrl));
+            if (wd.ShowDialog() == true)
+            {
+                CreateShortcut();
+                startKebler();
+            }
+            Application.Current.Shutdown();
+
+        }
+
+        void startKebler()
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                WorkingDirectory = Const.ConstStrings.KeblerAppFolderPath,
+                FileName = ConstStrings.KeblerExepath,
+                Arguments = Const.ConstStrings.KeblerAppFolderPath,
+                UseShellExecute = true,
+            });
+        }
+
+        public static void CreateShortcut()
+        {
+            var lnkFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{nameof(Kebler)}.lnk");
             Shortcut.Create(lnkFileName, ConstStrings.KeblerExepath,
-                null, null, nameof(Kebler), null, null);
+                ConstStrings.KeblerAppFolderPath, ConstStrings.KeblerAppFolderPath, "", null, ConstStrings.KeblerExepath);
         }
     }
 }

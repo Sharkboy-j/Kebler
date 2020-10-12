@@ -9,7 +9,7 @@ namespace Kebler.Services.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (parameter != null && bool.TryParse(parameter.ToString(), out var para))
-                return Utils.GetSizeString((long) value, para);
+                return Utils.GetSizeString(System.Convert.ToInt64(value), para);
 
             return Utils.GetSizeString((long) value);
         }

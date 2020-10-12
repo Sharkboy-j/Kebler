@@ -38,6 +38,8 @@
             <conv:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
             <conv:PointToPercent x:Key="PointToPercent" />
             <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <conv:CountToBoolConverter x:Key="CountToBoolConverter" />
+       
         </ResourceDictionary>
     </Application.Resources>
 </Application>

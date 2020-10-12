@@ -42,7 +42,11 @@ namespace Kebler.Update
 
         private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+
             if (e.Cancelled) return;
+
+
+            App.Log("Download completed");
 
             ContentDisposition contentDisposition = null;
             if (_webClient.ResponseHeaders?["Content-Disposition"] != null)
@@ -56,13 +60,7 @@ namespace Kebler.Update
 
             var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
             zip.ExtractToDirectory(ConstStrings.KeblerRoamingFolder, true);
-
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = ConstStrings.KeblerExepath
-            };
-            App.Instance.CreateShortcut();
-            Process.Start(processStartInfo);
+            DialogResult = true;
             Close();
         }
 

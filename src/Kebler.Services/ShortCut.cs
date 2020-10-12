@@ -14,8 +14,12 @@ namespace Kebler.Services
         {
             var shortcut = (IWshShortcut) m_type.InvokeMember("CreateShortcut",
                 BindingFlags.InvokeMethod, null, m_shell, new object[] {fileName});
+
             shortcut.Description = description;
             shortcut.TargetPath = targetPath;
+            shortcut.Arguments = arguments;
+            shortcut.WorkingDirectory = workingDirectory;
+
             if (!string.IsNullOrEmpty(iconPath))
                 shortcut.IconLocation = iconPath;
             shortcut.Save();

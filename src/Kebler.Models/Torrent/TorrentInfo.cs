@@ -65,7 +65,8 @@ namespace Kebler.Models.Torrent
 
         [JsonProperty(TorrentFields.ETA_IDLE)] public int ETAIdle { get; set; }
 
-        [JsonProperty(TorrentFields.FILES)] public TransmissionTorrentFiles[] Files { get; set; }
+        [JsonProperty(TorrentFields.FILES)]
+        public TransmissionTorrentFiles[] Files { get; set; }
 
         [JsonProperty(TorrentFields.FILE_STATS)]
         public TransmissionTorrentFileStats[] FileStats { get; set; }

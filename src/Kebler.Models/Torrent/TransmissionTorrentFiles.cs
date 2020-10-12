@@ -18,13 +18,23 @@ namespace Kebler.Models.Torrent
         }
 
         [JsonProperty("bytesCompleted")]
-        public double BytesCompleted { get; set; }
+        public long BytesCompleted { get; set; }
 
         [JsonProperty("length")]
         public long Length { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public string[] NameParts
+        {
+            get
+            {
+                return Name.Split('/');
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
