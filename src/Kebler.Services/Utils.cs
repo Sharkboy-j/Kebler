@@ -6,24 +6,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Kebler.Models.Torrent;
+using Kebler.Resources;
 
 namespace Kebler.Services
 {
     public static class Utils
     {
-        //public static void LogServers<T>(this List<T> serverList)
-        //{
-        //    if (serverList.Count == 0)
-        //    {
-        //        App.Log.Info("ServerListCount: 0");
-        //    }
-        //    var txt = $"ServersList[{serverList.Count}]:{Environment.NewLine}";
-        //    foreach (var server in serverList)
-        //    {
-        //        txt += server + Environment.NewLine;
-        //    }
-        //    App.Log.Info(txt);
-        //}
+ 
         public static bool IsNullOrEmpty(this IEnumerable This)
         {
             return null == This || false == This.GetEnumerator().MoveNext();
@@ -77,13 +66,13 @@ namespace Kebler.Services
 
             var sb = new StringBuilder();
             if (span.Days > 0)
-                sb.AppendFormat("{0} d ", span.Days);
+                sb.Append($"{span.Days} {Strings.time_days_short}");
             if (span.Hours > 0)
-                sb.AppendFormat("{0} h ", span.Hours);
+                sb.Append($"{span.Hours} {Strings.time_days_short}");
             if (span.Minutes > 0)
-                sb.AppendFormat("{0} m ", span.Minutes);
+                sb.Append($"{span.Minutes} {Strings.time_days_short}");
             if (span.Seconds > 0)
-                sb.AppendFormat("{0} s", span.Seconds);
+                sb.Append($"{span.Seconds} {Strings.time_days_short}");
             return sb.ToString();
         }
 
@@ -110,46 +99,44 @@ namespace Kebler.Services
         {
             var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
 
-            Bitmap? bmp = new Bitmap(decodedPices.Length, (int)height);
+            var bmp = new Bitmap(decodedPices.Length, (int)height);
 
             try
             {
+                using Graphics g = Graphics.FromImage(bmp);
+                var c_bit = 0;
+                var bitsperrow = bmp.Width > 0 ? pieceCount / (float)bmp.Width : 0;
 
-                using (Graphics g = Graphics.FromImage(bmp))
+                if (bitsperrow > 0)
                 {
-                    int c_bit = 0, num_bits, bits_got;
-                    float bitsperrow = bmp.Width > 0 ? pieceCount / (float)bmp.Width : 0;
-                    float chunk_done;
-
-                    if (bitsperrow > 0)
+                    for (var n = 0; n < bmp.Width; n++)
                     {
-                        for (int n = 0; n < bmp.Width; n++)
+                        var num_bits = (int)(bitsperrow * (n + 1)) - c_bit;
+                        var bits_got = 0;
+                        for (var i = 0; i < num_bits; i++)
                         {
-                            num_bits = (int)(bitsperrow * (n + 1)) - c_bit;
-                            bits_got = 0;
-                            for (int i = 0; i < num_bits; i++)
-                            {
-                                if (BitGet(decodedPices, pieceCount, c_bit + i))
-                                    bits_got++;
-                            }
-                            if (num_bits > 0)
-                                chunk_done = (float)bits_got / (float)num_bits;
-                            else if (BitGet(decodedPices, pieceCount, c_bit))
-                                chunk_done = 1;
-                            else
-                                chunk_done = 0;
-
-                            System.Drawing.Color fill;
-
-                            if (chunk_done == 1)
-                                fill = System.Drawing.Color.FromArgb(0, 122, 204);
-                            else
-                                fill = System.Drawing.Color.FromArgb(50, 50, 50);
-
-                            g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
-
-                            c_bit += num_bits;
+                            if (BitGet(decodedPices, pieceCount, c_bit + i))
+                                bits_got++;
                         }
+
+                        float chunk_done;
+                        if (num_bits > 0)
+                            chunk_done = (float)bits_got / (float)num_bits;
+                        else if (BitGet(decodedPices, pieceCount, c_bit))
+                            chunk_done = 1;
+                        else
+                            chunk_done = 0;
+
+                        System.Drawing.Color fill;
+
+                        if (chunk_done == 1)
+                            fill = System.Drawing.Color.FromArgb(0, 122, 204);
+                        else
+                            fill = System.Drawing.Color.FromArgb(50, 50, 50);
+
+                        g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
+
+                        c_bit += num_bits;
                     }
                 }
             }
@@ -160,6 +147,7 @@ namespace Kebler.Services
             return bmp;
 
         }
+        
         private static bool BitGet(byte[] array, int len, int index)
         {
             if (index < 0 || index >= len)

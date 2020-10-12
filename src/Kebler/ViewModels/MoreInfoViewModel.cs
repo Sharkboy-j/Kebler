@@ -445,10 +445,10 @@ namespace Kebler.ViewModels
             var p = new TorrentFile() { Name = ti.Name };
 
 
-            var counter = 0;
+            var counter = 0U;
             foreach (var item in ti.Files)
             {
-                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted);
+                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted,counter);
 
                 counter++;
             }
@@ -458,7 +458,27 @@ namespace Kebler.ViewModels
             return model;
         }
 
-        private static void createNodes(ref TorrentFile root, string[] file, long size, long done, bool check)
+        public static FilesModel CreateTestModel(BencodeNET.Torrents.Torrent ti)
+        {
+            var model = new FilesModel();
+            var p = new TorrentFile() { Name = ti.DisplayName };
+
+
+            var counter = 0U;
+            foreach (var item in ti.Files)
+            {
+                createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true,counter);
+
+                counter++;
+            }
+
+
+            model.Root.Children.Add(p);
+            return model;
+        }
+
+
+        private static void createNodes(ref TorrentFile root, string[] file, long size, long done, bool check,uint index)
         {
             var last = root;
 
@@ -473,7 +493,7 @@ namespace Kebler.ViewModels
                     //if not found children
                     if (i + 1 == file.Length)
                     {
-                        var pth = new TorrentFile(pathPart, size, done, check);
+                        var pth = new TorrentFile(pathPart, size, done, check,index);
                         pth.Parent = last;
                         last.Children.Add(pth);
                         last = pth;
@@ -535,6 +555,8 @@ namespace Kebler.ViewModels
         {
             return (parent as TorrentFile).Children.Count > 0;
         }
+
+   
     }
 
 

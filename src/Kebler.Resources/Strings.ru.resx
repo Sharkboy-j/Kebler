@@ -120,4 +120,16 @@
   <data name="Kebler" xml:space="preserve">
     <value>Kebler</value>
   </data>
+  <data name="time_days_short" xml:space="preserve">
+    <value>дн</value>
+  </data>
+  <data name="time_hours_short" xml:space="preserve">
+    <value>ч</value>
+  </data>
+  <data name="time_minutes_short" xml:space="preserve">
+    <value>м</value>
+  </data>
+  <data name="time_seconds_short" xml:space="preserve">
+    <value>с</value>
+  </data>
 </root>

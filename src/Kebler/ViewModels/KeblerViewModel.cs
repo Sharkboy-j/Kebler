@@ -1363,7 +1363,6 @@ namespace Kebler.ViewModels
         private Task? _whileCycleMoreInfoTask;
         private Task? _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
-        private HotKey[]? RegisteredKeys;
         private bool requested;
         private uint[]? selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];

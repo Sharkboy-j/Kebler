@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Kebler.Models;
+using Kebler.Models.Interfaces;
 using Kebler.UI.CSControls.TreeListView;
 
 namespace Kebler.UI.Controls
@@ -17,6 +18,33 @@ namespace Kebler.UI.Controls
         {
             InitializeComponent();
 
+        }
+
+        public static readonly DependencyProperty ModelProperty = 
+            DependencyProperty.Register(
+                "Model",
+                typeof(ITreeModel),
+                typeof(FilesTreeView),
+                new FrameworkPropertyMetadata(null, 
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
+            );
+
+        public bool DoneVisibility
+        {
+            set
+            {
+                if (value)
+                {
+                    DoneColumn.Width = 100;
+                    PercentColumn.Width = 100;
+                }
+                else
+                {
+                    DoneColumn.Width = 0;
+                    PercentColumn.Width = 0;
+                }
+                  
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -80,6 +108,6 @@ namespace Kebler.UI.Controls
 
         }
 
-       
+
     }
 }

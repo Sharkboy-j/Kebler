@@ -22,7 +22,7 @@
                                               RenderOptions.ClearTypeHint="Enabled" RenderOptions.EdgeMode="Unspecified"
                                               Tag="{Binding}"
                                               Unchecked="CheckBox_Checked" />
-                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -32,13 +32,14 @@
                             <DataTemplate>
                                 <TextBlock Width="Auto" MinWidth="100"
                                            Tag="{Binding}"
+                                           TextTrimming="WordEllipsis"
                                            Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
                                            Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Done">
+                    <GridViewColumn Header="Done" x:Name="DoneColumn">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Width="Auto" MinWidth="100"
@@ -49,7 +50,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="%">
+                    <GridViewColumn Header="%" x:Name="PercentColumn">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Width="Auto" MinWidth="100"

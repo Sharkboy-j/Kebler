@@ -22,18 +22,19 @@ namespace Kebler.Models
         public double DonePercent { get; set; }
 
         public bool? Checked { get; set; } = true;
+        public uint Index;
 
         static int _i;
         private bool @checked;
 
-        public TorrentFile(string name, long size, long done, bool check)
+        public TorrentFile(string name, long size, long done, bool check,uint index)
         {
             Id = ++_i;
             this.Name = name;
             this.Size = size;
             Done = done;
             Checked = check;
-
+            Index = index;
             //size  :   1
             //done  :   ?
             if(size>0)

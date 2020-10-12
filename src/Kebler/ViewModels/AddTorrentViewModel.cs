@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+﻿using System.Collections.Generic;
+using System.Windows.Threading;
 
 namespace Kebler.ViewModels
 {
@@ -21,6 +22,8 @@ namespace Kebler.ViewModels
     using Microsoft.Win32;
     using ILog = log4net.ILog;
     using LogManager = log4net.LogManager;
+    using Kebler.Models.Interfaces;
+    using Kebler.UI.CSControls.TreeListView;
 
     public class AddTorrentViewModel : Screen
     {
@@ -31,15 +34,16 @@ namespace Kebler.ViewModels
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
-        private FileInfo? _torrentFileInfo;
+        private FileInfo? _fileInfo;
         private SessionSettings? settings;
         public AddTorrentResponse TorrentResult;
         public bool Result;
-        
-        
+
+
         private string? _torrentPath, _downlaodDir;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
         private int _peerLimit, _uploadLimit;
+        private ITreeModel _files;
 
         private Visibility _resultVisibility = Visibility.Collapsed,
             _loadingGridVisibility = Visibility.Collapsed;
@@ -53,6 +57,7 @@ namespace Kebler.ViewModels
         //    get => _filesTree ??= new FilesTreeViewModel();
         //    set => Set(ref _filesTree, value);
         //}
+
 
         public string TorrentPath
         {
@@ -112,8 +117,8 @@ namespace Kebler.ViewModels
 
         public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings)
         {
-            _torrentFileInfo = new FileInfo(path);
-            TorrentPath = _torrentFileInfo.FullName;
+            _fileInfo = new FileInfo(path);
+            TorrentPath = _fileInfo.FullName;
             _transmissionClient = transmissionClient;
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
@@ -139,6 +144,7 @@ namespace Kebler.ViewModels
         {
             try
             {
+                this.view = view;
                 LoadTree();
                 base.OnViewLoaded(view);
             }
@@ -146,15 +152,16 @@ namespace Kebler.ViewModels
             {
                 LoadingGridVisibility = Visibility.Collapsed;
             }
-         
         }
+
+        private object view;
 
         public void ChangeVisibilityWindow()
         {
             ConfigService.Instanse.IsAddTorrentWindowShow = IsAddTorrentWindowShow;
             ConfigService.Save();
         }
-        
+
         private void LoadTree()
         {
             LoadingGridVisibility = Visibility.Visible;
@@ -162,9 +169,9 @@ namespace Kebler.ViewModels
             try
             {
                 if (_torrent != null)
-                {                  
-                    //FilesTree?.Clear();
-                    //FilesTree?.UpdateFilesTree(_torrent);
+                {
+                    if (view is IAddTorrent _addView && _addView.FilesTreeView is TreeListView vv)
+                        vv.Model = FilesModel.CreateTestModel(_torrent);
                 }
             }
             catch (TaskCanceledException)
@@ -184,23 +191,67 @@ namespace Kebler.ViewModels
                 {
                     Filter = "Torrent files (*.torrent)|*.torrent|All files (*.*)|*.*",
                     Multiselect = false,
-                    InitialDirectory = _torrentFileInfo?.DirectoryName ?? throw new InvalidOperationException()
+                    InitialDirectory = _fileInfo?.DirectoryName ?? throw new InvalidOperationException()
                 };
 
                 if (openFileDialog.ShowDialog() != true) return;
-            
-                _torrentFileInfo = new FileInfo(openFileDialog.FileName);
-                TorrentPath = _torrentFileInfo.FullName;
+
+                _fileInfo = new FileInfo(openFileDialog.FileName);
+                TorrentPath = _fileInfo.FullName;
+
+
+                using var file = File.Open(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                _torrent = new BencodeParser().Parse<Torrent>(file);
                 LoadTree();
             }
             finally
             {
                 LoadingGridVisibility = Visibility.Collapsed;
             }
-          
-
         }
-        
+
+        private void merge(ref uint[] array1, ref uint[] array2, out uint[] result)
+        {
+            var array1OriginalLength = array1.Length;
+            Array.Resize(ref array1, array1OriginalLength + array2.Length);
+            Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
+            result = array1;
+        }
+
+        private uint[] get(TorrentFile Node, bool search)
+        {
+            var output = new uint[0];
+            if (Node.Children.Count > 0)
+            {
+                foreach (var item in Node.Children)
+                    if (item.Children.Count > 0)
+                    {
+                        var ids = get(item, search);
+                        merge(ref output, ref ids, out output);
+                    }
+                    else
+                    {
+                        if (item.Checked == search)
+                        {
+                            Array.Resize(ref output, output.Length + 1);
+                            output[output.GetUpperBound(0)] = item.Index;
+                            //dd.Add(item.IndexPattern);
+                        }
+                    }
+            }
+            else
+            {
+                if (Node.Checked == search)
+                {
+                    Array.Resize(ref output, output.Length + 1);
+                    output[output.GetUpperBound(0)] = Node.Index;
+                    //dd.Add(Node.IndexPattern);
+                }
+            }
+
+            return output;
+        }
+
         public void Add()
         {
             ResultVisibility = Visibility.Collapsed;
@@ -211,6 +262,16 @@ namespace Kebler.ViewModels
                 try
                 {
                     //var dd = FilesTree.getFilesWantedStatus(false);
+                    List<uint> want = new List<uint>();
+                    List<uint> unWant = new List<uint>();
+
+                    if (view is IAddTorrent _addView && _addView.FilesTreeView is TreeListView vv)
+                    {
+                        var mod = (vv.Model as FilesModel);
+
+                        want = get(mod.Root, true).ToList();
+                        unWant = get(mod.Root, false).ToList();
+                    }
 
                     var newTorrent = new NewTorrent
                     {
@@ -218,8 +279,8 @@ namespace Kebler.ViewModels
                         Paused = !IsAutoStart,
                         DownloadDirectory = DownlaodDir ?? settings?.DownloadDirectory,
                         PeerLimit = PeerLimit,
-                        //FilesUnwanted = FilesTree?.getFilesWantedStatus(false),
-                        //FilesWanted = FilesTree?.getFilesWantedStatus(true)
+                        FilesUnwanted = unWant.ToArray(),
+                        FilesWanted = want.ToArray()
                     };
 
                     Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
@@ -269,6 +330,7 @@ namespace Kebler.ViewModels
                                             {
                                                 Log.Info($"Tracker added: {tr}'");
                                             }
+
                                             Result = true;
                                             await TryCloseAsync();
                                         }
@@ -320,7 +382,7 @@ namespace Kebler.ViewModels
             //_filesTree = null;
             cancellationTokenSource?.Cancel();
             settings = null;
-            _torrentFileInfo = null;
+            _fileInfo = null;
             _torrent = null;
         }
     }

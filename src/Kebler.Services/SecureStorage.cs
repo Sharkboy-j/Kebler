@@ -9,7 +9,7 @@ namespace Kebler.Services
     public static class SecureStorage
     {
         /// <summary>
-        ///     Yeah! YEah! Fucking usefull!! I know. STFU
+        ///     Yeah! YEah! Fucking usefull!! I know. suck it and STFU
         /// </summary>
 
         #region sdsdsdsd

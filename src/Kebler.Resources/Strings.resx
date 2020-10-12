@@ -639,4 +639,16 @@
   <data name="AddTrackerTitile" xml:space="preserve">
     <value>Enter announce URI</value>
   </data>
+  <data name="time_days_short" xml:space="preserve">
+    <value>d</value>
+  </data>
+  <data name="time_hours_short" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="time_minutes_short" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="time_seconds_short" xml:space="preserve">
+    <value>s</value>
+  </data>
 </root>

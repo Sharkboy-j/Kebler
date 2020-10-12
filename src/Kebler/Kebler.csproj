@@ -6,7 +6,6 @@
     <AssemblyName>Kebler</AssemblyName>
     <LangVersion>8.0</LangVersion>
     <PackageIconUrl></PackageIconUrl>
-    <ApplicationIcon>Kebler.ico</ApplicationIcon>
     <StartupObject>Kebler.App</StartupObject>
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
@@ -27,21 +26,23 @@
       <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <ApplicationIcon>Kebler.ico</ApplicationIcon>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Portable|AnyCPU'">
+    <ApplicationIcon>Kebler.ico</ApplicationIcon>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>TRACE;PORTABLE</DefineConstants>
-    <OutputPath></OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <ApplicationIcon>KeblerD.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>

@@ -1555,6 +1555,42 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to d.
+        /// </summary>
+        public static string time_days_short {
+            get {
+                return ResourceManager.GetString("time_days_short", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to h.
+        /// </summary>
+        public static string time_hours_short {
+            get {
+                return ResourceManager.GetString("time_hours_short", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to m.
+        /// </summary>
+        public static string time_minutes_short {
+            get {
+                return ResourceManager.GetString("time_minutes_short", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        public static string time_seconds_short {
+            get {
+                return ResourceManager.GetString("time_seconds_short", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Torrent.
         /// </summary>
         public static string Title_AddTorrentDialog {

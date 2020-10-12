@@ -11,9 +11,9 @@ namespace Kebler.Update
         {
             InitializeComponent();
 
-            App.Instance.Log(txt);
+            App.Log(txt);
 
-            TXT.Text = App.Instance.BUILDER.ToString();
+            TXT.Text = App.BUILDER.ToString();
         }
     }
 }
