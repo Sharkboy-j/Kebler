@@ -89,7 +89,7 @@ jobs:
       run: dotnet test src/Kebler.sln
 
     - name: Release86
-      run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
     # - name: Portable64
     #   run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
@@ -101,7 +101,7 @@ jobs:
     #   run: dotnet publish ./src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
     - name: Installer
-      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
 
     - name: dir
       run: dir src\publish
