@@ -18,7 +18,7 @@ using System.Windows;
 #if DEBUG
 [assembly: AssemblyVersion("9.9.9.9")]
 #else
-[assembly: AssemblyVersion("0.8.4.2")]
+[assembly: AssemblyVersion("0.8.4.3")]
 #endif
 
 [assembly: AssemblyTitle("Kebler")]
