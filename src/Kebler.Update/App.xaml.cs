@@ -43,6 +43,9 @@ namespace Kebler.Update
                     }
 
                     Log("Started Temp");
+                    Current.Shutdown();
+                    Environment.Exit(0);
+                    return;
                 }
                 else
                 {

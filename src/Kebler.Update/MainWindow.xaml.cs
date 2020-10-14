@@ -41,26 +41,45 @@ namespace Kebler.Update
 
         private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            try
+            {
+                if (e.Cancelled)
+                {
+                    Close();
+                    Application.Current.Shutdown();
+                    Environment.Exit(0);
+                }
 
-            if (e.Cancelled) return;
 
+                App.Log("Download completed");
 
-            App.Log("Download completed");
+                ContentDisposition contentDisposition = null;
+                if (_webClient.ResponseHeaders?["Content-Disposition"] != null)
+                    contentDisposition = new ContentDisposition(_webClient.ResponseHeaders["Content-Disposition"]);
 
-            ContentDisposition contentDisposition = null;
-            if (_webClient.ResponseHeaders?["Content-Disposition"] != null)
-                contentDisposition = new ContentDisposition(_webClient.ResponseHeaders["Content-Disposition"]);
+                var fileName = contentDisposition.FileName;
 
-            var fileName = contentDisposition.FileName;
+                var pth = Path.Combine(Path.GetTempPath(), fileName);
+                if (File.Exists(pth)) File.Delete(pth);
+                File.Move(tempfile, pth);
 
-            var pth = Path.Combine(Path.GetTempPath(), fileName);
-            if (File.Exists(pth)) File.Delete(pth);
-            File.Move(tempfile, pth);
-
-            var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
-            zip.ExtractToDirectory(ConstStrings.KeblerRoamingFolder, true);
-            DialogResult = true;
-            Close();
+                var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
+                zip.ExtractToDirectory(ConstStrings.KeblerRoamingFolder, true);
+                DialogResult = true;
+            }
+            catch
+            {
+                Close();
+                Application.Current.Shutdown();
+                Environment.Exit(0);
+            }
+            finally
+            {
+                Close();
+                Application.Current.Shutdown();
+                Environment.Exit(0);
+            }
+            return;
         }
 
         public static void DeleteDirectory(string path)
