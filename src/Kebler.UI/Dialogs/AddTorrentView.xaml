@@ -51,7 +51,7 @@
                     FontSize="15"
                     FontWeight="Normal"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    Text="{lex:Loc  Title_AddTorrentDialog}"
+                    Text="{lex:BLoc  Title_AddTorrentDialog}"
                     TextAlignment="Left"
                     TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextHintingMode="Animated"
@@ -82,7 +82,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:Loc  ATD_TorrentFilePath}"
+                        Text="{lex:BLoc  ATD_TorrentFilePath}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -132,7 +132,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:Loc  ATD_DownloadDIr}"
+                        Text="{lex:BLoc  ATD_DownloadDIr}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -156,7 +156,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:Loc  ATD_Connection}"
+                        Text="{lex:BLoc  ATD_Connection}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -172,7 +172,7 @@
                             FontSize="13"
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
-                            Text="{lex:Loc  ATD_PeerLimit}"
+                            Text="{lex:BLoc  ATD_PeerLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -194,7 +194,7 @@
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
-                            Text="{lex:Loc  ATD_UploadLimit}"
+                            Text="{lex:BLoc  ATD_UploadLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -217,7 +217,7 @@
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
-                            Text="{lex:Loc  ATD_DownloadLimit}"
+                            Text="{lex:BLoc  ATD_DownloadLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -242,7 +242,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         VerticalContentAlignment="Center"
-                        Content="{lex:Loc  ATD_StartTorrent}"
+                        Content="{lex:BLoc  ATD_StartTorrent}"
                         FontSize="13"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsChecked="{Binding IsAutoStart}" />
@@ -262,7 +262,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:Loc  ATD_Files}"
+                        Text="{lex:BLoc  ATD_Files}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -290,7 +290,7 @@
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         cal:Message.Attach="ChangeVisibilityWindow"
-                        Content="{lex:Loc  ATD_DontShowAddTorrentDialog}"
+                        Content="{lex:BLoc  ATD_DontShowAddTorrentDialog}"
                         FontSize="13"
                         IsChecked="{Binding IsAddTorrentWindowShow}"
                         IsEnabled="False" />
@@ -310,14 +310,14 @@
                         Padding="10,0,10,0"
                         HorizontalAlignment="Center"
                         cal:Message.Attach="Add"
-                        Content="{lex:Loc  ATD_Add}"
+                        Content="{lex:BLoc  ATD_Add}"
                         Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
                     <Button
                         Grid.Column="1"
                         Padding="10,0,10,0"
                         HorizontalAlignment="Center"
                         cal:Message.Attach="Stop"
-                        Content="{lex:Loc  ATD_Stop}"
+                        Content="{lex:BLoc  ATD_Stop}"
                         Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                     <Button
                         Grid.Column="3"
@@ -325,7 +325,7 @@
                         Padding="10,0,10,0"
                         HorizontalAlignment="Center"
                         cal:Message.Attach="Cancel"
-                        Content="{lex:Loc ATD_Cancel}" />
+                        Content="{lex:BLoc ATD_Cancel}" />
 
 
                 </Grid>
@@ -346,7 +346,7 @@
                     FontSize="15"
                     FontWeight="Normal"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    Text="{lex:Loc  ATD_RetrievingSettings}"
+                    Text="{lex:BLoc  ATD_RetrievingSettings}"
                     TextAlignment="Center"
                     TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextRenderingMode="ClearType" />

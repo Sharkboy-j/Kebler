@@ -278,8 +278,11 @@ namespace Kebler.ViewModels
             this.view = view;
         }
 
-        public async Task Update(uint[] ids, TransmissionClient? client)
+        public async Task Update(uint[] ids, TransmissionClient? client, CancellationToken token)
         {
+            if (token.IsCancellationRequested)
+                return;
+
             _client = client;
             this.id = ids;
 
@@ -288,6 +291,8 @@ namespace Kebler.ViewModels
             FormsVisibility = Visibility.Collapsed;
 
             var answ = await client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
+            if (token.IsCancellationRequested)
+                return;
 
             if (answ != null && answ.Torrents.Length == 1)
             {
@@ -347,6 +352,7 @@ namespace Kebler.ViewModels
 
                 TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
             }
+
             Loading = false;
         }
 

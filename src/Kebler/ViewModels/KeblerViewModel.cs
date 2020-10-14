@@ -186,7 +186,7 @@ namespace Kebler.ViewModels
                 {
                     try
                     {
-                        if (Application.Current.Dispatcher.HasShutdownStarted)
+                        if (Application.Current!= null && Application.Current.Dispatcher.HasShutdownStarted)
                             throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
 
                         var date = DateTimeOffset.Now;
@@ -341,18 +341,18 @@ namespace Kebler.ViewModels
                 {
                     SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
 
-                    //_moreInfoCancelTokeSource?.Cancel();
-                    //_moreInfoCancelTokeSource = new CancellationTokenSource();
+                    _moreInfoCancelTokeSource?.Cancel();
+                    _moreInfoCancelTokeSource = new CancellationTokenSource();
 
-                    //await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
 
-                    //if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                    //    return;
+                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                        return;
 
 
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-                    await UpdateMoreInfoView(new CancellationToken());
+                    await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
                 }
             }
             catch (TaskCanceledException)
@@ -371,7 +371,7 @@ namespace Kebler.ViewModels
             }
 
             MoreInfoView.IsMore = false;
-            await MoreInfoView.Update(selectedIDs, _transmissionClient);
+            await MoreInfoView.Update(selectedIDs, _transmissionClient,token);
         }
 
 
@@ -1286,7 +1286,7 @@ namespace Kebler.ViewModels
 
         private BindableCollection<MenuItem> _languages = new BindableCollection<MenuItem>();
         private DateTimeOffset _longActionTimeStart;
-        //private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
+        private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
 
         private StatusCategory? _selectedCat;

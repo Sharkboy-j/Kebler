@@ -47,7 +47,7 @@
                     FontSize="15"
                     FontWeight="Normal"
                     Foreground="White"
-                    Text="{lex:Loc  RMT_Title}"
+                    Text="{lex:BLoc  RMT_Title}"
                     TextAlignment="Left"
                     TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextHintingMode="Animated"
@@ -81,7 +81,7 @@
                     Name="RemoveWithDataCheckBox"
                     Margin="0,10,0,0"
                     HorizontalAlignment="Left"
-                    Content="{lex:Loc  RMT_RemoveWithData}" />
+                    Content="{lex:BLoc  RMT_RemoveWithData}" />
             </StackPanel>
 
             <Grid Height="30" Margin="0,20,0,0">
@@ -104,14 +104,14 @@
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
                     Click="Cancel"
-                    Content="{lex:Loc BTNS_No}" />
+                    Content="{lex:BLoc BTNS_No}" />
                 <Button
                     Grid.Column="3"
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
                     Click="Add"
                     IsDefault="True"
-                    Content="{lex:Loc  BTNS_Yes}"
+                    Content="{lex:BLoc  BTNS_Yes}"
                     Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
 
                 <Button
@@ -119,7 +119,7 @@
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
                     Click="Stop"
-                    Content="{lex:Loc  ATD_Stop}"
+                    Content="{lex:BLoc  ATD_Stop}"
                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
 
             </Grid>

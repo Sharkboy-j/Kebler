@@ -52,7 +52,7 @@
                         Background="Transparent"
                         SelectedIndex="0"
                         TabStripPlacement="Top">
-                        <TabItem Header="{lex:Loc  CM_Tab_General}">
+                        <TabItem Header="{lex:BLoc  CM_Tab_General}">
                             <Grid Background="#FF2D2D30" Grid.IsSharedSizeScope="True">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10" />
@@ -215,7 +215,7 @@
                                 </StackPanel>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{lex:Loc  MoreInfo_Trackers}">
+                        <TabItem Header="{lex:BLoc  MoreInfo_Trackers}">
                             <Grid >
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -270,11 +270,11 @@
                     <Button
                         Grid.Column="1"
                         cal:Message.Attach="Cancel"
-                        Content="{lex:Loc  CM_Cancel}" />
+                        Content="{lex:BLoc  CM_Cancel}" />
                     <Button
                         Grid.Column="2"
                         cal:Message.Attach="Save"
-                        Content="{lex:Loc  CM_Ok}"
+                        Content="{lex:BLoc  CM_Ok}"
                         IsDefault="True" />
                 </Grid>
 
@@ -293,7 +293,7 @@
                         FontSize="15"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:Loc  ATD_RetrievingSettings}"
+                        Text="{lex:BLoc  ATD_RetrievingSettings}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextRenderingMode="ClearType" />

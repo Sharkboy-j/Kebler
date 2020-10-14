@@ -36,11 +36,11 @@
                                 <TextBlock
                                     Grid.Row="0" Grid.Column="0" Padding="0"
                                     HorizontalAlignment="Right" VerticalAlignment="Center"
-                                    Text="{lex:Loc TI_Progress}" />
+                                    Text="{lex:BLoc TI_Progress}" />
                                 <TextBlock
                                     Grid.Row="2" Grid.Column="0" Padding="0"
                                     HorizontalAlignment="Right" VerticalAlignment="Center"
-                                    Text="{lex:Loc TI_Pieces}" />
+                                    Text="{lex:BLoc TI_Pieces}" />
 
                                 <ProgressBar
                                     Grid.Row="0" Grid.Column="1" Height="15"
@@ -98,7 +98,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_State}" />
+                                        Text="{lex:BLoc MI_State}" />
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -106,7 +106,7 @@
 
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Downloaded}" />
+                                        Text="{lex:BLoc MI_Downloaded}" />
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -114,7 +114,7 @@
 
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_SpeedDownload}" />
+                                        Text="{lex:BLoc MI_SpeedDownload}" />
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -122,7 +122,7 @@
 
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_DownloadLimit}" />
+                                        Text="{lex:BLoc MI_DownloadLimit}" />
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -130,7 +130,7 @@
 
                                     <TextBlock
                                         Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Seeds}" />
+                                        Text="{lex:BLoc MI_Seeds}" />
                                     <TextBlock
                                         Grid.Row="4" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -150,7 +150,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Error}" />
+                                        Text="{lex:BLoc MI_Error}" />
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -158,7 +158,7 @@
 
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Uploaded}" />
+                                        Text="{lex:BLoc MI_Uploaded}" />
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -166,7 +166,7 @@
 
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_UploadSpeed}" />
+                                        Text="{lex:BLoc MI_UploadSpeed}" />
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -174,7 +174,7 @@
 
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_UploadLimit}" />
+                                        Text="{lex:BLoc MI_UploadLimit}" />
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -182,7 +182,7 @@
 
                                     <TextBlock
                                         Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Peers}" />
+                                        Text="{lex:BLoc MI_Peers}" />
                                     <TextBlock
                                         Grid.Row="4" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -202,7 +202,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Remaining}" />
+                                        Text="{lex:BLoc MI_Remaining}" />
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -210,7 +210,7 @@
 
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_Wasted}" />
+                                        Text="{lex:BLoc MI_Wasted}" />
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -218,7 +218,7 @@
 
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_ShareRatio}" />
+                                        Text="{lex:BLoc MI_ShareRatio}" />
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -226,7 +226,7 @@
 
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc MI_MaxPeers}" />
+                                        Text="{lex:BLoc MI_MaxPeers}" />
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -254,7 +254,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_path}" />
+                                        Text="{lex:BLoc TI_path}" />
                                     <csControls:LinkableTextBlock
                                         Grid.Row="0" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center" CopyOnly="True" Cursor="Hand"
@@ -264,7 +264,7 @@
 
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_TotalSize}" />
+                                        Text="{lex:BLoc TI_TotalSize}" />
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -272,7 +272,7 @@
 
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_Hash}"
+                                        Text="{lex:BLoc TI_Hash}"
                                         TextTrimming="CharacterEllipsis" />
                                     <csControls:LinkableTextBlock
                                         Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
@@ -281,7 +281,7 @@
 
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_AddedOn}" />
+                                        Text="{lex:BLoc TI_AddedOn}" />
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -289,7 +289,7 @@
 
                                     <TextBlock
                                         Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_Magnet}" />
+                                        Text="{lex:BLoc TI_Magnet}" />
                                     <csControls:LinkableTextBlock
                                         Grid.Row="4" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center" CopyOnly="True" Cursor="Hand"
@@ -312,7 +312,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_CreatedOn}" />
+                                        Text="{lex:BLoc TI_CreatedOn}" />
                                     <TextBlock
                                         Grid.Row="0" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -320,7 +320,7 @@
 
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_Pieces}" />
+                                        Text="{lex:BLoc TI_Pieces}" />
                                     <TextBlock
                                         Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -328,7 +328,7 @@
 
                                     <TextBlock
                                         Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_Comment}" />
+                                        Text="{lex:BLoc TI_Comment}" />
                                     <csControls:LinkableTextBlock
                                         Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center" CopyOnly="False" Cursor="Hand"
@@ -337,7 +337,7 @@
 
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"
-                                        Text="{lex:Loc TI_CompletedOn}" />
+                                        Text="{lex:BLoc TI_CompletedOn}" />
                                     <TextBlock
                                         Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                                         VerticalAlignment="Center"
@@ -348,12 +348,12 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="{lex:Loc MoreInfo_FilesTab}">
+            <TabItem Header="{lex:BLoc MoreInfo_FilesTab}">
                 <local:FilesTreeView
                     x:Name="FileTreeViewControl" x:FieldModifier="public" Focusable="False" />
             </TabItem>
 
-            <TabItem Header="{lex:Loc MoreInfo_Trackers}">
+            <TabItem Header="{lex:BLoc MoreInfo_Trackers}">
                 <ListView
                     ItemsSource="{Binding TrackerStats, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Extended"
@@ -361,7 +361,7 @@
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Name}">
+                                <GridViewColumn Header="{lex:BLoc MoreInfo_Trackers_Name}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock
@@ -370,7 +370,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Status}">
+                                <GridViewColumn Header="{lex:BLoc MoreInfo_Trackers_Status}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock
@@ -379,7 +379,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="{lex:Loc MoreInfo_Trackers_Seeds}">
+                                <GridViewColumn Header="{lex:BLoc MoreInfo_Trackers_Seeds}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock
@@ -403,34 +403,34 @@
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding announce, Mode=OneWay, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Trackers_Name}" />
+                            Header="{lex:BLoc MoreInfo_Trackers_Name}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding LastAnnounceResult, Mode=OneWay, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Trackers_Status}" />
+                            Header="{lex:BLoc MoreInfo_Trackers_Status}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding SeederCount, Mode=OneWay, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Trackers_Seeds}" />
+                            Header="{lex:BLoc MoreInfo_Trackers_Seeds}" />
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem cal:Message.Attach="DeleteTracker" Header="{lex:Loc MoreInfo_DeleteTrackerBtn}" />
-                            <MenuItem cal:Message.Attach="AddTracker" Header="{lex:Loc MoreInfo_AddTackerBtn}" />
+                            <MenuItem cal:Message.Attach="DeleteTracker" Header="{lex:BLoc MoreInfo_DeleteTrackerBtn}" />
+                            <MenuItem cal:Message.Attach="AddTracker" Header="{lex:BLoc MoreInfo_AddTackerBtn}" />
 
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </csControls:MDataGrid>-->
             </TabItem>
 
-            <TabItem Header="{lex:Loc MoreInfo_Peers}">
+            <TabItem Header="{lex:BLoc MoreInfo_Peers}">
                 <DataGrid
                     AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserSortColumns="True"
                     HorizontalScrollBarVisibility="Auto"
                     ItemsSource="{Binding Peers, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="Auto" Header="{lex:Loc MoreInfo_Peers_Host}">
+                        <DataGridTemplateColumn Width="Auto" Header="{lex:BLoc MoreInfo_Peers_Host}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="3,0" Orientation="Horizontal">
@@ -445,24 +445,24 @@
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding ClientName, Mode=OneWay, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Peers_Client}" />
+                            Header="{lex:BLoc MoreInfo_Peers_Client}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Progress, Converter={StaticResource PercentToUserFriendlyConvertor}, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Peers_Progress}" />
+                            Header="{lex:BLoc MoreInfo_Peers_Progress}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding RateToClient, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_PeersRateToClient}" />
+                            Header="{lex:BLoc MoreInfo_PeersRateToClient}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding RateToPeer, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_PeersRateToPeer}" />
+                            Header="{lex:BLoc MoreInfo_PeersRateToPeer}" />
 
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding IsEncrypted, Mode=OneWay, NotifyOnTargetUpdated=True}"
-                            Header="{lex:Loc MoreInfo_Peers_Encryption}" />
+                            Header="{lex:BLoc MoreInfo_Peers_Encryption}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -470,7 +470,7 @@
 
         <Label
             Height="27" HorizontalAlignment="Right" VerticalAlignment="Top"
-            Content="{lex:Loc MoreInfo_HideHint}"
+            Content="{lex:BLoc MoreInfo_HideHint}"
             Focusable="False"
             Foreground="{DynamicResource ForegroundBrush.Gray}" />
 
@@ -485,7 +485,7 @@
                 <TextBlock
                     VerticalAlignment="Center" FontSize="15" FontWeight="Normal"
                     Foreground="White"
-                    Text="{lex:Loc ATD_RetrievingSettings}"
+                    Text="{lex:BLoc ATD_RetrievingSettings}"
                     TextAlignment="Center" TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextRenderingMode="ClearType" />
                 <local:LoadingRing
