@@ -15,25 +15,25 @@
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="NoCancel"
-            Content="{lex:Loc  BTNS_No}"
+            Content="{lex:BLoc  BTNS_No}"
             Visibility="{Binding NoVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="OkYes"
-            Content="{lex:Loc  BTNS_Yes}"
+            Content="{lex:BLoc  BTNS_Yes}"
             IsDefault="{Binding YesDefault}"
             Visibility="{Binding YesVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             cm:Message.Attach="NoCancel"
-            Content="{lex:Loc  BTNS_Cancel}"
+            Content="{lex:BLoc  BTNS_Cancel}"
             Visibility="{Binding CancelVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
             HorizontalAlignment="Right"
             cm:Message.Attach="OkYes"
-            Content="{lex:Loc  BTNS_Ok}"
+            Content="{lex:BLoc  BTNS_Ok}"
             IsDefault="{Binding OkDefault}"
             Visibility="{Binding OkVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
     </StackPanel>

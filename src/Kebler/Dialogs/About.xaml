@@ -44,7 +44,7 @@
             TextOptions.TextFormattingMode="Ideal"
             TextOptions.TextHintingMode="Animated"
             TextOptions.TextRenderingMode="ClearType">
-            <Run Text="{lex:Loc  About_Version}" />
+            <Run Text="{lex:BLoc  About_Version}" />
             <Run Text="{Binding Vers}" />
         </TextBlock>
         <TextBlock

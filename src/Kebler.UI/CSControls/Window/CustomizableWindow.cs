@@ -65,22 +65,30 @@ namespace Kebler.UI.CSControls.Window
 
         public CustomizableWindow()
         {
-            SetResourceReference(StyleProperty, typeof(CustomizableWindow));
-            var chrome = new WindowChrome
+            try
             {
-                CornerRadius = new CornerRadius(),
-                GlassFrameThickness = new Thickness(0.0, 0.0, 0.0, 1.0),
-                UseAeroCaptionButtons = false,
-                ResizeBorderThickness = new Thickness(5)
-            };
-            BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(nameof(HeaderHeight))
+                SetResourceReference(StyleProperty, typeof(CustomizableWindow));
+                var chrome = new WindowChrome
+                {
+                    CornerRadius = new CornerRadius(),
+                    GlassFrameThickness = new Thickness(0.0, 0.0, 0.0, 1.0),
+                    UseAeroCaptionButtons = false,
+                    ResizeBorderThickness = new Thickness(5)
+                };
+                BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(nameof(HeaderHeight))
+                {
+                    Source = this
+                });
+                WindowChrome.SetWindowChrome(this, chrome);
+                _padding = Padding;
+                Loaded += Onload;
+                RenderSize = new Size(250, 250);
+            }
+            catch
             {
-                Source = this
-            });
-            WindowChrome.SetWindowChrome(this, chrome);
-            _padding = Padding;
-            Loaded += Onload;
-            RenderSize = new Size(250,250);
+
+            }
+           
         }
 
 
