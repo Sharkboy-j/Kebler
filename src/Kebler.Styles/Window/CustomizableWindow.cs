@@ -7,7 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Shell;
 
-namespace Kebler.UI.CSControls.Window
+namespace Kebler.Styles.Window
 {
     [ContentProperty(nameof(Content))]
     [TemplatePart(Name = PartNameMinimizeButton, Type = typeof(FrameworkElement))]

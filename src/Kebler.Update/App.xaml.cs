@@ -60,7 +60,8 @@ namespace Kebler.Update
                 ss.Append(ex.StackTrace);
                 Log($"{ss}");
                 File.AppendAllText("install.log", BUILDER.ToString());
-                Current.Shutdown();
+                Application.Current.Shutdown();
+                Environment.Exit(0);
             }
         }
 

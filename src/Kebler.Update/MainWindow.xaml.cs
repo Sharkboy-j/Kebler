@@ -14,7 +14,7 @@ namespace Kebler.Update
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow 
     {
         private readonly Uri uri;
         private MyWebClient _webClient;
@@ -34,7 +34,6 @@ namespace Kebler.Update
             tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
-
             _webClient.DownloadFileCompleted += WebClientOnDownloadFileCompleted;
 
             _webClient.DownloadFileTaskAsync(uri, tempfile);
@@ -98,7 +97,7 @@ namespace Kebler.Update
             //        //Speed.Content = string.Format(BytesToString(bytesPerSecond)+"/s");
             //    }
             //}
-
+          
             Size.Content = $@"{BytesToString(e.BytesReceived)} / {BytesToString(e.TotalBytesToReceive)}";
             PB.Value = e.ProgressPercentage;
         }
@@ -112,6 +111,18 @@ namespace Kebler.Update
             var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             var num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return $"{(Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture)} {suf[place]}";
+        }
+
+        private void CustomizableWindow_Closing(object sender, CancelEventArgs e)
+        {
+            _webClient.CancelAsync();
+
+            _webClient.DownloadProgressChanged -= OnDownloadProgressChanged;
+            _webClient.DownloadFileCompleted -= WebClientOnDownloadFileCompleted;
+
+            _webClient.Dispose();
+            Application.Current.Shutdown();
+            Environment.Exit(0);
         }
     }
 

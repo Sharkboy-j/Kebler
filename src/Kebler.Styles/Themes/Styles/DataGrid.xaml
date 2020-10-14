@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrl="clr-namespace:Kebler.UI.CSControls">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
     <Style TargetType="DataGridColumnHeader">
@@ -214,5 +213,4 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type ctrl:MDataGrid}" />
 </ResourceDictionary>

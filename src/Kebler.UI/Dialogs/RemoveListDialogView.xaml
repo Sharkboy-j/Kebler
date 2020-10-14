@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:window="clr-namespace:Kebler.UI.CSControls.Window"
+    xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles"
     Title="RemoveListDialogView"
     Width="520"
     Height="240"

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI" xmlns:ui11="clr-namespace:Kebler.Views"
     xmlns:viewModels="clr-namespace:Kebler.ViewModels"
-    xmlns:window="clr-namespace:Kebler.UI.CSControls.Window;assembly=Kebler.UI"
+    xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles"
     Title="{Binding HeaderTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"
     Width="850" Height="600" MinWidth="850"
     MinHeight="600" cal:Message.Attach="[Event Closing] = [Action ClosingW]"

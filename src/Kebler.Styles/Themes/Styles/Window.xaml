@@ -1,11 +1,11 @@
 ﻿<ResourceDictionary
-    x:Class="Kebler.UI.Themes.Styles.WindowST"
+    x:Class="Kebler.Styles.Themes.Styles.WindowST"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters1="clr-namespace:Kebler.Services.Converters;assembly=Kebler.Services"
-    xmlns:local="clr-namespace:Kebler.UI.CSControls.Window">
+    xmlns:local="clr-namespace:Kebler.Styles.Window" 
+    xmlns:converters="clr-namespace:Kebler.Styles.Converters">
     <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-    <converters1:ResizeModeToVisibilityConverter x:Key="ResizeModeToVisibilityConverter" />
+    <converters:ResizeModeToVisibilityConverter x:Key="ResizeModeToVisibilityConverter" />
     <Geometry x:Key="MinimizeGeometry">
         M0,0 L10,0 10,1.0 10,1.0 1,1.0 0,1.0 z
     </Geometry>

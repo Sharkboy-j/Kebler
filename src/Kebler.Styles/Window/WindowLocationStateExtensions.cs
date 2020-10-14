@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Kebler.UI.CSControls.Window
+namespace Kebler.Styles.Window
 {
     public static class WindowLocationStateExtensions
     {

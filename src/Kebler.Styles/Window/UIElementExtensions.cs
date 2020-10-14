@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Kebler.UI.CSControls.Window
+namespace Kebler.Styles.Window
 {
     public static class UIElementExtensions
     {

@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
     <ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
+    <ProjectReference Include="..\Kebler.Styles\Kebler.Styles.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\AssemblyInfo.cs">
