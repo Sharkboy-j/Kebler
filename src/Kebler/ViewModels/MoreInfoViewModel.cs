@@ -278,7 +278,7 @@ namespace Kebler.ViewModels
             this.view = view;
         }
 
-        public async Task Update(uint[] ids, TransmissionClient client)
+        public async Task Update(uint[] ids, TransmissionClient? client)
         {
             _client = client;
             this.id = ids;

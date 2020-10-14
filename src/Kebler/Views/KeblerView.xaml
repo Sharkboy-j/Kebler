@@ -382,28 +382,85 @@
                 </ListBox>
             </Grid>
 
-            <!--<ListView
+            <ListView
                 Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"
-                ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
-                <ListView.Resources>
-
-                </ListView.Resources>
-                <ListView.Style>
-                    <Style TargetType="{x:Type ListView}">
-
-                    </Style>
-                </ListView.Style>
+                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                SelectedIndex="{Binding SelectedTorrentIndex}"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
+                ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                Style="{DynamicResource ListViewWithGridViewStyle}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn
-                            Width="Auto"
-                            DisplayMemberBinding="{Binding Name}"
-                            Header="Name" />
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="78" Header="Status">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:TagBorder
+                                        Height="20"
+                                        Percent="{Binding PercentDone, UpdateSourceTrigger=PropertyChanged}"
+                                        Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}">
+                                        <controls:TagBorder.Effect>
+                                            <DropShadowEffect
+                                                BlurRadius="5" Direction="305" ShadowDepth="0" />
+                                        </controls:TagBorder.Effect>
+                                    </controls:TagBorder>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Upload speed">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Download speed">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Uploaded">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
-            </ListView>-->
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem cal:Message.Attach="Start" Header="{lex:Loc QA_Resume}" />
+                        <MenuItem cal:Message.Attach="Pause" Header="{lex:Loc QA_Pause}" />
+                        <MenuItem cal:Message.Attach="Remove" Header="{lex:Loc QA_Remove}" />
+                        <MenuItem cal:Message.Attach="RemoveWithData" Header="{lex:Loc QA_RemoveData}" />
+                        <Separator />
+                        <MenuItem Header="{lex:Loc QA_Queue}">
+                            <MenuItem cal:Message.Attach="MoveTop" Header="{lex:Loc QA_MoveTop}" />
+                            <MenuItem cal:Message.Attach="MoveUp" Header="{lex:Loc QA_MoveUp}" />
+                            <MenuItem cal:Message.Attach="MoveDown" Header="{lex:Loc QA_MoveDown}" />
+                            <MenuItem cal:Message.Attach="MoveBot" Header="{lex:Loc QA_MoveBot}" />
+                        </MenuItem>
+                        <MenuItem cal:Message.Attach="Reannounce" Header="{lex:Loc QA_Reannounce}" />
+                        <MenuItem cal:Message.Attach="Verify" Header="{lex:Loc QA_Verify}" />
+                        <MenuItem cal:Message.Attach="SetLoc" Header="{lex:Loc QA_SetLoc}" />
+                        <MenuItem cal:Message.Attach="Rename" Header="{lex:Loc QA_Rename}" />
+                        <Separator />
+                        <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:Loc QA_CopyMagnet}" />
+                        <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:Loc QA_Properties}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
 
-            <DataGrid
+            <!--<DataGrid
                 Name="TorrentsDataGrid" Grid.Row="0" Grid.Column="2"
                 cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
                 x:FieldModifier="public" AutoGenerateColumns="False" CanUserResizeColumns="True"
@@ -469,7 +526,7 @@
                         <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:Loc QA_Properties}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
-            </DataGrid>
+            </DataGrid>-->
             <StackPanel
                 Grid.Row="0" Grid.Column="2" Height="Auto"
                 HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"

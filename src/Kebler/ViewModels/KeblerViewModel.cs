@@ -207,47 +207,6 @@ namespace Kebler.ViewModels
             });
         }
 
-        private async void StoppdateingMoreInfoCycle()
-        {
-            //_moreInfoCancelTokeSource?.Cancel();
-            //if (_whileCycleMoreInfoTask != null) await _whileCycleMoreInfoTask;
-            //_whileCycleMoreInfoTask = null;
-
-            //Debug.WriteLine("Stopped");
-        }
-
-
-        private void StartUpdateingMoreInfoCycle()
-        {
-            //_moreInfoCancelTokeSource?.Cancel();
-
-            //_moreInfoCancelTokeSource = new CancellationTokenSource();
-            //var token = _moreInfoCancelTokeSource.Token;
-
-            //_whileCycleMoreInfoTask = new Task(async () =>
-            //{
-            //    try
-            //    {
-            //        while (IsConnected && !token.IsCancellationRequested)
-            //        {
-            //            await PerformMoreInfoUpdate(token);
-            //            await Task.Delay(ConfigService.Instanse.UpdateTime, token);
-            //        }
-            //    }
-            //    catch (TaskCanceledException)
-            //    {
-            //    }
-            //    catch (Exception)
-            //    {
-            //        //Log.Error(ex);
-            //    }
-            //}, token);
-
-
-            //_whileCycleMoreInfoTask.Start();
-            ////Debug.WriteLine("Started");
-        }
-
 
         #region TopBarMenu
 
@@ -372,7 +331,7 @@ namespace Kebler.ViewModels
 
         #region Events
 
-        public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
+        public async void TorrentChanged(ListView obj, TorrentInfo inf)
         {
             SelectedTorrent = inf;
 
@@ -382,23 +341,18 @@ namespace Kebler.ViewModels
                 {
                     SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
 
-                    _moreInfoCancelTokeSource?.Cancel();
-                    _moreInfoCancelTokeSource = new CancellationTokenSource();
+                    //_moreInfoCancelTokeSource?.Cancel();
+                    //_moreInfoCancelTokeSource = new CancellationTokenSource();
 
-                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+                    //await Task.Delay(250, _moreInfoCancelTokeSource.Token);
 
-                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                        return;
+                    //if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                    //    return;
 
 
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-                    await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
-
-                    if (selectedIDs.Length == 1)
-                        StartUpdateingMoreInfoCycle();
-                    else
-                        StoppdateingMoreInfoCycle();
+                    await UpdateMoreInfoView(new CancellationToken());
                 }
             }
             catch (TaskCanceledException)
@@ -418,16 +372,6 @@ namespace Kebler.ViewModels
 
             MoreInfoView.IsMore = false;
             await MoreInfoView.Update(selectedIDs, _transmissionClient);
-            //var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, token,
-            //    MoreInfoView.id);
-
-            //if (token.IsCancellationRequested || Application.Current.Dispatcher.HasShutdownStarted)
-            //    return;
-            //if (answ != null)
-            //{
-            //    if (torrent != null) 
-            //    return;
-            //}
         }
 
 
@@ -751,6 +695,7 @@ namespace Kebler.ViewModels
 
             lock (_syncTorrentList)
             {
+                var tr = SelectedTorrentIndex;
                 //1: 'check pending',
                 //2: 'checking',
 
@@ -830,6 +775,7 @@ namespace Kebler.ViewModels
                 TorrentList = new BindableCollection<TorrentInfo>(data.Torrents);
 
                 UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
+                SelectedTorrentIndex = tr;
             }
 
             //on itemSource update, datagrid lose focus for selected row. 
@@ -973,7 +919,6 @@ namespace Kebler.ViewModels
         public void Unselect()
         {
             UpdateMoreInfoPosition(false);
-            StoppdateingMoreInfoCycle();
 
             // Execute.OnUIThread(() =>
             // {
@@ -1341,7 +1286,7 @@ namespace Kebler.ViewModels
 
         private BindableCollection<MenuItem> _languages = new BindableCollection<MenuItem>();
         private DateTimeOffset _longActionTimeStart;
-        private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
+        //private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
 
         private StatusCategory? _selectedCat;
@@ -1350,6 +1295,7 @@ namespace Kebler.ViewModels
         private int _selectedFolderIndex;
         private Server? _SelectedServer;
         private TorrentInfo? _selectedTorrent;
+        private int _selectedTorrentIndex;
         private List<Server>? _servers;
         private SessionInfo? _sessionInfo;
         private SessionSettings? _settings;
@@ -1405,10 +1351,16 @@ namespace Kebler.ViewModels
             set => Set(ref servers, value);
         }
 
-        public TorrentInfo SelectedTorrent
+        public TorrentInfo? SelectedTorrent
         {
             get => _selectedTorrent;
             set => Set(ref _selectedTorrent, value);
+        } 
+        
+        public int SelectedTorrentIndex
+        {
+            get => _selectedTorrentIndex;
+            set => Set(ref _selectedTorrentIndex, value);
         }
 
         public BindableCollection<StatusCategory> CategoriesList
