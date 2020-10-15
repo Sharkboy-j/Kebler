@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		AssemblyInfo.cs = AssemblyInfo.cs
 		..\README.md = ..\README.md
+		..\.github\workflows\wpfdotnet-core.yml = ..\.github\workflows\wpfdotnet-core.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.UI", "Kebler.UI\Kebler.UI.csproj", "{60A962B5-6B74-40AF-A4E9-EE5126D41AE6}"
@@ -33,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{F0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET", "BencodeNET\BencodeNET\BencodeNET.csproj", "{F159F1D0-3F7A-470C-9F49-89D67F24EB10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Styles", "Kebler.Styles\Kebler.Styles.csproj", "{6421DB6F-7E42-4560-8202-692A2902BFDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Styles", "Kebler.Styles\Kebler.Styles.csproj", "{6421DB6F-7E42-4560-8202-692A2902BFDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -222,8 +223,8 @@ Global
 		{F159F1D0-3F7A-470C-9F49-89D67F24EB10} = {F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
-		RESX_TaskErrorCategory = Message
 		RESX_ShowErrorsInErrorList = False
+		RESX_TaskErrorCategory = Message
+		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
 	EndGlobalSection
 EndGlobal
