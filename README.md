@@ -1,10 +1,10 @@
-# Kebler - Transmission Remote GUI (Windows only)
+# Kebler - Transmission Remote GUI (Windows only, and can't be ported to *nix os)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/2.png)
 
 ## Some info
 
-Kebler is Transmission Remote GUI
+Kebler is GUI for Transmission Daemon (local or remote)
 Kebler is developed using .Net Core 3.0. And still in beta
 
 
