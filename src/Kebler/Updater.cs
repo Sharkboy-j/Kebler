@@ -26,7 +26,7 @@ namespace Kebler
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
-                var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current,true);
+                var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
 
 
                 Log.Info($"Current {current} Serv {result.Item2.name}");

@@ -81,7 +81,7 @@ namespace Kebler.Update
         async void startFree()
         {
             Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
-            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0),true);
+            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
             var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
             StartDownlaod(updateUrl);
         }
