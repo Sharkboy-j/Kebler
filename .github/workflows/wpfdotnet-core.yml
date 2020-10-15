@@ -83,7 +83,7 @@ jobs:
     #     AI_PATH: src/AssemblyInfo.cs
 
     - name: TEST
-     run: dotnet test src/Kebler.sln
+      run: dotnet test src/Kebler.sln
     
     - name: Release86
       run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
