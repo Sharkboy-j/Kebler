@@ -20,7 +20,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
     <Configurations>Debug;Release;Portable</Configurations>
     <Nullable>enable</Nullable>
-	<ApplicationIcon>KeblerD.ico</ApplicationIcon>
+	<ApplicationIcon>Kebler.ico</ApplicationIcon>
 
   </PropertyGroup>
   <PropertyGroup>

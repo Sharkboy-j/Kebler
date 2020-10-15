@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Installer</AssemblyName>
-	  <ApplicationIcon>KeblerD.ico</ApplicationIcon>
+	  <ApplicationIcon>Kebler.ico</ApplicationIcon>
 	  <Nullable>enable</Nullable>
   </PropertyGroup>
 	<PropertyGroup>
