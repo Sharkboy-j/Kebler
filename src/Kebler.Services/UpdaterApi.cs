@@ -1,53 +1,44 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using static Kebler.Services.GitHubApi;
 
 namespace Kebler.Services
 {
     public static class UpdaterApi
-    {
-        private static JObject latestReleaseJson;
-
-        public static async Task<(bool, Version)> CheckAsync(string user, string repository, Version currentVersion)
+    { 
+        public static async Task<Tuple<bool, Release>> Check(string user, string repository, Version currentVersion, bool preRelease = false)
         {
-            try
-            {
-                var gitHub = new GitHubApi();
-                latestReleaseJson = await gitHub.GetLatestReleaseJSONAsync(user, repository);
-                var version = GitHubApi.ExtractVersion(latestReleaseJson);
-
-                return (currentVersion < version, version);
-            }
-            catch
-            {
-                return (false, new Version());
-            }
-        }
-
-        public static Task<Tuple<bool, Version>> Check(string user, string repository, Version currentVersion)
-        {
-            return Task.Run(async ()=>
+            if (preRelease)
             {
                 try
                 {
                     var gitHub = new GitHubApi();
-                    latestReleaseJson = await gitHub.GetLatestReleaseJSONAsync(user, repository);
-                    var version = GitHubApi.ExtractVersion(latestReleaseJson);
+                    var rel = await gitHub.GetLatestPreReleaseJSONAsync(user, repository);
+                    var release = rel.First(x => x.prerelease);
 
-                    return new Tuple<bool, Version>(currentVersion < version, version);
+                    return new Tuple<bool, Release>(currentVersion < release.name, release);
                 }
                 catch (Exception ex)
                 {
-                    return new Tuple<bool, Version>(false, new Version());
+                    return new Tuple<bool, Release>(false, null);
                 }
-            });
-           
-        }
 
-        public static string GetlatestUri()
-        {
-            var updateUrl = GitHubApi.ExtractDownloadUrl(latestReleaseJson);
-            return updateUrl;
+            }
+            else
+            {
+                try
+                {
+                    var gitHub = new GitHubApi();
+                    var release = await gitHub.GetLatestReleaseJSONAsync(user, repository);
+                    return new Tuple<bool, Release>(currentVersion < release.name, release);
+                }
+                catch (Exception ex)
+                {
+                    return new Tuple<bool, Release>(false, null);
+                }
+            }
+
         }
     }
 }
