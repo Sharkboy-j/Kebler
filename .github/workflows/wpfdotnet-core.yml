@@ -91,6 +91,13 @@ jobs:
     - name: Release86
       run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
 
+
+    - name: Set outputs
+      id: vars
+      shell: pwsh
+      run: |
+        $data = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\src\publish\RELEASE\App\Kebler.exe").ProductVersion
+        echo $data
     # - name: Portable64
     #   run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
     
@@ -106,11 +113,6 @@ jobs:
     - name: dir
       run: dir src\publish
       shell: cmd
-    
-    - name: Set outputs
-      id: vars
-      shell: pwsh
-      run: echo ${[System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\src\publish\RELEASE\App\Kebler.exe").ProductVersion}
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
