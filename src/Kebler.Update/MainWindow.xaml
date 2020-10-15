@@ -23,6 +23,6 @@
             Background="#FF333333" BorderBrush="#FF3F3F46" Foreground="#FF007ACC" />
         <Label
             Name="Size" Height="45" VerticalAlignment="Center"
-            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Downloading update" />
+            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Checking..." />
     </Grid>
 </window:CustomizableWindow>

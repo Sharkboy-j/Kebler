@@ -4,40 +4,187 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using System.Threading;
 using System.Windows;
 using Kebler.Const;
+using Kebler.Services;
 
 namespace Kebler.Update
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow 
+    public partial class MainWindow
     {
-        private readonly Uri uri;
-        private MyWebClient _webClient;
+        private WebClient _webClient;
         private string tempfile;
-
-        public MainWindow(Uri uri)
+        public MainWindow()
         {
             InitializeComponent();
-            this.uri = uri;
             Loaded += MainWindow_Loaded;
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+
+
+
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _webClient = new MyWebClient();
+
+            string? getEnv = null;
+            Version? current = null;
+            getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+
+            if (!string.IsNullOrEmpty(getEnv))
+            {
+                Log($"We found old version on GetEnvironmentVariable: {getEnv}");
+                if (File.Exists(getEnv))
+                {
+                    current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+                    Log($"Current version is: {current}");
+
+                    Log($"Okay. Try get server version (github version)");
+                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
+
+                    Log($"Server version is: {result.Item2.name}");
+
+                    if (result.Item2.name > current)
+                    {
+                        var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
+                        Log($"So here is: {updateUrl}");
+
+                        StartDownlaod(result.Item2.assets.LastOrDefault().browser_download_url);
+                    }
+                    else
+                    {
+                        Process.Start(getEnv);
+                        App.DONE(true);
+                    }
+                }
+                else
+                {
+                    startFree();
+                }
+            }
+            else
+            {
+                startFree();
+            }
+
+
+              
+        }
+
+        async void startFree()
+        {
+            Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
+            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
+            var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
+            StartDownlaod(updateUrl);
+        }
+
+        private void StartDownlaod(string uri)
+        {
+            _webClient = new WebClient();
 
             tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
             _webClient.DownloadFileCompleted += WebClientOnDownloadFileCompleted;
-
-            _webClient.DownloadFileAsync(uri, tempfile);
+            Size.Content = "Downlaoding...";
+            _webClient.DownloadFileAsync(new Uri(uri), tempfile);
         }
+
+        void Log(string msg)
+        {
+            App.Log(msg);
+        }
+
+
+        //public async void HasUpdate()
+        //{
+        //    string? getEnv = null;
+        //    Version? current = null;
+
+        //    //try find installed version
+        //    getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+
+        //    if (!string.IsNullOrEmpty(getEnv))
+        //    {
+        //        Log($"We found old version on: {getEnv}");
+
+        //        if (File.Exists(getEnv))
+        //        {
+        //            current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+        //            Log($"Current version is: {current}");
+
+        //            Log($"Okay. Try get server version (github version)");
+        //            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
+
+        //            Log($"Server version is: {result.Item2.name}");
+
+        //            if (result.Item2.name > current)
+        //            {
+        //                var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
+        //                Log($"So here is: {updateUrl}");
+
+        //                await Application.Current.Dispatcher.InvokeAsync(() =>
+        //                {
+        //                    var wd = new MainWindow(new Uri(updateUrl));
+        //                    wd.ShowDialog();
+        //                    Current.Shutdown(0);
+        //                });
+        //            }
+        //            else
+        //            {
+        //                Process.Start(getEnv);
+        //                Current.Shutdown(0);
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            startFree();
+
+        //        }
+        //    }
+        //    else
+        //    {
+        //        startFree();
+        //    }
+        //}
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -100,7 +247,7 @@ namespace Kebler.Update
 
         private static string BytesToString(long byteCount)
         {
-            string[] suf = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (byteCount == 0)
                 return "0" + suf[0];
             var bytes = Math.Abs(byteCount);
@@ -121,19 +268,19 @@ namespace Kebler.Update
         }
     }
 
-    public class MyWebClient : WebClient
-    {
-        /// <summary>
-        ///     Response Uri after any redirects.
-        /// </summary>
-        public Uri ResponseUri;
+    //public class MyWebClient : WebClient
+    //{
+    //    /// <summary>
+    //    ///     Response Uri after any redirects.
+    //    /// </summary>
+    //    public Uri ResponseUri;
 
-        /// <inheritdoc />
-        protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
-        {
-            var webResponse = base.GetWebResponse(request, result);
-            ResponseUri = webResponse.ResponseUri;
-            return webResponse;
-        }
-    }
+    //    /// <inheritdoc />
+    //    protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
+    //    {
+    //        var webResponse = base.GetWebResponse(request, result);
+    //        ResponseUri = webResponse.ResponseUri;
+    //        return webResponse;
+    //    }
+    //}
 }

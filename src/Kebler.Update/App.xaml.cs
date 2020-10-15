@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Kebler.Const;
@@ -52,7 +54,7 @@ namespace Kebler.Update
                     Log($"Go for Update from {path}");
 
                     Console.WriteLine("CheckUpdate");
-                    HasUpdate();
+                    new MainWindow().Show();
                 }
             }
             catch (Exception ex)
@@ -71,66 +73,7 @@ namespace Kebler.Update
             BUILDER.Append(msg + Environment.NewLine);
         }
 
-        public void HasUpdate()
-        {
-            string? getEnv = null;
-            Version? current = null;
-
-            //try find installed version
-            getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-
-            if (!string.IsNullOrEmpty(getEnv))
-            {
-                Log($"We found old version on: {getEnv}");
-
-                if (File.Exists(getEnv))
-                {
-                    current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
-                    Log($"Current version is: {current}");
-
-                    Log($"Okay. Try get server version (github version)");
-                    var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
-                    Log($"Server version is: {result.Item2}");
-
-                    if (result.Item2 > current)
-                    {
-                        Log($"So we have old version....");
-
-                        Log("Try get server version uri");
-                        var updateUrl = UpdaterApi.GetlatestUri();
-                        Log($"So here is: {updateUrl}");
-
-                        var wd = new MainWindow(new Uri(updateUrl));
-                        wd.ShowDialog();
-                        Current.Shutdown(0);
-                    }
-                    else
-                    {
-                        Process.Start(getEnv);
-                        Current.Shutdown(0);
-                    }
-                }
-                else
-                {
-                    startFree();
-
-                }
-            }
-            else
-            {
-                startFree();
-            }
-        }
-
-        void startFree()
-        {
-            Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
-            var result = UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
-            var updateUrl = UpdaterApi.GetlatestUri();
-
-            var wd = new MainWindow(new Uri(updateUrl));
-            DONE(wd.ShowDialog());
-        }
+       
 
         static void startKebler()
         {
@@ -153,11 +96,11 @@ namespace Kebler.Update
 
         public static void DONE(bool? isTrue)
         {
-            if(isTrue==false)
+            if (isTrue == false)
             {
                 File.AppendAllText("install.log", BUILDER.ToString());
             }
-            else if(isTrue ==true)
+            else if (isTrue == true)
             {
                 CreateShortcut();
                 startKebler();

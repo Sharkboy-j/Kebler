@@ -1,0 +1,97 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Release]
+    runs-on: windows-latest 
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: submodules-init
+      uses: snickerbockers/submodules-init@v4
+      
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101      
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+
+    - name: TEST
+      run: dotnet test src/Kebler.sln
+    
+    - name: Release86
+      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+
+    - name: Get version
+      id: vars
+      shell: pwsh
+      run: |
+        $data = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\src\publish\RELEASE\App\Kebler.exe").ProductVersion
+        echo "::set-output name=ASSEMBLY_VERSION::$data"
+
+    - name: Installer
+      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+
+    - name: dir
+      run: dir src\publish
+      shell: cmd
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+       path: src\publish\
+       name: BuildArchive
+       
+    - name: ZIP
+      shell: bash
+      run: |
+        # Define some variables for things we need
+        release_name="${{ steps.vars.outputs.ASSEMBLY_VERSION  }}"
+
+        # Build everything
+        # dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+
+        7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
+        dir    
+  
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.vars.outputs.ASSEMBLY_VERSION  }}
+        release_name: ${{ steps.vars.outputs.ASSEMBLY_VERSION  }}
+        draft: false
+        prerelease: true
+        
+    - name: Upload Release ZIP
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: ./${{ steps.vars.outputs.ASSEMBLY_VERSION  }}.zip
+        asset_name: Release ${{ steps.vars.outputs.ASSEMBLY_VERSION  }}.zip
+        asset_content_type: application/zip
+
+    - name: Upload Installer
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}} 
+        asset_path: .\src\publish\RELEASE\Installer.exe
+        asset_name: Installer.exe
+        asset_content_type: application/exe
