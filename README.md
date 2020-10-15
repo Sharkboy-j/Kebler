@@ -5,7 +5,7 @@
 ## Some info
 
 Kebler is GUI for Transmission Daemon (local or remote)
-Kebler is developed using .Net Core 3.0. And still in beta
+Kebler developed using .Net Core 3.1 and still in beta
 
 
 [Official Transmission RPC specs](https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt)
