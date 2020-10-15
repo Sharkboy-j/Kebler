@@ -34,6 +34,8 @@ namespace Kebler.Views
             if (WindowState == WindowState.Minimized)
                 ShowInTaskbar = false;
         }
+
+
     }
 
     public class GridViewSort

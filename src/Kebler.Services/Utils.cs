@@ -130,9 +130,9 @@ namespace Kebler.Services
                         System.Drawing.Color fill;
 
                         if (chunk_done == 1)
-                            fill = System.Drawing.Color.FromArgb(0, 122, 204);
+                            fill = Color.FromArgb(0, 122, 204);
                         else
-                            fill = System.Drawing.Color.FromArgb(50, 50, 50);
+                            fill = Color.FromArgb(50, 50, 50);
 
                         g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
 

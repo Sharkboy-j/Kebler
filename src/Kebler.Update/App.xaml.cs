@@ -61,10 +61,8 @@ namespace Kebler.Update
                 ss.Append(ex.Message);
                 ss.Append(ex);
                 ss.Append(ex.StackTrace);
-                Log($"{ss}");
-                File.AppendAllText("install.log", BUILDER.ToString());
-                Application.Current.Shutdown();
-                Environment.Exit(0);
+                Log(ss.ToString());
+                DONE(false);
             }
         }
 
@@ -131,22 +129,16 @@ namespace Kebler.Update
             var updateUrl = UpdaterApi.GetlatestUri();
 
             var wd = new MainWindow(new Uri(updateUrl));
-            if (wd.ShowDialog() == true)
-            {
-                CreateShortcut();
-                startKebler();
-            }
-            Application.Current.Shutdown();
-
+            DONE(wd.ShowDialog());
         }
 
-        void startKebler()
+        static void startKebler()
         {
             Process.Start(new ProcessStartInfo()
             {
-                WorkingDirectory = Const.ConstStrings.KeblerAppFolderPath,
+                WorkingDirectory = ConstStrings.KeblerAppFolderPath,
                 FileName = ConstStrings.KeblerExepath,
-                Arguments = Const.ConstStrings.KeblerAppFolderPath,
+                Arguments = ConstStrings.KeblerAppFolderPath,
                 UseShellExecute = true,
             });
         }
@@ -156,6 +148,28 @@ namespace Kebler.Update
             var lnkFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{nameof(Kebler)}.lnk");
             Shortcut.Create(lnkFileName, ConstStrings.KeblerExepath,
                 ConstStrings.KeblerAppFolderPath, ConstStrings.KeblerAppFolderPath, "", null, ConstStrings.KeblerExepath);
+        }
+
+
+        public static void DONE(bool? isTrue)
+        {
+            if(isTrue==false)
+            {
+                File.AppendAllText("install.log", BUILDER.ToString());
+            }
+            else if(isTrue ==true)
+            {
+                CreateShortcut();
+                startKebler();
+            }
+            JUSTDIEMOTHERFUCKER();
+
+        }
+
+        private static void JUSTDIEMOTHERFUCKER()
+        {
+            Current.Shutdown();
+            Environment.Exit(0);
         }
     }
 }

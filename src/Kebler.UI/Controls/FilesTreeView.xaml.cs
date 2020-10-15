@@ -13,6 +13,9 @@ namespace Kebler.UI.Controls
     /// </summary>
     public partial class FilesTreeView
     {
+        public delegate void MyPersonalizedUCEventHandler();
+
+        public event MyPersonalizedUCEventHandler Checked;
 
         public FilesTreeView()
         {
@@ -54,6 +57,8 @@ namespace Kebler.UI.Controls
                 Set(trnt, chk.IsChecked);
                 RecalParent(trnt);
                 tree.Items.Refresh();
+
+                Checked?.Invoke();
             }
         }
 

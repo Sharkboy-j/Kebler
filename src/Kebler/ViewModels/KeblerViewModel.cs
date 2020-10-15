@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using Kebler.Const;
 using Kebler.Dialogs;
@@ -141,6 +142,7 @@ namespace Kebler.ViewModels
             {
                 //_view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
                 MoreInfoView = new MoreInfoViewModel(_view);
+                _view.MoreView.FileTreeViewControl.Checked += MoreInfoView.MakeRecheck;
             }
             base.OnViewAttached(view, context);
             ApplyConfig();
@@ -186,7 +188,7 @@ namespace Kebler.ViewModels
                 {
                     try
                     {
-                        if (Application.Current!= null && Application.Current.Dispatcher.HasShutdownStarted)
+                        if (Application.Current != null && Application.Current.Dispatcher.HasShutdownStarted)
                             throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
 
                         var date = DateTimeOffset.Now;
@@ -333,8 +335,6 @@ namespace Kebler.ViewModels
 
         public async void TorrentChanged(ListView obj, TorrentInfo inf)
         {
-            SelectedTorrent = inf;
-
             try
             {
                 if (obj != null)
@@ -371,7 +371,7 @@ namespace Kebler.ViewModels
             }
 
             MoreInfoView.IsMore = false;
-            await MoreInfoView.Update(selectedIDs, _transmissionClient,token);
+            await MoreInfoView.Update(selectedIDs, _transmissionClient, token);
         }
 
 
@@ -580,7 +580,7 @@ namespace Kebler.ViewModels
                     ConnectedServer = null;
                     IsConnecting = false;
                     allTorrents = null;
-                    TorrentList = new BindableCollection<TorrentInfo>();
+                    TorrentList = new Bind<TorrentInfo>();
                     IsConnected = false;
                     Categories?.Clear();
                     IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
@@ -601,9 +601,9 @@ namespace Kebler.ViewModels
             {
                 var ch = new Task(() =>
                 {
-                    Execute.OnUIThread(() =>
+                    Execute.OnUIThread(async () =>
                     {
-                        OpenTorrent(App.Instance.torrentsToAdd);
+                        await OpenTorrent(App.Instance.torrentsToAdd);
                         App.Instance.torrentsToAdd = new List<string>();
                     });
                 }, _cancelTokenSource.Token);
@@ -692,10 +692,8 @@ namespace Kebler.ViewModels
             if (!IsConnected)
                 return;
 
-
             lock (_syncTorrentList)
             {
-                var tr = SelectedTorrentIndex;
                 //1: 'check pending',
                 //2: 'checking',
 
@@ -772,32 +770,89 @@ namespace Kebler.ViewModels
 
                 for (var i = 0; i < data.Torrents.Length; i++) data.Torrents[i] = ValidateTorrent(data.Torrents[i]);
 
-                TorrentList = new BindableCollection<TorrentInfo>(data.Torrents);
+                //Debug.WriteLine("S" + DateTime.Now.ToString("HH:mm:ss:ffff"));
+
+                UpdateOnUi(data.Torrents);
+
+                //Debug.WriteLine("E" + DateTime.Now.ToString("HH:mm:ss:ffff"));
 
                 UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
-                SelectedTorrentIndex = tr;
+
             }
 
-            //on itemSource update, datagrid lose focus for selected row. 
 
-            // #region ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
-            //
-            // Execute.OnUIThread(() =>
-            // {
-            //     //var tm = FocusManager.GetFocusedElement(_view);
-            //     if (_view != null && _view.TorrentsDataGrid.IsFocused)
-            //         if (FocusManager.GetFocusedElement(_view) is DataGridCell)
-            //         {
-            //             var itm = _view.TorrentsDataGrid.SelectedCells.FirstOrDefault();
-            //             if (itm.Item == null) return;
-            //
-            //             var dd = GetDataGridCell(itm);
-            //             FocusManager.SetFocusedElement(_view, dd);
-            //         }
-            // });
-            //
-            // #endregion ♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿♿
         }
+
+        private void UpdateOnUi(TorrentInfo[] info)
+        {
+            var toRm = new List<TorrentInfo>(TorrentList.Except(info).ToList());
+
+
+            if (toRm.Count() > 0)
+                OnUIThread(() =>
+                {
+                    foreach (var item in toRm)
+                    {
+                        TorrentList.RemoveWithoutNotify(item);
+                    }
+                });
+
+            foreach (var item in info)
+            {
+                var ind = TorrentList.IndexOf(item);
+                if (ind == -1)
+                {
+                    TorrentList.Add(item);
+                }
+                else
+                {
+                    TorrentList[ind].Notify(item);
+                }
+            }
+        }
+
+
+        public class Bind<T> : BindableCollection<T>
+        {
+            /// <summary>
+            /// Need cuz fucking BindableCollection on Notify reset selected item and index for ListView =\
+            /// </summary>
+            /// <param name="item"></param>
+            public void RemoveWithoutNotify(T item)
+            {
+
+                if (PlatformProvider.Current.PropertyChangeNotificationsOnUIThread)
+                {
+                    var index = IndexOf(item);
+                    RemoveAt(index);
+                }
+                else
+                {
+                    var index = IndexOf(item);
+                    RemoveAt(index);
+                }
+
+            }
+
+            /// <summary>
+            /// need same for RemoveWithoutNotify
+            /// </summary>
+            /// <param name="index"></param>
+            /// <param name="item"></param>
+            public new void SetItem(int index, T item)
+            {
+                if (PlatformProvider.Current.PropertyChangeNotificationsOnUIThread)
+                {
+                    OnUIThread(() => base.SetItemBase(index, item));
+                }
+                else
+                {
+                    SetItemBase(index, item);
+                }
+            }
+        }
+
+
 
         public DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
         {
@@ -1295,25 +1350,23 @@ namespace Kebler.ViewModels
         private int _selectedFolderIndex;
         private Server? _SelectedServer;
         private TorrentInfo? _selectedTorrent;
-        private int _selectedTorrentIndex;
         private List<Server>? _servers;
         private SessionInfo? _sessionInfo;
         private SessionSettings? _settings;
         private WindowState _state;
         private Statistic? _stats;
-        private BindableCollection<TorrentInfo> _torrentList = new BindableCollection<TorrentInfo>();
+        private Bind<TorrentInfo> _torrentList = new Bind<TorrentInfo>();
         private TransmissionClient? _transmissionClient;
 
 
         private static KeblerView? _view;
-        private Task? _whileCycleMoreInfoTask;
+        //private Task? _whileCycleMoreInfoTask;
         private Task? _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private bool requested;
         private uint[]? selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
         private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
-
 
         public ICommand ShowConnectionManagerCommand => new DelegateCommand(ShowConnectionManager);
         public ICommand AddCommand => new DelegateCommand(Add);
@@ -1355,12 +1408,6 @@ namespace Kebler.ViewModels
         {
             get => _selectedTorrent;
             set => Set(ref _selectedTorrent, value);
-        } 
-        
-        public int SelectedTorrentIndex
-        {
-            get => _selectedTorrentIndex;
-            set => Set(ref _selectedTorrentIndex, value);
         }
 
         public BindableCollection<StatusCategory> CategoriesList
@@ -1369,7 +1416,7 @@ namespace Kebler.ViewModels
             set => Set(ref _categoriesList, value);
         }
 
-        public BindableCollection<TorrentInfo> TorrentList
+        public Bind<TorrentInfo> TorrentList
         {
             get => _torrentList;
             set => Set(ref _torrentList, value);

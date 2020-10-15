@@ -36,7 +36,7 @@ namespace Kebler.Update
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
             _webClient.DownloadFileCompleted += WebClientOnDownloadFileCompleted;
 
-            _webClient.DownloadFileTaskAsync(uri, tempfile);
+            _webClient.DownloadFileAsync(uri, tempfile);
         }
 
         private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -46,8 +46,7 @@ namespace Kebler.Update
                 if (e.Cancelled)
                 {
                     Close();
-                    Application.Current.Shutdown();
-                    Environment.Exit(0);
+                    App.DONE(false);
                 }
 
 
@@ -69,17 +68,10 @@ namespace Kebler.Update
             }
             catch
             {
-                Close();
-                Application.Current.Shutdown();
-                Environment.Exit(0);
+                App.DONE(false);
+                return;
             }
-            finally
-            {
-                Close();
-                Application.Current.Shutdown();
-                Environment.Exit(0);
-            }
-            return;
+            App.DONE(true);
         }
 
         public static void DeleteDirectory(string path)
@@ -102,21 +94,6 @@ namespace Kebler.Update
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //if (_startedAt == default)
-            //{
-            //    _startedAt = DateTime.Now;
-            //}
-            //else
-            //{
-            //    var timeSpan = DateTime.Now - _startedAt;
-            //    long totalSeconds = (long)timeSpan.TotalSeconds;
-            //    if (totalSeconds > 0)
-            //    {
-            //        var bytesPerSecond = e.BytesReceived / totalSeconds;
-            //        //Speed.Content = string.Format(BytesToString(bytesPerSecond)+"/s");
-            //    }
-            //}
-          
             Size.Content = $@"{BytesToString(e.BytesReceived)} / {BytesToString(e.TotalBytesToReceive)}";
             PB.Value = e.ProgressPercentage;
         }
@@ -140,8 +117,7 @@ namespace Kebler.Update
             _webClient.DownloadFileCompleted -= WebClientOnDownloadFileCompleted;
 
             _webClient.Dispose();
-            Application.Current.Shutdown();
-            Environment.Exit(0);
+            App.DONE(DialogResult);
         }
     }
 

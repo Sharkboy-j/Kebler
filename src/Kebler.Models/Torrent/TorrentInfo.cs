@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Caliburn.Micro;
 using Kebler.Models.Torrent.Attributes;
 using Newtonsoft.Json;
 
 namespace Kebler.Models.Torrent
 {
-    public class TorrentInfo : IComparable
+    [DebuggerDisplay("{Name} | {RateDownload} {RateUpload}")]
+    public class TorrentInfo : PropertyChangedBase, IComparable
     {
         [JsonConstructor]
         public TorrentInfo(uint id)
@@ -107,12 +110,14 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.METADATA_PERCENT_COMPLETE)]
         public double MetadataPercentComplete { get; set; }
 
-        [JsonProperty(TorrentFields.NAME)] public string Name { get; set; }
+        [JsonProperty(TorrentFields.NAME)]
+        public string Name { get; set; }
 
         [JsonProperty(TorrentFields.PEER_LIMIT)]
         public int PeerLimit { get; set; }
 
-        [JsonProperty(TorrentFields.PEERS)] public TransmissionTorrentPeers[] Peers { get; set; }
+        [JsonProperty(TorrentFields.PEERS)]
+        public TransmissionTorrentPeers[] Peers { get; set; }
 
         [JsonProperty(TorrentFields.PEERS_CONNECTED)]
         public int PeersConnected { get; set; }
@@ -141,12 +146,29 @@ namespace Kebler.Models.Torrent
         public int QueuePosition { get; set; }
 
         [JsonProperty(TorrentFields.RATE_DOWNLOAD)]
-        public int RateDownload { get; set; }
+        public int RateDownload
+        {
+            get => rateDownload;
+            set => Set(ref rateDownload, value);
+        }
 
         [JsonProperty(TorrentFields.RATE_UPLOAD)]
-        public int RateUpload { get; set; }
+        public int RateUpload
+        {
+            get => rateUpload;
+            set
+            {
+                Set(ref rateUpload, value);
+            }
+        }
 
-        [JsonProperty(TorrentFields.RECHECK)] 
+        public void Notify(TorrentInfo inf)
+        {
+            RateUpload = inf.rateUpload;
+            RateDownload = inf.rateDownload;
+        }
+
+        [JsonProperty(TorrentFields.RECHECK)]
         public double RecheckProgress { get; set; }
 
         [JsonProperty(TorrentFields.SECONDS_DOWNLOADING)]
@@ -186,7 +208,7 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.STATUS)]
         public int Status { get; set; }
 
-        [JsonProperty(TorrentFields.TRACKERS)] 
+        [JsonProperty(TorrentFields.TRACKERS)]
         public TransmissionTorrentTrackers[] Trackers { get; set; }
 
         [JsonProperty(TorrentFields.TRACKER_STATS)]
@@ -220,7 +242,7 @@ namespace Kebler.Models.Torrent
 
         public int CompareTo(object obj)
         {
-            return Status.CompareTo(((TorrentInfo) obj).Status);
+            return Status.CompareTo(((TorrentInfo)obj).Status);
         }
 
         public override string ToString()
@@ -290,6 +312,8 @@ namespace Kebler.Models.Torrent
         private long _infoStart;
         private long _infoEnd;
         private long _totalValues;
+        private int rateUpload;
+        private int rateDownload;
         private readonly Dictionary<string, TransmissionValue> _root;
 
         [JsonIgnore]
@@ -426,22 +450,22 @@ namespace Kebler.Models.Torrent
             var tFiles = new List<TransmissionTorrentFiles>();
             if (!Info.ContainsKey("files"))
             {
-                tFiles.Add(new TransmissionTorrentFiles((long) Info["length"].Value, (string) Info["name"].Value));
-                TotalSize = (long) Info["length"].Value;
+                tFiles.Add(new TransmissionTorrentFiles((long)Info["length"].Value, (string)Info["name"].Value));
+                TotalSize = (long)Info["length"].Value;
             }
             else
             {
                 long citem = 0;
-                var v = (List<TransmissionValue>) Info["files"].Value;
+                var v = (List<TransmissionValue>)Info["files"].Value;
                 foreach (var tVal in v)
                 {
                     var PieceLengthval = Info.FindNumber("piece length");
-                    var strs = (Dictionary<string, TransmissionValue>) tVal.Value;
-                    var pieceLength = (int) (citem / PieceLengthval) + 1;
-                    citem = citem + (long) strs["length"].Value;
-                    var num = (int) (citem / PieceLengthval) + 2 - pieceLength;
-                    tFiles.Add(new TransmissionTorrentFiles((long) strs["length"].Value,
-                        ((List<TransmissionValue>) strs["path"].Value).Select(c => c.Value as string).ToArray()));
+                    var strs = (Dictionary<string, TransmissionValue>)tVal.Value;
+                    var pieceLength = (int)(citem / PieceLengthval) + 1;
+                    citem = citem + (long)strs["length"].Value;
+                    var num = (int)(citem / PieceLengthval) + 2 - pieceLength;
+                    tFiles.Add(new TransmissionTorrentFiles((long)strs["length"].Value,
+                        ((List<TransmissionValue>)strs["path"].Value).Select(c => c.Value as string).ToArray()));
                 }
 
                 TotalSize = citem;
@@ -449,7 +473,7 @@ namespace Kebler.Models.Torrent
 
             return tFiles.Where(c => !c.Name.StartsWith("_____padding_file")).ToArray();
         }
-        
+
         private TransmissionTorrentTrackers[] GetTrackers()
         {
             if (!_root.ContainsKey("announce-list"))
@@ -469,7 +493,7 @@ namespace Kebler.Models.Torrent
                     strs.Add(str);
                 }
             }
-            return strs.Select(tr => new TransmissionTorrentTrackers() {announce = tr}).ToArray();
+            return strs.Select(tr => new TransmissionTorrentTrackers() { announce = tr }).ToArray();
         }
         #endregion
     }
@@ -479,7 +503,7 @@ namespace Kebler.Models.Torrent
         internal static T Find<T>(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)
         {
             if (!dictToSearch.ContainsKey(key)) return default;
-            return (T) dictToSearch[key].Value;
+            return (T)dictToSearch[key].Value;
         }
 
         internal static long FindNumber(this Dictionary<string, TorrentInfo.TransmissionValue> dictToSearch, string key)

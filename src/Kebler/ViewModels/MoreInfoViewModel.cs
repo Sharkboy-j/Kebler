@@ -29,7 +29,6 @@ namespace Kebler.ViewModels
         private static readonly log4net.ILog Log =
           log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
-        private static TransmissionClient? _client;
 
         private DateTime _addedOn, _createdOn, _completedOn;
         private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
@@ -272,6 +271,7 @@ namespace Kebler.ViewModels
 
 
         KeblerView view;
+        private static TransmissionClient? _client;
 
         public MoreInfoViewModel(KeblerView view)
         {
@@ -290,7 +290,7 @@ namespace Kebler.ViewModels
             Loading = true;
             FormsVisibility = Visibility.Collapsed;
 
-            var answ = await client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
+            var answ = await _client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
             if (token.IsCancellationRequested)
                 return;
 
@@ -360,6 +360,61 @@ namespace Kebler.ViewModels
         {
             FormsVisibility = Visibility.Visible;
         }
+
+        public void MakeRecheck()
+        {
+            Task.Run(async() =>
+            {
+                List<uint> wanted = new List<uint>();
+                List<uint> unWanted = new List<uint>();
+                var root = ((FilesModel)view.MoreView.FileTreeViewControl.tree.Model).Root;
+                var thiId = _ti?.Id;
+
+                if (root != null && thiId != null)
+                {
+                    void Get(TorrentFile trn)
+                    {
+                        if (trn.Children.Count > 0)
+                        {
+                            foreach (var item in trn.Children)
+                            {
+                                Get(item);
+                            }
+                        }
+                        else
+                        {
+                            if (trn.Checked == true)
+                            {
+                                wanted.Add(trn.Index);
+                            }
+                            else
+                            {
+                                unWanted.Add(trn.Index);
+                            }
+                        }
+                    }
+
+                    wanted.Clear();
+                    unWanted.Clear();
+                    Get(root);
+
+                    if (_client != null)
+                    {
+
+                        await _client.TorrentSetAsync(new TorrentSettings()
+                        {
+                            IDs = new uint[] { (uint)thiId },
+                            FilesUnwanted = unWanted.ToArray(),
+                            FilesWanted = wanted.ToArray()
+                        }, new CancellationToken());
+                    }
+                }
+            });
+        }
+
+
+
+
 
         public async void DeleteTracker()
         {
@@ -434,11 +489,6 @@ namespace Kebler.ViewModels
                 }
             }
         }
-
-        //public void Clear()
-        //{
-        //    FilesTree.Files = null;
-        //}
     }
 
 
@@ -454,7 +504,7 @@ namespace Kebler.ViewModels
             var counter = 0U;
             foreach (var item in ti.Files)
             {
-                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted,counter);
+                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted, counter);
 
                 counter++;
             }
@@ -473,7 +523,7 @@ namespace Kebler.ViewModels
             var counter = 0U;
             foreach (var item in ti.Files)
             {
-                createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true,counter);
+                createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true, counter);
 
                 counter++;
             }
@@ -484,7 +534,7 @@ namespace Kebler.ViewModels
         }
 
 
-        private static void createNodes(ref TorrentFile root, string[] file, long size, long done, bool check,uint index)
+        private static void createNodes(ref TorrentFile root, string[] file, long size, long done, bool check, uint index)
         {
             var last = root;
 
@@ -499,7 +549,7 @@ namespace Kebler.ViewModels
                     //if not found children
                     if (i + 1 == file.Length)
                     {
-                        var pth = new TorrentFile(pathPart, size, done, check,index);
+                        var pth = new TorrentFile(pathPart, size, done, check, index);
                         pth.Parent = last;
                         last.Children.Add(pth);
                         last = pth;
@@ -562,7 +612,7 @@ namespace Kebler.ViewModels
             return (parent as TorrentFile).Children.Count > 0;
         }
 
-   
+
     }
 
 

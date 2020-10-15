@@ -380,14 +380,15 @@
             </Grid>
 
             <ListView
+                Name="list" x:FieldModifier="public"
                 Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"
                 cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
                 IsSynchronizedWithCurrentItem="True"
+                SelectedValue="{Binding SelectedTorrent,Mode=OneWayToSource}"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                SelectedIndex="{Binding SelectedTorrentIndex}"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
                 <ListView.View>
                     <GridView>
@@ -420,21 +421,21 @@
                         <GridViewColumn ui11:GridViewSort.PropertyName="RateUpload" Header="Upload speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn ui11:GridViewSort.PropertyName="RateDownload" Header="Download speed" x:Name="col3">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn ui11:GridViewSort.PropertyName="UploadedEver" Header="Uploaded" x:Name="col4">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Width="Auto" Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=TwoWay}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Width="Auto" Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
