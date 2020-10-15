@@ -24,20 +24,24 @@ namespace Kebler.Services
             }
         }
 
-        public static (bool, Version) Check(string user, string repository, Version currentVersion)
+        public static Task<Tuple<bool, Version>> Check(string user, string repository, Version currentVersion)
         {
-            try
+            return Task.Run(async ()=>
             {
-                var gitHub = new GitHubApi();
-                latestReleaseJson = gitHub.GetLatestReleaseJSONAsync(user, repository).Result;
-                var version = GitHubApi.ExtractVersion(latestReleaseJson);
+                try
+                {
+                    var gitHub = new GitHubApi();
+                    latestReleaseJson = await gitHub.GetLatestReleaseJSONAsync(user, repository);
+                    var version = GitHubApi.ExtractVersion(latestReleaseJson);
 
-                return (currentVersion < version, version);
-            }
-            catch (Exception)
-            {
-                return (false, new Version());
-            }
+                    return new Tuple<bool, Version>(currentVersion < version, version);
+                }
+                catch (Exception ex)
+                {
+                    return new Tuple<bool, Version>(false, new Version());
+                }
+            });
+           
         }
 
         public static string GetlatestUri()
