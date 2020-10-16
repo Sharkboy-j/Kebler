@@ -427,7 +427,7 @@
             {
                 return new[]
                 {
-                    #region ALL FIELDS
+                    #region WORK FIELDS
 
                     NAME,
                     ID,
@@ -442,7 +442,8 @@
                     TRACKER_STATS,
                     DOWNLOAD_DIR,
                     FILES,
-                    MAGNET_LINK
+                    MAGNET_LINK,
+                    TOTAL_SIZE
 
                     #endregion
                 };

@@ -16,8 +16,7 @@
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings" Activated="CustomizableWindow_Activated"
     Deactivated="CustomizableWindow_Deactivated" IsTitleVisible="True" ResizeMode="CanResize"
-    ShowHeaderLine="True"
-    WindowStartupLocation="CenterScreen"
+    ShowHeaderLine="True" WindowStartupLocation="CenterScreen"
     WindowState="{Binding State}"
     mc:Ignorable="d">
     <window:CustomizableWindow.InputBindings>
@@ -51,8 +50,7 @@
             Modifiers="Shift" />
     </window:CustomizableWindow.InputBindings>
     <window:CustomizableWindow.Resources>
-        <Style
-            TargetType="{x:Type window:CustomizableWindow}">
+        <Style TargetType="{x:Type window:CustomizableWindow}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type window:CustomizableWindow}">
@@ -380,20 +378,20 @@
             </Grid>
 
             <ListView
-                Name="list" x:FieldModifier="public"
-                Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"
+                Name="list" Grid.Row="0" Grid.Column="2"
+                HorizontalAlignment="Stretch"
                 cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
-                IsSynchronizedWithCurrentItem="True"
-                SelectedValue="{Binding SelectedTorrent,Mode=OneWayToSource}"
+                x:FieldModifier="public" IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
                             x:Name="col1"
-                            Width="{Binding ElementName=helperField, Path=ActualWidth,Converter={StaticResource GridWidthConverter}}"
+                            Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}"
                             ui11:GridViewSort.PropertyName="Name" Header="Name">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -402,7 +400,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            Width="78" ui11:GridViewSort.PropertyName="Status" Header="Status">
+                            Width="90" ui11:GridViewSort.PropertyName="Status" Header="Status">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <controls:TagBorder
@@ -420,21 +418,37 @@
                         <GridViewColumn ui11:GridViewSort.PropertyName="RateUpload" Header="Upload speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn ui11:GridViewSort.PropertyName="RateDownload" Header="Download speed" x:Name="col3">
+                        <GridViewColumn
+                            x:Name="col3" ui11:GridViewSort.PropertyName="RateDownload" Header="Download speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn ui11:GridViewSort.PropertyName="UploadedEver" Header="Uploaded" x:Name="col4">
+                        <GridViewColumn
+                            x:Name="col4" ui11:GridViewSort.PropertyName="UploadedEver" Header="Uploaded">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Width="Auto" MinWidth="75" Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        Width="Auto" MinWidth="75"
+                                        Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn
+                            x:Name="col5" ui11:GridViewSort.PropertyName="TotalSize" Header="Size">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Width="Auto" MinWidth="75"
+                                        Text="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -472,8 +486,9 @@
                     <!--  Correction Width  -->
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="78" />
-                    <ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}"/>
+                    <ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=col4, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=col5, Path=ActualWidth}" />
 
                 </Grid.ColumnDefinitions>
                 <!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->

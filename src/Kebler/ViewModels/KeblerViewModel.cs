@@ -352,7 +352,7 @@ namespace Kebler.ViewModels
 
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-                    await UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
+                    UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
                 }
             }
             catch (TaskCanceledException)
@@ -360,7 +360,7 @@ namespace Kebler.ViewModels
             }
         }
 
-        public async Task UpdateMoreInfoView(CancellationToken token)
+        public void UpdateMoreInfoView(CancellationToken token)
         {
             if (selectedIDs.Length != 1)
             {
@@ -371,7 +371,7 @@ namespace Kebler.ViewModels
             }
 
             MoreInfoView.IsMore = false;
-            await MoreInfoView.Update(selectedIDs, _transmissionClient, token);
+            MoreInfoView.Update(selectedIDs, _transmissionClient, token);
         }
 
 
@@ -381,11 +381,11 @@ namespace Kebler.ViewModels
             {
                 if (hide)
                 {
-                    _view.MoreInfoColumn.MinHeight = 202D;
+                    _view.MoreInfoColumn.MinHeight = 300D;
                     _view.MoreInfoColumn.Height = new GridLength(_oldMoreInfoColumnHeight);
-                        //ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
-                        //    ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
-                        //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                    //ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
+                    //    ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
+                    //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
                     //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
                 }
                 else
@@ -812,7 +812,7 @@ namespace Kebler.ViewModels
         }
 
 
-   
+
 
         public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
         {
@@ -1037,6 +1037,13 @@ namespace Kebler.ViewModels
             if (!IsConnected) return;
 
             var resp = await _transmissionClient.TorrentStopAsync(selectedIDs, _cancelTokenSource.Token);
+            if (resp.Success)
+            {
+                foreach (var item in selectedIDs)
+                {
+                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 0;
+                }
+            }
             resp.ParseTransmissionReponse(Log);
         }
 
@@ -1065,6 +1072,13 @@ namespace Kebler.ViewModels
             if (!IsConnected) return;
 
             var resp = await _transmissionClient.TorrentStopAsync(selectedIDs, _cancelTokenSource.Token);
+            if (resp.Success)
+            {
+                foreach (var item in selectedIDs)
+                {
+                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 0;
+                }
+            }
             resp.ParseTransmissionReponse(Log);
         }
 
@@ -1073,6 +1087,13 @@ namespace Kebler.ViewModels
             if (!IsConnected) return;
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
             var resp = await _transmissionClient.TorrentStartAsync(selectedIDs, _cancelTokenSource.Token);
+            if (resp.Success)
+            {
+                foreach (var item in selectedIDs)
+                {
+                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 4;
+                }
+            }
             resp.ParseTransmissionReponse(Log);
         }
 
@@ -1081,6 +1102,13 @@ namespace Kebler.ViewModels
             if (!IsConnected) return;
 
             var resp = await _transmissionClient.TorrentStartAsync(selectedIDs, _cancelTokenSource.Token);
+            if (resp.Success)
+            {
+                foreach (var item in selectedIDs)
+                {
+                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 4;
+                }
+            }
             resp.ParseTransmissionReponse(Log);
         }
 
