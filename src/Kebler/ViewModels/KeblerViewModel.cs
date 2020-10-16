@@ -1032,14 +1032,17 @@ namespace Kebler.ViewModels
             dialog.Value = null;
         }
 
-        public async void Pause()
+        public async void Pause() => Pause(null);
+
+        public async void Pause(uint[]? ids = null)
         {
             if (!IsConnected) return;
 
-            var resp = await _transmissionClient.TorrentStopAsync(selectedIDs, _cancelTokenSource.Token);
+            var id = ids ?? selectedIDs;
+            var resp = await _transmissionClient.TorrentStopAsync(id, _cancelTokenSource.Token);
             if (resp.Success)
             {
-                foreach (var item in selectedIDs)
+                foreach (var item in id)
                 {
                     TorrentList.FirstOrDefault(x => x.Id == item).Status = 0;
                 }
@@ -1081,17 +1084,24 @@ namespace Kebler.ViewModels
             }
             resp.ParseTransmissionReponse(Log);
         }
+        public async void Start() => Start(null);
 
-        public async void Start()
+        public async void Start(uint[]? ids = null)
         {
             if (!IsConnected) return;
+
+            var id = ids ?? selectedIDs;
             //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentStartAsync(selectedIDs, _cancelTokenSource.Token);
+            var resp = await _transmissionClient.TorrentStartAsync(id, _cancelTokenSource.Token);
             if (resp.Success)
             {
-                foreach (var item in selectedIDs)
+                foreach (var item in id)
                 {
-                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 4;
+                    var sel = TorrentList.FirstOrDefault(x => x.Id == item);
+                    if(sel.PercentDone == 1)
+                        TorrentList.FirstOrDefault(x => x.Id == item).Status = 6;
+                    else
+                        TorrentList.FirstOrDefault(x => x.Id == item).Status = 4;
                 }
             }
             resp.ParseTransmissionReponse(Log);
@@ -1115,6 +1125,31 @@ namespace Kebler.ViewModels
         public void Remove()
         {
             RemoveTorrent();
+        }
+
+        public void Space(object obj)
+        {
+            if (!IsConnected) return;
+           
+
+            if (obj is TorrentInfo tr)
+            {
+                var status = tr.Status;
+                Debug.WriteLine($"Space + {tr.Id}");
+                switch (status)
+                {
+
+                    case 4:
+                    case 6:
+                        Pause(new uint[] { tr.Id});
+                        break;
+                    default:
+                        Start(new uint[] { tr.Id });
+                        break;
+                }
+            }
+         
+
         }
 
         public void RemoveWithData()
@@ -1359,6 +1394,7 @@ namespace Kebler.ViewModels
         public ICommand FindCommand => new DelegateCommand(Find);
         public ICommand RemoveWithDataCommand => new DelegateCommand(RemoveWithData);
         public ICommand RemoveCommand => new DelegateCommand(Remove);
+        public ICommand SpaceCommand => new DelegateCommand<object>(Space);
 
         private List<Server> ServersList
         {

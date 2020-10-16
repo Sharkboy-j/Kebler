@@ -405,6 +405,7 @@ namespace Kebler.ViewModels
 
                             TrackerStats = new BindableCollection<TransmissionTorrentTrackerStats>(_ti.TrackerStats);
                         }
+                        Loading = false;
                         await Task.Delay(1500);
                     }
                 }
@@ -415,7 +416,6 @@ namespace Kebler.ViewModels
 
 
             }, source.Token);
-            Loading = false;
         }
 
         private void DonePices()

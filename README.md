@@ -32,6 +32,7 @@ Run `winget install Kebler` to install the latest version of Kebler Transmission
 - <kbd>Shift</kbd> + <kbd>Delete</kbd> : Remove torrent with <B>Data</B>
 - <kbd>Delete</kbd> : Remove torrent and save data on disk
 - <kbd>Escape</kbd> : Hide props
+- <kbd>Space</kbd> : Start or Pause torrent
 ## License
 
 Copyright (c)2019 by JeremiSharkboy

@@ -43,7 +43,7 @@
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute((T)parameter);
+            return true;
         }
 
         public void Execute(object parameter)

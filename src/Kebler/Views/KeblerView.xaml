@@ -387,6 +387,9 @@
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
+                <ListView.InputBindings>
+                    <KeyBinding Key="Space" Command="{Binding SpaceCommand}" CommandParameter="{Binding SelectedValue,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" />
+                </ListView.InputBindings>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
