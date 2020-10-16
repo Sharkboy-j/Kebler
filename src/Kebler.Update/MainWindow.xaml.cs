@@ -81,6 +81,7 @@ namespace Kebler.Update
         async void startFree()
         {
             Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
+            App.CreateShortcut();
             var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0),true);
             var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
             StartDownlaod(updateUrl);
@@ -88,8 +89,8 @@ namespace Kebler.Update
 
         private void StartDownlaod(string uri)
         {
-            _webClient = new WebClient();
 
+            _webClient = new WebClient();
             tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
@@ -102,89 +103,6 @@ namespace Kebler.Update
         {
             App.Log(msg);
         }
-
-
-        //public async void HasUpdate()
-        //{
-        //    string? getEnv = null;
-        //    Version? current = null;
-
-        //    //try find installed version
-        //    getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-
-        //    if (!string.IsNullOrEmpty(getEnv))
-        //    {
-        //        Log($"We found old version on: {getEnv}");
-
-        //        if (File.Exists(getEnv))
-        //        {
-        //            current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
-        //            Log($"Current version is: {current}");
-
-        //            Log($"Okay. Try get server version (github version)");
-        //            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
-
-        //            Log($"Server version is: {result.Item2.name}");
-
-        //            if (result.Item2.name > current)
-        //            {
-        //                var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
-        //                Log($"So here is: {updateUrl}");
-
-        //                await Application.Current.Dispatcher.InvokeAsync(() =>
-        //                {
-        //                    var wd = new MainWindow(new Uri(updateUrl));
-        //                    wd.ShowDialog();
-        //                    Current.Shutdown(0);
-        //                });
-        //            }
-        //            else
-        //            {
-        //                Process.Start(getEnv);
-        //                Current.Shutdown(0);
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            startFree();
-
-        //        }
-        //    }
-        //    else
-        //    {
-        //        startFree();
-        //    }
-        //}
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -212,13 +130,13 @@ namespace Kebler.Update
                 var zip = new ZipArchive(new FileStream(pth, FileMode.Open));
                 zip.ExtractToDirectory(ConstStrings.KeblerRoamingFolder, true);
                 DialogResult = true;
+                App.DONE(true);
             }
-            catch
+            catch (Exception ex)
             {
+                Log(ex.ToString());
                 App.DONE(false);
-                return;
             }
-            App.DONE(true);
         }
 
         public static void DeleteDirectory(string path)
