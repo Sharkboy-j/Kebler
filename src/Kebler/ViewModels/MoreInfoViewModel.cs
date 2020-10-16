@@ -283,18 +283,26 @@ namespace Kebler.ViewModels
         }
 
 
-        //void Set(TorrentFile trn)
-        //{
-        //    if (trn.Children.Count > 0)
-        //    {
-        //        foreach (var item in trn.Children)
-        //        {
-        //            Set(item);
-        //        }
-        //    }
-        //    if (trn.Checked != _ti.FileStats[trn.Index].Wanted)
-        //        trn.Checked = _ti.FileStats[trn.Index].Wanted;
-        //}
+        void Set(TorrentFile trn)
+        {
+            if (trn.Children.Count > 0)
+            {
+                foreach (var item in trn.Children)
+                {
+                    Set(item);
+                }
+            }
+            else
+            {
+                trn.Done = _ti.FileStats[trn.Index].BytesCompleted;
+                if (trn.Done > 0)
+                {
+                    double p = (trn.Done * 100) / trn.Size;
+                    trn.DonePercent = Math.Round(p, 1);
+                }
+                //trn.checked1 = _ti.FileStats[trn.Index].Wanted;
+            }
+        }
 
 
         public void Update(uint[] ids, TransmissionClient? client, CancellationToken token)
@@ -332,6 +340,10 @@ namespace Kebler.ViewModels
                                     view.MoreView.FileTreeViewControl.tree.Model = model;
                                 });
 
+                            }
+                            else
+                            {
+                                Set(model.Root);
                             }
 
 

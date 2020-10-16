@@ -19,8 +19,22 @@ namespace Kebler.Models
         public string Name { get; set; }
         public int Id { get; set; }
         public long Size { get; set; }
-        public double Done { get; set; }
-        public double DonePercent { get; set; }
+        public double Done
+        {
+            get => done; set
+            {
+                if (done != value)
+                    Set(ref done, value);
+            }
+        }
+        public double DonePercent
+        {
+            get => donePercent; set
+            {
+                if (donePercent != value)
+                    Set(ref donePercent, value);
+            }
+        }
 
         public bool? Checked
         {
@@ -33,7 +47,9 @@ namespace Kebler.Models
         public uint Index;
 
         static int _i;
-        private bool? checked1 = true;
+        public bool? checked1 = true;
+        private double done;
+        private double donePercent;
 
         public TorrentFile(string name, long size, long done, bool check, uint index)
         {

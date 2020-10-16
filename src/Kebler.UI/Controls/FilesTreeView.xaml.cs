@@ -56,7 +56,7 @@ namespace Kebler.UI.Controls
             {
                 Set(trnt, chk.IsChecked);
                 RecalParent(trnt);
-                tree.Items.Refresh();
+                //tree.Items.Refresh();
 
                 Checked?.Invoke();
             }
@@ -100,13 +100,14 @@ namespace Kebler.UI.Controls
         {
             if (e.Key == Key.Space)
             {
+                e.Handled = true;
                 if (tree.SelectedItem is TreeNode node && node.Tag is TorrentFile trnt)
                 {
                     trnt.Checked = trnt.Checked == null ? false : !trnt.Checked;
                     Set(trnt, trnt.Checked);
                     RecalParent(trnt);
 
-                    tree.Items.Refresh();
+                    //tree.Items.Refresh();
 
                 }
             }
