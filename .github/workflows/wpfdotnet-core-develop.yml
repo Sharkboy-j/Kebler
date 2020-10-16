@@ -1,4 +1,4 @@
-name: Main
+name: Dev builds
 
 on:
   push:
@@ -75,7 +75,8 @@ jobs:
         release_name: ${{ steps.vars.outputs.ASSEMBLY_VERSION  }}
         draft: false
         prerelease: true
-        
+        target_commitish: develop
+
     - name: Upload Release ZIP
       uses: actions/upload-release-asset@v1
       env:
