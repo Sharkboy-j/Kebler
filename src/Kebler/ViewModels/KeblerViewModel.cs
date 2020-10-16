@@ -291,10 +291,10 @@ namespace Kebler.ViewModels
                     _view.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
                     _view.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
-                    _view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
+                    //_view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
                     _view.Width = ConfigService.Instanse.MainWindowWidth;
                     _view.Height = ConfigService.Instanse.MainWindowHeight;
-                    _view.WindowState = ConfigService.Instanse.MainWindowState;
+                    //_view.WindowState = ConfigService.Instanse.MainWindowState;
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                 }
                 else
@@ -382,10 +382,10 @@ namespace Kebler.ViewModels
                 if (hide)
                 {
                     _view.MoreInfoColumn.MinHeight = 202D;
-                    _view.MoreInfoColumn.Height =
-                        ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
-                            ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
-                            : new GridLength(ConfigService.Instanse.MoreInfoHeight);
+                    _view.MoreInfoColumn.Height = new GridLength(_oldMoreInfoColumnHeight);
+                        //ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
+                        //    ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
+                        //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
                     //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
                 }
                 else

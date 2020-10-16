@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles"
+    xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles" xmlns:csControls="clr-namespace:Kebler.UI.CSControls;assembly=Kebler.UI"
     Width="240"
     Height="300"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -34,11 +34,12 @@
             TextOptions.TextHintingMode="Animated"
             TextOptions.TextRenderingMode="ClearType" />
 
-        <TextBlock
+        <csControls:LinkableTextBlock
             Margin="0,5,0,0"
             VerticalAlignment="Center"
             FontSize="12"
             FontWeight="Normal"
+            CopyOnly="True"
             Foreground="#FFFFFFFF"
             TextAlignment="Center"
             TextOptions.TextFormattingMode="Ideal"
@@ -46,12 +47,13 @@
             TextOptions.TextRenderingMode="ClearType">
             <Run Text="{lex:BLoc  About_Version}" />
             <Run Text="{Binding Vers}" />
-        </TextBlock>
+        </csControls:LinkableTextBlock>
         <TextBlock
             Margin="0,5,0,0"
             VerticalAlignment="Center"
             FontSize="12"
             FontWeight="Normal"
+            Cursor="Hand"
             TextAlignment="Center"
             TextOptions.TextFormattingMode="Ideal"
             TextOptions.TextHintingMode="Animated"
