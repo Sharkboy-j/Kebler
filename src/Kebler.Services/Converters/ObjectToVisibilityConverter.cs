@@ -23,7 +23,7 @@ namespace Kebler.Services.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is double dd)
-                return dd - 75;
+                return dd - 90;
             return value;
         }
 

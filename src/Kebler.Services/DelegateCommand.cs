@@ -90,10 +90,9 @@
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute();
+            return true;
         }
 
         public void Execute(object parameter)

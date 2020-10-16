@@ -388,7 +388,6 @@
                 IsSynchronizedWithCurrentItem="True"
                 SelectedValue="{Binding SelectedTorrent,Mode=OneWayToSource}"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                ScrollViewer.VerticalScrollBarVisibility="Hidden"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
                 <ListView.View>
                     <GridView>
@@ -435,7 +434,7 @@
                         <GridViewColumn ui11:GridViewSort.PropertyName="UploadedEver" Header="Uploaded" x:Name="col4">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Width="Auto" Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Width="Auto" MinWidth="75" Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
