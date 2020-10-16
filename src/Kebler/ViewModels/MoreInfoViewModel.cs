@@ -324,11 +324,15 @@ namespace Kebler.ViewModels
                         {
                             _ti = answ.Torrents.First();
                             Debug.WriteLine(_ti.Name);
-                            model = FilesModel.CreateTestModel(_ti);
-                            OnUIThread(() =>
+                            if (model == null)
                             {
-                                view.MoreView.FileTreeViewControl.tree.Model = model;
-                            });
+                                model = FilesModel.CreateTestModel(_ti);
+                                OnUIThread(() =>
+                                {
+                                    view.MoreView.FileTreeViewControl.tree.Model = model;
+                                });
+
+                            }
 
 
 
