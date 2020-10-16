@@ -94,7 +94,7 @@ namespace Kebler.Update
         }
 
 
-        public static void DONE(bool? isTrue)
+        public static void DONE(bool isTrue)
         {
             if (isTrue == false)
             {

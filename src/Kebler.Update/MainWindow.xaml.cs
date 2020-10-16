@@ -21,6 +21,8 @@ namespace Kebler.Update
     {
         private WebClient _webClient;
         private string tempfile;
+        new bool DialogResult;
+
         public MainWindow()
         {
             InitializeComponent();
