@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
+using Kebler.Models.Torrent;
 
 namespace Kebler.ViewModels
 {
@@ -29,7 +30,8 @@ namespace Kebler.ViewModels
     {
         #region Properties
 
-        private Torrent? _torrent;
+        private Torrent _torrent;
+        private object view;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
@@ -38,7 +40,7 @@ namespace Kebler.ViewModels
         private SessionSettings? settings;
         public AddTorrentResponse TorrentResult;
         public bool Result;
-
+        private IEnumerable<Kebler.Models.Torrent.TorrentInfo> _infos;
 
         private string? _torrentPath, _downlaodDir;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
@@ -115,8 +117,9 @@ namespace Kebler.ViewModels
 
         #endregion
 
-        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings)
+        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos)
         {
+            _infos = infos;
             _fileInfo = new FileInfo(path);
             TorrentPath = _fileInfo.FullName;
             _transmissionClient = transmissionClient;
@@ -138,9 +141,10 @@ namespace Kebler.ViewModels
 
             using var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             _torrent = new BencodeParser().Parse<Torrent>(file);
+
         }
 
-        protected override void OnViewLoaded(object view)
+        protected override async void OnViewLoaded(object view)
         {
             try
             {
@@ -152,9 +156,21 @@ namespace Kebler.ViewModels
             {
                 LoadingGridVisibility = Visibility.Collapsed;
             }
+            
+            if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
+            {
+
+                var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
+
+                DownlaodDir = info.DownloadDir;
+                var manager = IoC.Get<IWindowManager>(); 
+                if(await MessageBoxViewModel.ShowDialog("Torrent exist, update trackers?",manager,string.Empty, Enums.MessageBoxDilogButtons.YesNo)==true)
+                {
+                    Add();
+                }
+            }
         }
 
-        private object view;
 
         public void ChangeVisibilityWindow()
         {
@@ -277,7 +293,7 @@ namespace Kebler.ViewModels
                     {
                         Metainfo = Convert.ToBase64String(_torrent.EncodeAsBytes()),
                         Paused = !IsAutoStart,
-                        DownloadDirectory = DownlaodDir ?? settings?.DownloadDirectory,
+                        DownloadDirectory = DownlaodDir,
                         PeerLimit = PeerLimit,
                         FilesUnwanted = unWant.ToArray(),
                         FilesWanted = want.ToArray()
@@ -312,8 +328,7 @@ namespace Kebler.ViewModels
                                     }
                                     case Enums.AddTorrentStatus.Duplicate:
                                     {
-                                        Log.Info(
-                                            $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
+                                        Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
 
                                         if (_torrent != null)
                                         {

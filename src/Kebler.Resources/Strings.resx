@@ -651,4 +651,13 @@
   <data name="time_seconds_short" xml:space="preserve">
     <value>s</value>
   </data>
+  <data name="MI_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="MI_ClearTrackers" xml:space="preserve">
+    <value>Clear all trackers...</value>
+  </data>
+  <data name="MI_ExportTorrents" xml:space="preserve">
+    <value>Export torrents...</value>
+  </data>
 </root>

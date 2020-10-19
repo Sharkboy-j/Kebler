@@ -140,9 +140,9 @@
         /// <summary>
         ///     Ids of trackers to remove
         /// </summary>
-        public int[] TrackerRemove
+        public uint[] TrackerRemove
         {
-            get => GetValue<int[]>("trackerRemove");
+            get => GetValue<uint[]>("trackerRemove");
             set => this["trackerRemove"] = value;
         }
 

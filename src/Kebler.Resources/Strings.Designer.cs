@@ -565,6 +565,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear all trackers....
+        /// </summary>
+        public static string MI_ClearTrackers {
+            get {
+                return ResourceManager.GetString("MI_ClearTrackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection Manager.
         /// </summary>
         public static string MI_CM {
@@ -615,6 +624,15 @@ namespace Kebler.Resources {
         public static string MI_Exit {
             get {
                 return ResourceManager.GetString("MI_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export torrents....
+        /// </summary>
+        public static string MI_ExportTorrents {
+            get {
+                return ResourceManager.GetString("MI_ExportTorrents", resourceCulture);
             }
         }
         
@@ -813,6 +831,15 @@ namespace Kebler.Resources {
         public static string MI_State {
             get {
                 return ResourceManager.GetString("MI_State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tools.
+        /// </summary>
+        public static string MI_Tools {
+            get {
+                return ResourceManager.GetString("MI_Tools", resourceCulture);
             }
         }
         

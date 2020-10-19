@@ -105,6 +105,17 @@
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
 
         </MenuItem>
+        <MenuItem Header="{lex:BLoc MI_Tools}">
+            <MenuItem
+                cal:Message.Attach="ClearTrackers"
+                Header="{lex:BLoc  MI_ClearTrackers}"
+                IsEnabled="{Binding IsConnected}"/>
+            <MenuItem
+                cal:Message.Attach="ExportTorrents"
+                Header="{lex:BLoc  MI_ExportTorrents}"
+                Visibility="Collapsed"
+                IsEnabled="{Binding IsConnected}"/>
+        </MenuItem>
         <MenuItem
             Name="LangMenu"
             Header="{lex:BLoc  MI_lang}"

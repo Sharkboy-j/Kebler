@@ -582,16 +582,25 @@ namespace Kebler.ViewModels
             var p = new TorrentFile() { Name = ti.DisplayName };
 
 
-            var counter = 0U;
-            foreach (var item in ti.Files)
+            if (ti.Files != null)
             {
-                createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true, counter);
+                var counter = 0U;
+                foreach (var item in ti.Files)
+                {
+                    createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true, counter);
 
-                counter++;
+                    counter++;
+                }
+                
+                model.Root.Children.Add(p); 
             }
-
-
-            model.Root.Children.Add(p);
+            else if(ti.File !=null)
+            {
+                var node = new TorrentFile(ti.File.FileName, ti.File.FileSize, 0, true, 0);
+                model.Root.Children.Add(node);   
+            }
+            
+          
             return model;
         }
 
