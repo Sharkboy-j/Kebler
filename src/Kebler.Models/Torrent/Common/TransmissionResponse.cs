@@ -16,13 +16,13 @@ namespace Kebler.Models.Torrent.Common
         public string Result { get; set; }
 
         [JsonIgnore]
-        public WebException WebException { get; set; }
+        public WebException? WebException { get; set; }
 
         [JsonIgnore]
-        public HttpWebResponse HttpWebResponse { get; set; }
+        public HttpWebResponse? HttpWebResponse { get; set; }
 
         [JsonIgnore]
-        public Exception CustomException { get; set; }
+        public Exception? CustomException { get; set; }
 
         [JsonIgnore]
         public bool Success => Result == "success";

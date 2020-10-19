@@ -46,15 +46,13 @@ namespace Kebler.Services
             var madeChanges = false;
             madeChanges |= SetKeyDefaultValue(@"Software\Classes\" + extension, progId);
             madeChanges |= SetKeyDefaultValue(@"Software\Classes\" + progId, fileTypeDescription);
-            madeChanges |= SetKeyDefaultValue($@"Software\Classes\{progId}\shell\open\command",
-                "\"" + applicationFilePath + "\" \"%1\"");
+            madeChanges |= SetKeyDefaultValue($@"Software\Classes\{progId}\shell\open\command","\"" + applicationFilePath + "\" \"%1\"");
 
             //magnet
 
-            madeChanges |= SetKeyDefaultValue(@"Software\Classes\magnet\shell\open\command",
-                "\"" + applicationFilePath + "\" \"%1\"");
-            madeChanges |= SetKeyDefaultValue(@"Software\Classes\magnet\DefaultIcon",
-                "\"" + applicationFilePath + "\" ,1");
+            madeChanges |= SetKeyDefaultValue(@"Software\Classes\magnet\shell\open\command", "\"" + applicationFilePath + "\" \"%1\"");
+            madeChanges |= SetKeyDefaultValue(@"Software\Classes\magnet\DefaultIcon", "\"" + applicationFilePath + "\" ,1");
+
             return madeChanges;
         }
 
@@ -69,6 +67,7 @@ namespace Kebler.Services
 
             return false;
         }
+
 
         public class FileAssociation
         {

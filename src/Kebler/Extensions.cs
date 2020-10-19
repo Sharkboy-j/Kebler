@@ -49,7 +49,7 @@ namespace Kebler
         {
             if (resp.Success)
             {
-                logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
+                //logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
             }
             else
             {

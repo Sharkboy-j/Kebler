@@ -102,9 +102,10 @@ namespace Kebler
 
         private void TaskbarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            var dd = IoC.Get<KeblerViewModel>();
-
-            dd.State = WindowState.Normal;
+            Current.MainWindow?.Activate();
+            // var dd = IoC.Get<KeblerViewModel>();
+            //
+            // dd.State = WindowState.Normal;
         }
 
 
@@ -129,11 +130,15 @@ namespace Kebler
                 var fileInfo = new FileInfo(arg);
                 if (fileInfo.Extension.Equals(".torrent") || arg.StartsWith("magnet")) torrentsToAdd.Add(arg);
             }
-
-
+            
             KeblerVM.OpenPaseedWithArgsFiles();
         }
 
         #endregion
+
+        private void NI_ExitClick(object sender, RoutedEventArgs e)
+        {
+            KeblerVM.Exit();
+        }
     }
 }
