@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -575,7 +576,6 @@ namespace Kebler.ViewModels
                     {
                         ConnectedServer = null;
                         IsConnecting = false;
-                        allTorrents = null;
                         TorrentList = new Bind<TorrentInfo>();
                         IsConnected = false;
                         Categories?.Clear();
@@ -809,18 +809,18 @@ namespace Kebler.ViewModels
 
         public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
         {
-            if (torrInf.Status == 1 || torrInf.Status == 2)
-            {
-                torrInf.PercentDone = torrInf.RecheckProgress;
-                return torrInf;
-            }
-
-            if (torrInf.Status == 0)
-                return torrInf;
-
-
-            if (!skip && torrInf.TrackerStats.Length > 0 &&
-                torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false)) torrInf.Status = -1;
+            // if (torrInf.Status == 1 || torrInf.Status == 2)
+            // {
+            //     torrInf.PercentDone = torrInf.RecheckProgress;
+            //     return torrInf;
+            // }
+            //
+            // if (torrInf.Status == 0)
+            //     return torrInf;
+            //
+            //
+            // if (!skip && torrInf.TrackerStats.Length > 0 &&
+            //     torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false)) torrInf.Status = -1;
 
             return torrInf;
         }
@@ -1349,6 +1349,56 @@ namespace Kebler.ViewModels
                         IDs = ids,
                         TrackerRemove = trackersId.ToArray()
                     }, new CancellationToken());
+                }
+            }
+        }
+
+        public async void AddFromNewTrack()
+        {
+            if (await MessageBoxViewModel.ShowDialog(
+                "Kebler will get trackers from newtrackon.com and add for each torrent. Are you sure?", manager,
+                "Confirm action",
+                Enums.MessageBoxDilogButtons.YesNo) == true)
+            {
+                if (_transmissionClient!= null)
+                {
+                    var torents =
+                        (await Get(_transmissionClient.TorrentGetAsync(new []{TorrentFields.TRACKERS},
+                                _cancelTokenSource.Token),
+                            Strings.MW_StatusText_Torrents)).Value;
+                    
+                    var stringList =
+                        await new WebClient().DownloadStringTaskAsync(new Uri("https://newtrackon.com/api/live"));
+                    
+                    var trackersId = new List<string>();
+
+                    using StringReader reader = new StringReader(stringList);
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (!string.IsNullOrEmpty(line))
+                            trackersId.Add(line);
+                    }
+                    
+                    foreach (var torrent in torents.Torrents)
+                    {
+                        var tracks = torrent.Trackers.Select(x => x.announce);
+                        var toAdd = tracks.Except(trackersId);
+                        var arr = toAdd.ToArray();
+                        if (arr.Length > 0)
+                        {
+                            var resp = await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                            {
+                                IDs = new []{torrent.Id},
+                                TrackerAdd = arr
+                            }, new CancellationToken());
+                        
+                            if (resp.Success == false)
+                            {
+                            
+                            }
+                        }
+                    }
                 }
             }
         }

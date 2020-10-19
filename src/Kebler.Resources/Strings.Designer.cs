@@ -538,6 +538,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fill trackers.
+        /// </summary>
+        public static string MI_AddFromNewTrack {
+            get {
+                return ResourceManager.GetString("MI_AddFromNewTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Magnet.
         /// </summary>
         public static string MI_AddMagnet {

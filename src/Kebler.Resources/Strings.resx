@@ -660,4 +660,7 @@
   <data name="MI_ExportTorrents" xml:space="preserve">
     <value>Export torrents...</value>
   </data>
+  <data name="MI_AddFromNewTrack" xml:space="preserve">
+    <value>Fill trackers</value>
+  </data>
 </root>

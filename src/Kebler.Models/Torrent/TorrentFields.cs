@@ -439,7 +439,6 @@
                     PERCENT_DONE,
                     UPLOADED_EVER,
                     STATUS,
-                    TRACKER_STATS,
                     DOWNLOAD_DIR,
                     FILES,
                     MAGNET_LINK,
