@@ -50,7 +50,7 @@ namespace Kebler.Models.Torrent
         public int LastAnnouncePeerCount { get; set; }
 
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public uint ID { get; set; }
 
         [JsonProperty("lastAnnounceResult")]
         public string LastAnnounceResult { get; set; }

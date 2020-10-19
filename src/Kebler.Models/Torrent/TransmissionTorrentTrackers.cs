@@ -9,7 +9,7 @@ namespace Kebler.Models.Torrent
         public string announce { get; set; }
 
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public uint ID { get; set; }
 
         [JsonProperty("scrape")]
         public string Scrape { get; set; }

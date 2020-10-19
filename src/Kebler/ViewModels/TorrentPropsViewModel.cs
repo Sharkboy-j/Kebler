@@ -218,7 +218,7 @@ namespace Kebler.ViewModels
         }
 
         private List<string> toAdd = new List<string>();
-        private List<int> toRm = new List<int>();
+        private List<uint> toRm = new List<uint>();
 
         public async void AddTracker()
         {

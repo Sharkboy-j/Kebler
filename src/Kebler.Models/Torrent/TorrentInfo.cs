@@ -111,7 +111,13 @@ namespace Kebler.Models.Torrent
         public double MetadataPercentComplete { get; set; }
 
         [JsonProperty(TorrentFields.NAME)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => name; set
+            {
+                Set(ref name, value);
+            }
+        }
 
         [JsonProperty(TorrentFields.PEER_LIMIT)]
         public int PeerLimit { get; set; }
@@ -129,7 +135,13 @@ namespace Kebler.Models.Torrent
         public int PeersSendingToUs { get; set; }
 
         [JsonProperty(TorrentFields.PERCENT_DONE)]
-        public double PercentDone { get; set; }
+        public double PercentDone
+        {
+            get => percentDone; set
+            {
+                Set(ref percentDone, value);
+            }
+        }
 
         [JsonProperty(TorrentFields.PIECES)] public string Pieces { get; set; }
 
@@ -166,6 +178,11 @@ namespace Kebler.Models.Torrent
         {
             RateUpload = inf.rateUpload;
             RateDownload = inf.rateDownload;
+            Name = inf.Name;
+            PercentDone = inf.PercentDone;
+            Status = inf.Status;
+            UploadedEver = inf.UploadedEver;
+            TotalSize = inf.TotalSize;
         }
 
         [JsonProperty(TorrentFields.RECHECK)]
@@ -206,7 +223,13 @@ namespace Kebler.Models.Torrent
         /// </summary>
         ///
         [JsonProperty(TorrentFields.STATUS)]
-        public int Status { get; set; }
+        public int Status
+        {
+            get => status; set
+            {
+                Set(ref status, value);
+            }
+        }
 
         [JsonProperty(TorrentFields.TRACKERS)]
         public TransmissionTorrentTrackers[] Trackers { get; set; }
@@ -215,13 +238,23 @@ namespace Kebler.Models.Torrent
         public TransmissionTorrentTrackerStats[] TrackerStats { get; set; }
 
         [JsonProperty(TorrentFields.TOTAL_SIZE)]
-        public long TotalSize { get; set; }
+        public long TotalSize { get => totalSize;  set
+            {
+                Set(ref totalSize, value);
+            }
+        }
 
         [JsonProperty(TorrentFields.TORRENT_FILE)]
         public string TorrentFile { get; set; }
 
         [JsonProperty(TorrentFields.UPLOADED_EVER)]
-        public long UploadedEver { get; set; }
+        public long UploadedEver
+        {
+            get => uploadedEver; set
+            {
+                Set(ref uploadedEver, value);
+            }
+        }
 
         [JsonProperty(TorrentFields.UPLOAD_LIMIT)]
         public long UploadLimit { get; set; }
@@ -314,6 +347,11 @@ namespace Kebler.Models.Torrent
         private long _totalValues;
         private int rateUpload;
         private int rateDownload;
+        private string name;
+        private double percentDone;
+        private int status;
+        private long uploadedEver;
+        private long totalSize;
         private readonly Dictionary<string, TransmissionValue> _root;
 
         [JsonIgnore]

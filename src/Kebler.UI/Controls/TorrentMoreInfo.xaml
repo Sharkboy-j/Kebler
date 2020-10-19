@@ -27,7 +27,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="50" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
@@ -45,7 +45,7 @@
 
                                 <ProgressBar
                                     Grid.Row="0" Grid.Column="1" Height="15"
-                                    Margin="10,0,10,0" VerticalAlignment="Center"
+                                    Margin="11,0,10,0" VerticalAlignment="Center"
                                     Background="{DynamicResource ProgressBarBackGroundBrush}"
                                     BorderThickness="0" Foreground="#FF007ACC" Maximum="1"
                                     Value="{Binding PercentDone, Mode=OneWay}" />
@@ -72,7 +72,7 @@
 
                                 <TextBlock
                                     Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                     Text="{Binding PercentDone, Converter={StaticResource PointToPercent}}" />
 
 

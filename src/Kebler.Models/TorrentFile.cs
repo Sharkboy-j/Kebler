@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Kebler.Models
 {
-    public class TorrentFile
+    public class TorrentFile : PropertyChangedBase
     {
         private readonly ObservableCollection<TorrentFile> _children = new ObservableCollection<TorrentFile>();
         public ObservableCollection<TorrentFile> Children
@@ -18,16 +19,39 @@ namespace Kebler.Models
         public string Name { get; set; }
         public int Id { get; set; }
         public long Size { get; set; }
-        public double Done { get; set; }
-        public double DonePercent { get; set; }
+        public double Done
+        {
+            get => done; set
+            {
+                if (done != value)
+                    Set(ref done, value);
+            }
+        }
+        public double DonePercent
+        {
+            get => donePercent; set
+            {
+                if (donePercent != value)
+                    Set(ref donePercent, value);
+            }
+        }
 
-        public bool? Checked { get; set; } = true;
+        public bool? Checked
+        {
+            get => checked1; set
+            {
+                if (checked1 != value)
+                    Set(ref checked1, value);
+            }
+        }
         public uint Index;
 
         static int _i;
-        private bool @checked;
+        public bool? checked1 = true;
+        private double done;
+        private double donePercent;
 
-        public TorrentFile(string name, long size, long done, bool check,uint index)
+        public TorrentFile(string name, long size, long done, bool check, uint index)
         {
             Id = ++_i;
             this.Name = name;
@@ -37,7 +61,7 @@ namespace Kebler.Models
             Index = index;
             //size  :   1
             //done  :   ?
-            if(size>0)
+            if (size > 0)
             {
                 double p = (done * 100) / size;
                 DonePercent = Math.Round(p, 1);
