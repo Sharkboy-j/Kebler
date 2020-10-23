@@ -13,7 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Kebler.UI;component/Themes/Dictionary1.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ContextMenu x:Key="SysTrayMenu" x:Shared="false">
-                <MenuItem cal:Message.Attach="Exit" Header="Exit" />
+                <MenuItem Click="NI_ExitClick" Header="Exit" />
             </ContextMenu>
             <tb:TaskbarIcon
                 x:Key="NotifyIcon"

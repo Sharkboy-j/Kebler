@@ -15,7 +15,7 @@ namespace Kebler.Models
 
         public class ConnectedServerChanged
         {
-            public Server srv;
+            public Server? srv;
         }
 
         public class ReconnectRequested

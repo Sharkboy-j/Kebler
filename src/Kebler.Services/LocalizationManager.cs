@@ -15,7 +15,7 @@ namespace Kebler.Services
         private static List<CultureInfo>? _cultureList;
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalizationManager));
 
-        private static CultureInfo? _currentCulture;
+        private static CultureInfo _currentCulture = new CultureInfo("en");
 
         public static List<CultureInfo> CultureList
         {
@@ -29,7 +29,7 @@ namespace Kebler.Services
             }
         }
 
-        public static CultureInfo? CurrentCulture
+        public static CultureInfo CurrentCulture
         {
             get => _currentCulture;
             set

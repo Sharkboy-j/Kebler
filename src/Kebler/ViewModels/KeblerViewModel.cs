@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -13,10 +14,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
-using BencodeNET.Objects;
-using BencodeNET.Parsing;
-using BencodeNET.Torrents;
 using Caliburn.Micro;
 using Kebler.Const;
 using Kebler.Dialogs;
@@ -35,6 +32,7 @@ using Clipboard = System.Windows.Clipboard;
 using ILog = log4net.ILog;
 using ListView = System.Windows.Controls.ListView;
 using LogManager = log4net.LogManager;
+using MessageBox = System.Windows.Forms.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Screen = Caliburn.Micro.Screen;
 using TorrentFields = Kebler.Models.Torrent.TorrentFields;
@@ -103,7 +101,7 @@ namespace Kebler.ViewModels
         {
             foreach (var item in Languages) item.IsChecked = Equals((CultureInfo) item.Tag, message.Culture);
 
-            if (IsConnected)
+            if (IsConnected && _stats != null)
                 IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
                                         $"      {Strings.Stats_Uploaded} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
                                         $"      {Strings.Stats_Downloaded}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
@@ -158,25 +156,6 @@ namespace Kebler.ViewModels
             ApplyConfig();
         }
 
-        private async void FileTreeViewControl_OnFileStatusUpdate(uint[] wanted, uint[] unwanted, bool status)
-        {
-            var settings = new TorrentSettings
-            {
-                IDs = selectedIDs,
-                FilesWanted = wanted.Any() ? wanted : null,
-                FilesUnwanted = unwanted.Any() ? unwanted : null
-            };
-
-            if (wanted.Length > 0)
-                Log.Info("wanted " + string.Join(", ", wanted));
-
-            if (unwanted.Length > 0)
-                Log.Info("unwanted " + string.Join(", ", unwanted));
-
-            var resp = await _transmissionClient.TorrentSetAsync(settings, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
-        }
-
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             Task.Factory.StartNew(InitConnection, cancellationToken);
@@ -187,7 +166,13 @@ namespace Kebler.ViewModels
 
         public void ShowConnectionManager()
         {
-            manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
+            if (_eventAggregator != null)
+                manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
+            else
+            {
+                Log.Error(
+                    $"{nameof(KeblerViewModel)}.{nameof(ShowConnectionManager)}() => {nameof(_eventAggregator)} is null");
+            }
         }
 
         private Task GetLongChecker()
@@ -245,7 +230,12 @@ namespace Kebler.ViewModels
 
         public void Preferences()
         {
-            manager.ShowDialogAsync(new ServerPreferencesViewModel(_settings));
+            if (_settings != null)
+                manager.ShowDialogAsync(new ServerPreferencesViewModel(_settings));
+            else
+            {
+                Log.Error($"{nameof(KeblerViewModel)}.{nameof(Preferences)}() => {nameof(_settings)} is null");
+            }
         }
 
         private void ReInitServers()
@@ -321,21 +311,16 @@ namespace Kebler.ViewModels
 
         public void SaveConfig()
         {
-            //var size = new StringBuilder();
-            //foreach (var column in TorrentsDataGrid.Columns)
-            //{
-            //    size.Append($"{column.ActualWidth},");
-            //}
+            if (_view != null)
+            {
+                ConfigService.Instanse.MainWindowHeight = _view.ActualHeight;
+                ConfigService.Instanse.MainWindowWidth = _view.ActualWidth;
+                ConfigService.Instanse.MainWindowState = _view.WindowState;
+                ConfigService.Instanse.CategoriesWidth = _view.CategoriesColumn.Width.Value;
+                ConfigService.Instanse.MoreInfoHeight = _view.MoreInfoColumn.Height.Value;
 
-
-            ConfigService.Instanse.MainWindowHeight = _view.ActualHeight;
-            ConfigService.Instanse.MainWindowWidth = _view.ActualWidth;
-            ConfigService.Instanse.MainWindowState = _view.WindowState;
-            ConfigService.Instanse.CategoriesWidth = _view.CategoriesColumn.Width.Value;
-            ConfigService.Instanse.MoreInfoHeight = _view.MoreInfoColumn.Height.Value;
-            //ConfigService.Instanse.ColumnSizes = size.ToString().TrimEnd(',');
-
-            ConfigService.Save();
+                ConfigService.Save();
+            }
         }
 
         #endregion
@@ -347,23 +332,20 @@ namespace Kebler.ViewModels
         {
             try
             {
-                if (obj != null)
-                {
-                    SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
+                SelectedTorrents = obj.SelectedItems.Cast<TorrentInfo>().ToArray();
 
-                    _moreInfoCancelTokeSource?.Cancel();
-                    _moreInfoCancelTokeSource = new CancellationTokenSource();
+                _moreInfoCancelTokeSource?.Cancel();
+                _moreInfoCancelTokeSource = new CancellationTokenSource();
 
-                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+                await Task.Delay(250, _moreInfoCancelTokeSource.Token);
 
-                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                        return;
+                if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                    return;
 
 
-                    UpdateMoreInfoPosition(SelectedTorrents.Any());
-                    selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
-                    UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
-                }
+                UpdateMoreInfoPosition(SelectedTorrents.Any());
+                selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
+                UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
             }
             catch (TaskCanceledException)
             {
@@ -375,7 +357,6 @@ namespace Kebler.ViewModels
             if (selectedIDs.Length != 1)
             {
                 MoreInfoView.IsMore = true;
-                //MoreInfoView.Clear();
                 MoreInfoView.SelectedCount = selectedIDs.Length;
                 return;
             }
@@ -409,7 +390,8 @@ namespace Kebler.ViewModels
 
         public void HorDragCompleted()
         {
-            _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
+            if (_view != null)
+                _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
         }
 
         #endregion
@@ -524,80 +506,85 @@ namespace Kebler.ViewModels
             //MoreInfoControl.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
             _whileCycleTask = new Task(async () =>
             {
-                try
+                if (_transmissionClient != null)
                 {
-                    var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token),
-                        Strings.MW_StatusText_Session);
-                    //var info = _transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token);
-
-                    if (CheckResponse(info.Response))
+                    try
                     {
-                        _sessionInfo = info.Value;
-                        IsConnected = true;
-                        Log.Info($"Connected {_sessionInfo.Version}");
-                        ConnectedServer = SelectedServer;
+                        var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token),
+                            Strings.MW_StatusText_Session);
+                        //var info = _transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token);
 
-                        if (App.Instance.torrentsToAdd.Count > 0)
-                            OpenPaseedWithArgsFiles();
-
-                        while (IsConnected && !token.IsCancellationRequested)
+                        if (CheckResponse(info.Response))
                         {
-                            if (Application.Current?.Dispatcher != null &&
-                                Application.Current.Dispatcher.HasShutdownStarted)
-                                throw new TaskCanceledException();
+                            _sessionInfo = info.Value;
+                            IsConnected = true;
+                            Log.Info($"Connected {_sessionInfo.Version}");
+                            ConnectedServer = SelectedServer;
+
+                            if (App.Instance.torrentsToAdd.Count > 0)
+                                OpenPaseedWithArgsFiles();
+
+                            while (IsConnected && !token.IsCancellationRequested)
+                            {
+                                if (Application.Current?.Dispatcher != null &&
+                                    Application.Current.Dispatcher.HasShutdownStarted)
+                                    throw new TaskCanceledException();
 
 
-                            _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                Strings.MW_StatusText_Stats)).Value;
+                                _stats = (await Get(
+                                    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
+                                    Strings.MW_StatusText_Stats)).Value;
 
-                            allTorrents =
-                                (await Get(
-                                    _transmissionClient.TorrentGetAsync(TorrentFields.WORK, _cancelTokenSource.Token),
-                                    Strings.MW_StatusText_Torrents)).Value;
-                            _settings = (await Get(
-                                _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                Strings.MW_StatusText_Settings)).Value;
-                            ParseSettings();
-                            ParseStats();
+                                allTorrents =
+                                    (await Get(
+                                        _transmissionClient.TorrentGetAsync(TorrentFields.WORK,
+                                            _cancelTokenSource.Token),
+                                        Strings.MW_StatusText_Torrents)).Value;
+                                _settings = (await Get(
+                                    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
+                                    Strings.MW_StatusText_Settings)).Value;
+                                ParseSettings();
+                                ParseStats();
 
-                            if (allTorrents.Clone() is TransmissionTorrents data)
-                                ProcessParsingTransmissionResponse(data);
+                                if (allTorrents.Clone() is TransmissionTorrents data)
+                                    ProcessParsingTransmissionResponse(data);
 
-                            await Task.Delay(ConfigService.Instanse.UpdateTime, token);
+                                await Task.Delay(ConfigService.Instanse.UpdateTime, token);
+                            }
+                        }
+                        else
+                        {
+                            IsErrorOccuredWhileConnecting = true;
+                            if (info.Response.WebException != null)
+                                throw info.Response.WebException;
+
+                            if (info.Response.CustomException != null)
+                                throw info.Response.CustomException;
+
+                            if (info.Response.HttpWebResponse != null)
+                                throw new Exception(info.Response.HttpWebResponse.StatusCode.ToString());
                         }
                     }
-                    else
+                    catch (TaskCanceledException)
                     {
-                        IsErrorOccuredWhileConnecting = true;
-                        if (info.Response.WebException != null)
-                            throw info.Response.WebException;
-
-                        if (info.Response.CustomException != null)
-                            throw info.Response.CustomException;
-
-                        throw new Exception(info.Response.HttpWebResponse.StatusCode.ToString());
                     }
-                }
-                catch (TaskCanceledException)
-                {
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-                finally
-                {
-                    ConnectedServer = null;
-                    IsConnecting = false;
-                    allTorrents = null;
-                    TorrentList = new Bind<TorrentInfo>();
-                    IsConnected = false;
-                    Categories?.Clear();
-                    IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
-                    Log.Info("Disconnected from server");
-                    if (requested)
-                        await _eventAggregator.PublishOnBackgroundThreadAsync(new Messages.ReconnectAllowed(),
-                            CancellationToken.None);
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                    }
+                    finally
+                    {
+                        ConnectedServer = null;
+                        IsConnecting = false;
+                        TorrentList = new Bind<TorrentInfo>();
+                        IsConnected = false;
+                        Categories?.Clear();
+                        IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
+                        Log.Info("Disconnected from server");
+                        if (requested)
+                            await _eventAggregator.PublishOnBackgroundThreadAsync(new Messages.ReconnectAllowed(),
+                                CancellationToken.None);
+                    }
                 }
             }, token);
 
@@ -606,15 +593,16 @@ namespace Kebler.ViewModels
 
         public void OpenPaseedWithArgsFiles()
         {
-            State = WindowState.Normal;
             if (App.Instance.torrentsToAdd.Count > 0)
             {
                 var ch = new Task(() =>
                 {
                     Execute.OnUIThread(async () =>
                     {
+                        State = WindowState.Normal;
+                        Application.Current.MainWindow?.Activate();
                         await OpenTorrent(App.Instance.torrentsToAdd);
-                        App.Instance.torrentsToAdd = new List<string>();
+                        App.Instance.torrentsToAdd.Clear();
                     });
                 }, _cancelTokenSource.Token);
                 ch.Start();
@@ -686,10 +674,10 @@ namespace Kebler.ViewModels
 
             var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
             var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-            var altUp = _settings.AlternativeSpeedEnabled == true
+            var altUp = _settings?.AlternativeSpeedEnabled == true
                 ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
                 : string.Empty;
-            var altD = _settings.AlternativeSpeedEnabled == true
+            var altD = _settings?.AlternativeSpeedEnabled == true
                 ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
                 : string.Empty;
 
@@ -795,7 +783,7 @@ namespace Kebler.ViewModels
             var toRm = new List<TorrentInfo>(TorrentList.Except(info).ToList());
 
 
-            if (toRm.Count() > 0)
+            if (toRm.Any())
                 OnUIThread(() =>
                 {
                     foreach (var item in toRm)
@@ -821,26 +809,25 @@ namespace Kebler.ViewModels
 
         public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
         {
-            if (torrInf.Status == 1 || torrInf.Status == 2)
-            {
-                torrInf.PercentDone = torrInf.RecheckProgress;
-                return torrInf;
-            }
-
-            if (torrInf.Status == 0)
-                return torrInf;
-
-
-            if (!skip && torrInf.TrackerStats.Length > 0 &&
-                torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false)) torrInf.Status = -1;
+            // if (torrInf.Status == 1 || torrInf.Status == 2)
+            // {
+            //     torrInf.PercentDone = torrInf.RecheckProgress;
+            //     return torrInf;
+            // }
+            //
+            // if (torrInf.Status == 0)
+            //     return torrInf;
+            //
+            //
+            // if (!skip && torrInf.TrackerStats.Length > 0 &&
+            //     torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false)) torrInf.Status = -1;
 
             return torrInf;
         }
 
 
-        private void UpdateCategories(List<FolderCategory> dirrectories)
+        private void UpdateCategories(IEnumerable<FolderCategory> dirrectories)
         {
-            if (dirrectories == null) return;
             var dirs = dirrectories.Distinct().ToList();
 
             var cats = new List<FolderCategory>();
@@ -926,24 +913,14 @@ namespace Kebler.ViewModels
             }
 
 
-            if (allTorrents.Clone() is TransmissionTorrents data) ProcessParsingTransmissionResponse(data);
+            if (allTorrents.Clone() is TransmissionTorrents data)
+                ProcessParsingTransmissionResponse(data);
         }
 
 
         public void Unselect()
         {
             UpdateMoreInfoPosition(false);
-
-            // Execute.OnUIThread(() =>
-            // {
-            //     if (_view.TorrentsDataGrid.SelectionUnit != DataGridSelectionUnit.FullRow)
-            //         _view.TorrentsDataGrid.SelectedCells.Clear();
-            //
-            //     if (_view.TorrentsDataGrid.SelectionMode != DataGridSelectionMode.Single) //if the Extended mode
-            //         _view.TorrentsDataGrid.SelectedItems.Clear();
-            //     else
-            //         _view.TorrentsDataGrid.SelectedItem = null;
-            // });
         }
 
         public void ClearFilter()
@@ -964,7 +941,7 @@ namespace Kebler.ViewModels
 
         public void ChangeFolderFilter()
         {
-            if (SelectedFolderIndex != -1 && SelectedFolder != null) FilterText = $"{{p}}:{SelectedFolder.FullPath}";
+            if (SelectedFolderIndex != -1) FilterText = $"{{p}}:{SelectedFolder.FullPath}";
         }
     }
 
@@ -984,102 +961,98 @@ namespace Kebler.ViewModels
                 return;
             }
 
-            if (!IsConnected) return;
-
-            var sel = SelectedTorrent;
-            var dialog = new DialogBoxViewModel(Strings.MSG_InterNewName, sel.Name, false);
-
-            var result = await manager.ShowDialogAsync(dialog);
-
-            if (result == true)
+            if (IsConnected && SelectedTorrent != null)
             {
-                var resp = await _transmissionClient.TorrentRenamePathAsync(sel.Id, sel.Name, dialog.Value,
-                    _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                var sel = SelectedTorrent;
+                var dialog = new DialogBoxViewModel(Strings.MSG_InterNewName, sel.Name, false);
+
+                if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
+                {
+                    var resp = await _transmissionClient.TorrentRenamePathAsync(sel.Id, sel.Name, dialog.Value,
+                        _cancelTokenSource.Token);
+                    resp.ParseTransmissionReponse(Log);
+                }
             }
         }
 
         public async void SetLoc()
         {
-            if (!IsConnected) return;
+            if (IsConnected && SelectedTorrent != null)
+            {
+                var question = selectedIDs.Length > 1
+                    ? Strings.SetLocForMany.Replace("%d", selectedIDs.Length.ToString())
+                    : Strings.SetLocOnce;
 
-            //var items = TorrentsDataGrid.SelectedItems.Cast<TorrentInfo>().ToList();
-            var question = selectedIDs.Length > 1
-                ? Strings.SetLocForMany.Replace("%d", selectedIDs.Length.ToString())
-                : Strings.SetLocOnce;
+                var path = SelectedTorrent.DownloadDir;
+                var dialog = new DialogBoxViewModel(question, path, false);
 
-            var path = SelectedTorrent.DownloadDir;
-
-            //var dialog = new DialogBoxView(question, path, false) { Owner = Application.Current.MainWindow };
-
-            var dialog = new DialogBoxViewModel(question, path, false);
-
-            var result = await manager.ShowDialogAsync(dialog);
-
-            if ((bool) result)
-                await Task.Factory.StartNew(async () =>
-                {
-                    var itms = selectedIDs;
-                    while (true)
+                if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
+                    await Task.Factory.StartNew(async () =>
                     {
-                        if (Application.Current.Dispatcher.HasShutdownStarted) return;
-                        var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value, true,
-                            _cancelTokenSource.Token);
-                        resp.ParseTransmissionReponse(Log);
+                        var itms = selectedIDs;
+                        while (true)
+                        {
+                            if (Application.Current.Dispatcher.HasShutdownStarted) return;
+                            var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value, true,
+                                _cancelTokenSource.Token);
+                            resp.ParseTransmissionReponse(Log);
 
-                        if (CheckResponse(resp))
-                            break;
+                            if (CheckResponse(resp))
+                                break;
 
-                        await Task.Delay(500, _cancelTokenSource.Token);
-                    }
-                }, _cancelTokenSource.Token);
-
-            dialog.Value = null;
+                            await Task.Delay(500, _cancelTokenSource.Token);
+                        }
+                    }, _cancelTokenSource.Token);
+            }
         }
 
-        public async void Pause() => Pause(null);
+        public void Pause() => Pause(null);
 
-        public async void Pause(uint[]? ids = null)
+        public async void Pause(uint[]? ids)
         {
-            if (!IsConnected) return;
-
-            var id = ids ?? selectedIDs;
-            var resp = await _transmissionClient.TorrentStopAsync(id, _cancelTokenSource.Token);
-            if (resp.Success)
+            if (IsConnected && _transmissionClient != null)
             {
-                foreach (var item in id)
+                var id = ids ?? selectedIDs;
+                var resp = await _transmissionClient.TorrentStopAsync(id, _cancelTokenSource.Token);
+                if (resp.Success)
                 {
-                    TorrentList.FirstOrDefault(x => x.Id == item).Status = 0;
+                    foreach (var item in id)
+                    {
+                        var tr = TorrentList.FirstOrDefault(x => x.Id == item);
+                        if (tr != null)
+                            tr.Status = 0;
+                    }
                 }
-            }
 
-            resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void AddMagnet()
         {
-            if (!IsConnected) return;
-
-            var dialog = new DialogBoxViewModel(Strings.MSG_LinkOrMagnet, string.Empty, false);
-
-            var result = await manager.ShowDialogAsync(dialog);
-
-            if (result == true)
+            if (IsConnected && _transmissionClient != null)
             {
-                var newTr = new NewTorrent
-                {
-                    Filename = dialog.Value,
-                    Paused = false
-                };
+                var dialog = new DialogBoxViewModel(Strings.MSG_LinkOrMagnet, string.Empty, false);
 
-                var resp = await _transmissionClient.TorrentAddAsync(newTr, _cancelTokenSource.Token);
+                var result = await manager.ShowDialogAsync(dialog);
+
+                if (result == true)
+                {
+                    var newTr = new NewTorrent
+                    {
+                        Filename = dialog.Value,
+                        Paused = false
+                    };
+
+                    await _transmissionClient.TorrentAddAsync(newTr, _cancelTokenSource.Token);
+                }
             }
         }
 
         public async void PauseAll()
         {
             if (IsConnected && _transmissionClient != null)
-            {            
+            {
                 var ids = _torrentList.Select(x => x.Id).ToArray();
 
                 var resp = await _transmissionClient.TorrentStopAsync(ids, _cancelTokenSource.Token);
@@ -1095,13 +1068,11 @@ namespace Kebler.ViewModels
 
                 resp.ParseTransmissionReponse(Log);
             }
-            
-           
         }
 
         public async void Start() => Start(null);
 
-        public async void Start(uint[]? ids = null)
+        public async void Start(uint[]? ids)
         {
             if (IsConnected && _transmissionClient != null)
             {
@@ -1115,19 +1086,18 @@ namespace Kebler.ViewModels
                         var tor = TorrentList.FirstOrDefault(x => x.Id == item);
                         if (tor != null)
                         {
-                            tor.Status = tor.PercentDone == 1 ? 6 : 4;
+                            tor.Status = tor.PercentDone == 1D ? 6 : 4;
                         }
                     }
                 }
+
                 resp.ParseTransmissionReponse(Log);
             }
         }
 
         public async void StartAll()
         {
-            if (!IsConnected) return;
-
-            if (_isConnected && _transmissionClient != null)
+            if (IsConnected && _transmissionClient != null)
             {
                 var ids = _torrentList.Select(x => x.Id).ToArray();
                 var resp = await _transmissionClient.TorrentStartAsync(ids, _cancelTokenSource.Token);
@@ -1147,17 +1117,12 @@ namespace Kebler.ViewModels
             }
         }
 
-        public void Remove()
-        {
-            RemoveTorrent();
-        }
+        public void Remove() => RemoveTorrent();
+        public void RemoveWithData() => RemoveTorrent(true);
 
         public void Space(object obj)
         {
-            if (!IsConnected) return;
-
-
-            if (obj is TorrentInfo tr)
+            if (IsConnected && _transmissionClient != null && obj is TorrentInfo tr)
             {
                 var status = tr.Status;
                 Debug.WriteLine($"Space + {tr.Id}");
@@ -1165,95 +1130,97 @@ namespace Kebler.ViewModels
                 {
                     case 4:
                     case 6:
-                        Pause(new uint[] {tr.Id});
+                        Pause(new[] {tr.Id});
                         break;
                     default:
-                        Start(new uint[] {tr.Id});
+                        Start(new[] {tr.Id});
                         break;
                 }
             }
         }
 
-        public void RemoveWithData()
-        {
-            RemoveTorrent(true);
-        }
 
         public async void Verify()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void Reannounce()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void MoveTop()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void MoveUp()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void MoveDown()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
         public async void MoveBot()
         {
-            if (!IsConnected) return;
-
-            //var torrents = SelectedTorrents.Select(x => x.Id).ToArray();
-            var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs, _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            if (IsConnected && _transmissionClient != null)
+            {
+                var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs, _cancelTokenSource.Token);
+                resp.ParseTransmissionReponse(Log);
+            }
         }
 
-        public void Properties(object obj)
+        public void Properties(object? obj)
         {
-            if (obj != null && obj is TorrentInfo tr)
+            if (_transmissionClient != null)
             {
-                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] {tr.Id}));
-            }
-            else
-            {
-                var asd = SelectedTorrents.Select(x => x.Id).ToArray();
-                manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, asd));
+                if (obj != null && obj is TorrentInfo tr)
+                {
+                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] {tr.Id}));
+                }
+                else
+                {
+                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,
+                        SelectedTorrents.Select(x => x.Id).ToArray()));
+                }
             }
         }
 
         public void CopyMagnet()
         {
-            Clipboard.SetText(SelectedTorrent.MagnetLink);
+            if (SelectedTorrent != null)
+                Clipboard.SetText(SelectedTorrent.MagnetLink);
+            else
+                MessageBoxViewModel.ShowDialog("Please select torrent");
         }
 
         private void RemoveTorrent(bool removeData = false)
         {
-            if (selectedIDs != null && selectedIDs.Length > 0)
+            if (selectedIDs.Length > 0)
             {
                 var toRemove = selectedIDs;
                 var dialog =
@@ -1386,6 +1353,56 @@ namespace Kebler.ViewModels
             }
         }
 
+        public async void AddFromNewTrack()
+        {
+            if (await MessageBoxViewModel.ShowDialog(
+                "Kebler will get trackers from newtrackon.com and add for each torrent. Are you sure?", manager,
+                "Confirm action",
+                Enums.MessageBoxDilogButtons.YesNo) == true)
+            {
+                if (_transmissionClient!= null)
+                {
+                    var torents =
+                        (await Get(_transmissionClient.TorrentGetAsync(new []{TorrentFields.TRACKERS},
+                                _cancelTokenSource.Token),
+                            Strings.MW_StatusText_Torrents)).Value;
+                    
+                    var stringList =
+                        await new WebClient().DownloadStringTaskAsync(new Uri("https://newtrackon.com/api/live"));
+                    
+                    var trackersId = new List<string>();
+
+                    using StringReader reader = new StringReader(stringList);
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (!string.IsNullOrEmpty(line))
+                            trackersId.Add(line);
+                    }
+                    
+                    foreach (var torrent in torents.Torrents)
+                    {
+                        var tracks = torrent.Trackers.Select(x => x.announce);
+                        var toAdd = tracks.Except(trackersId);
+                        var arr = toAdd.ToArray();
+                        if (arr.Length > 0)
+                        {
+                            var resp = await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                            {
+                                IDs = new []{torrent.Id},
+                                TrackerAdd = arr
+                            }, new CancellationToken());
+                        
+                            if (resp.Success == false)
+                            {
+                            
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public void ExportTorrents()
         {
             var dialog = new FolderBrowserDialog();
@@ -1447,7 +1464,7 @@ namespace Kebler.ViewModels
         private Task? _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private bool requested;
-        private uint[]? selectedIDs;
+        private uint[] selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
         private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
 
@@ -1549,7 +1566,7 @@ namespace Kebler.ViewModels
             set => Set(ref _isErrorOccuredWhileConnecting, value);
         }
 
-        public Server ConnectedServer
+        public Server? ConnectedServer
         {
             get => _ConnectedServer;
             set

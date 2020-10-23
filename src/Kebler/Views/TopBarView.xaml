@@ -111,6 +111,10 @@
                 Header="{lex:BLoc  MI_ClearTrackers}"
                 IsEnabled="{Binding IsConnected}"/>
             <MenuItem
+                cal:Message.Attach="AddFromNewTrack"
+                Header="{lex:BLoc  MI_AddFromNewTrack}"
+                IsEnabled="{Binding IsConnected}"/>
+            <MenuItem
                 cal:Message.Attach="ExportTorrents"
                 Header="{lex:BLoc  MI_ExportTorrents}"
                 Visibility="Collapsed"
