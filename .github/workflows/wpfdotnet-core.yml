@@ -72,9 +72,12 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101      
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+        dotnet-version: 3.1.101    
+
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1    
+    #- name: Setup MSBuild.exe
+    #uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
     # - name: AssemblyInfo Version
     #   id: get_version
