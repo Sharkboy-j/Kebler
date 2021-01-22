@@ -538,7 +538,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fill trackers.
+        ///   Looks up a localized string similar to Fill trackers....
         /// </summary>
         public static string MI_AddFromNewTrack {
             get {
@@ -763,7 +763,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Share ratio:.
+        ///   Looks up a localized string similar to Ratio:.
         /// </summary>
         public static string MI_ShareRatio {
             get {
@@ -1114,7 +1114,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connecting to session.
+        ///   Looks up a localized string similar to Initialisation.
         /// </summary>
         public static string MW_StatusText_Session {
             get {
@@ -1456,7 +1456,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hashfails.
+        ///   Looks up a localized string similar to Hashfails.
         /// </summary>
         public static string TI_hashfails {
             get {
