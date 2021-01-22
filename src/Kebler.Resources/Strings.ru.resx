@@ -666,4 +666,10 @@
   <data name="ATD_TorrentExist_UpdateTrackers" xml:space="preserve">
     <value>Торрент уже создан, обновить трекеры?</value>
   </data>
+  <data name="MI_MoreInoShow" xml:space="preserve">
+    <value>Отображать подробности торрента</value>
+  </data>
+  <data name="MoreInfo_DontShowMoreInfo" xml:space="preserve">
+    <value>Не отображать подробную информацию</value>
+  </data>
 </root>

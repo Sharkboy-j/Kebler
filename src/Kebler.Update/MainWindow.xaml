@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles" Title="Update" Width="238"
     Height="100" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-    WindowStyle="ToolWindow" mc:Ignorable="d"
+    WindowStyle="None" mc:Ignorable="d"
     
     Closing="CustomizableWindow_Closing">
     <window:CustomizableWindow.Resources>

@@ -39,7 +39,7 @@ using TorrentFields = Kebler.Models.Torrent.TorrentFields;
 
 namespace Kebler.ViewModels
 {
-    public partial class KeblerViewModel : Screen,
+    public partial class KeblerViewModel : BaseScreen,
         IHandle<Messages.LocalizationCultureChangesMessage>,
         IHandle<Messages.ReconnectRequested>,
         IHandle<Messages.ReconnectAllowed>,
@@ -146,6 +146,7 @@ namespace Kebler.ViewModels
         public Task HandleAsync(Messages.ShowMoreInfoChanged message, CancellationToken cancellationToken)
         {
             IsShowMoreInfo = ConfigService.Instanse.MoreInfoShow;
+            MoreInfoView.IsShowMoreInfoCheckNotify = !IsShowMoreInfo;
             return Task.CompletedTask;
         }
 
@@ -218,12 +219,19 @@ namespace Kebler.ViewModels
         {
             foreach (var item in LocalizationManager.CultureList)
             {
-                var dd = new MenuItem { Header = item.EnglishName, Tag = item };
-                dd.Click += langChanged;
-                dd.IsCheckable = true;
-                dd.IsChecked = Equals(Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName,
+                var name = item.NativeName.ToCharArray();
+                if (name.Length > 0)
+                {
+                    name[0] = Char.ToUpper(name[0]);
+                }
+
+
+                var menuItem = new MenuItem { Header = new string(name), Tag = item };
+                menuItem.Click += langChanged;
+                menuItem.IsCheckable = true;
+                menuItem.IsChecked = Equals(Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName,
                     item.TwoLetterISOLanguageName);
-                Languages.Add(dd);
+                Languages.Add(menuItem);
             }
 
             ReInitServers();
@@ -303,6 +311,7 @@ namespace Kebler.ViewModels
                     _view.Height = ConfigService.Instanse.MainWindowHeight;
                     _view.WindowState = ConfigService.Instanse.MainWindowState;
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+                    IsShowMoreInfo = ConfigService.Instanse.MoreInfoShow;
                 }
                 else
                 {
@@ -325,7 +334,7 @@ namespace Kebler.ViewModels
                 ConfigService.Instanse.MainWindowState = _view.WindowState;
                 ConfigService.Instanse.CategoriesWidth = _view.CategoriesColumn.Width.Value;
                 ConfigService.Instanse.MoreInfoHeight = _view.MoreInfoColumn.Height.Value;
-
+                ConfigService.Instanse.MoreInfoShow = IsShowMoreInfo;
                 ConfigService.Save();
             }
         }
@@ -1203,11 +1212,11 @@ namespace Kebler.ViewModels
             }
         }
 
-        public void Properties(object? obj)
+        public void Properties()
         {
             if (_transmissionClient != null)
             {
-                if (obj != null && obj is TorrentInfo tr)
+                if (SelectedTorrent is TorrentInfo tr)
                 {
                     manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }));
                 }
@@ -1426,7 +1435,10 @@ namespace Kebler.ViewModels
         public void MoreInfoShow()
         {
             ConfigService.Instanse.MoreInfoShow = IsShowMoreInfo;
+            MoreInfoView.IsShowMoreInfoCheckNotify = !IsShowMoreInfo;
             ConfigService.Save();
+            if (!IsShowMoreInfo)
+                UpdateMoreInfoPosition(false);
         }
 
         #endregion
@@ -1677,7 +1689,12 @@ namespace Kebler.ViewModels
         public bool IsShowMoreInfo
         {
             get => isShowMoreInfo;
-            set => Set(ref isShowMoreInfo, value);
+            set
+            {
+                Set(ref isShowMoreInfo, value);
+                if (!value)
+                    UpdateMoreInfoPosition(false);
+            }
         }
     }
 

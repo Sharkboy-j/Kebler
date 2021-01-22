@@ -96,14 +96,8 @@
             <Separator />
             <MenuItem
                 cal:Message.Attach="Properties"
-                Header="{lex:BLoc  QA_Properties}"
+                Header="{lex:BLoc QA_Properties}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-
-            <MenuItem
-                cal:Message.Attach="Properties"
-                Header="{lex:BLoc  QA_Properties}"
-                IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-
         </MenuItem>
 
         <MenuItem Header="View">

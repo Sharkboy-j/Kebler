@@ -19,8 +19,17 @@ namespace Kebler.Update
         {
             try
             {
+
+
+
                 var module = Process.GetCurrentProcess()?.MainModule;
                 var path = module?.FileName;
+
+                foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
+                {
+                    process.Kill(false);
+                }
+
 
                 Log($"Current Path: {path}");
 

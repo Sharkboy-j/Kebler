@@ -280,10 +280,18 @@ namespace Kebler.ViewModels
                 ConfigService.Save();
                 _eventAggregator?.PublishOnUIThreadAsync(new ShowMoreInfoChanged());
 
-                if(value && hide !=null)
+                if (value && hide != null)
                 {
                     hide(false);
                 }
+            }
+        }
+
+        public bool IsShowMoreInfoCheckNotify
+        {
+            set
+            {
+                Set(ref _isShowMoreInfoCheck, value, nameof(IsShowMoreInfoCheck));
             }
         }
 
@@ -302,7 +310,7 @@ namespace Kebler.ViewModels
             this.view = view;
             IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;
-            if(unselect!=null)
+            if (unselect != null)
             {
                 hide = unselect;
             }
