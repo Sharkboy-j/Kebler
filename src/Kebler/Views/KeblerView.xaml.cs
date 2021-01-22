@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using Kebler.ViewModels;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,7 +20,10 @@ namespace Kebler.Views
 
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            (DataContext as KeblerViewModel).SaveConfig();
+            if(DataContext is KeblerViewModel vm)
+            {
+               vm.SaveConfig();
+            }
         }
 
         private void CustomizableWindow_Activated(object sender, EventArgs e)

@@ -90,7 +90,7 @@ namespace Kebler
             if (!isFirstInstance) Current.Shutdown();
             base.OnStartup(e);
 
-            notifyIcon = (TaskbarIcon) FindResource("NotifyIcon");
+            notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -102,12 +102,15 @@ namespace Kebler
 
         private void TaskbarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            Current.MainWindow?.Activate();
-            // var dd = IoC.Get<KeblerViewModel>();
-            //
-            // dd.State = WindowState.Normal;
-        }
+            if (Current.MainWindow is Window wnd)
+            {
+                wnd?.Activate();
 
+                if (wnd?.WindowState != WindowState.Normal)
+                    wnd.WindowState = WindowState.Normal;
+            }
+
+        }
 
         #region Events
 
@@ -130,7 +133,7 @@ namespace Kebler
                 var fileInfo = new FileInfo(arg);
                 if (fileInfo.Extension.Equals(".torrent") || arg.StartsWith("magnet")) torrentsToAdd.Add(arg);
             }
-            
+
             KeblerVM.OpenPaseedWithArgsFiles();
         }
 

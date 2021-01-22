@@ -294,7 +294,7 @@ namespace Kebler.ViewModels
                     //_view.CategoriesColumn.Width = new GridLength(ConfigService.Instanse.CategoriesWidth);
                     _view.Width = ConfigService.Instanse.MainWindowWidth;
                     _view.Height = ConfigService.Instanse.MainWindowHeight;
-                    //_view.WindowState = ConfigService.Instanse.MainWindowState;
+                    _view.WindowState = ConfigService.Instanse.MainWindowState;
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                 }
                 else
