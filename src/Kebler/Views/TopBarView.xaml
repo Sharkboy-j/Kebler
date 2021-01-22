@@ -105,6 +105,15 @@
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
 
         </MenuItem>
+
+        <MenuItem Header="View">
+            <MenuItem 
+                IsCheckable="True"
+                IsChecked="{Binding IsShowMoreInfo}"
+                cal:Message.Attach="MoreInfoShow"
+                CommandParameter="{Binding .}"
+                Header="{lex:BLoc MI_MoreInoShow}"/>
+        </MenuItem>
         <MenuItem Header="{lex:BLoc MI_Tools}">
             <MenuItem
                 cal:Message.Attach="ClearTrackers"
@@ -122,7 +131,7 @@
         </MenuItem>
         <MenuItem
             Name="LangMenu"
-            Header="{lex:BLoc  MI_lang}"
+            Header="{lex:BLoc MI_lang}"
             ItemsSource="{Binding Languages}" />
         <MenuItem
             Header="{lex:BLoc  Mi_Info}"

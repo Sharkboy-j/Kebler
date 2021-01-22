@@ -18,6 +18,7 @@ using Kebler.Services;
 using Kebler.TransmissionCore;
 using Kebler.Views;
 using Microsoft.VisualBasic;
+using static Kebler.Models.Messages;
 using Strings = Kebler.Resources.Strings;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -59,7 +60,7 @@ namespace Kebler.ViewModels
         private int _status, _piecesCount;
         private TorrentInfo? _ti;
         private Visibility _formsVisibility;
-
+        private bool _isShowMoreInfoCheck;
         private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
             new BindableCollection<TransmissionTorrentTrackerStats>();
 
@@ -269,6 +270,23 @@ namespace Kebler.ViewModels
             set => Set(ref _formsVisibility, value);
         }
 
+        public bool IsShowMoreInfoCheck
+        {
+            get => _isShowMoreInfoCheck;
+            set
+            {
+                Set(ref _isShowMoreInfoCheck, value);
+                ConfigService.Instanse.MoreInfoShow = !value;
+                ConfigService.Save();
+                _eventAggregator?.PublishOnUIThreadAsync(new ShowMoreInfoChanged());
+
+                if(value && hide !=null)
+                {
+                    hide(false);
+                }
+            }
+        }
+
         #endregion
 
         static CancellationTokenSource source = new CancellationTokenSource();
@@ -277,9 +295,17 @@ namespace Kebler.ViewModels
         KeblerView view;
         static FilesModel? model;
         private static TransmissionClient? _client;
-        public MoreInfoViewModel(KeblerView view)
+        IEventAggregator _eventAggregator;
+        Action<bool> hide;
+        public MoreInfoViewModel(KeblerView view, Action<bool>? unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
+            IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
+            _eventAggregator = eventAggregator;
+            if(unselect!=null)
+            {
+                hide = unselect;
+            }
         }
 
 
@@ -591,16 +617,16 @@ namespace Kebler.ViewModels
 
                     counter++;
                 }
-                
-                model.Root.Children.Add(p); 
+
+                model.Root.Children.Add(p);
             }
-            else if(ti.File !=null)
+            else if (ti.File != null)
             {
                 var node = new TorrentFile(ti.File.FileName, ti.File.FileSize, 0, true, 0);
-                model.Root.Children.Add(node);   
+                model.Root.Children.Add(node);
             }
-            
-          
+
+
             return model;
         }
 

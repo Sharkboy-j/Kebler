@@ -663,4 +663,13 @@
   <data name="MI_AddFromNewTrack" xml:space="preserve">
     <value>Fill trackers...</value>
   </data>
+  <data name="ATD_TorrentExist_UpdateTrackers" xml:space="preserve">
+    <value>Torrent exist, update trackers?</value>
+  </data>
+  <data name="MoreInfo_DontShowMoreInfo" xml:space="preserve">
+    <value>Don't show this tab</value>
+  </data>
+  <data name="MI_MoreInoShow" xml:space="preserve">
+    <value>Show more info tab</value>
+  </data>
 </root>

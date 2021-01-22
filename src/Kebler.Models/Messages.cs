@@ -26,5 +26,9 @@ namespace Kebler.Models
         public class ReconnectAllowed
         {
         }
+
+        public class ShowMoreInfoChanged
+        {
+        }
     }
 }

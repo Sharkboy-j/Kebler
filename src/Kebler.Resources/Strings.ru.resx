@@ -166,7 +166,7 @@
     <value>Ожидайте</value>
   </data>
   <data name="ATD_StartTorrent" xml:space="preserve">
-    <value>Возобновить</value>
+    <value>Начать загрузку</value>
   </data>
   <data name="ATD_Stop" xml:space="preserve">
     <value>Остановить</value>
@@ -662,5 +662,8 @@
   </data>
   <data name="TP_TorrentsSelected" xml:space="preserve">
     <value>выбрано торрентов</value>
+  </data>
+  <data name="ATD_TorrentExist_UpdateTrackers" xml:space="preserve">
+    <value>Торрент уже создан, обновить трекеры?</value>
   </data>
 </root>

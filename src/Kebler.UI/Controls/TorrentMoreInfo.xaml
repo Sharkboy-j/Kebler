@@ -469,11 +469,15 @@
             </TabItem>
         </TabControl>
 
-        <Label
-            Height="27" HorizontalAlignment="Right" VerticalAlignment="Top"
-            Content="{lex:BLoc MoreInfo_HideHint}"
-            Focusable="False"
-            Foreground="{DynamicResource ForegroundBrush.Gray}" />
+        <StackPanel Height="26" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+         
+            <Label
+                Content="{lex:BLoc MoreInfo_HideHint}"
+                Focusable="False" VerticalAlignment="Center"
+                Foreground="{DynamicResource ForegroundBrush.Gray}" />
+            <CheckBox Content="{lex:BLoc MoreInfo_DontShowMoreInfo}" IsChecked="{Binding IsShowMoreInfoCheck}" VerticalAlignment="Center" Margin="10,0,10,0"
+                      Foreground="{DynamicResource ForegroundBrush.Gray}"/>
+        </StackPanel>
 
         <Grid
             VerticalAlignment="Stretch" d:IsHidden="True"

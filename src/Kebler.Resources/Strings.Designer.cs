@@ -187,6 +187,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Torrent exist, update trackers?.
+        /// </summary>
+        public static string ATD_TorrentExist_UpdateTrackers {
+            get {
+                return ResourceManager.GetString("ATD_TorrentExist_UpdateTrackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Torrent File Path:.
         /// </summary>
         public static string ATD_TorrentFilePath {
@@ -700,6 +709,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show more info tab.
+        /// </summary>
+        public static string MI_MoreInoShow {
+            get {
+                return ResourceManager.GetString("MI_MoreInoShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peers:.
         /// </summary>
         public static string MI_Peers {
@@ -930,6 +948,15 @@ namespace Kebler.Resources {
         public static string MoreInfo_DeleteTrackerBtn {
             get {
                 return ResourceManager.GetString("MoreInfo_DeleteTrackerBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show this tab.
+        /// </summary>
+        public static string MoreInfo_DontShowMoreInfo {
+            get {
+                return ResourceManager.GetString("MoreInfo_DontShowMoreInfo", resourceCulture);
             }
         }
         

@@ -11,7 +11,7 @@
     xmlns:viewModels="clr-namespace:Kebler.ViewModels"
     xmlns:helpers="clr-namespace:Kebler.UI.Helpers;assembly=Kebler.UI"
     Title="TorrentPropsView"
-    MinWidth="490"
+    MinWidth="600"
     MinHeight="345"
     Width="490"
     Height="345"

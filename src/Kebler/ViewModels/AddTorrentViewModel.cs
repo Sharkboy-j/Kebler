@@ -164,9 +164,14 @@ namespace Kebler.ViewModels
 
                 DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>(); 
-                if(await MessageBoxViewModel.ShowDialog("Torrent exist, update trackers?",manager,string.Empty, Enums.MessageBoxDilogButtons.YesNo)==true)
+                if(await MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers, manager,string.Empty, Enums.MessageBoxDilogButtons.YesNo)==true)
                 {
+                    LoadingGridVisibility = Visibility.Visible;
                     Add();
+                }
+                else
+                {
+                    await TryCloseAsync(false);
                 }
             }
         }
@@ -371,6 +376,12 @@ namespace Kebler.ViewModels
                         }
                     }
                 }
+                catch(Exception ex)
+                {
+                    //2021-01-21 03:46:45,609 [11] ERROR Kebler.ViewModels.AddTorrentViewModel - System.NullReferenceException: Object reference not set to an instance of an object.
+                    //at Kebler.ViewModels.AddTorrentViewModel.< Add > b__55_0()
+                    Log.Error(ex);
+                }
                 finally
                 {
                     IsWorking = false;
@@ -398,7 +409,6 @@ namespace Kebler.ViewModels
             cancellationTokenSource?.Cancel();
             settings = null;
             _fileInfo = null;
-            _torrent = null;
         }
     }
 }
