@@ -424,7 +424,7 @@
     <value>Updating stats</value>
   </data>
   <data name="MW_StatusText_Session" xml:space="preserve">
-    <value>Connecting to session</value>
+    <value>Initialisation</value>
   </data>
   <data name="MW_StatusText_CloseSession" xml:space="preserve">
     <value>Closing session</value>
@@ -526,7 +526,7 @@
     <value>Max peers:</value>
   </data>
   <data name="MI_ShareRatio" xml:space="preserve">
-    <value>Share ratio:</value>
+    <value>Ratio:</value>
   </data>
   <data name="MI_Wasted" xml:space="preserve">
     <value>Wasted:</value>
@@ -565,7 +565,7 @@
     <value>connected</value>
   </data>
   <data name="TI_hashfails" xml:space="preserve">
-    <value>hashfails</value>
+    <value>Hashfails</value>
   </data>
   <data name="TI_path" xml:space="preserve">
     <value>Path:</value>
@@ -661,6 +661,15 @@
     <value>Export torrents...</value>
   </data>
   <data name="MI_AddFromNewTrack" xml:space="preserve">
-    <value>Fill trackers</value>
+    <value>Fill trackers...</value>
+  </data>
+  <data name="ATD_TorrentExist_UpdateTrackers" xml:space="preserve">
+    <value>Torrent exist, update trackers?</value>
+  </data>
+  <data name="MoreInfo_DontShowMoreInfo" xml:space="preserve">
+    <value>Don't show this tab</value>
+  </data>
+  <data name="MI_MoreInoShow" xml:space="preserve">
+    <value>Show more info tab</value>
   </data>
 </root>
