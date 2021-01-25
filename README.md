@@ -1,18 +1,18 @@
-# Kebler - Transmission Remote GUI (Windows only, and can't be ported to *nix os)
+# Kebler - Transmission Remote GUI (Windows only)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/2.png)
 
 ## Some info
 
 Kebler is GUI for Transmission Daemon (local or remote)
-Kebler developed using .Net Core 3.1 and still in beta
+Kebler developed using .Net 5 and still in beta
 
 
 [Official Transmission RPC specs](https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt)
 
 ## Installation
 
-Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net Core 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 Be carefull, portable version doesnot include auto update feature yet
 
