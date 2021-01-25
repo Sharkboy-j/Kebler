@@ -4,17 +4,20 @@
 
 ## Some info
 
-Kebler is Transmission Remote GUI
-Kebler is developed using .Net Core 3.0. And still in beta
+Kebler is GUI for Transmission Daemon (local or remote)
+Kebler developed using .Net 5 and still in beta
 
 
 [Official Transmission RPC specs](https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt)
 
 ## Installation
 
-Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net Core 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
-Be carefull, portable version doesnot include auto update feature
+Be carefull, portable version doesnot include auto update feature yet
+
+Also you can download <B>prerelease installer</B> and receive updates from <B>develop</B> branch
+
 
 #### Using [WinGet](https://docs.microsoft.com/en-us/windows/package-manager/winget/)
 
