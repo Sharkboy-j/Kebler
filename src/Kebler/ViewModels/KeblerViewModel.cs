@@ -174,12 +174,14 @@ namespace Kebler.ViewModels
 
         public void ShowConnectionManager()
         {
+            var sw = new Stopwatch();
+            sw.Start();
             if (_eventAggregator != null)
                 manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
             else
             {
-                Log.Error(
-                    $"{nameof(KeblerViewModel)}.{nameof(ShowConnectionManager)}() => {nameof(_eventAggregator)} is null");
+                sw.Stop();
+                Log.Error(sw, $"{nameof(KeblerViewModel)}.{nameof(ShowConnectionManager)}() => {nameof(_eventAggregator)} is null");
             }
         }
 

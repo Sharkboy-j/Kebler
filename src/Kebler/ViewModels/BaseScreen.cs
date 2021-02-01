@@ -18,5 +18,7 @@ namespace Kebler.ViewModels
             get => _isWorking;
             set => Set(ref _isWorking, value);
         }
+
+     
     }
 }

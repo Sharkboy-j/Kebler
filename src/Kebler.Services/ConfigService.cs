@@ -64,8 +64,13 @@ namespace Kebler.Services
             catch (FileNotFoundException)
             {
                 Log.Info("Configuration file not found");
-                return false;
             }
+            catch(Exception ex)
+            {
+                Log.Error(ex);
+            }
+            return false;
+
         }
 
         private static void LoadConfigurationFromFile()
