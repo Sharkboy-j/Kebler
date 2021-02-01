@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
@@ -13,9 +14,17 @@ namespace Kebler
 {
     public static class LocalExtensions
     {
+        #region Log
+        public static void Error(this ILog log, System.Diagnostics.Stopwatch watch, object error, [CallerMemberName] string data = "")
+        {
+            log.Error($"{data} done with error in {watch.ElapsedMilliseconds}ms");
+            log.Error(error);
+        }
+        #endregion
+
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            if (((FrameworkElement) templateFrameworkElement).TemplatedParent is Window window) action(window);
+            if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
         }
 
         public static IntPtr GetWindowHandle(this Window window)
@@ -24,7 +33,7 @@ namespace Kebler
             return helper.Handle;
         }
 
-      
+
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
         {
             return source.OrderBy(ToLambda<T>(propertyName));
