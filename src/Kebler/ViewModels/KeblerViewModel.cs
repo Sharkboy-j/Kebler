@@ -1282,7 +1282,7 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList);
+                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory);
 
                     await manager.ShowDialogAsync(dialog);
 

@@ -5,6 +5,77 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
     <SolidColorBrush x:Key="BackgroundBrush.Dark" Color="{DynamicResource BackgroundColor.Dark}" />
 
+    <SolidColorBrush x:Key="ComboBox.Popup.BorderBrush" Color="{DynamicResource ComboBox.Popup.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Popup.BackgroundBrush" Color="{DynamicResource ComboBox.Popup.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Background" Color="{DynamicResource ComboBox.Static.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Border" Color="{DynamicResource ComboBox.Static.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="{DynamicResource ComboBox.Static.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Border"
+                     Color="{DynamicResource ComboBox.Static.Editable.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background"
+                     Color="{DynamicResource ComboBox.Static.Editable.Button.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border"
+                     Color="{DynamicResource ComboBox.Static.Editable.Button.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{DynamicResource ComboBox.MouseOver.GlyphColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{DynamicResource ComboBox.MouseOver.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{DynamicResource ComboBox.MouseOver.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background"
+                     Color="{DynamicResource ComboBox.MouseOver.Editable.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border"
+                     Color="{DynamicResource ComboBox.MouseOver.Editable.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Background"
+                     Color="{DynamicResource ComboBox.MouseOver.Editable.Button.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border"
+                     Color="{DynamicResource ComboBox.MouseOver.Editable.Button.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{DynamicResource ComboBox.Pressed.GlyphColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{DynamicResource ComboBox.Pressed.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{DynamicResource ComboBox.Pressed.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background"
+                     Color="{DynamicResource ComboBox.Pressed.Editable.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border"
+                     Color="{DynamicResource ComboBox.Pressed.Editable.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Background"
+                     Color="{DynamicResource ComboBox.Pressed.Editable.Button.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border"
+                     Color="{DynamicResource ComboBox.Pressed.Editable.Button.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{DynamicResource ComboBox.Disabled.GlyphColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{DynamicResource ComboBox.Disabled.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{DynamicResource ComboBox.Disabled.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background"
+                     Color="{DynamicResource ComboBox.Disabled.Editable.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border"
+                     Color="{DynamicResource ComboBox.Disabled.Editable.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background"
+                     Color="{DynamicResource ComboBox.Disabled.Editable.Button.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border"
+                     Color="{DynamicResource ComboBox.Disabled.Editable.Button.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="{DynamicResource ComboBox.Static.GlyphColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewHover.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewHover.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelected.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelected.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedHover.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedHover.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedNoFocus.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedNoFocus.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewFocus.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewFocus.BorderColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewHoverFocus.BackgroundColor}" />
+    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border"
+                     Color="{DynamicResource ComboBoxItem.ItemsviewHoverFocus.BorderColor}" />
+
+
     <SolidColorBrush x:Key="DataGrid.Header.BorderBrush" Color="{DynamicResource DataGrid.Header.BorderColor}" />
     <SolidColorBrush x:Key="DataGrid.Header.BackgroundBrush" Color="{DynamicResource DataGrid.Header.BackgroundColor}" />
     <SolidColorBrush x:Key="DataGrid.Header.ForegroundBrush" Color="{DynamicResource DataGrid.Header.ForegroundColor}" />
@@ -41,35 +112,6 @@
     <SolidColorBrush x:Key="ForegroundBrush.Gray" Color="{DynamicResource ForegroundColor.Gray}" />
 
     <SolidColorBrush x:Key="ListView.Static.Background" Color="{DynamicResource ListView.BackgroundColor}" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -290,75 +332,8 @@
     <SolidColorBrush x:Key="MergeCheckBox.Disabled.Background"
                      Color="{DynamicResource MergeCheckBox.Disabled.BackgroundColor}" />
     <SolidColorBrush x:Key="MergeCheckBox.Disabled.Border" Color="{DynamicResource MergeCheckBox.Disabled.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Popup.BorderBrush" Color="{DynamicResource ComboBox.Popup.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Popup.BackgroundBrush" Color="{DynamicResource ComboBox.Popup.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Background" Color="{DynamicResource ComboBox.Static.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Border" Color="{DynamicResource ComboBox.Static.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="{DynamicResource ComboBox.Static.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Editable.Border"
-                     Color="{DynamicResource ComboBox.Static.Editable.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background"
-                     Color="{DynamicResource ComboBox.Static.Editable.Button.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border"
-                     Color="{DynamicResource ComboBox.Static.Editable.Button.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{DynamicResource ComboBox.MouseOver.GlyphColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{DynamicResource ComboBox.MouseOver.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{DynamicResource ComboBox.MouseOver.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background"
-                     Color="{DynamicResource ComboBox.MouseOver.Editable.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border"
-                     Color="{DynamicResource ComboBox.MouseOver.Editable.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Background"
-                     Color="{DynamicResource ComboBox.MouseOver.Editable.Button.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border"
-                     Color="{DynamicResource ComboBox.MouseOver.Editable.Button.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{DynamicResource ComboBox.Pressed.GlyphColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{DynamicResource ComboBox.Pressed.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{DynamicResource ComboBox.Pressed.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background"
-                     Color="{DynamicResource ComboBox.Pressed.Editable.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border"
-                     Color="{DynamicResource ComboBox.Pressed.Editable.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Background"
-                     Color="{DynamicResource ComboBox.Pressed.Editable.Button.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border"
-                     Color="{DynamicResource ComboBox.Pressed.Editable.Button.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{DynamicResource ComboBox.Disabled.GlyphColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{DynamicResource ComboBox.Disabled.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{DynamicResource ComboBox.Disabled.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background"
-                     Color="{DynamicResource ComboBox.Disabled.Editable.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border"
-                     Color="{DynamicResource ComboBox.Disabled.Editable.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background"
-                     Color="{DynamicResource ComboBox.Disabled.Editable.Button.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border"
-                     Color="{DynamicResource ComboBox.Disabled.Editable.Button.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="{DynamicResource ComboBox.Static.GlyphColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewHover.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewHover.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelected.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelected.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedHover.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedHover.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedNoFocus.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewSelectedNoFocus.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewFocus.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewFocus.BorderColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewHoverFocus.BackgroundColor}" />
-    <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border"
-                     Color="{DynamicResource ComboBoxItem.ItemsviewHoverFocus.BorderColor}" />
+   
+    
     <SolidColorBrush x:Key="InteractiveRebase.Red" Color="{DynamicResource InteractiveRebase.RedColor}" />
     <SolidColorBrush x:Key="InteractiveRebase.Green" Color="{DynamicResource InteractiveRebase.GreenColor}" />
     <SolidColorBrush x:Key="InteractiveRebase.Yellow" Color="{DynamicResource InteractiveRebase.YellowColor}" />
