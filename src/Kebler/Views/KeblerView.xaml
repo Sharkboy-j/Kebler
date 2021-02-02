@@ -476,7 +476,7 @@
                         <MenuItem cal:Message.Attach="Rename" Header="{lex:BLoc QA_Rename}" />
                         <Separator />
                         <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:BLoc QA_CopyMagnet}" />
-                        <MenuItem cal:Message.Attach="Properties(s)" Header="{lex:BLoc QA_Properties}" />
+                        <MenuItem cal:Message.Attach="Properties" Header="{lex:BLoc QA_Properties}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>

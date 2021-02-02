@@ -64,7 +64,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
                         <RowDefinition Height="40" />
-                        <RowDefinition Height="25" />
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
@@ -137,13 +137,22 @@
                         TextOptions.TextHintingMode="Animated"
                         TextOptions.TextRenderingMode="ClearType" />
 
-                    <TextBox
+                    <!--<TextBox
                         Grid.Row="2"
                         Grid.Column="2"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         IsReadOnly="False"
-                        Text="{Binding DownlaodDir}" />
+                        Text="{Binding DownlaodDir}" />-->
+                    <ComboBox
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="{Binding DownlaodDirPath}"
+                        SelectedIndex="{Binding DownlaodDirIndex,Mode=OneWay}"
+                        IsEditable="True"
+                        IsReadOnly="False"
+                        ItemsSource="{Binding DownlaodDirs}"
+                        Background="{x:Null}"/>
 
                     <TextBlock
                         Grid.Row="4"

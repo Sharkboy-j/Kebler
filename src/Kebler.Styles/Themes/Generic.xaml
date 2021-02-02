@@ -13,5 +13,6 @@
         <ResourceDictionary Source="pack://application:,,,/Kebler.Styles;component/Themes/Styles/Scroll.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.Styles;component/Themes/Styles/Check.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Kebler.Styles;component/Themes/Styles/Window.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Kebler.Styles;component/Themes/Styles/Combobox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

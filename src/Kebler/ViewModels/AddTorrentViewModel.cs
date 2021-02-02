@@ -30,6 +30,7 @@ namespace Kebler.ViewModels
     {
         #region Properties
 
+        private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -37,14 +38,15 @@ namespace Kebler.ViewModels
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
         private FileInfo? _fileInfo;
+        private BindableCollection<string> _dirs;
         private SessionSettings? settings;
         public AddTorrentResponse TorrentResult;
         public bool Result;
         private IEnumerable<Kebler.Models.Torrent.TorrentInfo> _infos;
 
-        private string? _torrentPath, _downlaodDir;
+        private string? _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
-        private int _peerLimit, _uploadLimit;
+        private int _peerLimit, _uploadLimit, _downlaodDirIndex;
         private ITreeModel _files;
 
         private Visibility _resultVisibility = Visibility.Collapsed,
@@ -67,10 +69,21 @@ namespace Kebler.ViewModels
             set => Set(ref _torrentPath, value);
         }
 
-        public string DownlaodDir
+        public BindableCollection<string> DownlaodDirs
         {
-            get => _downlaodDir ??= string.Empty;
-            set => Set(ref _downlaodDir, value);
+            get
+            {
+                if(_dirs==null)
+                    _dirs = new BindableCollection<string>();
+                return _dirs;
+            }
+            set => Set(ref _dirs, value);
+        }
+
+        public string DownlaodDirPath
+        {
+            get => _downlaodDirPath ??= string.Empty;
+            set => Set(ref _downlaodDirPath, value);
         }
 
         public bool IsWorking
@@ -115,9 +128,18 @@ namespace Kebler.ViewModels
             set => Set(ref _loadingGridVisibility, value);
         }
 
+        public int DownlaodDirIndex
+        {
+            get => _downlaodDirIndex;
+            set => Set(ref _downlaodDirIndex, value);
+        }
+
+
+        
         #endregion
 
-        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos)
+        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos,
+            BindableCollection<FolderCategory> folderCategory)
         {
             _infos = infos;
             _fileInfo = new FileInfo(path);
@@ -128,7 +150,12 @@ namespace Kebler.ViewModels
             IsAutoStart = true;
             this.settings = settings;
 
-            DownlaodDir = settings.DownloadDirectory;
+
+            foreach(var item in folderCategory)
+            {
+                DownlaodDirs.Add(item.FullPath);
+            }
+            DownlaodDirIndex = 0;
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
@@ -162,7 +189,7 @@ namespace Kebler.ViewModels
 
                 var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
 
-                DownlaodDir = info.DownloadDir;
+                //DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>(); 
                 if(await MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers, manager,string.Empty, Enums.MessageBoxDilogButtons.YesNo)==true)
                 {
@@ -298,7 +325,7 @@ namespace Kebler.ViewModels
                     {
                         Metainfo = Convert.ToBase64String(_torrent.EncodeAsBytes()),
                         Paused = !IsAutoStart,
-                        DownloadDirectory = DownlaodDir,
+                        DownloadDirectory = DownlaodDirPath,
                         PeerLimit = PeerLimit,
                         FilesUnwanted = unWant.ToArray(),
                         FilesWanted = want.ToArray()
