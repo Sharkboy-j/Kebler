@@ -25,6 +25,7 @@ namespace Kebler.ViewModels
     using LogManager = log4net.LogManager;
     using Kebler.Models.Interfaces;
     using Kebler.UI.CSControls.TreeListView;
+    using Kebler.Views;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
@@ -139,11 +140,16 @@ namespace Kebler.ViewModels
         #endregion
 
         public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos,
-            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator, ref bool isWindOpened)
+            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator, ref bool isWindOpened, ref KeblerView wnd)
         {
             isWindOpened = true;
             _eventAggregator = eventAggregator;
             _eventAggregator?.SubscribeOnPublishedThread(this);
+
+            wnd?.Activate();
+
+            if (wnd?.WindowState != WindowState.Normal)
+                wnd.WindowState = WindowState.Normal;
 
             _infos = infos;
             _fileInfo = new FileInfo(path);

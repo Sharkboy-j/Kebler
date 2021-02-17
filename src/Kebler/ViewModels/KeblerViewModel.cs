@@ -1289,7 +1289,8 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory, _eventAggregator, ref _isAddWindOpened);
+                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory, _eventAggregator, ref _isAddWindOpened, ref _view);
+
 
                     await manager.ShowDialogAsync(dialog);
 
