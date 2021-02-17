@@ -1294,6 +1294,7 @@ namespace Kebler.ViewModels
 
                     await manager.ShowDialogAsync(dialog);
 
+
                     _isAddWindOpened = false;
 
                     if (dialog.Result == true)
