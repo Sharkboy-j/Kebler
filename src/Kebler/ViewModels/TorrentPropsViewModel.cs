@@ -230,13 +230,13 @@ namespace Kebler.ViewModels
             var maxId = Trackers.Max(x => x.ID) + 1;
             var tracker = new TransmissionTorrentTrackers()
             {
-                announce = dialog.Value,
+                announce = dialog.Value.ToString(),
                 ID = maxId
             };
             if (result == true && !Trackers.Contains(tracker))
             {
                 Trackers.Add(tracker);
-                toAdd.Add(dialog.Value);
+                toAdd.Add(dialog.Value.ToString());
             }
         }
     }

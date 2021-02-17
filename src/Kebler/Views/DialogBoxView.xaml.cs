@@ -13,9 +13,11 @@ namespace Kebler.Views
             InitializeComponent();
             PWD = DialogPasswordBox;
             TBX = TBXC;
+            CBX = CBXT;
         }
 
         public PasswordBox PWD { get; }
         public TextBox TBX { get; }
+        public ComboBox CBX { get; }
     }
 }

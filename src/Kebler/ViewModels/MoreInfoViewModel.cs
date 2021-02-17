@@ -566,7 +566,7 @@ namespace Kebler.ViewModels
                 var addRes = await _client.TorrentSetAsync(new TorrentSettings
                 {
                     IDs = ids,
-                    TrackerAdd = new[] { dialog.Value }
+                    TrackerAdd = new[] { dialog.Value.ToString() }
                 }, new CancellationToken());
 
                 if (addRes.Success)

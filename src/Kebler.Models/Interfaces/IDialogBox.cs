@@ -6,5 +6,7 @@ namespace Kebler.Models.Interfaces
     {
         PasswordBox PWD { get; }
         TextBox TBX { get; }
+        ComboBox CBX { get; }
+
     }
 }

@@ -184,7 +184,7 @@ namespace Kebler.ViewModels
                     return;
                 }
 
-                pswd = dialog.Value;
+                pswd = dialog.Value.ToString();
             }
 
             var result = await TesConnection(pswd);

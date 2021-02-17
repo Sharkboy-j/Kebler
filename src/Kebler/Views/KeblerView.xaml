@@ -1,22 +1,32 @@
 ﻿<window:CustomizableWindow
-    x:Class="Kebler.Views.KeblerView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
+    x:Class="Kebler.Views.KeblerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
     xmlns:controls="clr-namespace:Kebler.UI.Controls;assembly=Kebler.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI" xmlns:ui11="clr-namespace:Kebler.Views"
+    xmlns:ui="clr-namespace:Kebler.UI;assembly=Kebler.UI"
+    xmlns:ui11="clr-namespace:Kebler.Views"
     xmlns:viewModels="clr-namespace:Kebler.ViewModels"
     xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles"
     Title="{Binding HeaderTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"
-    Width="850" Height="600" MinWidth="850"
-    MinHeight="600" cal:Message.Attach="[Event Closing] = [Action ClosingW]"
+    Width="850"
+    Height="600"
+    MinWidth="850"
+    MinHeight="600"
+    cal:Message.Attach="[Event Closing] = [Action ClosingW]"
     d:DataContext="{DynamicResource KeblerViewModel}"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
-    lex:ResxLocalizationProvider.DefaultDictionary="Strings" Activated="CustomizableWindow_Activated"
-    Deactivated="CustomizableWindow_Deactivated" IsTitleVisible="True" ResizeMode="CanResize"
-    ShowHeaderLine="True" WindowStartupLocation="CenterScreen"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    Activated="CustomizableWindow_Activated"
+    Deactivated="CustomizableWindow_Deactivated"
+    IsTitleVisible="True"
+    ResizeMode="CanResize"
+    ShowHeaderLine="True"
+    WindowStartupLocation="CenterScreen"
     WindowState="{Binding State}"
     mc:Ignorable="d">
     <window:CustomizableWindow.InputBindings>
@@ -65,7 +75,9 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Border
-                                    Name="PART_WindowHeader" Grid.Row="0" Padding="0"
+                                    Name="PART_WindowHeader"
+                                    Grid.Row="0"
+                                    Padding="0"
                                     Background="{TemplateBinding Control.Background}"
                                     BorderBrush="{DynamicResource ToolBarBorderBrush}"
                                     BorderThickness="0"
@@ -77,32 +89,42 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <ui11:TopBarView
-                                            Grid.Column="0" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="true" />
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Left"
+                                            WindowChrome.IsHitTestVisibleInChrome="true" />
                                         <Label
-                                            Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="3"
+                                            HorizontalAlignment="Center"
                                             Content="{TemplateBinding Window.Title}"
                                             Foreground="{TemplateBinding Control.Foreground}"
                                             Visibility="{TemplateBinding IsTitleVisible,
                                                                          Converter={StaticResource BooleanToVisibility}}" />
                                         <StackPanel
-                                            Grid.Column="2" Orientation="Horizontal" WindowChrome.IsHitTestVisibleInChrome="true">
+                                            Grid.Column="2"
+                                            Orientation="Horizontal"
+                                            WindowChrome.IsHitTestVisibleInChrome="true">
                                             <Button
-                                                Name="PART_MinimizeButton" Command="SystemCommands.MinimizeWindowCommand"
+                                                Name="PART_MinimizeButton"
+                                                Command="SystemCommands.MinimizeWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
                                                 <Path Data="{StaticResource MinimizeGeometry}" Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
-                                                Name="PART_RestoreButton" Command="SystemCommands.RestoreWindowCommand"
+                                                Name="PART_RestoreButton"
+                                                Command="SystemCommands.RestoreWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
                                                 <Path Data="{StaticResource RestoreGeometry}" Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
-                                                Name="PART_MaximizeButton" Command="SystemCommands.MaximizeWindowCommand"
+                                                Name="PART_MaximizeButton"
+                                                Command="SystemCommands.MaximizeWindowCommand"
                                                 Style="{DynamicResource WindowButton}">
                                                 <Path Data="{StaticResource MaximizeGeometry}" Style="{DynamicResource WindowPathStyle}" />
                                             </Button>
                                             <Button
-                                                Name="PART_CloseButton" Command="SystemCommands.CloseWindowCommand"
+                                                Name="PART_CloseButton"
+                                                Command="SystemCommands.CloseWindowCommand"
                                                 Style="{DynamicResource WindowCloseButton}">
                                                 <Path Data="{StaticResource CloseGeometry}" Style="{DynamicResource WindowCloseButtonPathStyle}" />
                                             </Button>
@@ -161,29 +183,38 @@
 
                     <ui:ToolBarButton
                         Title="{lex:BLoc QA_AddTorrent}"
-                        Grid.Column="1" Margin="0,2" cal:Message.Attach="Add"
+                        Grid.Column="1"
+                        Margin="0,2"
+                        cal:Message.Attach="Add"
                         Data="{StaticResource Icon.Open}"
-                        PathHeight="17" PathWidth="20"
+                        PathHeight="17"
+                        PathWidth="20"
                         Style="{StaticResource ToolBarButton}" />
 
                     <StackPanel Grid.Column="3" Orientation="Horizontal">
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_ResumeAll}"
-                            Margin="0,2" cal:Message.Attach="StartAll"
+                            Margin="0,2"
+                            cal:Message.Attach="StartAll"
                             Data="{StaticResource Icon.Resume}"
-                            PathHeight="16" PathWidth="16"
+                            PathHeight="16"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_PauseAll}"
-                            Margin="0,2" cal:Message.Attach="PauseAll"
+                            Margin="0,2"
+                            cal:Message.Attach="PauseAll"
                             Data="{StaticResource Icon.Pause}"
-                            PathHeight="16" PathWidth="16"
+                            PathHeight="16"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_Slow}"
-                            Margin="0,2" cal:Message.Attach="Slow"
+                            Margin="0,2"
+                            cal:Message.Attach="Slow"
                             ImageSource="{Binding IsSlowModeEnabled, Converter={StaticResource BoolToSlowImageConveter}}"
-                            PathHeight="16" PathWidth="16"
+                            PathHeight="16"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                     </StackPanel>
                 </Grid>
@@ -199,37 +230,59 @@
                                 <RowDefinition Height="6*" />
                             </Grid.RowDefinitions>
                             <StackPanel
-                                Grid.Row="0" Margin="0,3,0,0" HorizontalAlignment="Center"
+                                Grid.Row="0"
+                                Margin="0,3,0,0"
+                                HorizontalAlignment="Center"
                                 Orientation="Horizontal">
                                 <Label
-                                    Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Padding="0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
                                     Content="{Binding ConnectedServer.Title, UpdateSourceTrigger=PropertyChanged}"
                                     Foreground="{DynamicResource ForegroundBrush.Light}" />
                             </StackPanel>
 
                             <StackPanel
-                                Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
                                 <Grid Visibility="{Binding IsDoingStuff, Converter={StaticResource ReverseBoolToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Label
-                                        Grid.Column="0" Width="Auto" Height="Auto"
-                                        Margin="10,0,0,0" Padding="0" HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                        Grid.Column="0"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
                                         Content="{Binding DownloadSpeed}" />
                                     <Label
-                                        Grid.Column="1" Width="Auto" Height="Auto"
-                                        Margin="10,0,0,0" Padding="0" HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                        Grid.Column="1"
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="10,0,0,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
                                         Content="{Binding UploadSpeed}" />
                                 </Grid>
                                 <controls:LoadingRing
-                                    Width="16" Height="16" Margin="0,0.5,3,0"
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,0.5,3,0"
                                     Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                                 <Label
-                                    Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Padding="0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
                                     Content="{Binding LongStatusText}"
                                     Foreground="White"
                                     Visibility="{Binding IsDoingStuff, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
@@ -252,33 +305,43 @@
 
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_Resume}"
-                            Margin="0,2" cal:Message.Attach="Start"
+                            Margin="0,2"
+                            cal:Message.Attach="Start"
                             Data="{StaticResource Icon.Resume}"
-                            PathHeight="16" PathWidth="16"
+                            PathHeight="16"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
 
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_Pause}"
-                            Margin="0,2" cal:Message.Attach="Pause"
+                            Margin="0,2"
+                            cal:Message.Attach="Pause"
                             Data="{StaticResource Icon.Pause}"
-                            PathHeight="16" PathWidth="16"
+                            PathHeight="16"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
                     </StackPanel>
                     <StackPanel
-                        Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
 
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_Remove}"
-                            Margin="0,2" cal:Message.Attach="Remove"
+                            Margin="0,2"
+                            cal:Message.Attach="Remove"
                             Data="{StaticResource Icon.Remove}"
-                            PathHeight="18" PathWidth="16"
+                            PathHeight="18"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
 
                         <ui:ToolBarButton
                             Title="{lex:BLoc QA_RemoveData}"
-                            Margin="0,2" cal:Message.Attach="RemoveWithData"
+                            Margin="0,2"
+                            cal:Message.Attach="RemoveWithData"
                             Data="{StaticResource Icon.RemoveData}"
-                            PathHeight="18" PathWidth="16"
+                            PathHeight="18"
+                            PathWidth="16"
                             Style="{StaticResource ToolBarButton}" />
 
                     </StackPanel>
@@ -290,7 +353,9 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Name="CategoriesColumn" Width="150" MinWidth="100"
+                    Name="CategoriesColumn"
+                    Width="150"
+                    MinWidth="100"
                     MaxWidth="250" />
                 <!--  splitter column  -->
                 <ColumnDefinition Width="1" />
@@ -300,7 +365,9 @@
                 <RowDefinition />
                 <RowDefinition Height="1" />
                 <RowDefinition
-                    Name="MoreInfoColumn" Height="0" MinHeight="0" />
+                    Name="MoreInfoColumn"
+                    Height="0"
+                    MinHeight="0" />
             </Grid.RowDefinitions>
             <Grid
                 Background="{DynamicResource ListBox.Static.Background}"
@@ -313,8 +380,10 @@
                 </Grid.RowDefinitions>
 
                 <ListBox
-                    Name="CategoriesListBox" cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
-                    BorderThickness="0" DisplayMemberPath="Title"
+                    Name="CategoriesListBox"
+                    cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
+                    BorderThickness="0"
+                    DisplayMemberPath="Title"
                     ItemsSource="{Binding CategoriesList}"
                     SelectedIndex="{Binding SelectedCategoryIndex}"
                     SelectedValue="{Binding SelectedCat}"
@@ -327,10 +396,14 @@
                 </ListBox>
 
                 <Grid
-                    Height="24" Margin="4,4" VerticalAlignment="Stretch"
+                    Height="24"
+                    Margin="4,4"
+                    VerticalAlignment="Stretch"
                     Row="1">
                     <TextBox
-                        Name="FilterTextBox" Margin="0" Padding="0,0,17,0"
+                        Name="FilterTextBox"
+                        Margin="0"
+                        Padding="0,0,17,0"
                         VerticalContentAlignment="Center"
                         cal:Message.Attach="[Event TextChanged] = [Action FilterTextChanged]"
                         BorderBrush="{StaticResource BorderBrush}"
@@ -338,17 +411,21 @@
                         Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Border
-                        Width="20" HorizontalAlignment="Right"
-                        cal:Message.Attach="[Event PreviewMouseUp] = [Action ClearFilter]" Cursor="Hand">
+                        Width="20"
+                        HorizontalAlignment="Right"
+                        cal:Message.Attach="[Event PreviewMouseUp] = [Action ClearFilter]"
+                        Cursor="Hand">
                         <Image
-                            Width="13" Height="13"
+                            Width="13"
+                            Height="13"
                             Source="{StaticResource Icon.Clear}"
                             Stretch="UniformToFill" />
                     </Border>
                 </Grid>
 
                 <ListBox
-                    Grid.Row="2" cal:Message.Attach="[Event PreviewMouseUp] = [Action ChangeFolderFilter]"
+                    Grid.Row="2"
+                    cal:Message.Attach="[Event PreviewMouseUp] = [Action ChangeFolderFilter]"
                     BorderThickness="0"
                     ItemsSource="{Binding Categories}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -362,8 +439,11 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Path
-                                    Width="16" Height="15" Margin="0,0,3,0"
-                                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                                    Width="16"
+                                    Height="15"
+                                    Margin="0,0,3,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
                                     Data="{StaticResource Icon.Dir}"
                                     Fill="{DynamicResource Window.Button.Static.Foreground}"
                                     Stretch="Fill" />
@@ -378,24 +458,31 @@
             </Grid>
 
             <ListView
-                Name="list" Grid.Row="0" Grid.Column="2"
+                Name="list"
+                Grid.Row="0"
+                Grid.Column="2"
                 HorizontalAlignment="Stretch"
                 cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
-                x:FieldModifier="public" IsSynchronizedWithCurrentItem="True"
+                x:FieldModifier="public"
+                IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
                 <ListView.InputBindings>
-                    <KeyBinding Key="Space" Command="{Binding SpaceCommand}" CommandParameter="{Binding SelectedValue,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" />
+                    <KeyBinding
+                        Key="Space"
+                        Command="{Binding SpaceCommand}"
+                        CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" />
                 </ListView.InputBindings>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
                             x:Name="col1"
                             Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}"
-                            ui11:GridViewSort.PropertyName="Name" Header="Name">
+                            ui11:GridViewSort.PropertyName="Name"
+                            Header="Name">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
@@ -403,7 +490,9 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            Width="90" ui11:GridViewSort.PropertyName="Status" Header="Status">
+                            Width="90"
+                            ui11:GridViewSort.PropertyName="Status"
+                            Header="Status">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <controls:TagBorder
@@ -412,7 +501,9 @@
                                         Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}">
                                         <controls:TagBorder.Effect>
                                             <DropShadowEffect
-                                                BlurRadius="5" Direction="305" ShadowDepth="0" />
+                                                BlurRadius="5"
+                                                Direction="305"
+                                                ShadowDepth="0" />
                                         </controls:TagBorder.Effect>
                                     </controls:TagBorder>
                                 </DataTemplate>
@@ -426,7 +517,9 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col3" ui11:GridViewSort.PropertyName="RateDownload" Header="Download speed">
+                            x:Name="col3"
+                            ui11:GridViewSort.PropertyName="RateDownload"
+                            Header="Download speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
@@ -434,22 +527,28 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col4" ui11:GridViewSort.PropertyName="UploadedEver" Header="Uploaded">
+                            x:Name="col4"
+                            ui11:GridViewSort.PropertyName="UploadedEver"
+                            Header="Uploaded">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Width="Auto" MinWidth="75"
+                                        Width="Auto"
+                                        MinWidth="75"
                                         Text="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
                                         TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col5" ui11:GridViewSort.PropertyName="TotalSize" Header="Size">
+                            x:Name="col5"
+                            ui11:GridViewSort.PropertyName="TotalSize"
+                            Header="Size">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Width="Auto" MinWidth="75"
+                                        Width="Auto"
+                                        MinWidth="75"
                                         Text="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
                                         TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
@@ -482,7 +581,9 @@
             </ListView>
 
             <Grid
-                Grid.Row="0" Grid.Column="2" Visibility="Hidden">
+                Grid.Row="0"
+                Grid.Column="2"
+                Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <!--  Width is set to "Fill"  -->
                     <ColumnDefinition Width="*" />
@@ -566,13 +667,19 @@
                 </DataGrid.ContextMenu>
             </DataGrid>-->
             <StackPanel
-                Grid.Row="0" Grid.Column="2" Height="Auto"
-                HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
+                Grid.Row="0"
+                Grid.Column="2"
+                Height="Auto"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical"
                 Visibility="{Binding IsConnected, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Collapsed}">
                 <Image Width="150" Source="/Kebler.UI;component/Icons/Kebler_dark_512x512.png" />
                 <controls:LoadingRing Margin="0,5,0,0" Visibility="{Binding IsConnecting, FallbackValue=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <Button
-                    Width="70" Margin="0,10,0,0" cal:Message.Attach="Retry"
+                    Width="70"
+                    Margin="0,10,0,0"
+                    cal:Message.Attach="Retry"
                     Content="{lex:BLoc RetryConnection}"
                     IsDefault="True"
                     Visibility="{Binding IsErrorOccuredWhileConnecting, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=false}" />
@@ -581,23 +688,31 @@
 
             <Grid
                 Background="{DynamicResource ListBox.Static.Background}"
-                Column="2" Row="2"
+                Column="2"
+                Row="2"
                 Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
                 <controls:TorrentMoreInfo
-                    Name="MoreView" x:FieldModifier="public"
+                    Name="MoreView"
+                    x:FieldModifier="public"
                     DataContext="{Binding MoreInfoView}" />
             </Grid>
 
 
             <GridSplitter
-                Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
-                cal:Message.Attach="[Event DragCompleted] = [Action SaveConfig]" DragCompleted="DragCompleted"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="1"
+                cal:Message.Attach="[Event DragCompleted] = [Action SaveConfig]"
+                DragCompleted="DragCompleted"
                 Focusable="False"
                 Style="{DynamicResource VerticalGridSplitter}" />
 
             <GridSplitter
-                Grid.Row="1" Grid.Column="2" cal:Message.Attach="[Event DragCompleted] = [Action HorDragCompleted]"
-                DragCompleted="DragCompleted" Focusable="False"
+                Grid.Row="1"
+                Grid.Column="2"
+                cal:Message.Attach="[Event DragCompleted] = [Action HorDragCompleted]"
+                DragCompleted="DragCompleted"
+                Focusable="False"
                 Style="{DynamicResource HorizontalGridSplitter}"
                 Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -611,9 +726,15 @@
 
                 <Grid>
                     <Label
-                        Grid.Column="0" Width="Auto" Height="Auto"
-                        Margin="5,0,0,0" Padding="0" HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                        Grid.Column="0"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="5,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         Content="{Binding IsConnectedStatusText}" />
                 </Grid>
 
