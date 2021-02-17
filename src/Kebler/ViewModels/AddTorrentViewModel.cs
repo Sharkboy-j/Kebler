@@ -26,10 +26,10 @@ namespace Kebler.ViewModels
     using Kebler.Models.Interfaces;
     using Kebler.UI.CSControls.TreeListView;
 
-    public class AddTorrentViewModel : Screen
+    public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
         #region Properties
-
+        private readonly IEventAggregator? _eventAggregator;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
@@ -73,7 +73,7 @@ namespace Kebler.ViewModels
         {
             get
             {
-                if(_dirs==null)
+                if (_dirs == null)
                     _dirs = new BindableCollection<string>();
                 return _dirs;
             }
@@ -135,12 +135,16 @@ namespace Kebler.ViewModels
         }
 
 
-        
+
         #endregion
 
         public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos,
-            BindableCollection<FolderCategory> folderCategory)
+            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator, ref bool isWindOpened)
         {
+            isWindOpened = true;
+            _eventAggregator = eventAggregator;
+            _eventAggregator?.SubscribeOnPublishedThread(this);
+
             _infos = infos;
             _fileInfo = new FileInfo(path);
             TorrentPath = _fileInfo.FullName;
@@ -151,7 +155,7 @@ namespace Kebler.ViewModels
             this.settings = settings;
 
 
-            foreach(var item in folderCategory)
+            foreach (var item in folderCategory)
             {
                 DownlaodDirs.Add(item.FullPath);
             }
@@ -183,15 +187,15 @@ namespace Kebler.ViewModels
             {
                 LoadingGridVisibility = Visibility.Collapsed;
             }
-            
+
             if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
             {
 
                 var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
 
                 //DownlaodDir = info.DownloadDir;
-                var manager = IoC.Get<IWindowManager>(); 
-                if(await MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers, manager,string.Empty, Enums.MessageBoxDilogButtons.YesNo)==true)
+                var manager = IoC.Get<IWindowManager>();
+                if (await MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers, manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
                 {
                     LoadingGridVisibility = Visibility.Visible;
                     Add();
@@ -347,43 +351,43 @@ namespace Kebler.ViewModels
                                 switch (TorrentResult.Value.Status)
                                 {
                                     case Enums.AddTorrentStatus.Added:
-                                    {
-                                        Log.Info(
-                                            $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
-                                        IsWorking = false;
-
-                                        ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
-                                        ConfigService.Save();
-                                        Result = true;
-                                        await TryCloseAsync();
-                                        return;
-                                    }
-                                    case Enums.AddTorrentStatus.Duplicate:
-                                    {
-                                        Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
-
-                                        if (_torrent != null)
                                         {
-                                            var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
+                                            Log.Info(
+                                                $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
+                                            IsWorking = false;
 
-
-                                            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
-                                            {
-                                                IDs = new[] {TorrentResult.Value.ID},
-                                                TrackerAdd = toAdd
-                                            }, cancellationToken);
-
-                                            foreach (var tr in toAdd)
-                                            {
-                                                Log.Info($"Tracker added: {tr}'");
-                                            }
-
+                                            ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
+                                            ConfigService.Save();
                                             Result = true;
                                             await TryCloseAsync();
+                                            return;
                                         }
+                                    case Enums.AddTorrentStatus.Duplicate:
+                                        {
+                                            Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
 
-                                        return;
-                                    }
+                                            if (_torrent != null)
+                                            {
+                                                var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
+
+
+                                                await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                                                {
+                                                    IDs = new[] { TorrentResult.Value.ID },
+                                                    TrackerAdd = toAdd
+                                                }, cancellationToken);
+
+                                                foreach (var tr in toAdd)
+                                                {
+                                                    Log.Info($"Tracker added: {tr}'");
+                                                }
+
+                                                Result = true;
+                                                await TryCloseAsync();
+                                            }
+
+                                            return;
+                                        }
                                 }
                             }
                             else
@@ -403,7 +407,7 @@ namespace Kebler.ViewModels
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //2021-01-21 03:46:45,609 [11] ERROR Kebler.ViewModels.AddTorrentViewModel - System.NullReferenceException: Object reference not set to an instance of an object.
                     //at Kebler.ViewModels.AddTorrentViewModel.< Add > b__55_0()
@@ -436,6 +440,27 @@ namespace Kebler.ViewModels
             cancellationTokenSource?.Cancel();
             settings = null;
             _fileInfo = null;
+        }
+
+        public Task HandleAsync(Messages.DownlaodCategoriesChanged message, CancellationToken cancellationToken)
+        {
+
+            var cats = message.Paths.Select(x => x.FullPath);
+            var toRm = DownlaodDirs.Except(cats).ToList();
+            var toAdd = cats.Except(DownlaodDirs).ToList();
+
+            if (toRm.Any())
+            {
+                foreach (var itm in toRm) DownlaodDirs.Remove(itm);
+            }
+
+            if (toAdd.Any())
+            {
+                foreach (var itm in toAdd)
+                    DownlaodDirs.Add(itm);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

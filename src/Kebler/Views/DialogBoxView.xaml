@@ -51,13 +51,28 @@
                     FontWeight="DemiBold"
                     Text="{Binding Message}"
                     TextAlignment="Left" />
-                <TextBox
-                    Name="TBXC"
-                    Height="25"
-                    Margin="0,10,0,0"
-                    VerticalContentAlignment="Center"
-                    Text="{Binding DialogTextBoxText}"
-                    Visibility="{Binding ShowTextBox, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <Grid>
+                    <TextBox
+                        Name="TBXC"
+                        Height="25"
+                        Margin="0,10,0,0"
+                        VerticalContentAlignment="Center"
+                        Text="{Binding DialogTextBoxText}"
+                        Visibility="{Binding ShowTextBox, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <ComboBox
+                        x:Name="CBXT"
+                        Height="25"
+                        Margin="0,10,0,0"
+                        Background="{x:Null}"
+                        IsEditable="True"
+                        IsReadOnly="False"
+                        ItemsSource="{Binding Values}"
+                        SelectedIndex="{Binding SelectedIndex, Mode=OneWay}"
+                        Text="{Binding Value}"
+                        Visibility="{Binding ShowCombo, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </Grid>
+
+
                 <PasswordBox
                     Name="DialogPasswordBox"
                     Height="25"

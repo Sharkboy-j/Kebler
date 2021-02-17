@@ -2,12 +2,12 @@
     x:Class="Kebler.UI.Dialogs.AddTorrentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:Kebler.UI.Helpers"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:cal="http://caliburnmicro.com"
-    xmlns:helpers="clr-namespace:Kebler.UI.Helpers"
-    xmlns:controls="clr-namespace:Kebler.UI.Controls"
     xmlns:window="clr-namespace:Kebler.Styles.Window;assembly=Kebler.Styles"
     Width="700"
     Height="530"
@@ -50,7 +50,7 @@
                     FontSize="15"
                     FontWeight="Normal"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    Text="{lex:BLoc  Title_AddTorrentDialog}"
+                    Text="{lex:BLoc Title_AddTorrentDialog}"
                     TextAlignment="Left"
                     TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextHintingMode="Animated"
@@ -64,7 +64,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
                         <RowDefinition Height="40" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
@@ -81,7 +81,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:BLoc  ATD_TorrentFilePath}"
+                        Text="{lex:BLoc ATD_TorrentFilePath}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -131,7 +131,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:BLoc  ATD_DownloadDIr}"
+                        Text="{lex:BLoc ATD_DownloadDIr}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -147,12 +147,12 @@
                     <ComboBox
                         Grid.Row="2"
                         Grid.Column="2"
-                        Text="{Binding DownlaodDirPath}"
-                        SelectedIndex="{Binding DownlaodDirIndex,Mode=OneWay}"
+                        Background="{x:Null}"
                         IsEditable="True"
                         IsReadOnly="False"
                         ItemsSource="{Binding DownlaodDirs}"
-                        Background="{x:Null}"/>
+                        SelectedIndex="{Binding DownlaodDirIndex, Mode=OneWay}"
+                        Text="{Binding DownlaodDirPath}" />
 
                     <TextBlock
                         Grid.Row="4"
@@ -164,7 +164,7 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:BLoc  ATD_Connection}"
+                        Text="{lex:BLoc ATD_Connection}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
@@ -180,7 +180,7 @@
                             FontSize="13"
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
-                            Text="{lex:BLoc  ATD_PeerLimit}"
+                            Text="{lex:BLoc ATD_PeerLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -202,7 +202,7 @@
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
-                            Text="{lex:BLoc  ATD_UploadLimit}"
+                            Text="{lex:BLoc ATD_UploadLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -225,7 +225,7 @@
                             FontWeight="Normal"
                             Foreground="{DynamicResource ForegroundBrush}"
                             IsEnabled="False"
-                            Text="{lex:BLoc  ATD_DownloadLimit}"
+                            Text="{lex:BLoc ATD_DownloadLimit}"
                             TextAlignment="Left"
                             TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Animated"
@@ -250,7 +250,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         VerticalContentAlignment="Center"
-                        Content="{lex:BLoc  ATD_StartTorrent}"
+                        Content="{lex:BLoc ATD_StartTorrent}"
                         FontSize="13"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsChecked="{Binding IsAutoStart}" />
@@ -270,16 +270,16 @@
                         FontSize="13"
                         FontWeight="Normal"
                         Foreground="{DynamicResource ForegroundBrush}"
-                        Text="{lex:BLoc  ATD_Files}"
+                        Text="{lex:BLoc ATD_Files}"
                         TextAlignment="Left"
                         TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Animated"
                         TextOptions.TextRenderingMode="ClearType" />
                     <controls:FilesTreeView
-                        DoneVisibility="False"
                         x:Name="FileTreeViewControl"
                         Grid.Row="8"
-                        Grid.Column="2" />
+                        Grid.Column="2"
+                        DoneVisibility="False" />
 
 
                 </Grid>
@@ -298,7 +298,7 @@
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         cal:Message.Attach="ChangeVisibilityWindow"
-                        Content="{lex:BLoc  ATD_DontShowAddTorrentDialog}"
+                        Content="{lex:BLoc ATD_DontShowAddTorrentDialog}"
                         FontSize="13"
                         IsChecked="{Binding IsAddTorrentWindowShow}"
                         IsEnabled="False" />
@@ -309,23 +309,23 @@
                         VerticalAlignment="Center"
                         Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                     <Label
-                        Visibility="{Binding ResultVisibility}"
                         Grid.Column="0"
                         HorizontalAlignment="Right"
-                        Foreground="#FFCF0000" />
+                        Foreground="#FFCF0000"
+                        Visibility="{Binding ResultVisibility}" />
                     <Button
                         Grid.Column="1"
                         Padding="10,0,10,0"
                         HorizontalAlignment="Center"
                         cal:Message.Attach="Add"
-                        Content="{lex:BLoc  ATD_Add}"
+                        Content="{lex:BLoc ATD_Add}"
                         Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
                     <Button
                         Grid.Column="1"
                         Padding="10,0,10,0"
                         HorizontalAlignment="Center"
                         cal:Message.Attach="Stop"
-                        Content="{lex:BLoc  ATD_Stop}"
+                        Content="{lex:BLoc ATD_Stop}"
                         Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" />
                     <Button
                         Grid.Column="3"
@@ -342,8 +342,8 @@
         </Grid>
         <Grid
             d:IsHidden="True"
-            Visibility="{Binding LoadingGridVisibility}"
-            Background="{DynamicResource Window.BackgroundBrush}">
+            Background="{DynamicResource Window.BackgroundBrush}"
+            Visibility="{Binding LoadingGridVisibility}">
             <StackPanel
                 Height="50"
                 HorizontalAlignment="Center"
@@ -354,7 +354,7 @@
                     FontSize="15"
                     FontWeight="Normal"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    Text="{lex:BLoc  ATD_RetrievingSettings}"
+                    Text="{lex:BLoc ATD_RetrievingSettings}"
                     TextAlignment="Center"
                     TextOptions.TextFormattingMode="Ideal"
                     TextOptions.TextRenderingMode="ClearType" />

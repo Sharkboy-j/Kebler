@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace Kebler.Models
 {
@@ -29,6 +30,16 @@ namespace Kebler.Models
 
         public class ShowMoreInfoChanged
         {
+        }
+
+        public class DownlaodCategoriesChanged
+        {
+            public DownlaodCategoriesChanged(IEnumerable<FolderCategory> cats)
+            {
+                Paths = cats;
+            }
+
+            public IEnumerable<FolderCategory> Paths;
         }
     }
 }

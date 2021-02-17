@@ -1,12 +1,19 @@
-﻿<UserControl x:Class="Kebler.UI.Controls.FilesTreeView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:csControls="clr-namespace:Kebler.UI.CSControls.TreeListView"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="450" d:DesignWidth="800" mc:Ignorable="d">
-    <csControls:TreeListView  x:Name="tree" x:FieldModifier="public" 
-                             BorderThickness="0" IsAutoExpanded="True" PreviewKeyDown="tree_PreviewKeyDown">
+﻿<UserControl
+    x:Class="Kebler.UI.Controls.FilesTreeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:csControls="clr-namespace:Kebler.UI.CSControls.TreeListView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <csControls:TreeListView
+        x:Name="tree"
+        x:FieldModifier="public"
+        BorderThickness="0"
+        IsAutoExpanded="True"
+        PreviewKeyDown="tree_PreviewKeyDown">
         <csControls:TreeListView.View>
             <GridView>
                 <GridView.Columns>
@@ -15,13 +22,17 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <csControls:RowExpander />
-                                    <CheckBox Margin="0,0,3,0" VerticalAlignment="Center" Checked="CheckBox_Checked"
-                                              Focusable="False"
-                                              IsChecked="{Binding Checked}"
-                                              RenderOptions.BitmapScalingMode="HighQuality"
-                                              RenderOptions.ClearTypeHint="Enabled" RenderOptions.EdgeMode="Unspecified"
-                                              Tag="{Binding}"
-                                              Unchecked="CheckBox_Checked" />
+                                    <CheckBox
+                                        Margin="0,0,3,0"
+                                        VerticalAlignment="Center"
+                                        Checked="CheckBox_Checked"
+                                        Focusable="False"
+                                        IsChecked="{Binding Checked}"
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        RenderOptions.ClearTypeHint="Enabled"
+                                        RenderOptions.EdgeMode="Unspecified"
+                                        Tag="{Binding}"
+                                        Unchecked="CheckBox_Checked" />
                                     <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" />
                                 </StackPanel>
                             </DataTemplate>
@@ -30,33 +41,39 @@
                     <GridViewColumn Header="Size">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Width="Auto" MinWidth="100"
-                                           Tag="{Binding}"
-                                           TextTrimming="WordEllipsis"
-                                           Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
-                                           Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                <TextBlock
+                                    Width="Auto"
+                                    MinWidth="100"
+                                    Tag="{Binding}"
+                                    Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
+                                    TextTrimming="WordEllipsis"
+                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Done" x:Name="DoneColumn">
+                    <GridViewColumn x:Name="DoneColumn" Header="Done">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Width="Auto" MinWidth="100"
-                                           Tag="{Binding}"
-                                           Text="{Binding Done, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
-                                           Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                <TextBlock
+                                    Width="Auto"
+                                    MinWidth="100"
+                                    Tag="{Binding}"
+                                    Text="{Binding Done, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
+                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="%" x:Name="PercentColumn">
+                    <GridViewColumn x:Name="PercentColumn" Header="%">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Width="Auto" MinWidth="100"
-                                           Tag="{Binding}"
-                                           Text="{Binding DonePercent, StringFormat={}{0}%}"
-                                           Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                <TextBlock
+                                    Width="Auto"
+                                    MinWidth="100"
+                                    Tag="{Binding}"
+                                    Text="{Binding DonePercent, StringFormat={}{0}%}"
+                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

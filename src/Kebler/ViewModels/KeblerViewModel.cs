@@ -27,6 +27,7 @@ using Kebler.Services;
 using Kebler.Services.Converters;
 using Kebler.TransmissionCore;
 using Kebler.Views;
+using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
 using ILog = log4net.ILog;
@@ -435,7 +436,7 @@ namespace Kebler.ViewModels
 
                 await manager.ShowDialogAsync(dialog);
 
-                passwordResult = dialog.Value;
+                passwordResult = dialog.Value.ToString();
             });
 
             if (passwordResult == null)
@@ -901,6 +902,12 @@ namespace Kebler.ViewModels
                         }
                     });
             }
+
+
+            if (_isAddWindOpened)
+            {
+                _eventAggregator.PublishOnUIThreadAsync(new DownlaodCategoriesChanged(Categories));
+            }
         }
 
         #endregion
@@ -988,7 +995,7 @@ namespace Kebler.ViewModels
 
                 if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
                 {
-                    var resp = await _transmissionClient.TorrentRenamePathAsync(sel.Id, sel.Name, dialog.Value,
+                    var resp = await _transmissionClient.TorrentRenamePathAsync(sel.Id, sel.Name, dialog.Value.ToString(),
                         _cancelTokenSource.Token);
                     resp.ParseTransmissionReponse(Log);
                 }
@@ -1004,7 +1011,7 @@ namespace Kebler.ViewModels
                     : Strings.SetLocOnce;
 
                 var path = SelectedTorrent.DownloadDir;
-                var dialog = new DialogBoxViewModel(question, path, false);
+                var dialog = new DialogBoxViewModel(question, Categories.Select(x => x.FullPath), path);
 
                 if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
                     await Task.Factory.StartNew(async () =>
@@ -1013,7 +1020,7 @@ namespace Kebler.ViewModels
                         while (true)
                         {
                             if (Application.Current.Dispatcher.HasShutdownStarted) return;
-                            var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value, true,
+                            var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value.ToString(), true,
                                 _cancelTokenSource.Token);
                             resp.ParseTransmissionReponse(Log);
 
@@ -1060,7 +1067,7 @@ namespace Kebler.ViewModels
                 {
                     var newTr = new NewTorrent
                     {
-                        Filename = dialog.Value,
+                        Filename = dialog.Value.ToString(),
                         Paused = false
                     };
 
@@ -1282,10 +1289,11 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory);
+                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory, _eventAggregator, ref _isAddWindOpened);
 
                     await manager.ShowDialogAsync(dialog);
 
+                    _isAddWindOpened = false;
 
                     if (dialog.Result == true)
                     {
@@ -1463,7 +1471,7 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private string? _isConnectedStatusText;
         private bool _isConnecting, _isDoingStuff, _isConnected, _isErrorOccuredWhileConnecting, _isSlowModeEnabled;
-        private bool _isLongTaskRunning, isShowMoreInfo;
+        private bool _isLongTaskRunning, isShowMoreInfo, _isAddWindOpened;
 
         private string? _uploadSpeed, _downloadSpeed, _filterText, _longStatusText;
 
