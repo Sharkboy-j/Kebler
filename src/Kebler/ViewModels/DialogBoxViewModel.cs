@@ -96,7 +96,7 @@ namespace Kebler.ViewModels
             _view = view as IDialogBox;
             if (ShowPasswordBox)
                 _view?.PWD.Focus();
-            else if (_values.Count() == 0)
+            else if (_values?.Count() == 0)
                 _view?.TBX.Focus();
             else
                 _view?.CBX.Focus();

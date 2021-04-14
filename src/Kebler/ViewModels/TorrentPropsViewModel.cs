@@ -228,15 +228,20 @@ namespace Kebler.ViewModels
             var result = await mgr.ShowDialogAsync(dialog);
 
             var maxId = Trackers.Max(x => x.ID) + 1;
-            var tracker = new TransmissionTorrentTrackers()
+
+         
+            if (dialog.Value is not null)
             {
-                announce = dialog.Value.ToString(),
-                ID = maxId
-            };
-            if (result == true && !Trackers.Contains(tracker))
-            {
-                Trackers.Add(tracker);
-                toAdd.Add(dialog.Value.ToString());
+                var tracker = new TransmissionTorrentTrackers()
+                {
+                    announce = dialog.Value.ToString(),
+                    ID = maxId
+                };
+                if (result == true && !Trackers.Contains(tracker))
+                {
+                    Trackers.Add(tracker);
+                    toAdd.Add(dialog.Value.ToString());
+                }
             }
         }
     }
