@@ -15,6 +15,9 @@ using Kebler.ViewModels;
 using log4net.Config;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Kebler
 {
@@ -34,6 +37,7 @@ namespace Kebler
         private TaskbarIcon notifyIcon;
         public List<string> torrentsToAdd = new List<string>();
 
+       
 
         private App()
         {
@@ -64,6 +68,7 @@ namespace Kebler
             if (Current.Dispatcher != null)
                 Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
+
             ConfigService.LoadConfig();
 
 
@@ -86,11 +91,21 @@ namespace Kebler
 
         protected override void OnStartup(StartupEventArgs e)
         {
+#if !DEBUG
+            AppCenter.Start("b4abb5a6-9873-466e-97af-2b3879c23e42",
+                             typeof(Analytics), typeof(Crashes));
+
+            AppCenter.LogLevel = LogLevel.Verbose;
+#endif
+
+
             var isFirstInstance = SingleInstance<App>.InitializeAsFirstInstance(nameof(Kebler));
             if (!isFirstInstance) Current.Shutdown();
             base.OnStartup(e);
 
             notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
+
+
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -112,17 +127,20 @@ namespace Kebler
 
         }
 
-        #region Events
+#region Events
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             if (!(e.ExceptionObject is Exception exception)) return;
             Log.Error(exception);
+            Crashes.TrackError(exception);
         }
 
         private static void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Log.Error(e.Exception);
+            Crashes.TrackError(e.Exception);
+
             e.Handled = true;
         }
 
@@ -137,11 +155,13 @@ namespace Kebler
             KeblerVM.OpenPaseedWithArgsFiles();
         }
 
-        #endregion
+#endregion
 
         private void NI_ExitClick(object sender, RoutedEventArgs e)
         {
             KeblerVM.Exit();
         }
+
+   
     }
 }
