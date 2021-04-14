@@ -462,7 +462,7 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
-                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($this)]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties]"
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
                 x:FieldModifier="public"
