@@ -18,21 +18,14 @@ namespace Kebler.Update
     {
         public static StringBuilder BUILDER = new StringBuilder();
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            AppCenter.Start("142c80cd-83b2-4776-9fcd-2702dc591977",
-                   typeof(Analytics), typeof(Crashes));
-            AppCenter.LogLevel = LogLevel.Verbose;
-
-            base.OnStartup(e);
-        }
-
         private App()
         {
             try
             {
 
-
+                AppCenter.Start("142c80cd-83b2-4776-9fcd-2702dc591977",
+                  typeof(Analytics), typeof(Crashes));
+                AppCenter.LogLevel = LogLevel.Verbose;
 
                 var module = Process.GetCurrentProcess()?.MainModule;
                 var path = module?.FileName;
