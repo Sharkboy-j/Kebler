@@ -1,4 +1,6 @@
-﻿namespace Kebler.Models.Torrent.Args
+﻿using Newtonsoft.Json;
+
+namespace Kebler.Models.Torrent.Args
 {
     public class TorrentSettings : ArgumentsBase
     {
@@ -131,7 +133,7 @@
         /// <summary>
         ///     Strings of announce URLs to add
         /// </summary>
-        public string[] TrackerAdd
+        public string[]? TrackerAdd
         {
             get => GetValue<string[]>("trackerAdd");
             set => this["trackerAdd"] = value;
@@ -140,7 +142,7 @@
         /// <summary>
         ///     Ids of trackers to remove
         /// </summary>
-        public uint[] TrackerRemove
+        public uint[]? TrackerRemove
         {
             get => GetValue<uint[]>("trackerRemove");
             set => this["trackerRemove"] = value;
@@ -170,19 +172,17 @@
         //"priority-normal"     | array      indices of normal-priority file(s)
         //public [] PriorityNormal;
 
-
-        public object Get(string propertyName)
-        {
-            var myType = typeof(TorrentSettings);
-            var myPropInfo = myType.GetProperty(propertyName);
-            return myPropInfo?.GetValue(this, null);
-        }
-
-        public void Set(string propertyName, object value)
-        {
-            var myType = typeof(TorrentInfo);
-            var myPropInfo = myType.GetProperty(propertyName);
-            myPropInfo?.SetValue(this, value, null);
-        }
+        //public object Get(string propertyName)
+        //{
+        //    var myType = typeof(TorrentSettings);
+        //    var myPropInfo = myType.GetProperty(propertyName);
+        //    return myPropInfo?.GetValue(this, null);
+        //}
+        //public void Set(string propertyName, object value)
+        //{
+        //    var myType = typeof(TorrentInfo);
+        //    var myPropInfo = myType.GetProperty(propertyName);
+        //    myPropInfo?.SetValue(this, value, null);
+        //}
     }
 }

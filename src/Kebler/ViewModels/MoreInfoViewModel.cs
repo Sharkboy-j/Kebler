@@ -354,8 +354,6 @@ namespace Kebler.ViewModels
 
             Task.Run(async () =>
             {
-                try
-                {
                     while (!source.IsCancellationRequested)
                     {
                         var answ = await _client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
@@ -442,12 +440,6 @@ namespace Kebler.ViewModels
                         Loading = false;
                         await Task.Delay(1500);
                     }
-                }
-                catch (Exception ex)
-                {
-
-                }
-
 
             }, source.Token);
         }

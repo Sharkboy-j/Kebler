@@ -27,6 +27,7 @@ using Kebler.Services;
 using Kebler.Services.Converters;
 using Kebler.TransmissionCore;
 using Kebler.Views;
+using Microsoft.AppCenter.Crashes;
 using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
@@ -324,6 +325,8 @@ namespace Kebler.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
+                Crashes.TrackError(ex);
+
                 MessageBoxViewModel.ShowDialog(Strings.ConfigApllyError, manager);
             }
         }
@@ -505,6 +508,8 @@ namespace Kebler.ViewModels
                 catch (Exception ex)
                 {
                     Log.Error(ex.Message, ex);
+                    Crashes.TrackError(ex);
+
                     IsConnectedStatusText = ex.Message;
                     IsConnected = false;
                     IsErrorOccuredWhileConnecting = true;
@@ -592,6 +597,8 @@ namespace Kebler.ViewModels
                     catch (Exception ex)
                     {
                         Log.Error(ex);
+                        Crashes.TrackError(ex);
+
                     }
                     finally
                     {
@@ -1227,12 +1234,12 @@ namespace Kebler.ViewModels
             {
                 if (SelectedTorrent is TorrentInfo tr)
                 {
-                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }));
+                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }, manager));
                 }
                 else
                 {
                     manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,
-                        SelectedTorrents.Select(x => x.Id).ToArray()));
+                        SelectedTorrents.Select(x => x.Id).ToArray(), manager));
                 }
             }
         }
@@ -1706,44 +1713,6 @@ namespace Kebler.ViewModels
                 Set(ref isShowMoreInfo, value);
                 if (!value)
                     UpdateMoreInfoPosition(false);
-            }
-        }
-    }
-
-    public class Bind<T> : BindableCollection<T>
-    {
-        /// <summary>
-        /// Need cuz fucking BindableCollection on Notify reset selected item and index for ListView =\
-        /// </summary>
-        /// <param name="item"></param>
-        public void RemoveWithoutNotify(T item)
-        {
-            if (PlatformProvider.Current.PropertyChangeNotificationsOnUIThread)
-            {
-                var index = IndexOf(item);
-                RemoveAt(index);
-            }
-            else
-            {
-                var index = IndexOf(item);
-                RemoveAt(index);
-            }
-        }
-
-        /// <summary>
-        /// need same for RemoveWithoutNotify
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        public new void SetItem(int index, T item)
-        {
-            if (PlatformProvider.Current.PropertyChangeNotificationsOnUIThread)
-            {
-                OnUIThread(() => base.SetItemBase(index, item));
-            }
-            else
-            {
-                SetItemBase(index, item);
             }
         }
     }

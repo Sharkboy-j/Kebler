@@ -26,16 +26,19 @@ namespace Kebler.ViewModels
 
         private int _trackerIndex;
         private TransmissionTorrentTrackers? _selectedTracker;
+        private readonly IWindowManager _manager = new WindowManager();
 
 
         public TorrentPropsViewModel()
         {
+            
         }
 
-        public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids)
+        public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids, IWindowManager manager)
         {
             _transmissionClient = transmissionClient;
             tors = ids;
+            _manager = manager;
 
             Task.Factory.StartNew(async () =>
             {
@@ -72,6 +75,106 @@ namespace Kebler.ViewModels
         }
 
 
+       
+
+
+        public void Cancel()
+        {
+            TryCloseAsync();
+        }
+
+
+        public async void Save()
+        {
+            try
+            {
+                var sett = new TorrentSettings
+                {
+                    DownloadLimited = MXD_Bool,
+                    UploadLimited = MXU_Bool,
+                    DownloadLimit = MaxDownSp,
+                    UploadLimit = MaxUpSp,
+                    SeedRatioLimit = SeedRation,
+                    SeedIdleLimit = StopSeed,
+                    IDs = tors,
+                    PeerLimit = PeerLimit,
+                    TrackerAdd = toAdd?.Count <=0 ? null : toAdd?.ToArray(),
+                    TrackerRemove = toRm?.Count <=0 ? null : toRm?.ToArray(),
+                };
+
+                var resp = await _transmissionClient.TorrentSetAsync(sett, new CancellationToken());
+
+                if(resp.Success)
+                {
+                    await TryCloseAsync();
+                }
+                else
+                {
+                    await MessageBoxViewModel.ShowDialog(Strings.TorretPropertiesSetError, _manager);
+                }
+
+
+            }
+            finally
+            {
+                IsBusy = Visibility.Collapsed;
+            }
+        }
+
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            if (view is DependencyObject dependencyObject)
+            {
+                var thisWindow = Window.GetWindow(dependencyObject);
+                if (thisWindow != null) thisWindow.Owner = Application.Current.MainWindow;
+            }
+
+            base.OnViewAttached(view, context);
+        }
+
+
+        public void DeleteTracker()
+        {
+            if (SelectedTracker != null)
+            {
+                var tr = SelectedTracker;
+                Trackers.Remove(tr);
+                toRm.Add(tr.ID);
+                toAdd.Remove(tr.announce);
+            }
+        }
+
+        private List<string> toAdd = new List<string>();
+        private List<uint> toRm = new List<uint>();
+
+        public async void AddTracker()
+        {
+            var mgr = IoC.Get<IWindowManager>();
+
+            var dialog = new DialogBoxViewModel(Strings.AddTrackerTitile, string.Empty, false);
+            var result = await mgr.ShowDialogAsync(dialog);
+
+            var maxId = Trackers.Max(x => x.ID) + 1;
+
+         
+            if (dialog.Value is not null)
+            {
+                var tracker = new TransmissionTorrentTrackers()
+                {
+                    announce = dialog.Value.ToString(),
+                    ID = maxId
+                };
+                if (result == true && !Trackers.Contains(tracker))
+                {
+                    Trackers.Add(tracker);
+                    toAdd.Add(dialog.Value.ToString());
+                }
+            }
+        }
+
+
+        #region props
         public BindableCollection<TransmissionTorrentTrackers> Trackers
         {
             get => _trackers;
@@ -156,93 +259,6 @@ namespace Kebler.ViewModels
             get => _selectedTracker;
             set => Set(ref _selectedTracker, value);
         }
-
-
-        public void Cancel()
-        {
-            TryCloseAsync();
-        }
-
-
-        public async void Save()
-        {
-            try
-            {
-                await _transmissionClient.TorrentSetAsync(new TorrentSettings
-                {
-                    DownloadLimited = MXD_Bool,
-                    UploadLimited = MXU_Bool,
-                    DownloadLimit = MaxDownSp,
-                    UploadLimit = MaxUpSp,
-                    SeedRatioLimit = SeedRation,
-                    SeedIdleLimit = StopSeed,
-                    IDs = tors,
-                    PeerLimit = PeerLimit,
-                    TrackerAdd = toAdd.ToArray(),
-                    TrackerRemove = toRm.ToArray()
-                }, new CancellationToken());
-                await TryCloseAsync();
-            }
-            catch (Exception ex)
-            {
-                //ignore
-            }
-            finally
-            {
-                IsBusy = Visibility.Collapsed;
-            }
-        }
-
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            if (view is DependencyObject dependencyObject)
-            {
-                var thisWindow = Window.GetWindow(dependencyObject);
-                if (thisWindow != null) thisWindow.Owner = Application.Current.MainWindow;
-            }
-
-            base.OnViewAttached(view, context);
-        }
-
-
-        public void DeleteTracker()
-        {
-            if (SelectedTracker != null)
-            {
-                var tr = SelectedTracker;
-                Trackers.Remove(tr);
-                toRm.Add(tr.ID);
-                toAdd.Remove(tr.announce);
-            }
-        }
-
-        private List<string> toAdd = new List<string>();
-        private List<uint> toRm = new List<uint>();
-
-        public async void AddTracker()
-        {
-            var mgr = IoC.Get<IWindowManager>();
-
-            var dialog = new DialogBoxViewModel(Strings.AddTrackerTitile, string.Empty, false);
-            var result = await mgr.ShowDialogAsync(dialog);
-
-            var maxId = Trackers.Max(x => x.ID) + 1;
-
-         
-            if (dialog.Value is not null)
-            {
-                var tracker = new TransmissionTorrentTrackers()
-                {
-                    announce = dialog.Value.ToString(),
-                    ID = maxId
-                };
-                if (result == true && !Trackers.Contains(tracker))
-                {
-                    Trackers.Add(tracker);
-                    toAdd.Add(dialog.Value.ToString());
-                }
-            }
-        }
+        #endregion
     }
 }

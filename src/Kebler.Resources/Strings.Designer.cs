@@ -1663,6 +1663,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while save settings :(.
+        /// </summary>
+        public static string TorretPropertiesSetError {
+            get {
+                return ResourceManager.GetString("TorretPropertiesSetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum download speed:.
         /// </summary>
         public static string TP_MaximumDownloadSp {
