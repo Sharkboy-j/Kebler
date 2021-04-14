@@ -8,12 +8,24 @@ using System.Windows;
 using System.Windows.Threading;
 using Kebler.Const;
 using Kebler.Services;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Kebler.Update
 {
     public partial class App : Application
     {
         public static StringBuilder BUILDER = new StringBuilder();
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            AppCenter.Start("142c80cd-83b2-4776-9fcd-2702dc591977",
+                   typeof(Analytics), typeof(Crashes));
+            AppCenter.LogLevel = LogLevel.Verbose;
+
+            base.OnStartup(e);
+        }
 
         private App()
         {
@@ -68,6 +80,8 @@ namespace Kebler.Update
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
+
                 var ss = new StringBuilder();
                 ss.Append(ex.Message);
                 ss.Append(ex);

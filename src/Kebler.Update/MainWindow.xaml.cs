@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using Kebler.Const;
 using Kebler.Services;
+using Microsoft.AppCenter.Crashes;
 
 namespace Kebler.Update
 {
@@ -137,6 +138,8 @@ namespace Kebler.Update
             catch (Exception ex)
             {
                 Log(ex.ToString());
+                Crashes.TrackError(ex);
+
                 App.DONE(false);
             }
         }
@@ -188,19 +191,4 @@ namespace Kebler.Update
         }
     }
 
-    //public class MyWebClient : WebClient
-    //{
-    //    /// <summary>
-    //    ///     Response Uri after any redirects.
-    //    /// </summary>
-    //    public Uri ResponseUri;
-
-    //    /// <inheritdoc />
-    //    protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
-    //    {
-    //        var webResponse = base.GetWebResponse(request, result);
-    //        ResponseUri = webResponse.ResponseUri;
-    //        return webResponse;
-    //    }
-    //}
 }

@@ -205,6 +205,7 @@ namespace Kebler.ViewModels
                 {
                     LoadingGridVisibility = Visibility.Visible;
                     Add();
+                    await TryCloseAsync(true);
                 }
                 else
                 {
@@ -310,12 +311,12 @@ namespace Kebler.ViewModels
             return output;
         }
 
-        public void Add()
+        public async void Add()
         {
             ResultVisibility = Visibility.Collapsed;
             IsWorking = true;
 
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 try
                 {
