@@ -11,7 +11,7 @@ using System.Threading;
 using System.Windows;
 using Kebler.Const;
 using Kebler.Services;
-using Microsoft.AppCenter.Crashes;
+//using Microsoft.AppCenter.Crashes;
 
 namespace Kebler.Update
 {
@@ -137,7 +137,7 @@ namespace Kebler.Update
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                //Crashes.TrackError(ex);
 
                 Log(ex.ToString());
 
