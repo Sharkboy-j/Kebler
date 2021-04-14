@@ -137,8 +137,9 @@ namespace Kebler.Update
             }
             catch (Exception ex)
             {
-                Log(ex.ToString());
                 Crashes.TrackError(ex);
+
+                Log(ex.ToString());
 
                 App.DONE(false);
             }
