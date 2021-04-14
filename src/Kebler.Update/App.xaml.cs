@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Threading;
 using Kebler.Const;
 using Kebler.Services;
-using Microsoft.AppCenter;
 
 namespace Kebler.Update
 {
@@ -21,9 +20,7 @@ namespace Kebler.Update
             try
             {
 
-                //AppCenter.Start("142c80cd-83b2-4776-9fcd-2702dc591977",
-                //  typeof(Analytics), typeof(Crashes));
-                //AppCenter.LogLevel = LogLevel.Verbose;
+
 
                 var module = Process.GetCurrentProcess()?.MainModule;
                 var path = module?.FileName;
@@ -71,8 +68,6 @@ namespace Kebler.Update
             }
             catch (Exception ex)
             {
-                //Crashes.TrackError(ex);
-
                 var ss = new StringBuilder();
                 ss.Append(ex.Message);
                 ss.Append(ex);
