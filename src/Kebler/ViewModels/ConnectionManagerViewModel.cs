@@ -14,6 +14,7 @@ using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
 using LiteDB;
+using Microsoft.AppCenter.Crashes;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
 
@@ -219,6 +220,8 @@ namespace Kebler.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex.Message, ex);
+                Crashes.TrackError(ex);
+
                 return false;
             }
             finally

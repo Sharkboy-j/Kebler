@@ -672,4 +672,7 @@
   <data name="MI_MoreInoShow" xml:space="preserve">
     <value>Show more info tab</value>
   </data>
+  <data name="TorretPropertiesSetError" xml:space="preserve">
+    <value>Error while save settings :(</value>
+  </data>
 </root>

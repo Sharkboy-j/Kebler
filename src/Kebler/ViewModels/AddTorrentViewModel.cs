@@ -26,6 +26,7 @@ namespace Kebler.ViewModels
     using Kebler.Models.Interfaces;
     using Kebler.UI.CSControls.TreeListView;
     using Kebler.Views;
+    using Microsoft.AppCenter.Crashes;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
@@ -239,6 +240,8 @@ namespace Kebler.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
+                Crashes.TrackError(ex);
+
             }
         }
 
@@ -410,6 +413,8 @@ namespace Kebler.ViewModels
                         catch (Exception ex)
                         {
                             Log.Error(ex);
+                            Crashes.TrackError(ex);
+
                             return;
                         }
                     }
@@ -419,6 +424,8 @@ namespace Kebler.ViewModels
                     //2021-01-21 03:46:45,609 [11] ERROR Kebler.ViewModels.AddTorrentViewModel - System.NullReferenceException: Object reference not set to an instance of an object.
                     //at Kebler.ViewModels.AddTorrentViewModel.< Add > b__55_0()
                     Log.Error(ex);
+                    Crashes.TrackError(ex);
+
                 }
                 finally
                 {

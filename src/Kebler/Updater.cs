@@ -11,6 +11,7 @@ using Kebler.Models;
 using Kebler.Resources;
 using Kebler.Services;
 using Kebler.ViewModels;
+using Microsoft.AppCenter.Crashes;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
 
@@ -45,6 +46,7 @@ namespace Kebler
             {
                 App.Instance.IsUpdateReady = false;
                 Log.Error(ex);
+                Crashes.TrackError(ex);
             }
         }
 

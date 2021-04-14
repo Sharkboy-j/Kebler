@@ -225,6 +225,7 @@
                                     <ListView
                                         DisplayMemberPath="announce"
                                         BorderThickness="1,0,1,1"
+                                        Height="210"
                                         ItemsSource="{Binding Trackers}"
                                         SelectedIndex="{Binding TrackerIndex}"
                                         SelectedValue="{Binding SelectedTracker}" >
