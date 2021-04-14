@@ -11,7 +11,6 @@ using System.Threading;
 using System.Windows;
 using Kebler.Const;
 using Kebler.Services;
-//using Microsoft.AppCenter.Crashes;
 
 namespace Kebler.Update
 {
@@ -50,7 +49,7 @@ namespace Kebler.Update
                     Log($"Current version is: {current}");
 
                     Log($"Okay. Try get server version (github version)");
-                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
+                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
 
                     Log($"Server version is: {result.Item2.name}");
 
@@ -84,8 +83,8 @@ namespace Kebler.Update
         async void startFree()
         {
             Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
+            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
             App.CreateShortcut();
-            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0),true);
             var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
             StartDownlaod(updateUrl);
         }
@@ -137,10 +136,7 @@ namespace Kebler.Update
             }
             catch (Exception ex)
             {
-                //Crashes.TrackError(ex);
-
                 Log(ex.ToString());
-
                 App.DONE(false);
             }
         }
@@ -192,4 +188,19 @@ namespace Kebler.Update
         }
     }
 
+    //public class MyWebClient : WebClient
+    //{
+    //    /// <summary>
+    //    ///     Response Uri after any redirects.
+    //    /// </summary>
+    //    public Uri ResponseUri;
+
+    //    /// <inheritdoc />
+    //    protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
+    //    {
+    //        var webResponse = base.GetWebResponse(request, result);
+    //        ResponseUri = webResponse.ResponseUri;
+    //        return webResponse;
+    //    }
+    //}
 }
