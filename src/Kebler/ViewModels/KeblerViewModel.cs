@@ -1232,14 +1232,14 @@ namespace Kebler.ViewModels
         {
             if (_transmissionClient != null)
             {
-                if (SelectedTorrent is TorrentInfo tr)
-                {
-                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { tr.Id }, manager));
-                }
-                else
+                if(selectedIDs.Length>1)
                 {
                     manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,
                         SelectedTorrents.Select(x => x.Id).ToArray(), manager));
+                }
+                else
+                {
+                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { SelectedTorrents.Select(x => x.Id).First() }, manager));
                 }
             }
         }
