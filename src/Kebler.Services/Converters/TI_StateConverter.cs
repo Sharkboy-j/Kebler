@@ -19,13 +19,13 @@ namespace Kebler.Services.Converters
             if (int.TryParse(value.ToString(), out var val))
                 return val switch
                 {
-                    0 => Strings.TI_Status_Stopped,
-                    1 => Strings.TI_Status_CheckPending,
-                    2 => Strings.TI_Status_Checking,
-                    3 => Strings.TI_Status_download_pending,
-                    4 => Strings.TI_Status_Downloading,
-                    5 => Strings.TI_Status_SeedPending,
-                    6 => Strings.TI_Status_Seeding,
+                    0 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_Stopped)),
+                    1 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_CheckPending)),
+                    2 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_Checking)),
+                    3 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_download_pending)),
+                    4 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_Downloading)),
+                    5 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_SeedPending)),
+                    6 => LocalizationProvider.GetLocalizedValue(nameof(Strings.TI_Status_Seeding)),
                     _ => string.Empty
                 };
             return string.Empty;

@@ -403,10 +403,10 @@
     <value>Скорость отдачи:</value>
   </data>
   <data name="MI_View" xml:space="preserve">
-    <value>Просмотр</value>
+    <value>Вид</value>
   </data>
   <data name="MI_Wasted" xml:space="preserve">
-    <value>Потрчено:</value>
+    <value>Утрачено:</value>
   </data>
   <data name="MoreInfo_AddTackerBtn" xml:space="preserve">
     <value>Добавить трекер</value>
@@ -671,5 +671,11 @@
   </data>
   <data name="MoreInfo_DontShowMoreInfo" xml:space="preserve">
     <value>Не отображать подробную информацию</value>
+  </data>
+  <data name="Error_EmptyString" xml:space="preserve">
+    <value>Значение не может быть пустым</value>
+  </data>
+  <data name="TorretPropertiesSetError" xml:space="preserve">
+    <value>Ошибка во время сохранения настроек</value>
   </data>
 </root>

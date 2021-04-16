@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using Caliburn.Micro;
+using System.Diagnostics;
 using System.IO;
 
 namespace Kebler.Models
 {
-    [DebuggerDisplay("{FolderName}")]
-    public class FolderCategory
+    [DebuggerDisplay("{FolderName} ({Count})")]
+    public class FolderCategory : PropertyChangedBase
     {
         public readonly DirectoryInfo Dir;
 
@@ -17,13 +18,35 @@ namespace Kebler.Models
         public string FolderName => Dir.Name;
         public string FullPath { get; }
 
-        public string Title { get; set; }
+        private string _title = "~";
+        public string Title
+        {
+            get => $"{_title} ({Count})";
+            set
+            {
+                Set(ref _title, value);
+            }
+        }
 
-        public override bool Equals(object obj)
+        private int _count;
+        public int Count
+        {
+            get => _count;
+            set
+            {
+                Set(ref _count, value);
+                NotifyOfPropertyChange(nameof(Title));
+            }
+        }
+
+        public override bool Equals(object? obj)
         {
             if (obj is FolderCategory cat) return cat.FullPath.Equals(FullPath);
             return false;
         }
+
+    
+
 
 
         public override int GetHashCode()
@@ -51,7 +74,7 @@ namespace Kebler.Models
 
     public class StatusCategory
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = "~";
         public Enums.Categories Cat { get; set; }
     }
 }
