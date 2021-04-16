@@ -36,7 +36,7 @@ namespace Kebler
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(Strings.NewUpdate, string.Empty,
+                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate)), string.Empty,
                         Enums.MessageBoxDilogButtons.YesNo, true));
                     if (dialogres == true) 
                         InstallUpdates();

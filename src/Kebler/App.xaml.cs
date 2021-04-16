@@ -41,6 +41,12 @@ namespace Kebler
 
         private App()
         {
+            Instance = this;
+
+            ConfigService.LoadConfig();
+            SetEnv();
+
+
             var args = Environment.GetCommandLineArgs();
 
             FileAssociations.EnsureAssociationsSet();
@@ -52,7 +58,7 @@ namespace Kebler
                 if (fileInfo.Extension.Equals(".torrent")) torrentsToAdd.Add(fileInfo.FullName);
             }
 
-            Instance = this;
+     
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
@@ -69,17 +75,11 @@ namespace Kebler
                 Current.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
 
-            ConfigService.LoadConfig();
 
 
-            SetEnv();
             InitializeComponent();
         }
 
-        public object FindRes(string name)
-        {
-            return FindResource(name);
-        }
 
         private void SetEnv()
         {

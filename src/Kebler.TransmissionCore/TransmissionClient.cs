@@ -487,7 +487,7 @@ namespace Kebler.TransmissionCore
         /// <param name="ids">Torrent ids</param>
         /// <param name="location">The new torrent location</param>
         /// <param name="move">Move from previous location</param>
-        public async Task<TransmissionResponse> TorrentSetLocationAsync(uint[] ids, string location, bool move,
+        public async Task<TransmissionResponse> TorrentSetLocationAsync(IEnumerable<uint> ids, string location, bool move,
             CancellationToken token)
         {
             var arguments = new Dictionary<string, object> {{"ids", ids}, {"location", location}, {"move", move}};

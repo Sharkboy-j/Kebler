@@ -66,13 +66,13 @@ namespace Kebler.Services
 
             var sb = new StringBuilder();
             if (span.Days > 0)
-                sb.Append($"{span.Days} {Strings.time_days_short}");
+                sb.Append($"{span.Days}{LocalizationProvider.GetLocalizedValue(nameof(Strings.time_days_short))} ");
             if (span.Hours > 0)
-                sb.Append($"{span.Hours} {Strings.time_days_short}");
+                sb.Append($"{span.Hours}{LocalizationProvider.GetLocalizedValue(nameof(Strings.time_hours_short))} ");
             if (span.Minutes > 0)
-                sb.Append($"{span.Minutes} {Strings.time_days_short}");
+                sb.Append($"{span.Minutes}{LocalizationProvider.GetLocalizedValue(nameof(Strings.time_minutes_short))} ");
             if (span.Seconds > 0)
-                sb.Append($"{span.Seconds} {Strings.time_days_short}");
+                sb.Append($"{span.Seconds}{LocalizationProvider.GetLocalizedValue(nameof(Strings.time_seconds_short))} ");
             return sb.ToString();
         }
 

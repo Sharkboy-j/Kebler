@@ -100,7 +100,7 @@
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
         </MenuItem>
 
-        <MenuItem Header="View">
+        <MenuItem Header="{lex:BLoc MI_View}">
             <MenuItem 
                 IsCheckable="True"
                 IsChecked="{Binding IsShowMoreInfo}"

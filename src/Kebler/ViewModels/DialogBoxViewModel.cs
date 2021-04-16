@@ -1,7 +1,11 @@
-﻿using Kebler.Models;
+﻿using Caliburn.Micro;
+using Kebler.Models;
 using Kebler.Models.Interfaces;
+using Kebler.Resources;
+using Kebler.Services;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Kebler.ViewModels
 {
@@ -13,14 +17,16 @@ namespace Kebler.ViewModels
         private object _value;
         private int _selectedIndex;
         private IEnumerable<object> _values;
+        private string? _emptyText;
 
         public DialogBoxViewModel(string message, string boxHint, bool isPassword,
-            Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
+            Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel, string? emptyText = null)
         {
             ShowPasswordBox = isPassword;
             ShowTextBox = !ShowPasswordBox;
             Message = message;
             LogoVisibility = true;
+            _emptyText = emptyText;
             if (!isPassword)
             {
                 ShowTextBox = true;
@@ -35,7 +41,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public DialogBoxViewModel(string message, IEnumerable<string> values, string val = "",  Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
+        public DialogBoxViewModel(string message, IEnumerable<string> values, string val = "", Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
         {
             ShowPasswordBox = false;
             ShowTextBox = false;
@@ -104,15 +110,33 @@ namespace Kebler.ViewModels
             base.OnViewAttached(view, context);
         }
 
-        public override void OkYes()
+        public override async void OkYes()
         {
+            async Task ShowError()
+            {
+                if (_emptyText is not null)
+                    await MessageBoxViewModel.ShowDialog(_emptyText, new WindowManager(), LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Error)));
+            }
+
             if (_showPasswordBox)
             {
+                if (string.IsNullOrEmpty(_view.PWD.Password))
+                {
+                    await ShowError();
+                    return;
+                }
+
                 Value = _view.PWD.Password;
                 _view.PWD.Clear();
             }
-            else if(ShowTextBox)
+            else if (ShowTextBox)
             {
+                if (string.IsNullOrEmpty(_dialogTextBoxText))
+                {
+                    await ShowError();
+                    return;
+                }
+
                 Value = _dialogTextBoxText;
             }
 

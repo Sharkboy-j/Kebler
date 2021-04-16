@@ -675,4 +675,7 @@
   <data name="TorretPropertiesSetError" xml:space="preserve">
     <value>Error while save settings :(</value>
   </data>
+  <data name="Error_EmptyString" xml:space="preserve">
+    <value>Value can not be empty</value>
+  </data>
 </root>

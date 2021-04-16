@@ -202,7 +202,10 @@ namespace Kebler.ViewModels
 
                 //DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>();
-                if (await MessageBoxViewModel.ShowDialog(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers, manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
+                if (await MessageBoxViewModel.ShowDialog(
+
+                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers))
+                    , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
                 {
                     LoadingGridVisibility = Visibility.Visible;
                     Add();

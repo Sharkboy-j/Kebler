@@ -520,6 +520,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value can not be empty.
+        /// </summary>
+        public static string Error_EmptyString {
+            get {
+                return ResourceManager.GetString("Error_EmptyString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Host name unknown.
         /// </summary>
         public static string EX_Host {
