@@ -51,7 +51,7 @@ namespace Kebler.Update
 
 
                     Log($"Okay. Try get server version (github version)");
-                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
+                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, false);
 
                     Log($"Server version is: {result.Item2.name}");
 
