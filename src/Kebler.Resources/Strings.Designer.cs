@@ -1186,7 +1186,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New update is ready. Install it?.
+        ///   Looks up a localized string similar to New update is ready (%d). Install it?.
         /// </summary>
         public static string NewUpdate {
             get {

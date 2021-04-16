@@ -27,7 +27,9 @@ namespace Kebler
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
+
                 var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current,true);
+
 
 
                 Log.Info($"Current {current} Serv {result.Item2.name}");
@@ -36,7 +38,7 @@ namespace Kebler
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate)), string.Empty,
+                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate).Replace("%d", result.Item2.tag_name)), string.Empty,
                         Enums.MessageBoxDilogButtons.YesNo, true));
                     if (dialogres == true) 
                         InstallUpdates();

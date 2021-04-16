@@ -493,7 +493,7 @@
     <value>Получение торрентов</value>
   </data>
   <data name="NewUpdate" xml:space="preserve">
-    <value>Вышла новая версия. Устанавливаем?</value>
+    <value>Вышла новая версия (%d). Устанавливаем?</value>
   </data>
   <data name="QA_AddTorrent" xml:space="preserve">
     <value>Добавить торрент</value>

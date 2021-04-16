@@ -631,7 +631,7 @@
     <value>Are you sure to remove tracker:</value>
   </data>
   <data name="NewUpdate" xml:space="preserve">
-    <value>New update is ready. Install it?</value>
+    <value>New update is ready (%d). Install it?</value>
   </data>
   <data name="MoreInfo_AddTackerBtn" xml:space="preserve">
     <value>Add tracker</value>
