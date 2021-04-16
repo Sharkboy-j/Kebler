@@ -48,8 +48,10 @@ namespace Kebler.Update
                     current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
                     Log($"Current version is: {current}");
 
+
+
                     Log($"Okay. Try get server version (github version)");
-                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current);
+                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
 
                     Log($"Server version is: {result.Item2.name}");
 

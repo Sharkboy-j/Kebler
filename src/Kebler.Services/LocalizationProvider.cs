@@ -12,13 +12,8 @@ namespace Kebler.Services
     {
         public static string GetLocalizedValue(string key)
         {
-
             ResourceManager temp = new ResourceManager("Kebler.Resources.Strings", typeof(Strings).Assembly);
-
             var value = temp.GetString(key, LocalizeDictionary.Instance.Culture);
-
-            //var value = LocalizeDictionary.Instance.GetLocalizedObject(key, null, LocalizeDictionary.Instance.Culture)?.ToString();
-
             if (value is null)
             {
                 Crashes.TrackError(new Exception($"Not found localization {key}"));
