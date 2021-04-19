@@ -10,6 +10,7 @@ using Kebler.Const;
 using Kebler.Models;
 using Kebler.Resources;
 using Kebler.Services;
+using Kebler.Update.Core;
 using Kebler.ViewModels;
 using Microsoft.AppCenter.Crashes;
 using ILog = log4net.ILog;

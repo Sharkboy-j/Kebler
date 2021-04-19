@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Kebler.Const;
-using Kebler.Services;
+using Kebler.Update.Core;
 
 namespace Kebler.Update
 {
@@ -21,7 +21,11 @@ namespace Kebler.Update
             BUILDER.Append(msg + Environment.NewLine);
         }
 
-       
+        protected override void OnStartup(StartupEventArgs e)
+        {
+
+            base.OnStartup(e);
+        }
 
         static void startKebler()
         {

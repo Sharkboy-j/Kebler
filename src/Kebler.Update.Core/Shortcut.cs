@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
-namespace Kebler.Services
+namespace Kebler.Update.Core
 {
     public class Shortcut
     {
@@ -12,8 +11,8 @@ namespace Kebler.Services
         public static void Create(string fileName, string targetPath, string arguments, string workingDirectory,
             string description, string hotkey, string iconPath)
         {
-            var shortcut = (IWshShortcut) m_type.InvokeMember("CreateShortcut",
-                BindingFlags.InvokeMethod, null, m_shell, new object[] {fileName});
+            var shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut",
+                BindingFlags.InvokeMethod, null, m_shell, new object[] { fileName });
 
             shortcut.Description = description;
             shortcut.TargetPath = targetPath;
@@ -131,7 +130,7 @@ namespace Kebler.Services
 
             [TypeLibFunc(0x40)]
             [DispId(0x7d0)]
-            void Load([In] [MarshalAs(UnmanagedType.BStr)] string PathLink);
+            void Load([In][MarshalAs(UnmanagedType.BStr)] string PathLink);
 
             [DispId(0x7d1)]
             void Save();

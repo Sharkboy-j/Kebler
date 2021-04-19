@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Kebler.Services
+namespace Kebler.Update.Core
 {
     public class GitHubApi
     {
@@ -131,6 +128,6 @@ namespace Kebler.Services
             public string zipball_url { get; set; }
             public string body { get; set; }
         }
-       
+
     }
 }

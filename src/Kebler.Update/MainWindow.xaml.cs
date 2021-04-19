@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using Kebler.Const;
-using Kebler.Services;
+using Kebler.Update.Core;
 
 namespace Kebler.Update
 {
@@ -65,6 +65,7 @@ namespace Kebler.Update
                 ss.Append(ex.StackTrace);
                 Log(ss.ToString());
                 App.DONE(false);
+
             }
 
            
@@ -158,7 +159,7 @@ namespace Kebler.Update
             }
 
 
-              
+
         }
 
         async void startFree()
@@ -218,6 +219,7 @@ namespace Kebler.Update
             catch (Exception ex)
             {
                 Log(ex.ToString());
+
                 App.DONE(false);
             }
         }
@@ -268,20 +270,4 @@ namespace Kebler.Update
             App.DONE(DialogResult);
         }
     }
-
-    //public class MyWebClient : WebClient
-    //{
-    //    /// <summary>
-    //    ///     Response Uri after any redirects.
-    //    /// </summary>
-    //    public Uri ResponseUri;
-
-    //    /// <inheritdoc />
-    //    protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
-    //    {
-    //        var webResponse = base.GetWebResponse(request, result);
-    //        ResponseUri = webResponse.ResponseUri;
-    //        return webResponse;
-    //    }
-    //}
 }

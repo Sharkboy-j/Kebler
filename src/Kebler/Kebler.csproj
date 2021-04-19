@@ -58,7 +58,7 @@
 	<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
 	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
 	<PackageReference Include="Microsoft.WindowsDesktop.App" Version="3.0.0-preview7-27912-14" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Plarium.Geo" Version="2.2.0" />
     <PackageReference Include="Plarium.Geo.Embedded" Version="1.3.0" />
     <PackageReference Include="sharpconfig" Version="3.2.9.1" />
@@ -73,6 +73,7 @@
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
     <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
     <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
+    <ProjectReference Include="..\Kebler.Update.Core\Kebler.Update.Core.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<None Update="log4net.config">
