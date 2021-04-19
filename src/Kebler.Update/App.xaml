@@ -1,4 +1,5 @@
 ﻿<Application
     x:Class="Kebler.Update.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    StartupUri="MainWindow.xaml"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" />
