@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static Kebler.Services.GitHubApi;
-
-namespace Kebler.Services
+using static Kebler.Update.Core.GitHubApi;
+namespace Kebler.Update.Core
 {
     public static class UpdaterApi
-    { 
+    {
         public static async Task<Tuple<bool, Release>> Check(string user, string repository, Version currentVersion, bool preRelease = false)
         {
             if (preRelease)

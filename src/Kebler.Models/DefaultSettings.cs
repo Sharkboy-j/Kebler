@@ -19,6 +19,7 @@ namespace Kebler.Models
         public double MainWindowHeight { get; set; } = 800;
         public WindowState MainWindowState { get; set; } = WindowState.Normal;
         public string ColumnSizes { get; set; } = string.Empty;
+        public bool AllowPreRelease { get; set; }
 
         public bool MoreInfoShow { get; set; } = true;
     }

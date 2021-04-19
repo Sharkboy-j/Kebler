@@ -10,6 +10,7 @@ using Kebler.Const;
 using Kebler.Models;
 using Kebler.Resources;
 using Kebler.Services;
+using Kebler.Update.Core;
 using Kebler.ViewModels;
 using Microsoft.AppCenter.Crashes;
 using ILog = log4net.ILog;
@@ -28,10 +29,7 @@ namespace Kebler
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
 
-
-                var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, false);
-
-
+                var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, ConfigService.Instanse.AllowPreRelease);
 
                 Log.Info($"Current {current} Serv {result.Item2.name}");
 
