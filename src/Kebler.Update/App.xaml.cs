@@ -15,67 +15,6 @@ namespace Kebler.Update
     {
         public static StringBuilder BUILDER = new StringBuilder();
 
-        private App()
-        {
-            try
-            {
-
-
-
-                var module = Process.GetCurrentProcess()?.MainModule;
-                var path = module?.FileName;
-
-                foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
-                {
-                    process.Kill(false);
-                }
-
-
-                Log($"Current Path: {path}");
-
-                if (path.Equals(ConstStrings.InstallerExePath))
-                {
-                    Log("Try start from Temp");
-                    Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
-                    File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
-
-                    using (var process = new Process())
-                    {
-                        var info = new ProcessStartInfo
-                        {
-                            FileName = ConstStrings.TempInstallerExePath,
-                            UseShellExecute = true,
-                            CreateNoWindow = true
-                        };
-
-                        process.StartInfo = info;
-                        process.EnableRaisingEvents = false;
-                        process.Start();
-                    }
-
-                    Log("Started Temp");
-                    Current.Shutdown();
-                    Environment.Exit(0);
-                    return;
-                }
-                else
-                {
-                    Log($"Go for Update from {path}");
-
-                    Console.WriteLine("CheckUpdate");
-                    new MainWindow().Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                var ss = new StringBuilder();
-                ss.Append(ex.Message);
-                ss.Append(ex);
-                ss.Append(ex.StackTrace);
-                Log(ss.ToString());
-                DONE(false);
-            }
-        }
 
         public static void Log(string msg)
         {
@@ -103,22 +42,24 @@ namespace Kebler.Update
         }
 
 
+
         public static void DONE(bool isTrue)
         {
+            File.AppendAllText("install.log", BUILDER.ToString());
             if (isTrue == false)
             {
-                File.AppendAllText("install.log", BUILDER.ToString());
+              //
             }
-            else if (isTrue == true)
+            else if (isTrue)
             {
-                CreateShortcut();
+                //CreateShortcut();
                 startKebler();
             }
             JUSTDIEMOTHERFUCKER();
 
         }
 
-        private static void JUSTDIEMOTHERFUCKER()
+        public static void JUSTDIEMOTHERFUCKER()
         {
             Current.Shutdown();
             Environment.Exit(0);

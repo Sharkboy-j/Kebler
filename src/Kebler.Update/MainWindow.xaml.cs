@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using Kebler.Const;
@@ -25,17 +26,97 @@ namespace Kebler.Update
 
         public MainWindow()
         {
-            InitializeComponent();
-            Loaded += MainWindow_Loaded;
+            try
+            {
+
+                var current = Process.GetCurrentProcess();
+
+                KillAllInstancesExceptThis(current);
+
+                var module = current?.MainModule;
+                var curretnPath = module?.FileName;
+                Log($"Current Path: {curretnPath}");
+
+                if(string.IsNullOrEmpty(curretnPath))
+                {
+                    Log($"Current Path is null. WTF?!");
+                    App.DONE(false);
+                    return;
+                }
+
+                // we have to start installer from any folder but not ConstStrings.InstallerExePath. so let check it
+                if (curretnPath.Equals(ConstStrings.InstallerExePath))
+                {
+                    MoveToTempStartAndExit();
+                }
+                else
+                {
+                    Log($"Go for Update from {curretnPath}");
+                    Console.WriteLine("CheckUpdate");
+                    InitializeComponent();
+                    Loaded += MainWindow_Loaded;
+                }
+            }
+            catch (Exception ex)
+            {
+                var ss = new StringBuilder();
+                ss.Append(ex.Message);
+                ss.Append(ex);
+                ss.Append(ex.StackTrace);
+                Log(ss.ToString());
+                App.DONE(false);
+            }
+
+           
         }
 
+        private void MoveToTempStartAndExit()
+        {
+            Log("Try start from Temp");
+            Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
+            File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
 
+            using (var process = new Process())
+            {
+                var info = new ProcessStartInfo
+                {
+                    FileName = ConstStrings.TempInstallerExePath,
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
 
+                process.StartInfo = info;
+                process.EnableRaisingEvents = false;
+                process.Start();
+            }
+
+            Log("Started from Temp");
+            Application.Current.Shutdown();
+            Environment.Exit(0);
+        }
+
+        private static void KillAllInstancesExceptThis(Process current)
+        {
+            //kill Kebler
+            foreach (var process in Process.GetProcessesByName(nameof(Kebler)))
+            {
+                process.Kill(false);
+            }
+
+            //Kill Kebler updater
+            Process[] p = Process.GetProcessesByName(ConstStrings.InstallerName);
+            foreach (var pro in p)
+            {
+                if (pro.Id != current.Id)
+                {
+                    pro.Kill();
+                }
+            }
+        }
 
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             string? getEnv = null;
             Version? current = null;
             getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
@@ -47,8 +128,6 @@ namespace Kebler.Update
                 {
                     current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
                     Log($"Current version is: {current}");
-
-
 
                     Log($"Okay. Try get server version (github version)");
                     var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, true);
