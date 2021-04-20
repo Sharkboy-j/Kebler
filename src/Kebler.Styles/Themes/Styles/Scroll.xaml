@@ -11,13 +11,13 @@
         M 25 0 L 0 15 25 30z
     </Geometry>
     <Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
-        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{DynamicResource FocusVisual}" />
-        <Setter Property="Control.HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Control.VerticalContentAlignment" Value="Stretch" />
-        <Setter Property="Control.Padding" Value="1" />
-        <Setter Property="UIElement.Focusable" Value="false" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border
@@ -39,11 +39,11 @@
         </Setter>
     </Style>
     <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
-        <Setter Property="Control.Background" Value="Transparent" />
-        <Setter Property="UIElement.Focusable" Value="false" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Rectangle
@@ -55,9 +55,9 @@
         </Setter>
     </Style>
     <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border
@@ -84,9 +84,9 @@
         </Setter>
     </Style>
     <Style x:Key="ScrollBarThumbHorizontal" TargetType="{x:Type Thumb}">
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border
@@ -115,12 +115,12 @@
     <Style x:Key="VerticalScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Control.Background" Value="{DynamicResource ScrollBar.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource ScrollBar.Static.Border}" />
-        <Setter Property="Control.BorderThickness" Value="1" />
-        <Setter Property="FrameworkElement.Width" Value="13" />
-        <Setter Property="FrameworkElement.MinWidth" Value="13" />
-        <Setter Property="Control.Template">
+        <Setter Property="Background" Value="{DynamicResource ScrollBar.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ScrollBar.Static.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Width" Value="13" />
+        <Setter Property="MinWidth" Value="13" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
                     <Grid x:Name="Bg" SnapsToDevicePixels="true">
@@ -135,7 +135,7 @@
                             BorderBrush="{TemplateBinding Control.BorderBrush}"
                             BorderThickness="{TemplateBinding Control.BorderThickness}" />
                         <RepeatButton
-                            x:Name="PART_LineUpButton"
+                            Grid.Row="0" x:Name="PART_LineUpButton"
                             Command="{x:Static ScrollBar.LineUpCommand}"
                             IsEnabled="{TemplateBinding UIElement.IsMouseOver}"
                             Style="{DynamicResource ScrollBarButton}">
@@ -238,7 +238,7 @@
                                     BorderBrush="{TemplateBinding Control.BorderBrush}"
                                     BorderThickness="{TemplateBinding Control.BorderThickness}" />
                                 <RepeatButton
-                                    x:Name="PART_LineLeftButton"
+                                    Grid.Column="0" x:Name="PART_LineLeftButton"
                                     Command="{x:Static ScrollBar.LineLeftCommand}"
                                     IsEnabled="{TemplateBinding UIElement.IsMouseOver}"
                                     Style="{DynamicResource ScrollBarButton}">
@@ -321,12 +321,12 @@
     <Style x:Key="HorizontalScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Control.Background" Value="{DynamicResource ScrollBar.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource ScrollBar.Static.Border}" />
-        <Setter Property="Control.BorderThickness" Value="1" />
-        <Setter Property="FrameworkElement.Width" Value="13" />
-        <Setter Property="FrameworkElement.MinWidth" Value="13" />
-        <Setter Property="Control.Template">
+        <Setter Property="Background" Value="{DynamicResource ScrollBar.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ScrollBar.Static.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Width" Value="13" />
+        <Setter Property="MinWidth" Value="13" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
                     <Grid x:Name="Bg" SnapsToDevicePixels="true">
@@ -341,7 +341,7 @@
                             BorderBrush="{TemplateBinding Control.BorderBrush}"
                             BorderThickness="{TemplateBinding Control.BorderThickness}" />
                         <RepeatButton
-                            x:Name="PART_LineUpButton"
+                            Grid.Row="0" x:Name="PART_LineUpButton"
                             Command="{x:Static ScrollBar.LineUpCommand}"
                             IsEnabled="{TemplateBinding UIElement.IsMouseOver}"
                             Style="{DynamicResource ScrollBarButton}">
@@ -441,7 +441,7 @@
                                     BorderBrush="{TemplateBinding Control.BorderBrush}"
                                     BorderThickness="{TemplateBinding Control.BorderThickness}" />
                                 <RepeatButton
-                                    x:Name="PART_LineLeftButton"
+                                    Grid.Column="0" x:Name="PART_LineLeftButton"
                                     Command="{x:Static ScrollBar.LineLeftCommand}"
                                     IsEnabled="{TemplateBinding UIElement.IsMouseOver}"
                                     Style="{DynamicResource ScrollBarButton}">
@@ -523,8 +523,8 @@
     </Style>
 
     <Style TargetType="{x:Type ScrollViewer}">
-        <Setter Property="Control.Background" Value="{DynamicResource ScrollViewerBackground}" />
-        <Setter Property="Control.Template">
+        <Setter Property="Background" Value="{DynamicResource ScrollViewerBackground}" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid x:Name="Grid" Background="{TemplateBinding Control.Background}">

@@ -63,10 +63,9 @@ namespace Kebler.Styles.Window
                 new FrameworkPropertyMetadata(typeof(CustomizableWindow)));
         }
 
-        public CustomizableWindow()
+        protected CustomizableWindow()
         {
-            try
-            {
+            
                 SetResourceReference(StyleProperty, typeof(CustomizableWindow));
                 var chrome = new WindowChrome
                 {
@@ -83,11 +82,7 @@ namespace Kebler.Styles.Window
                 _padding = Padding;
                 Loaded += Onload;
                 RenderSize = new Size(250, 250);
-            }
-            catch
-            {
-
-            }
+           
            
         }
 
@@ -129,7 +124,7 @@ namespace Kebler.Styles.Window
         }
 
         private static Thickness WindowMaximizedPadding =>
-            new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8);
+            new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8,8,8,8);
 
 
         protected override void OnContentRendered(EventArgs e)

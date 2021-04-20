@@ -431,7 +431,7 @@
                     ItemsSource="{Binding Peers, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="Auto" Header="{lex:BLoc MoreInfo_Peers_Host}">
+                        <DataGridTemplateColumn Width="*" Header="{lex:BLoc MoreInfo_Peers_Host}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="3,0" Orientation="Horizontal">
@@ -461,7 +461,7 @@
                             Header="{lex:BLoc MoreInfo_PeersRateToPeer}" />
 
                         <DataGridTextColumn
-                            Width="*"
+                            Width="Auto"
                             Binding="{Binding IsEncrypted, Mode=OneWay, NotifyOnTargetUpdated=True}"
                             Header="{lex:BLoc MoreInfo_Peers_Encryption}" />
                     </DataGrid.Columns>

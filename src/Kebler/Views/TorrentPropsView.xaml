@@ -155,7 +155,7 @@
                                         <TextBlock
                                             Grid.Column="1"
                                             HorizontalAlignment="Left"
-                                            Style="{DynamicResource CMTextBox}"
+                                            Style="{DynamicResource CmTextBox}"
                                             Text="{lex:BLoc TP_PeerLimit}" />
                                         <TextBox
                                             Grid.Row="0"
