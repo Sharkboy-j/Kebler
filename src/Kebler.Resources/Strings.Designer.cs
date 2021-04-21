@@ -736,7 +736,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preferences.
+        ///   Looks up a localized string similar to Kebler Preferences.
         /// </summary>
         public static string MI_Prefs {
             get {
