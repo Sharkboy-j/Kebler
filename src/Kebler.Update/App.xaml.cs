@@ -14,7 +14,8 @@ namespace Kebler.Update
     public partial class App : Application
     {
         public static StringBuilder BUILDER = new StringBuilder();
-
+        public static bool Force;
+        public static bool Beta;
 
         public static void Log(string msg)
         {
@@ -23,7 +24,21 @@ namespace Kebler.Update
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var args = e.Args.ToList().ConvertAll(x => x.ToLower());
+            if(args.Count>0)
+            {
+                if (args.Contains("-b") || args.Contains("-beta"))
+                {
+                    Beta = true;
+                    Log("Beta true");
+                }
+                if (args.Contains("-f") || args.Contains("-force"))
+                {
+                    Force = true;
+                    Log("Force true");
+                }
 
+            }
             base.OnStartup(e);
         }
 
