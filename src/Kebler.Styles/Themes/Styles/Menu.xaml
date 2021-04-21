@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="MenuShadowBorderStyle" TargetType="{x:Type Border}">
-        <Setter Property="Border.Background" Value="Transparent" />
-        <Setter Property="Border.Padding" Value="0,0,10,10" />
-        <Setter Property="UIElement.Effect">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0,0,10,10" />
+        <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect
                     BlurRadius="8"
@@ -14,16 +14,16 @@
     </Style>
     <ScaleTransform x:Key="LayoutScaleTransform" />
     <Style TargetType="{x:Type ContextMenu}">
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
-        <Setter Property="FrameworkElement.LayoutTransform" Value="{DynamicResource LayoutScaleTransform}" />
-        <Setter Property="Control.Foreground" Value="{DynamicResource Menu.MenuItem.Static.Foreground}" />
-        <Setter Property="Control.Background" Value="{DynamicResource Menu.MenuItem.Static.Background}" />
-        <Setter Property="Control.BorderThickness" Value="1" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource Menu.MenuItem.Static.Border}" />
-        <Setter Property="Control.VerticalContentAlignment" Value="Center" />
-        <Setter Property="Control.Padding" Value="2" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="LayoutTransform" Value="{DynamicResource LayoutScaleTransform}" />
+        <Setter Property="Foreground" Value="{DynamicResource Menu.MenuItem.Static.Foreground}" />
+        <Setter Property="Background" Value="{DynamicResource Menu.MenuItem.Static.Background}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Menu.MenuItem.Static.Border}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="2" />
         <Setter Property="Grid.IsSharedSizeScope" Value="true" />
-        <Setter Property="Control.Template">
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Border Uid="Border_93" Style="{DynamicResource MenuShadowBorderStyle}">
@@ -50,12 +50,12 @@
         </Setter>
     </Style>
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
-        <Setter Property="Control.Background" Value="{DynamicResource Menu.Static.Separator}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource Menu.Static.Separator}" />
-        <Setter Property="Control.BorderThickness" Value="0,0,0,1" />
-        <Setter Property="FrameworkElement.MinHeight" Value="3" />
-        <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
-        <Setter Property="Control.Template">
+        <Setter Property="Background" Value="{DynamicResource Menu.Static.Separator}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Menu.Static.Separator}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="MinHeight" Value="3" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Separator}">
                     <Border
@@ -68,8 +68,8 @@
         </Setter>
     </Style>
     <Style x:Key="MenuRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
-        <Setter Property="ButtonBase.ClickMode" Value="Hover" />
-        <Setter Property="Control.Template">
+        <Setter Property="ClickMode" Value="Hover" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border
@@ -91,9 +91,9 @@
         </Setter>
     </Style>
     <Style x:Key="{ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}" TargetType="{x:Type ScrollViewer}">
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Control.Template">
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid SnapsToDevicePixels="true">
@@ -190,7 +190,7 @@
                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                     TextElement.Foreground="{DynamicResource MainMenu.Static.Foreground}" />
                 <Path
-                    x:Name="GlyphPanel"
+                    Grid.Column="0" x:Name="GlyphPanel"
                     Margin="3"
                     VerticalAlignment="Center"
                     Data="F1 M 10,1.2 L 4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2 Z"
@@ -208,7 +208,7 @@
                     RecognizesAccessKey="true"
                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                 <Popup
-                    x:Name="PART_Popup"
+                    Grid.Column="0" x:Name="PART_Popup"
                     AllowsTransparency="true"
                     Focusable="false"
                     HorizontalOffset="-1"
@@ -304,7 +304,7 @@
                     ContentSource="Icon"
                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                 <Path
-                    x:Name="GlyphPanel"
+                    Grid.Column="0" x:Name="GlyphPanel"
                     Margin="3"
                     VerticalAlignment="Center"
                     Data="F1 M 10,1.2 L 4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2 Z"
@@ -379,7 +379,7 @@
                     ContentSource="Icon"
                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                 <Border
-                    x:Name="GlyphPanel"
+                    Grid.Column="0" x:Name="GlyphPanel"
                     Width="22"
                     Height="22"
                     Margin="-1,0,0,0"
@@ -478,7 +478,7 @@
                     ContentSource="Icon"
                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                 <Border
-                    x:Name="GlyphPanel"
+                    Grid.Column="0" x:Name="GlyphPanel"
                     Width="22"
                     Height="22"
                     Margin="-1,0,0,0"
@@ -523,7 +523,7 @@
                     Data="M 0,0 L 4,3.5 0,7 Z"
                     Fill="{DynamicResource Menu.MenuItem.Static.Foreground}" />
                 <Popup
-                    x:Name="PART_Popup"
+                    Grid.Column="0" x:Name="PART_Popup"
                     AllowsTransparency="true"
                     Focusable="false"
                     HorizontalOffset="0"
@@ -598,14 +598,14 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style TargetType="{x:Type MenuItem}">
-        <Setter Property="Control.HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-        <Setter Property="Control.VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-        <Setter Property="Control.Background" Value="Transparent" />
-        <Setter Property="Control.BorderBrush" Value="Transparent" />
-        <Setter Property="Control.BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Control.Template" Value="{DynamicResource {ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
+        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
         <Style.Triggers>
             <Trigger Property="MenuItem.Role" Value="TopLevelHeader">
                 <Setter Property="FrameworkElement.Height" Value="26" />
@@ -629,11 +629,11 @@
     </Style>
 
     <Style TargetType="{x:Type Menu}">
-        <Setter Property="Control.Background" Value="{DynamicResource Menu.Static.Background}" />
-        <Setter Property="Control.Foreground" Value="{DynamicResource Menu.Static.Foreground}" />
-        <Setter Property="Control.VerticalContentAlignment" Value="Center" />
-        <Setter Property="ItemsControl.ItemContainerStyle" Value="{DynamicResource {x:Type MenuItem}}" />
-        <Setter Property="Control.Template">
+        <Setter Property="Background" Value="{DynamicResource Menu.Static.Background}" />
+        <Setter Property="Foreground" Value="{DynamicResource Menu.Static.Foreground}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource {x:Type MenuItem}}" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Menu}">
                     <Border

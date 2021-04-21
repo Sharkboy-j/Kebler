@@ -36,12 +36,12 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="WindowCloseButtonPathStyle" TargetType="{x:Type Path}">
-        <Setter Property="FrameworkElement.Height" Value="10" />
-        <Setter Property="FrameworkElement.Width" Value="10" />
-        <Setter Property="FrameworkElement.Margin" Value="0" />
-        <Setter Property="Shape.Stretch" Value="Uniform" />
-        <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
-        <Setter Property="Shape.Fill" Value="{DynamicResource Window.Button.Static.Foreground}" />
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Fill" Value="{DynamicResource Window.Button.Static.Foreground}" />
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -53,12 +53,12 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="WindowButton" TargetType="{x:Type Button}">
-        <Setter Property="FrameworkElement.Height" Value="26" />
-        <Setter Property="FrameworkElement.Width" Value="46" />
-        <Setter Property="Control.Background" Value="{DynamicResource Window.Button.Static.Background}" />
-        <Setter Property="Control.BorderThickness" Value="0" />
-        <Setter Property="UIElement.Focusable" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="Height" Value="26" />
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Background" Value="{DynamicResource Window.Button.Static.Background}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Name="border" Background="{TemplateBinding Control.Background}">
@@ -77,12 +77,12 @@
         </Setter>
     </Style>
     <Style x:Key="WindowCloseButton" TargetType="{x:Type Button}">
-        <Setter Property="FrameworkElement.Height" Value="26" />
-        <Setter Property="FrameworkElement.Width" Value="46" />
-        <Setter Property="Control.Background" Value="{DynamicResource Window.CloseButton.Static.Background}" />
-        <Setter Property="Control.BorderThickness" Value="0" />
-        <Setter Property="UIElement.Focusable" Value="false" />
-        <Setter Property="Control.Template">
+        <Setter Property="Height" Value="26" />
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Background" Value="{DynamicResource Window.CloseButton.Static.Background}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Control.Background}">

@@ -1,13 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="{x:Type Button}">
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Background" Value="{DynamicResource Button.Static.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Button.Static.Border}" />
         <Setter Property="Foreground" Value="{DynamicResource Button.Foreground}" />
-        <Setter Property="FrameworkElement.Margin" Value="4,2,4,2" />
+        <Setter Property="Margin" Value="4,2,4,2" />
         <Setter Property="Padding" Value="8,0,8,0" />
-        <Setter Property="FrameworkElement.Height" Value="24" />
-        <Setter Property="FrameworkElement.MaxWidth" Value="400" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="MaxWidth" Value="400" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -32,7 +32,7 @@
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                             <FrameworkElement.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
                                 </Style>
                             </FrameworkElement.Resources>
                         </ContentPresenter>

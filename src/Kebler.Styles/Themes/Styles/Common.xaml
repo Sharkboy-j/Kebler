@@ -4,7 +4,7 @@
     xmlns:converters="clr-namespace:Kebler.Styles.Converters">
     <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
     <Style TargetType="{x:Type Separator}">
-        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
     </Style>
 
     <!--  checkbox  -->
@@ -36,16 +36,16 @@
 
 
     <Style TargetType="{x:Type GridSplitter}">
-        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
     </Style>
     <Style x:Key="HorizontalGridSplitter" TargetType="{x:Type GridSplitter}">
-        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch" />
-        <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="FrameworkElement.Margin" Value="0,-3,0,-3" />
-        <Setter Property="FrameworkElement.Height" Value="7" />
-        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
-        <Setter Property="Control.Template">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Margin" Value="0,-3,0,-3" />
+        <Setter Property="Height" Value="7" />
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
                     <Grid Background="Transparent">
@@ -64,13 +64,13 @@
     <converters:CanExpandConverter x:Key="CanExpandConverter" />
 
     <Style x:Key="VerticalGridSplitter" TargetType="{x:Type GridSplitter}">
-        <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch" />
-        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Control.IsTabStop" Value="false" />
-        <Setter Property="FrameworkElement.Margin" Value="-3,0,-3,0" />
-        <Setter Property="FrameworkElement.Width" Value="7" />
-        <Setter Property="Control.Background" Value="{DynamicResource BorderBrush}" />
-        <Setter Property="Control.Template">
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Margin" Value="-3,0,-3,0" />
+        <Setter Property="Width" Value="7" />
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
                     <Grid Background="Transparent">
@@ -86,12 +86,11 @@
     </Style>
 
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
-        <Setter Property="UIElement.Focusable" Value="false" />
-        <Setter Property="FrameworkElement.Width" Value="16" />
-        <Setter Property="FrameworkElement.Height" Value="16" />
-        <Setter Property="Control.Background" Value="{DynamicResource TreeViewItem.TreeArrow.Static.Fill}" />
-        <Setter Property="FrameworkElement.Height" Value="16" />
-        <Setter Property="Control.Template">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Background" Value="{DynamicResource TreeViewItem.TreeArrow.Static.Fill}" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border

@@ -26,6 +26,7 @@ namespace Kebler.Update
 
         public MainWindow()
         {
+
             try
             {
 
@@ -37,7 +38,7 @@ namespace Kebler.Update
                 var curretnPath = module?.FileName;
                 Log($"Current Path: {curretnPath}");
 
-                if(string.IsNullOrEmpty(curretnPath))
+                if (string.IsNullOrEmpty(curretnPath))
                 {
                     Log($"Current Path is null. WTF?!");
                     App.DONE(false);
@@ -68,7 +69,7 @@ namespace Kebler.Update
 
             }
 
-           
+
         }
 
         private void MoveToTempStartAndExit()
@@ -118,34 +119,45 @@ namespace Kebler.Update
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string? getEnv = null;
-            Version? current = null;
-            getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-
-            if (!string.IsNullOrEmpty(getEnv))
+            if (App.Force)
             {
-                Log($"We found old version on GetEnvironmentVariable: {getEnv}");
-                if (File.Exists(getEnv))
+                startFree();
+            }
+            else
+            {
+                string? getEnv = null;
+                Version? current = null;
+                getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+
+                if (!string.IsNullOrEmpty(getEnv))
                 {
-                    current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
-                    Log($"Current version is: {current}");
-
-                    Log($"Okay. Try get server version (github version)");
-                    var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, false);
-
-                    Log($"Server version is: {result.Item2.name}");
-
-                    if (result.Item2.name > current)
+                    Log($"We found old version on GetEnvironmentVariable: {getEnv}");
+                    if (File.Exists(getEnv))
                     {
-                        var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
-                        Log($"So here is: {updateUrl}");
+                        current = new Version(FileVersionInfo.GetVersionInfo(getEnv).FileVersion);
+                        Log($"Current version is: {current}");
 
-                        StartDownlaod(result.Item2.assets.LastOrDefault().browser_download_url);
+                        Log($"Okay. Try get server version (github version)");
+                        var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), current, App.Beta);
+
+                        Log($"Server version is: {result.Item2.name}");
+
+                        if (result.Item2.name > current)
+                        {
+                            var updateUrl = result.Item2.assets.Last().browser_download_url;
+                            Log($"So here is: {updateUrl}");
+
+                            StartDownlaod(result.Item2.assets.Last().browser_download_url);
+                        }
+                        else
+                        {
+                            Process.Start(getEnv);
+                            App.DONE(true);
+                        }
                     }
                     else
                     {
-                        Process.Start(getEnv);
-                        App.DONE(true);
+                        startFree();
                     }
                 }
                 else
@@ -153,10 +165,9 @@ namespace Kebler.Update
                     startFree();
                 }
             }
-            else
-            {
-                startFree();
-            }
+
+
+
 
 
 
@@ -165,30 +176,33 @@ namespace Kebler.Update
         async void startFree()
         {
             Log($"Oh my god. That is first time..... go for update with 0.0.0.0 version");
-            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0));
+            var result = await UpdaterApi.Check(ConstStrings.GITHUB_USER, nameof(Kebler), new Version(0, 0, 0, 0), App.Beta);
+
             App.CreateShortcut();
-            var updateUrl = result.Item2.assets.LastOrDefault().browser_download_url;
+            var updateUrl = result.Item2.assets.LastOrDefault()?.browser_download_url;
             StartDownlaod(updateUrl);
         }
 
-        private void StartDownlaod(string uri)
+        private void StartDownlaod(string? uri)
         {
+
+            if (string.IsNullOrEmpty(uri))
+            {
+                var resp = MessageBox.Show("Error url");
+                CustomizableWindow_Closing(null, null);
+                return;
+            }
 
             _webClient = new WebClient();
             tempfile = Path.GetTempFileName();
 
             _webClient.DownloadProgressChanged += OnDownloadProgressChanged;
-            _webClient.DownloadFileCompleted += WebClientOnDownloadFileCompleted;
-            Size.Content = "Downlaoding...";
+            _webClient.DownloadFileCompleted += _webClient_DownloadFileCompleted;
+            //Size.Content = "Downlaoding...";
             _webClient.DownloadFileAsync(new Uri(uri), tempfile);
         }
 
-        void Log(string msg)
-        {
-            App.Log(msg);
-        }
-
-        private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private void _webClient_DownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
             try
             {
@@ -224,6 +238,13 @@ namespace Kebler.Update
             }
         }
 
+        void Log(string msg)
+        {
+            App.Log(msg);
+        }
+
+
+
         public static void DeleteDirectory(string path)
         {
             foreach (var directory in Directory.GetDirectories(path)) DeleteDirectory(directory);
@@ -244,8 +265,8 @@ namespace Kebler.Update
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            Size.Content = $@"{BytesToString(e.BytesReceived)} / {BytesToString(e.TotalBytesToReceive)}";
-            PB.Value = e.ProgressPercentage;
+            //Size.Content = $@"{BytesToString(e.BytesReceived)} / {BytesToString(e.TotalBytesToReceive)}";
+            PB.Value = e.ProgressPercentage * 100;
         }
 
         private static string BytesToString(long byteCount)
@@ -259,15 +280,27 @@ namespace Kebler.Update
             return $"{(Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture)} {suf[place]}";
         }
 
-        private void CustomizableWindow_Closing(object sender, CancelEventArgs e)
+        private void CustomizableWindow_Closing(object? sender, CancelEventArgs? e)
         {
-            _webClient.CancelAsync();
 
-            _webClient.DownloadProgressChanged -= OnDownloadProgressChanged;
-            _webClient.DownloadFileCompleted -= WebClientOnDownloadFileCompleted;
 
-            _webClient.Dispose();
+            if (_webClient is not null)
+            {
+                _webClient.CancelAsync();
+                _webClient.DownloadProgressChanged -= OnDownloadProgressChanged;
+                _webClient.DownloadFileCompleted -= _webClient_DownloadFileCompleted;
+                _webClient.Dispose();
+            }
+
+
+
+
             App.DONE(DialogResult);
+        }
+
+        private void Button_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            CustomizableWindow_Closing(null, null);
         }
     }
 }

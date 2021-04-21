@@ -16,11 +16,11 @@
     </Style>
 
     <Style TargetType="{x:Type CheckBox}">
-        <Setter Property="Control.Background" Value="{DynamicResource OptionMark.Static.Background}" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource OptionMark.Static.Border}" />
-        <Setter Property="Control.Foreground" Value="{DynamicResource ForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource OptionMark.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource OptionMark.Static.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Control.Template">
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <Grid
