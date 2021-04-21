@@ -69,7 +69,7 @@ namespace Kebler
                 };
 
                 if (ConfigService.Instanse.AllowPreRelease)
-                    info.Arguments = "-b";
+                    info.Arguments = $"{ConstStrings.Args.Beta}";
 
                 process.StartInfo = info;
                 process.EnableRaisingEvents = false;
