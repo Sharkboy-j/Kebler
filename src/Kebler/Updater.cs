@@ -37,7 +37,8 @@ namespace Kebler
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate).Replace("%d", result.Item2.tag_name)), string.Empty,
+                    var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate)); 
+                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(lt.Replace("%d", result.Item2.tag_name), string.Empty,
                         Enums.MessageBoxDilogButtons.YesNo, true));
                     if (dialogres == true) 
                         InstallUpdates();
@@ -66,6 +67,9 @@ namespace Kebler
                     RedirectStandardOutput = false,
                     RedirectStandardError = false
                 };
+
+                if (ConfigService.Instanse.AllowPreRelease)
+                    info.Arguments = "-b";
 
                 process.StartInfo = info;
                 process.EnableRaisingEvents = false;

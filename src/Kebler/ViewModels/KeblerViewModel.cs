@@ -1794,7 +1794,7 @@ namespace Kebler.ViewModels
                 var assembly = Assembly.GetExecutingAssembly();
                 System.Diagnostics.FileVersionInfo fileVersionInfo =
  System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion}";
+                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta";
 #endif
             }
         }
