@@ -47,12 +47,12 @@ namespace Kebler.ViewModels
         public AddTorrentResponse TorrentResult;
         public bool Result;
         private IEnumerable<Kebler.Models.Torrent.TorrentInfo> _infos;
-        private IReadOnlyCollection<string> _torrents;
+        private IEnumerable<(string,uint)> _torrents;
         private string? _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
         private int _peerLimit, _uploadLimit, _downlaodDirIndex;
         private ITreeModel _files;
-        private Action<bool> _remove;
+        private Action<uint> _remove;
         private Visibility _resultVisibility = Visibility.Collapsed,
             _loadingGridVisibility = Visibility.Collapsed;
 
@@ -139,21 +139,22 @@ namespace Kebler.ViewModels
         }
 
         #endregion
-
+        KeblerView _wnd;
         public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings,
             IEnumerable<TorrentInfo> infos,
             BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator,
-            IReadOnlyCollection<string> torrents, Action<bool> remove, ref bool isWindOpened, ref KeblerView wnd)
+            IEnumerable<(string,uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
         {
             isWindOpened = true;
             _torrents = torrents;
             _eventAggregator = eventAggregator;
             _eventAggregator?.SubscribeOnPublishedThread(this);
             _remove = remove;
-            wnd?.Activate();
+            _wnd = wnd;
+            _wnd?.Activate();
 
-            if (wnd?.WindowState != WindowState.Normal)
-                wnd.WindowState = WindowState.Normal;
+            if (_wnd?.WindowState == WindowState.Minimized)
+                _wnd.WindowState = WindowState.Normal;
 
             _infos = infos;
             _fileInfo = new FileInfo(path);
@@ -376,20 +377,26 @@ namespace Kebler.ViewModels
 
                                             if (ConfigService.Instanse.CanSearchForSimilatTorrentsWhenAddingNewOne)
                                             {
-                                                await Dispatcher.CurrentDispatcher.InvokeAsync(async () =>
+                                                Log.Info($"Search for similar");
+
+                                                await _wnd.Dispatcher.InvokeAsync(async () => 
                                                 {
-                                                    if (_torrents.Contains(torrent.DisplayName))
+                                                    if (_torrents.Select(x=>x.Item1).Contains(torrent.DisplayName))
                                                     {
-                                                        var res = await MessageBoxViewModel.ShowDialog(
-                                                            LocalizationProvider.GetLocalizedValue(
-                                                                nameof(Strings.ASK_REMOVE_SIMILAR))
-                                                            , null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        Log.Info($"Here is similar torrent");
+
+                                                        var title = LocalizationProvider.GetLocalizedValue(
+                                                                nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
+                                                        var res = await MessageBoxViewModel.ShowDialog(title,
+                                                            null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        Log.Info($"Response for removing similar => {res}");
 
                                                         if (res == true)
                                                         {
-                                                            _remove(false);
+                                                            _remove(_torrents.First(x=>x.Item1.Equals(torrent.DisplayName)).Item2);
                                                         }
                                                     }
+
                                                 });
 
                                             }
@@ -408,12 +415,16 @@ namespace Kebler.ViewModels
                                             if (_torrent != null)
                                             {
                                                 var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
-                                                await Dispatcher.CurrentDispatcher.InvokeAsync(async () =>
+
+
+
+
+                                                await _wnd.Dispatcher.InvokeAsync(async () =>
                                                 {
                                                     var result = await MessageBoxViewModel.ShowDialog(
-                                                    LocalizationProvider.GetLocalizedValue(
-                                                  nameof(Strings.ASK_UpdateTrackers))
-                                              , null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        LocalizationProvider.GetLocalizedValue(
+                                                        nameof(Strings.ASK_UpdateTrackers))
+                                                        , null, null, Enums.MessageBoxDilogButtons.YesNo);
 
                                                     if (result == true)
                                                     {
@@ -424,8 +435,8 @@ namespace Kebler.ViewModels
                                                             TrackerAdd = toAdd
                                                         }, cancellationToken);
                                                     }
-                                                });
 
+                                                });
 
 
 
@@ -464,8 +475,6 @@ namespace Kebler.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    //2021-01-21 03:46:45,609 [11] ERROR Kebler.ViewModels.AddTorrentViewModel - System.NullReferenceException: Object reference not set to an instance of an object.
-                    //at Kebler.ViewModels.AddTorrentViewModel.< Add > b__55_0()
                     Log.Error(ex);
                     Crashes.TrackError(ex);
                 }
