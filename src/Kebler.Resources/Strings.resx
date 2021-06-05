@@ -678,4 +678,10 @@
   <data name="Error_EmptyString" xml:space="preserve">
     <value>Value can not be empty</value>
   </data>
+  <data name="ASK_UpdateTrackers" xml:space="preserve">
+    <value>Torrent exist. Update trackers?</value>
+  </data>
+  <data name="ASK_REMOVE_SIMILAR" xml:space="preserve">
+    <value>We found similar torrent '%d'. Remove it?</value>
+  </data>
 </root>

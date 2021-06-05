@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
 using Kebler.Models.Torrent;
+using Kebler.Resources;
 
 namespace Kebler.ViewModels
 {
@@ -31,6 +32,7 @@ namespace Kebler.ViewModels
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
         #region Properties
+
         private readonly IEventAggregator? _eventAggregator;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
@@ -45,12 +47,12 @@ namespace Kebler.ViewModels
         public AddTorrentResponse TorrentResult;
         public bool Result;
         private IEnumerable<Kebler.Models.Torrent.TorrentInfo> _infos;
-
+        private IEnumerable<(string,uint)> _torrents;
         private string? _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
         private int _peerLimit, _uploadLimit, _downlaodDirIndex;
         private ITreeModel _files;
-
+        private Action<uint> _remove;
         private Visibility _resultVisibility = Visibility.Collapsed,
             _loadingGridVisibility = Visibility.Collapsed;
 
@@ -136,21 +138,23 @@ namespace Kebler.ViewModels
             set => Set(ref _downlaodDirIndex, value);
         }
 
-
-
         #endregion
-
-        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings, IEnumerable<Kebler.Models.Torrent.TorrentInfo> infos,
-            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator, ref bool isWindOpened, ref KeblerView wnd)
+        KeblerView _wnd;
+        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings,
+            IEnumerable<TorrentInfo> infos,
+            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator,
+            IEnumerable<(string,uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
         {
             isWindOpened = true;
+            _torrents = torrents;
             _eventAggregator = eventAggregator;
             _eventAggregator?.SubscribeOnPublishedThread(this);
+            _remove = remove;
+            _wnd = wnd;
+            _wnd?.Activate();
 
-            wnd?.Activate();
-
-            if (wnd?.WindowState != WindowState.Normal)
-                wnd.WindowState = WindowState.Normal;
+            if (_wnd?.WindowState == WindowState.Minimized)
+                _wnd.WindowState = WindowState.Normal;
 
             _infos = infos;
             _fileInfo = new FileInfo(path);
@@ -166,6 +170,7 @@ namespace Kebler.ViewModels
             {
                 DownlaodDirs.Add(item.FullPath);
             }
+
             DownlaodDirIndex = 0;
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
@@ -179,7 +184,6 @@ namespace Kebler.ViewModels
 
             using var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             _torrent = new BencodeParser().Parse<Torrent>(file);
-
         }
 
         protected override async void OnViewLoaded(object view)
@@ -197,14 +201,13 @@ namespace Kebler.ViewModels
 
             if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
             {
-
                 var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
 
                 //DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>();
                 if (await MessageBoxViewModel.ShowDialog(
-
-                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.ATD_TorrentExist_UpdateTrackers))
+                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings
+                        .ATD_TorrentExist_UpdateTrackers))
                     , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
                 {
                     LoadingGridVisibility = Visibility.Visible;
@@ -244,7 +247,6 @@ namespace Kebler.ViewModels
             {
                 Log.Error(ex);
                 Crashes.TrackError(ex);
-
             }
         }
 
@@ -338,9 +340,10 @@ namespace Kebler.ViewModels
                         unWant = get(mod.Root, false).ToList();
                     }
 
+                    var torrentBytes = _torrent.EncodeAsBytes();
                     var newTorrent = new NewTorrent
                     {
-                        Metainfo = Convert.ToBase64String(_torrent.EncodeAsBytes()),
+                        Metainfo = Convert.ToBase64String(torrentBytes),
                         Paused = !IsAutoStart,
                         DownloadDirectory = DownlaodDirPath,
                         PeerLimit = PeerLimit,
@@ -356,6 +359,8 @@ namespace Kebler.ViewModels
                         try
                         {
                             cancellationToken.ThrowIfCancellationRequested();
+                            var parser = new BencodeParser();
+                            var torrent = parser.Parse<Torrent>(torrentBytes);
                             TorrentResult =
                                 await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
 
@@ -369,6 +374,33 @@ namespace Kebler.ViewModels
                                                 $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
                                             IsWorking = false;
 
+
+                                            if (ConfigService.Instanse.CanSearchForSimilatTorrentsWhenAddingNewOne)
+                                            {
+                                                Log.Info($"Search for similar");
+
+                                                await _wnd.Dispatcher.InvokeAsync(async () => 
+                                                {
+                                                    if (_torrents.Select(x=>x.Item1).Contains(torrent.DisplayName))
+                                                    {
+                                                        Log.Info($"Here is similar torrent");
+
+                                                        var title = LocalizationProvider.GetLocalizedValue(
+                                                                nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
+                                                        var res = await MessageBoxViewModel.ShowDialog(title,
+                                                            null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        Log.Info($"Response for removing similar => {res}");
+
+                                                        if (res == true)
+                                                        {
+                                                            _remove(_torrents.First(x=>x.Item1.Equals(torrent.DisplayName)).Item2);
+                                                        }
+                                                    }
+
+                                                });
+
+                                            }
+
                                             ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
                                             ConfigService.Save();
                                             Result = true;
@@ -377,23 +409,42 @@ namespace Kebler.ViewModels
                                         }
                                     case Enums.AddTorrentStatus.Duplicate:
                                         {
-                                            Log.Info($"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
+                                            Log.Info(
+                                                $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
 
                                             if (_torrent != null)
                                             {
                                                 var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
 
 
-                                                await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+
+
+                                                await _wnd.Dispatcher.InvokeAsync(async () =>
                                                 {
-                                                    IDs = new[] { TorrentResult.Value.ID },
-                                                    TrackerAdd = toAdd
-                                                }, cancellationToken);
+                                                    var result = await MessageBoxViewModel.ShowDialog(
+                                                        LocalizationProvider.GetLocalizedValue(
+                                                        nameof(Strings.ASK_UpdateTrackers))
+                                                        , null, null, Enums.MessageBoxDilogButtons.YesNo);
+
+                                                    if (result == true)
+                                                    {
+
+                                                        await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                                                        {
+                                                            IDs = new[] { TorrentResult.Value.ID },
+                                                            TrackerAdd = toAdd
+                                                        }, cancellationToken);
+                                                    }
+
+                                                });
+
+
 
                                                 foreach (var tr in toAdd)
                                                 {
                                                     Log.Info($"Tracker added: {tr}'");
                                                 }
+
 
                                                 Result = true;
                                                 await TryCloseAsync();
@@ -424,11 +475,8 @@ namespace Kebler.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    //2021-01-21 03:46:45,609 [11] ERROR Kebler.ViewModels.AddTorrentViewModel - System.NullReferenceException: Object reference not set to an instance of an object.
-                    //at Kebler.ViewModels.AddTorrentViewModel.< Add > b__55_0()
                     Log.Error(ex);
                     Crashes.TrackError(ex);
-
                 }
                 finally
                 {
@@ -461,7 +509,6 @@ namespace Kebler.ViewModels
 
         public Task HandleAsync(Messages.DownlaodCategoriesChanged message, CancellationToken cancellationToken)
         {
-
             var cats = message.Paths.Select(x => x.FullPath);
             var toRm = DownlaodDirs.Except(cats).ToList();
             var toAdd = cats.Except(DownlaodDirs).ToList();

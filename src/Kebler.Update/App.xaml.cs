@@ -17,30 +17,41 @@ namespace Kebler.Update
         public static bool Force;
         public static bool Beta;
 
-        public static void Log(string msg)
-        {
-            BUILDER.Append(msg + Environment.NewLine);
-        }
 
-        protected override void OnStartup(StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
             var args = e.Args.ToList().ConvertAll(x => x.ToLower());
-            if(args.Count>0)
+
+            Log("----ARGS----");
+            foreach (var a in args)
             {
-                if (args.Contains("-b") || args.Contains("-beta"))
+                Log(a);
+            }
+            Log("----ARGS----");
+
+
+            if (args.Count > 0)
+            {
+                if (args.Contains(ConstStrings.Args.Beta) || args.Contains(ConstStrings.Args.BetaShort))
                 {
                     Beta = true;
                     Log("Beta true");
                 }
-                if (args.Contains("-f") || args.Contains("-force"))
+                if (args.Contains(ConstStrings.Args.Force) || args.Contains(ConstStrings.Args.ForceShort))
                 {
                     Force = true;
                     Log("Force true");
                 }
 
             }
-            base.OnStartup(e);
         }
+
+
+        public static void Log(string msg)
+        {
+            BUILDER.Append(msg + Environment.NewLine);
+        }
+
 
         static void startKebler()
         {
@@ -67,7 +78,7 @@ namespace Kebler.Update
             File.AppendAllText("install.log", BUILDER.ToString());
             if (isTrue == false)
             {
-              //
+                //
             }
             else if (isTrue)
             {
@@ -83,5 +94,7 @@ namespace Kebler.Update
             Current.Shutdown();
             Environment.Exit(0);
         }
+
+
     }
 }

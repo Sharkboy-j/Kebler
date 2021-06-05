@@ -186,7 +186,7 @@ namespace Kebler.ViewModels
             {
                 _isChangingLang = false;
             }
-           
+
 
 
             return Task.CompletedTask;
@@ -1031,7 +1031,7 @@ namespace Kebler.ViewModels
             if (!IsConnected)
                 return;
 
-            if(!_isChangingLang)
+            if (!_isChangingLang)
             {
                 lock (_syncTorrentList)
                 {
@@ -1040,7 +1040,7 @@ namespace Kebler.ViewModels
 
             }
 
-           
+
 
 
             if (allTorrents.Clone() is TransmissionTorrents data)
@@ -1346,6 +1346,24 @@ namespace Kebler.ViewModels
                 MessageBoxViewModel.ShowDialog("Please select torrent");
         }
 
+        private async void RemoveTorrent(uint id)
+        {
+            var toRemove = new[] { id };
+
+            var result = await _transmissionClient?.TorrentRemoveAsync(toRemove, new CancellationToken(), false);
+
+
+            foreach (var rm in toRemove)
+            {
+                var itm = TorrentList.First(x => x.Id == rm);
+                TorrentList.Remove(itm);
+
+                allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
+            }
+
+
+        }
+
         private void RemoveTorrent(bool removeData = false)
         {
             if (selectedIDs.Length > 0)
@@ -1390,7 +1408,12 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings, _torrentList, _folderCategory, _eventAggregator, ref _isAddWindOpened, ref _view);
+
+                    var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
+                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                        _torrentList, _folderCategory, _eventAggregator,
+                        downs, RemoveTorrent,
+                        ref _isAddWindOpened, ref _view);
 
 
                     await manager.ShowDialogAsync(dialog);
@@ -1568,7 +1591,7 @@ namespace Kebler.ViewModels
         private BindableCollection<StatusCategory> _categoriesList = new BindableCollection<StatusCategory>();
         private Task? _checkerTask;
         private Server? _ConnectedServer;
-        
+
 
         private Enums.Categories _filterCategory;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();

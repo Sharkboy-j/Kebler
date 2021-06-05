@@ -32,5 +32,18 @@ namespace Kebler.Const
             if (!dir.Exists) dir.Create();
             return dir;
         }
+
+
+        #region args
+        public static class Args
+        {
+            public const string Beta = "--beta";
+            public const string BetaShort = "-b";
+
+            public const string Force = "--force";
+            public const string ForceShort = "-f";
+
+        }
+        #endregion
     }
 }

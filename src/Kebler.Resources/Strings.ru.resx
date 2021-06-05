@@ -678,4 +678,10 @@
   <data name="TorretPropertiesSetError" xml:space="preserve">
     <value>Ошибка во время сохранения настроек</value>
   </data>
+  <data name="ASK_UpdateTrackers" xml:space="preserve">
+    <value>Торрент уже добавлен. Обновить трекеры?</value>
+  </data>
+  <data name="ASK_REMOVE_SIMILAR" xml:space="preserve">
+    <value>Найден похожий торрент: '%d' Удалить его?</value>
+  </data>
 </root>

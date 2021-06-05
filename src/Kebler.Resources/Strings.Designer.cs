@@ -79,6 +79,24 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We found similar torrent &apos;%d&apos;. Remove it?.
+        /// </summary>
+        public static string ASK_REMOVE_SIMILAR {
+            get {
+                return ResourceManager.GetString("ASK_REMOVE_SIMILAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent exist. Update trackers?.
+        /// </summary>
+        public static string ASK_UpdateTrackers {
+            get {
+                return ResourceManager.GetString("ASK_UpdateTrackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string ATD_Add {
