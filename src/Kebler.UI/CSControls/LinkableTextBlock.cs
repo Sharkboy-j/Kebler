@@ -54,7 +54,7 @@ namespace Kebler.UI.CSControls
 
         private static object CoerceText(DependencyObject d, object baseValue)
         {
-            return null;
+            return new object();
         }
 
 

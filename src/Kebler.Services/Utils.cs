@@ -13,9 +13,9 @@ namespace Kebler.Services
     public static class Utils
     {
  
-        public static bool IsNullOrEmpty(this IEnumerable This)
+        public static bool IsNullOrEmpty(this IEnumerable current)
         {
-            return null == This || false == This.GetEnumerator().MoveNext();
+            return current is null || !current.GetEnumerator().MoveNext();
         }
 
         public static string GetSizeString(long length, bool showEmpty = false)

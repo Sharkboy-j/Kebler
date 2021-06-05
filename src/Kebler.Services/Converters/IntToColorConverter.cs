@@ -18,8 +18,8 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
+            if (value is not double torrInf)
+                return new object();
 
             return torrInf switch
             {
@@ -43,8 +43,8 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
+            if (value is not double torrInf)
+                return new object();
             return torrInf switch
             {
                 -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF3B30"),
@@ -67,8 +67,8 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
+            if (value is not double torrInf)
+                return new object();
 
             return torrInf switch
             {

@@ -186,10 +186,8 @@ namespace Kebler.Views
             {
                 parent = VisualTreeHelper.GetParent(parent);
             }
-            if (parent != null)
-                return (T)parent;
-            else
-                return null;
+
+            return (T)parent;
         }
 
         public static void ApplySort(ICollectionView view, string propertyName)

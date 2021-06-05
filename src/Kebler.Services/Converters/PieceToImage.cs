@@ -9,7 +9,7 @@ namespace Kebler.Services.Converters
 {
     public class PieceToImage : IMultiValueConverter
     {
-        public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] != null && values[1] != null)
             {
@@ -30,7 +30,7 @@ namespace Kebler.Services.Converters
                 }
             }
 
-            return null;
+            return new object();
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
