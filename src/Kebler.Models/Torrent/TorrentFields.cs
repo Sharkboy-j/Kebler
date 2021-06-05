@@ -442,8 +442,9 @@
                     DOWNLOAD_DIR,
                     FILES,
                     MAGNET_LINK,
-                    TOTAL_SIZE
-
+                    TOTAL_SIZE,
+                    ERROR,
+                    ERROR_STRING,
                     #endregion
                 };
             }
