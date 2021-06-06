@@ -482,11 +482,17 @@ namespace Kebler.ViewModels
                     //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
                     //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
                 }
-                else
+                else if(_view.MoreInfoColumn.ActualHeight !=0)
                 {
                     _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
                     _view.MoreInfoColumn.MinHeight = 0;
                     _view.MoreInfoColumn.Height = new GridLength(0);
+                    return;
+                }
+
+                else if(_view.MoreInfoColumn.ActualHeight == 0D && !string.IsNullOrEmpty(FilterText) )
+                {
+                    ClearFilter();
                 }
             }
         }
@@ -1053,6 +1059,9 @@ namespace Kebler.ViewModels
             UpdateMoreInfoPosition(false);
         }
 
+        /// <summary>
+        /// Clear filter textBox and unselect curent folder
+        /// </summary>
         public void ClearFilter()
         {
             FilterText = string.Empty;
