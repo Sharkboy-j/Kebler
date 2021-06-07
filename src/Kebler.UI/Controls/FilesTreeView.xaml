@@ -5,6 +5,7 @@
     xmlns:csControls="clr-namespace:Kebler.UI.CSControls.TreeListView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Kebler.Models;assembly=Kebler.Models"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -19,7 +20,7 @@
                 <GridView.Columns>
                     <GridViewColumn Width="Auto" Header="Name">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="models:TorrentFile">
                                 <StackPanel Orientation="Horizontal">
                                     <csControls:RowExpander />
                                     <CheckBox
@@ -39,41 +40,41 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Size">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
+                        <GridViewColumn.CellTemplate >
+                            <DataTemplate  DataType="models:TorrentFile">
                                 <TextBlock
                                     Width="Auto"
                                     MinWidth="100"
                                     Tag="{Binding}"
                                     Text="{Binding Size, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
                                     TextTrimming="WordEllipsis"
-                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                      />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
                     <GridViewColumn x:Name="DoneColumn" Header="Done">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="models:TorrentFile">
                                 <TextBlock
                                     Width="Auto"
                                     MinWidth="100"
                                     Tag="{Binding}"
                                     Text="{Binding Done, Converter={StaticResource BytesToUserFriendlyString}, ConverterParameter=true}"
-                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                     />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
                     <GridViewColumn x:Name="PercentColumn" Header="%">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="models:TorrentFile">
                                 <TextBlock
                                     Width="Auto"
                                     MinWidth="100"
                                     Tag="{Binding}"
                                     Text="{Binding DonePercent, StringFormat={}{0}%}"
-                                    Visibility="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource CountToBoolConverter}}" />
+                                     />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

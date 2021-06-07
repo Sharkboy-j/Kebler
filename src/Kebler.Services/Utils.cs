@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using Kebler.Models.Torrent;
 using Kebler.Resources;
@@ -127,14 +125,14 @@ namespace Kebler.Services
                         else
                             chunk_done = 0;
 
-                        System.Drawing.Color fill;
+                        Color fill;
 
                         if (chunk_done == 1)
                             fill = Color.FromArgb(0, 122, 204);
                         else
                             fill = Color.FromArgb(50, 50, 50);
 
-                        g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
+                        g.DrawLine(new Pen(fill), n, 0, n, bmp.Height);
 
                         c_bit += num_bits;
                     }

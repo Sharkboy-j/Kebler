@@ -9,16 +9,16 @@ namespace Kebler.UI.CSControls.TreeListView
     {
         public void RemoveRange(int index, int count)
         {
-            this.CheckReentrancy();
-            var items = this.Items as List<T>;
+            CheckReentrancy();
+            var items = Items as List<T>;
             items.RemoveRange(index, count);
             OnReset();
         }
 
         public void InsertRange(int index, IEnumerable<T> collection)
         {
-            this.CheckReentrancy();
-            var items = this.Items as List<T>;
+            CheckReentrancy();
+            var items = Items as List<T>;
             items.InsertRange(index, collection);
             OnReset();
         }

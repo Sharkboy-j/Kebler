@@ -24,9 +24,9 @@ namespace Kebler.ViewModels
     using Microsoft.Win32;
     using ILog = log4net.ILog;
     using LogManager = log4net.LogManager;
-    using Kebler.Models.Interfaces;
-    using Kebler.UI.CSControls.TreeListView;
-    using Kebler.Views;
+    using Models.Interfaces;
+    using UI.CSControls.TreeListView;
+    using Views;
     using Microsoft.AppCenter.Crashes;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
@@ -46,7 +46,7 @@ namespace Kebler.ViewModels
         private SessionSettings? settings;
         public AddTorrentResponse TorrentResult;
         public bool Result;
-        private IEnumerable<Kebler.Models.Torrent.TorrentInfo> _infos;
+        private IEnumerable<TorrentInfo> _infos;
         private IEnumerable<(string,uint)> _torrents;
         private string? _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
@@ -206,7 +206,7 @@ namespace Kebler.ViewModels
                 //DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>();
                 if (await MessageBoxViewModel.ShowDialog(
-                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings
+                    LocalizationProvider.GetLocalizedValue(nameof(Strings
                         .ATD_TorrentExist_UpdateTrackers))
                     , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
                 {

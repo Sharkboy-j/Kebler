@@ -15,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Caliburn.Micro;
-using Kebler.Const;
 using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Models.Torrent;
@@ -24,7 +23,6 @@ using Kebler.Models.Torrent.Common;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Resources;
 using Kebler.Services;
-using Kebler.Services.Converters;
 using Kebler.TransmissionCore;
 using Kebler.Views;
 using Microsoft.AppCenter.Crashes;
@@ -34,20 +32,18 @@ using Clipboard = System.Windows.Clipboard;
 using ILog = log4net.ILog;
 using ListView = System.Windows.Controls.ListView;
 using LogManager = log4net.LogManager;
-using MessageBox = System.Windows.Forms.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using Screen = Caliburn.Micro.Screen;
 using TorrentFields = Kebler.Models.Torrent.TorrentFields;
 
 namespace Kebler.ViewModels
 {
     public partial class KeblerViewModel : BaseScreen,
-        IHandle<Messages.LocalizationCultureChangesMessage>,
-        IHandle<Messages.ReconnectRequested>,
-        IHandle<Messages.ReconnectAllowed>,
-        IHandle<Messages.ConnectedServerChanged>,
-        IHandle<Messages.ServersUpdated>,
-        IHandle<Messages.ShowMoreInfoChanged>
+        IHandle<LocalizationCultureChangesMessage>,
+        IHandle<ReconnectRequested>,
+        IHandle<ReconnectAllowed>,
+        IHandle<ConnectedServerChanged>,
+        IHandle<ServersUpdated>,
+        IHandle<ShowMoreInfoChanged>
 
 
     {
@@ -66,37 +62,37 @@ namespace Kebler.ViewModels
 
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_AllTorrents)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
                 Cat = Enums.Categories.All
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Downloading)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
                 Cat = Enums.Categories.Downloading
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Active)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
                 Cat = Enums.Categories.Active
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_InActive)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
                 Cat = Enums.Categories.Inactive
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Ended)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
                 Cat = Enums.Categories.Ended
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Stopped)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
                 Cat = Enums.Categories.Stopped
             });
             CategoriesList.Add(new StatusCategory
             {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Error)),
+                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
                 Cat = Enums.Categories.Error
             });
 
@@ -108,9 +104,9 @@ namespace Kebler.ViewModels
             App.Instance.KeblerVM = this;
         }
 
-        public Task HandleAsync(Messages.ConnectedServerChanged message, CancellationToken cancellationToken)
+        public Task HandleAsync(ConnectedServerChanged message, CancellationToken cancellationToken)
         {
-            if (message.srv == null)
+            if (message.Server == null)
             {
                 foreach (var item in Servers) item.IsChecked = false;
                 return Task.CompletedTask;
@@ -118,7 +114,7 @@ namespace Kebler.ViewModels
 
             foreach (var item in Servers)
                 if (item.Tag is Server srv)
-                    if (srv.Equals(message.srv))
+                    if (srv.Equals(message.Server))
                     {
                         item.IsChecked = true;
                         break;
@@ -127,7 +123,7 @@ namespace Kebler.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.LocalizationCultureChangesMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(LocalizationCultureChangesMessage message, CancellationToken cancellationToken)
         {
             _isChangingLang = true;
 
@@ -138,46 +134,46 @@ namespace Kebler.ViewModels
 
                 if (IsConnected && _stats != null)
                     IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
                 var ind = SelectedCategoryIndex;
                 CategoriesList.Clear();
 
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_AllTorrents)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
                     Cat = Enums.Categories.All
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Downloading)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
                     Cat = Enums.Categories.Downloading
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Active)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
                     Cat = Enums.Categories.Active
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_InActive)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
                     Cat = Enums.Categories.Inactive
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Ended)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
                     Cat = Enums.Categories.Ended
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Stopped)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
                     Cat = Enums.Categories.Stopped
                 });
                 CategoriesList.Add(new StatusCategory
                 {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Cat_Error)),
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
                     Cat = Enums.Categories.Error
                 });
                 SelectedCategoryIndex = ind;
@@ -192,39 +188,39 @@ namespace Kebler.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.ReconnectAllowed message, CancellationToken cancellationToken)
+        public Task HandleAsync(ReconnectAllowed message, CancellationToken cancellationToken)
         {
             requested = false;
-            InitConnection();
+            GetServerAndInitConnection();
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.ReconnectRequested message, CancellationToken cancellationToken)
+        public Task HandleAsync(ReconnectRequested message, CancellationToken cancellationToken)
         {
             if (IsConnected)
             {
                 requested = true;
                 _cancelTokenSource.Cancel();
                 IsConnecting = true;
-                _SelectedServer = message.srv;
+                _SelectedServer = message.Server;
             }
             else
             {
                 IsConnecting = true;
-                _SelectedServer = message.srv;
-                InitConnection();
+                _SelectedServer = message.Server;
+                GetServerAndInitConnection();
             }
 
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.ServersUpdated message, CancellationToken cancellationToken)
+        public Task HandleAsync(ServersUpdated message, CancellationToken cancellationToken)
         {
             ReInitServers();
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(Messages.ShowMoreInfoChanged message, CancellationToken cancellationToken)
+        public Task HandleAsync(ShowMoreInfoChanged message, CancellationToken cancellationToken)
         {
             IsShowMoreInfo = ConfigService.Instanse.MoreInfoShow;
             MoreInfoView.IsShowMoreInfoCheckNotify = !IsShowMoreInfo;
@@ -247,7 +243,7 @@ namespace Kebler.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            Task.Factory.StartNew(InitConnection, cancellationToken);
+            Task.Factory.StartNew(GetServerAndInitConnection, cancellationToken);
 
             return base.OnActivateAsync(cancellationToken);
         }
@@ -296,87 +292,7 @@ namespace Kebler.ViewModels
         }
 
 
-        #region TopBarMenu
-
-        private void InitMenu()
-        {
-            foreach (var item in LocalizationManager.CultureList)
-            {
-                var name = item.NativeName.ToCharArray();
-                if (name.Length > 0)
-                {
-                    name[0] = Char.ToUpper(name[0]);
-                }
-
-
-                var menuItem = new MenuItem { Header = new string(name), Tag = item };
-                menuItem.Click += langChanged;
-                menuItem.IsCheckable = true;
-                menuItem.IsChecked = Equals(Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName,
-                    item.TwoLetterISOLanguageName);
-                Languages.Add(menuItem);
-            }
-
-            ReInitServers();
-        }
-
-
-        public void Settings()
-        {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") { CreateNoWindow = true });
-        }
-
-        public void Preferences()
-        {
-            if (_settings != null)
-                manager.ShowDialogAsync(new ServerPreferencesViewModel(_settings));
-            else
-            {
-                Log.Error($"{nameof(KeblerViewModel)}.{nameof(Preferences)}() => {nameof(_settings)} is null");
-            }
-        }
-
-        private void ReInitServers()
-        {
-            var _dbServersList = StorageRepository.GetServersList();
-
-            var items = _dbServersList?.FindAll() ?? new List<Server>();
-
-            Servers.Clear();
-
-            foreach (var srv in items)
-            {
-                var dd = new MenuItem { Header = srv.Title, Tag = srv };
-                dd.Click += srvClicked;
-                dd.IsCheckable = true;
-                Servers.Add(dd);
-            }
-        }
-
-        private void srvClicked(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi)
-            {
-                var srv = mi.Tag as Server;
-
-                foreach (var item in Servers) item.IsChecked = false;
-
-                _eventAggregator.PublishOnUIThreadAsync(new Messages.ReconnectRequested { srv = srv });
-            }
-        }
-
-
-        private void langChanged(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi)
-            {
-                var ci = mi.Tag as CultureInfo;
-                foreach (var item in Languages) item.IsChecked = false;
-                LocalizationManager.CurrentCulture = ci;
-            }
-        }
-
-        #endregion
+    
 
         #region Config
 
@@ -406,7 +322,7 @@ namespace Kebler.ViewModels
                 Log.Error(ex);
                 Crashes.TrackError(ex);
 
-                MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.ConfigApllyError)), manager);
+                MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Strings.ConfigApllyError)), manager);
             }
         }
 
@@ -508,207 +424,15 @@ namespace Kebler.ViewModels
 
         #region Connection
 
-        public void Retry()
-        {
-            IsErrorOccuredWhileConnecting = false;
-            _servers = GetServers();
-            InitConnection();
-        }
+        
 
-        private async Task<string> GetPassword()
-        {
-            string? passwordResult = null;
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
+    
 
-                await manager.ShowDialogAsync(dialog);
+     
 
-                passwordResult = dialog.Value.ToString();
-            });
+    
 
-            if (passwordResult == null)
-                throw new TaskCanceledException();
-
-            return passwordResult;
-        }
-
-        private List<Server> GetServers()
-        {
-            var bdServers = StorageRepository.GetServersList();
-            return bdServers.FindAll().ToList();
-        }
-
-        private void InitConnection()
-        {
-            if (IsConnected) return;
-
-            _servers = GetServers();
-
-
-            if (ServersList.Count > 0)
-            {
-                if (_checkerTask == null)
-                {
-                    _checkerTask = GetLongChecker();
-                    _checkerTask.Start();
-                }
-
-                var srv = ServersList.FirstOrDefault();
-                if (srv is not null)
-                {
-                    SelectedServer = srv;
-
-                    TryConnect();
-                }
-
-            }
-        }
-
-        private async void TryConnect()
-        {
-            Log.Info("Try initialize connection");
-            IsErrorOccuredWhileConnecting = false;
-            IsConnectedStatusText = LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_ConnectingText));
-            try
-            {
-                IsConnecting = true;
-                var pass = string.Empty;
-                if (SelectedServer.AskForPassword)
-                {
-                    Log.Info("Manual ask password");
-
-                    pass = await GetPassword();
-                    if (string.IsNullOrEmpty(pass))
-                    {
-                        IsErrorOccuredWhileConnecting = true;
-                        return;
-                    }
-                }
-
-                try
-                {
-                    _transmissionClient = new TransmissionClient(SelectedServer.FullUriPath, null,
-                        SelectedServer.UserName,
-                        SelectedServer.AskForPassword
-                            ? pass
-                            : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
-                    Log.Info("Client created");
-                    StartCycle();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message, ex);
-                    Crashes.TrackError(ex);
-
-                    IsConnectedStatusText = ex.Message;
-                    IsConnected = false;
-                    IsErrorOccuredWhileConnecting = true;
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                IsConnectedStatusText = "Canceled";
-            }
-            finally
-            {
-                IsConnecting = false;
-            }
-        }
-
-        private void StartCycle()
-        {
-            _cancelTokenSource = new CancellationTokenSource();
-            var token = _cancelTokenSource.Token;
-            //MoreInfoControl.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
-            _whileCycleTask = new Task(async () =>
-            {
-                if (_transmissionClient != null)
-                {
-                    try
-                    {
-                        var info = await Get(_transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token),
-                            LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_StatusText_Session)));
-                        //var info = _transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token);
-
-                        if (CheckResponse(info.Response))
-                        {
-                            _sessionInfo = info.Value;
-                            IsConnected = true;
-                            Log.Info($"Connected {_sessionInfo.Version}");
-                            ConnectedServer = SelectedServer;
-
-                            if (App.Instance.torrentsToAdd.Count > 0)
-                                OpenPaseedWithArgsFiles();
-
-                            while (IsConnected && !token.IsCancellationRequested)
-                            {
-                                if (Application.Current?.Dispatcher != null &&
-                                    Application.Current.Dispatcher.HasShutdownStarted)
-                                    throw new TaskCanceledException();
-
-
-                                _stats = (await Get(
-                                    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_StatusText_Stats)))).Value;
-
-                                allTorrents =
-                                    (await Get(
-                                        _transmissionClient.TorrentGetAsync(TorrentFields.WORK,
-                                            _cancelTokenSource.Token),
-                                        LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_StatusText_Torrents)))).Value;
-                                _settings = (await Get(
-                                    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_StatusText_Settings)))).Value;
-                                ParseSettings();
-                                ParseStats();
-
-                                if (allTorrents.Clone() is TransmissionTorrents data)
-                                    ProcessParsingTransmissionResponse(data);
-
-                                await Task.Delay(ConfigService.Instanse.UpdateTime, token);
-                            }
-                        }
-                        else
-                        {
-                            IsErrorOccuredWhileConnecting = true;
-                            if (info.Response.WebException != null)
-                                throw info.Response.WebException;
-
-                            if (info.Response.CustomException != null)
-                                throw info.Response.CustomException;
-
-                            if (info.Response.HttpWebResponse != null)
-                                throw new Exception(info.Response.HttpWebResponse.StatusCode.ToString());
-                        }
-                    }
-                    catch (TaskCanceledException)
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex);
-                        Crashes.TrackError(ex);
-
-                    }
-                    finally
-                    {
-                        ConnectedServer = null;
-                        IsConnecting = false;
-                        TorrentList = new Bind<TorrentInfo>();
-                        IsConnected = false;
-                        Categories?.Clear();
-                        IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
-                        Log.Info("Disconnected from server");
-                        if (requested)
-                            await _eventAggregator.PublishOnBackgroundThreadAsync(new Messages.ReconnectAllowed(),
-                                CancellationToken.None);
-                    }
-                }
-            }, token);
-
-            _whileCycleTask.Start();
-        }
+      
 
         public void OpenPaseedWithArgsFiles()
         {
@@ -728,39 +452,16 @@ namespace Kebler.ViewModels
             }
         }
 
-        private bool CheckResponse(TransmissionResponse resp)
-        {
-            if (resp.WebException != null)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var msg = resp.WebException.Status switch
-                    {
-                        WebExceptionStatus.NameResolutionFailure =>
-                            $"{LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'",
-                        _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
-                    };
+     
 
-                    MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
-                });
-                return false;
-            }
-
-            if (resp.CustomException != null)
-            {
-            }
-
-            return true;
-        }
-
-        private async Task<TransmissionResponse<T>> Get<T>(Task<TransmissionResponse<T>> t, string status)
+        private async Task<TransmissionResponse<T>> Get<T>(Task<TransmissionResponse<T>> task, string statusText)
         {
             try
             {
                 _isLongTaskRunning = true;
                 _longActionTimeStart = DateTimeOffset.Now;
-                LongStatusText = status;
-                var resp = await t;
+                LongStatusText = statusText;
+                var resp = await task;
                 resp.ParseTransmissionReponse(Log);
                 return resp;
             }
@@ -772,246 +473,19 @@ namespace Kebler.ViewModels
             }
         }
 
-        public void ParseSettings()
-        {
-            if (_settings?.AlternativeSpeedEnabled != null)
-                IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
-        }
+        
 
-        public void ParseStats()
-        {
-            Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
+      
 
-            IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+    
 
-            var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
-            var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
-
-            var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
-            var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-            var altUp = _settings?.AlternativeSpeedEnabled == true
-                ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
-                : string.Empty;
-            var altD = _settings?.AlternativeSpeedEnabled == true
-                ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
-                : string.Empty;
-
-            DownloadSpeed = $"D: {dSpeed}{altD}";
-            UploadSpeed = $"U: {uSpeed}{altUp}";
-        }
-
-        private void ProcessParsingTransmissionResponse(TransmissionTorrents data)
-        {
-            if (!IsConnected)
-                return;
-
-            lock (_syncTorrentList)
-            {
-                //1: 'check pending',
-                //2: 'checking',
-
-                //5: 'seed pending',
-                //6: 'seeding',
-                switch (_filterCategory)
-                {
-                    //3: 'download pending',
-                    //4: 'downloading',
-                    case Enums.Categories.Downloading:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 3 || x.Status == 4).ToArray();
-                        break;
-
-                    //4: 'downloading',
-                    //6: 'seeding',
-                    //2: 'checking',
-                    case Enums.Categories.Active:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2)
-                            .ToArray();
-                        data.Torrents = data.Torrents.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToArray();
-                        break;
-
-                    //0: 'stopped' and is error,
-                    case Enums.Categories.Stopped:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString))
-                            .ToArray();
-                        break;
-
-                    case Enums.Categories.Error:
-                        data.Torrents = data.Torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToArray();
-                        break;
+    
 
 
-                    //6: 'seeding',
-                    //1: 'checking queue',
-                    case Enums.Categories.Inactive:
-                        //var array1 = data.Torrents.Where(x=> x.Status == 1).ToArray();
-                        var array2 = data.Torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0 && x.Status != 2)
-                            .ToArray();
-
-                        //int array1OriginalLength = array1.Length;
-                        //Array.Resize<TorrentInfo>(ref array1, array1OriginalLength + array2.Length);
-                        //Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
-                        data.Torrents = array2;
-                        break;
-
-                    //6: 'seeding',
-                    case Enums.Categories.Ended:
-                        data.Torrents = data.Torrents.Where(x => x.Status == 6).ToArray();
-                        break;
-                    case Enums.Categories.All:
-                    default:
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(FilterText))
-                {
-                    //var txtfilter = FilterText;
-                    if (FilterText.Contains("{p}:"))
-                    {
-                        var splited = FilterText.Split("{p}:");
-                        var filterKey = splited[^1];
-                        // txtfilter = txtfilter.Replace($"{{p}}:{filterKey}", string.Empty);
-
-                        data.Torrents = data.Torrents
-                            .Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
-                    }
-                    else
-                    {
-                        data.Torrents = data.Torrents.Where(x => x.Name.ToLower().Contains(FilterText.ToLower()))
-                            .ToArray();
-                    }
-                }
-
-                for (var i = 0; i < data.Torrents.Length; i++) data.Torrents[i] = ValidateTorrent(data.Torrents[i]);
-
-                //Debug.WriteLine("S" + DateTime.Now.ToString("HH:mm:ss:ffff"));
-
-                UpdateOnUi(data.Torrents);
-
-                //Debug.WriteLine("E" + DateTime.Now.ToString("HH:mm:ss:ffff"));
-
-                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
-            }
-        }
-
-        private void UpdateOnUi(TorrentInfo[] info)
-        {
-            var toRm = new List<TorrentInfo>(TorrentList.Except(info).ToList());
+    
 
 
-            if (toRm.Any())
-                OnUIThread(() =>
-                {
-                    foreach (var item in toRm)
-                    {
-                        TorrentList.RemoveWithoutNotify(item);
-                    }
-                });
-
-            foreach (var item in info)
-            {
-                var ind = TorrentList.IndexOf(item);
-                if (ind == -1)
-                {
-                    TorrentList.Add(item);
-                }
-                else
-                {
-                    TorrentList[ind].Notify(item);
-                }
-            }
-        }
-
-
-        public TorrentInfo ValidateTorrent(TorrentInfo torrInf, bool skip = false)
-        {
-            // if (torrInf.Status == 1 || torrInf.Status == 2)
-            // {
-            //     torrInf.PercentDone = torrInf.RecheckProgress;
-            //     return torrInf;
-            // }
-            //
-            // if (torrInf.Status == 0)
-            //     return torrInf;
-            //
-            //
-            // if (!skip && torrInf.TrackerStats.Length > 0 &&
-            //     torrInf.TrackerStats.All(x => x.LastAnnounceSucceeded == false)) torrInf.Status = -1;
-
-            return torrInf;
-        }
-
-
-        private void UpdateCategories(IEnumerable<FolderCategory> dirrectories)
-        {
-            var dirs = dirrectories.Distinct().ToList();
-
-            var cats = new List<FolderCategory>();
-            var toUpd = new List<FolderCategory>();
-
-            foreach (var cat in dirs)
-            {
-                cat.Count = allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == cat.FullPath);
-                cat.Title = cat.FolderName;
-                cats.Add(cat);
-
-                if (Categories.Any(x => x.Equals(cat) && cat.Count != x.Count))
-                {
-                    toUpd.Add(cat);
-                }
-
-            }
-
-
-            var toRm = Categories.Except(cats).ToList();
-            var toAdd = cats.Except(Categories).ToList();
-
-            if (toRm.Any())
-            {
-                Log.Info("Remove categories" + string.Join(", ", toRm));
-
-                foreach (var itm in toRm) Application.Current.Dispatcher.Invoke(() => { Categories.Remove(itm); });
-            }
-
-            //update counter for existing
-            foreach (var itm in toUpd)
-            {
-                Categories.First(x => x.Equals(itm)).Count = itm.Count;
-            }
-
-            if (toAdd.Any())
-            {
-                Log.Info("Add categories" + string.Join(", ", toAdd));
-                foreach (var itm in toAdd)
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var ct = Categories.Count(x => x.FolderName == itm.FolderName);
-                        if (ct <= 0)
-                        {
-                            Categories.Add(itm);
-                        }
-                        else
-                        {
-                            foreach (var cat in Categories)
-                                if (cat.FolderName == itm.FolderName)
-                                    cat.Title =
-                                        $"{cat.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
-                            itm.Title =
-                                $"{itm.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
-                            Categories.Add(itm);
-                        }
-                    });
-            }
-
-
-            if (_isAddWindOpened)
-            {
-                _eventAggregator.PublishOnUIThreadAsync(new DownlaodCategoriesChanged(Categories));
-            }
-        }
+     
 
         #endregion
     }
@@ -1086,41 +560,15 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel //TorrentActions
     {
-        public async void Rename()
-        {
-            if (selectedIDs.Length > 1)
-            {
-                await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MSG_OnlyOneTorrent)), manager);
-                return;
-            }
-
-            if (selectedIDs.Length < 1)
-            {
-                await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MSG_SelectOneTorrent)), manager);
-                return;
-            }
-
-            if (IsConnected && SelectedTorrent != null)
-            {
-                var sel = SelectedTorrent;
-                var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MSG_InterNewName)), sel.Name, false);
-
-                if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
-                {
-                    var resp = await _transmissionClient.TorrentRenamePathAsync(sel.Id, sel.Name, dialog.Value.ToString(),
-                        _cancelTokenSource.Token);
-                    resp.ParseTransmissionReponse(Log);
-                }
-            }
-        }
+      
 
         public async void SetLoc()
         {
             if (IsConnected && SelectedTorrent != null)
             {
                 var question = SelectedTorrents.Length > 1
-                    ? LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.SetLocForMany)).Replace("%d", selectedIDs.Length.ToString())
-                    : LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.SetLocOnce));
+                    ? LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocForMany)).Replace("%d", selectedIDs.Length.ToString())
+                    : LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocOnce));
 
                 var path = SelectedTorrent.DownloadDir;
                 var dialog = new DialogBoxViewModel(question, Categories.Select(x => x.FullPath), path);
@@ -1136,7 +584,7 @@ namespace Kebler.ViewModels
                                 _cancelTokenSource.Token);
                             resp.ParseTransmissionReponse(Log);
 
-                            if (CheckResponse(resp))
+                            if (IsResponseStatusOk(resp))
                                 break;
 
                             await Task.Delay(500, _cancelTokenSource.Token);
@@ -1169,7 +617,7 @@ namespace Kebler.ViewModels
         {
             if (IsConnected && _transmissionClient != null)
             {
-                var dialog = new DialogBoxViewModel(Strings.MSG_LinkOrMagnet, string.Empty, false, Enums.MessageBoxDilogButtons.OkCancel, LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Error_EmptyString)));
+                var dialog = new DialogBoxViewModel(Strings.MSG_LinkOrMagnet, string.Empty, false, Enums.MessageBoxDilogButtons.OkCancel, LocalizationProvider.GetLocalizedValue(nameof(Strings.Error_EmptyString)));
 
                 var result = await manager.ShowDialogAsync(dialog);
 
@@ -1528,7 +976,7 @@ namespace Kebler.ViewModels
                     var torents =
                         (await Get(_transmissionClient.TorrentGetAsync(new[] { TorrentFields.TRACKERS },
                                 _cancelTokenSource.Token),
-                            LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.MW_StatusText_Torrents)))).Value;
+                            LocalizationProvider.GetLocalizedValue(nameof(Strings.MW_StatusText_Torrents)))).Value;
 
                     var stringList =
                         await new WebClient().DownloadStringTaskAsync(new Uri("https://newtrackon.com/api/live"));
@@ -1625,7 +1073,7 @@ namespace Kebler.ViewModels
         private SessionInfo? _sessionInfo;
         private SessionSettings? _settings;
         private WindowState _state;
-        private Statistic? _stats;
+        private Statistic _stats;
         private Bind<TorrentInfo> _torrentList = new Bind<TorrentInfo>();
         private TransmissionClient? _transmissionClient;
         private bool _isChangingLang;
@@ -1744,7 +1192,7 @@ namespace Kebler.ViewModels
             set
             {
                 Set(ref _ConnectedServer, value);
-                _eventAggregator.PublishOnUIThreadAsync(new Messages.ConnectedServerChanged { srv = value });
+                _eventAggregator.PublishOnUIThreadAsync(new ConnectedServerChanged(value));
             }
         }
 

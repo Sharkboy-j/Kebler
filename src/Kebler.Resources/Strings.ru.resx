@@ -340,10 +340,10 @@
     <value>Пиров:</value>
   </data>
   <data name="MI_Prefs" xml:space="preserve">
-    <value>Настройки Kebler</value>
+    <value>Настройки Cервера</value>
   </data>
   <data name="MI_Props" xml:space="preserve">
-    <value>Настройки сервера</value>
+    <value>Настройки Kebler</value>
   </data>
   <data name="MI_Remaining" xml:space="preserve">
     <value>Осталось:</value>

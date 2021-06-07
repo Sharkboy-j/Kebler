@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kebler.Models.Interfaces
+﻿namespace Kebler.Models.Interfaces
 {
     public interface IAddTorrent
     {

@@ -21,8 +21,8 @@ namespace Kebler.UI.CSControls.TreeListView
 
             protected override void ClearItems()
             {
-                while (this.Count != 0)
-                    this.RemoveAt(this.Count - 1);
+                while (Count != 0)
+                    RemoveAt(Count - 1);
             }
 
             protected override void InsertItem(int index, TreeNode item)
@@ -227,7 +227,7 @@ namespace Kebler.UI.CSControls.TreeListView
         {
             get
             {
-                TreeNode parent = this.Parent;
+                TreeNode parent = Parent;
                 if (parent != null)
                 {
                     if (parent.NextNode != null)
@@ -268,7 +268,7 @@ namespace Kebler.UI.CSControls.TreeListView
         {
             get
             {
-                int level = this.Level;
+                int level = Level;
                 TreeNode node = this;
                 while (true)
                 {

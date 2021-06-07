@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kebler.UI.CSControls.Dialogs
+﻿namespace Kebler.UI.CSControls.Dialogs
 {
     using System;
     using System.Runtime.InteropServices;
@@ -26,15 +22,15 @@ namespace Kebler.UI.CSControls.Dialogs
         /// </summary>
         public FolderDialog()
         {
-            this.BrowseInfo = new FolderInfo();
-            this.BrowseInfo.hwndOwner = IntPtr.Zero;
-            this.BrowseInfo.pidlRoot = IntPtr.Zero;
-            this.BrowseInfo.pszDisplayName = new string(' ', 260);
-            this.BrowseInfo.lpszTitle = "Select a folder:";
-            this.BrowseInfo.ulFlags = BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
-            this.BrowseInfo.lpfn = this.BrowseEventHandler;
-            this.BrowseInfo.lParam = IntPtr.Zero;
-            this.BrowseInfo.iImage = -1;
+            BrowseInfo = new FolderInfo();
+            BrowseInfo.hwndOwner = IntPtr.Zero;
+            BrowseInfo.pidlRoot = IntPtr.Zero;
+            BrowseInfo.pszDisplayName = new string(' ', 260);
+            BrowseInfo.lpszTitle = "Select a folder:";
+            BrowseInfo.ulFlags = BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+            BrowseInfo.lpfn = BrowseEventHandler;
+            BrowseInfo.lParam = IntPtr.Zero;
+            BrowseInfo.iImage = -1;
         }
 
         /// <summary>
@@ -220,12 +216,12 @@ namespace Kebler.UI.CSControls.Dialogs
         {
             get
             {
-                return this.browseInfo;
+                return browseInfo;
             }
 
             protected set
             {
-                this.browseInfo = value;
+                browseInfo = value;
             }
         }
 
@@ -236,12 +232,12 @@ namespace Kebler.UI.CSControls.Dialogs
         {
             get
             {
-                return this.BrowseInfo.ulFlags;
+                return BrowseInfo.ulFlags;
             }
 
             set
             {
-                this.BrowseInfo.ulFlags = value;
+                BrowseInfo.ulFlags = value;
             }
         }
 
@@ -272,12 +268,12 @@ namespace Kebler.UI.CSControls.Dialogs
         {
             get
             {
-                return this.BrowseInfo.lpszTitle;
+                return BrowseInfo.lpszTitle;
             }
 
             set
             {
-                this.BrowseInfo.lpszTitle = value;
+                BrowseInfo.lpszTitle = value;
             }
         }
 
@@ -316,7 +312,7 @@ namespace Kebler.UI.CSControls.Dialogs
         /// </returns>
         public bool? ShowDialog()
         {
-            return this.PInvokeSHBrowseForFolder(null);
+            return PInvokeSHBrowseForFolder(null);
         }
 
         /// <summary>
@@ -328,7 +324,7 @@ namespace Kebler.UI.CSControls.Dialogs
         /// </returns>
         public bool? ShowDialog(Window owner)
         {
-            return this.PInvokeSHBrowseForFolder(owner);
+            return PInvokeSHBrowseForFolder(owner);
         }
 
         /// <summary>
@@ -370,19 +366,19 @@ namespace Kebler.UI.CSControls.Dialogs
                     {
                         // The dialog box has finished initializing.
                         // lParam   Not used, value is NULL.
-                        if (!string.IsNullOrEmpty(this.InitialExpandedFolder))
+                        if (!string.IsNullOrEmpty(InitialExpandedFolder))
                         {
                             SendMessageW(
-                                hwnd, MessageToBrowser.BFFM_SETEXPANDED, new IntPtr(1), this.InitialExpandedFolder);
+                                hwnd, MessageToBrowser.BFFM_SETEXPANDED, new IntPtr(1), InitialExpandedFolder);
                         }
-                        else if (!string.IsNullOrEmpty(this.InitialFolder))
+                        else if (!string.IsNullOrEmpty(InitialFolder))
                         {
-                            SendMessageW(hwnd, MessageToBrowser.BFFM_SETSELECTIONW, new IntPtr(1), this.InitialFolder);
+                            SendMessageW(hwnd, MessageToBrowser.BFFM_SETSELECTIONW, new IntPtr(1), InitialFolder);
                         }
 
-                        if (!string.IsNullOrEmpty(this.OKButtonText))
+                        if (!string.IsNullOrEmpty(OKButtonText))
                         {
-                            SendMessageW(hwnd, MessageToBrowser.BFFM_SETOKTEXT, new IntPtr(1), this.OKButtonText);
+                            SendMessageW(hwnd, MessageToBrowser.BFFM_SETOKTEXT, new IntPtr(1), OKButtonText);
                         }
 
                         break;
@@ -395,7 +391,7 @@ namespace Kebler.UI.CSControls.Dialogs
                         var pathsb = new StringBuilder(260);
                         if (SHGetPathFromIDList(lParam, pathsb))
                         {
-                            this.SelectedFolder = pathsb.ToString();
+                            SelectedFolder = pathsb.ToString();
                         }
 
                         break;
@@ -443,17 +439,17 @@ namespace Kebler.UI.CSControls.Dialogs
             if (null != owner)
             {
                 windowhelper = new WindowInteropHelper(owner);
-                this.BrowseInfo.hwndOwner = windowhelper.Handle;
+                BrowseInfo.hwndOwner = windowhelper.Handle;
             }
 
-            IntPtr pidl = SHBrowseForFolderW(this.browseInfo);
+            IntPtr pidl = SHBrowseForFolderW(browseInfo);
 
             if (IntPtr.Zero != pidl)
             {
                 var pathsb = new StringBuilder(260);
                 if (SHGetPathFromIDList(pidl, pathsb))
                 {
-                    this.SelectedFolder = pathsb.ToString();
+                    SelectedFolder = pathsb.ToString();
                     Marshal.FreeCoTaskMem(pidl);
                     return true;
                 }

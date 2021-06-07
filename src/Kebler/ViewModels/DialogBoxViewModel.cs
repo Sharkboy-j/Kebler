@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
-using Kebler.Resources;
 using Kebler.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +114,7 @@ namespace Kebler.ViewModels
             async Task ShowError()
             {
                 if (_emptyText is not null)
-                    await MessageBoxViewModel.ShowDialog(_emptyText, new WindowManager(), LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Error)));
+                    await MessageBoxViewModel.ShowDialog(_emptyText, new WindowManager(), LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Error)));
             }
 
             if (_showPasswordBox)

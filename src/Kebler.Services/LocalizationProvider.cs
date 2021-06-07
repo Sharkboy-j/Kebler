@@ -2,9 +2,7 @@
 using Microsoft.AppCenter.Crashes;
 using System;
 using System.Resources;
-using System.Windows;
 using WPFLocalizeExtension.Engine;
-using WPFLocalizeExtension.Providers;
 
 namespace Kebler.Services
 {

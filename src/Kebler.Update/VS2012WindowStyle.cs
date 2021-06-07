@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
-using System.Collections;
 
 namespace Kebler.Update
 {
@@ -51,7 +47,7 @@ namespace Kebler.Update
             }
         }
 
-        private readonly RectangleGeometry _clipRect = new();
+        private readonly RectangleGeometry _clipRect = new RectangleGeometry();
         private object _oldClip;
     }
 

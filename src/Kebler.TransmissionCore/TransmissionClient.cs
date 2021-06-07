@@ -41,7 +41,7 @@ namespace Kebler.TransmissionCore
         /// <param name="sessionId">Session ID</param>
         /// <param name="login">Login</param>
         /// <param name="password">Password</param>
-        public TransmissionClient(string url, string sessionId = null, string login = null, string password = null)
+        public TransmissionClient(string url, string? sessionId = default, string? login = default, string? password = default)
         {
             Url = url;
             SessionId = sessionId;
@@ -63,7 +63,7 @@ namespace Kebler.TransmissionCore
         /// <summary>
         ///     Session ID
         /// </summary>
-        public string SessionId { get; private set; }
+        private string? SessionId { get; set; }
 
         /// <summary>
         ///     Current Tag
