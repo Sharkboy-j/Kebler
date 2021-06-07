@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
@@ -9,6 +10,7 @@ using Caliburn.Micro;
 using Kebler.Const;
 using Kebler.Models;
 using Kebler.Services;
+using LiteDB;
 // ReSharper disable once CheckNamespace
 
 namespace Kebler.ViewModels
@@ -18,14 +20,31 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     {
-        #region Title header
-
         /// <summary>
-        /// Initialise menu.
+        /// Initialise languages title bar menu.
         /// </summary>
-        private void InitMenu()
+        /// <param name="cultureList">Cultures.</param>
+        /// <param name="languageChanged">Event, that will be raised.</param>
+        /// <returns><see cref="IEnumerable{T}"/> where T is <see cref="System.Windows.Controls.MenuItem"/></returns>
+        public IEnumerable<System.Windows.Controls.MenuItem> InitMenu(
+            IEnumerable<CultureInfo> cultureList,
+            RoutedEventHandler languageChanged,
+            CultureInfo checkingLanguage)
         {
-            foreach (var item in LocalizationManager.CultureList)
+            if (cultureList is null)
+            {
+                throw new ArgumentNullException(nameof(cultureList));
+            }
+
+            if (languageChanged is null)
+            {
+                throw new ArgumentNullException(nameof(languageChanged));
+            }
+
+
+            var languages = new List<System.Windows.Controls.MenuItem>();
+
+            foreach (var item in cultureList)
             {
                 var name = item.NativeName.ToCharArray();
                 if (name.Length > 0)
@@ -34,23 +53,56 @@ namespace Kebler.ViewModels
                 }
 
 
-                var menuItem = new MenuItem {Header = new string(name), Tag = item};
-                menuItem.Click += LanguageChanged;
+                var menuItem = new MenuItem { Header = new string(name), Tag = item };
+                menuItem.Click += languageChanged;
                 menuItem.IsCheckable = true;
-                menuItem.IsChecked = Equals(Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName,
-                    item.TwoLetterISOLanguageName);
-                Languages.Add(menuItem);
+                menuItem.IsChecked = Equals(checkingLanguage.TwoLetterISOLanguageName, item.TwoLetterISOLanguageName);
+
+                languages.Add(menuItem);
             }
 
-            ReInitServers();
+            return languages;
         }
+
+
+        /// <summary>
+        /// Reinitialise servers.
+        /// </summary>
+        public IEnumerable<System.Windows.Controls.MenuItem> ReInitServers(
+            IEnumerable<Server> dbServers,
+            RoutedEventHandler serverClicked)
+        {
+            if (dbServers is null)
+            {
+                throw new ArgumentNullException(nameof(dbServers));
+            }
+
+            if (serverClicked is null)
+            {
+                throw new ArgumentNullException(nameof(serverClicked));
+            }
+
+            var servers = new List<System.Windows.Controls.MenuItem>();
+
+            foreach (var server in dbServers)
+            {
+                var menuItem = new MenuItem { Header = server.Title, Tag = server };
+                menuItem.Click += serverClicked;
+                menuItem.IsCheckable = true;
+
+                servers.Add(menuItem);
+            }
+
+            return servers;
+        }
+
 
         /// <summary>
         /// Button Kebler Settings
         /// </summary>
         public void Settings()
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") {CreateNoWindow = true});
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {ConstStrings.CONFIGPATH}") { CreateNoWindow = true });
         }
 
 
@@ -69,39 +121,17 @@ namespace Kebler.ViewModels
 
 
         /// <summary>
-        /// Reinitialise servers.
-        /// </summary>
-        private void ReInitServers()
-        {
-            var dbServersList = StorageRepository.GetServersList();
-
-            var items = dbServersList.FindAll() ?? new List<Server>();
-
-            Servers.Clear();
-
-            foreach (var srv in items)
-            {
-                var dd = new MenuItem {Header = srv.Title, Tag = srv};
-                dd.Click += ServerClicked;
-                dd.IsCheckable = true;
-                Servers.Add(dd);
-            }
-        }
-
-
-        /// <summary>
         /// MenuButton server clicked event-action.
         /// </summary>
         private void ServerClicked(object sender, RoutedEventArgs e)
         {
-            if (!(sender is MenuItem menuItem) || !(menuItem.Tag is Server server)) 
+            if (!(sender is MenuItem menuItem) || !(menuItem.Tag is Server server))
                 return;
-            
+
             foreach (var item in Servers) item.IsChecked = false;
 
             _eventAggregator.PublishOnUIThreadAsync(new Messages.ReconnectRequested(server));
         }
-
 
         /// <summary>
         /// MenuButton Intefrace language clicked event-action.
@@ -110,13 +140,11 @@ namespace Kebler.ViewModels
         {
             if (!(sender is MenuItem menuItem) || !(menuItem.Tag is CultureInfo cultureInfo))
                 return;
-            
+
             foreach (var item in Languages)
                 item.IsChecked = false;
 
             LocalizationManager.CurrentCulture = cultureInfo;
         }
-
-        #endregion
     }
 }

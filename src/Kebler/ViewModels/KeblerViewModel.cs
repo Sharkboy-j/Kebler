@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -10,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -47,54 +47,24 @@ namespace Kebler.ViewModels
 
 
     {
-        private readonly IEventAggregator? _eventAggregator;
+        private readonly IEventAggregator _eventAggregator;
 
         public KeblerViewModel()
         {
+            _eventAggregator = new EventAggregator();
         }
 
 
         public KeblerViewModel(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
-            _eventAggregator.SubscribeOnPublishedThread(this);
-            InitMenu();
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
 
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
-                Cat = Enums.Categories.All
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
-                Cat = Enums.Categories.Downloading
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
-                Cat = Enums.Categories.Active
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
-                Cat = Enums.Categories.Inactive
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
-                Cat = Enums.Categories.Ended
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
-                Cat = Enums.Categories.Stopped
-            });
-            CategoriesList.Add(new StatusCategory
-            {
-                Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
-                Cat = Enums.Categories.Error
-            });
+            _eventAggregator.SubscribeOnPublishedThread(this);
+
+            var menus = InitMenu(LocalizationManager.CultureList, LanguageChanged, Thread.CurrentThread.CurrentCulture);
+
+            Languages = new BindableCollection<System.Windows.Controls.MenuItem>(menus);
+            Servers = new BindableCollection<MenuItem>(ReInitServers(StorageRepository.GetServersList().FindAll() ?? new List<Server>(), ServerClicked));
 
             SelectedFolderIndex = -1;
 
@@ -139,43 +109,8 @@ namespace Kebler.ViewModels
                                             $"      {LocalizationProvider.GetLocalizedValue(nameof(Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
                 var ind = SelectedCategoryIndex;
-                CategoriesList.Clear();
 
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
-                    Cat = Enums.Categories.All
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
-                    Cat = Enums.Categories.Downloading
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
-                    Cat = Enums.Categories.Active
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
-                    Cat = Enums.Categories.Inactive
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
-                    Cat = Enums.Categories.Ended
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
-                    Cat = Enums.Categories.Stopped
-                });
-                CategoriesList.Add(new StatusCategory
-                {
-                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
-                    Cat = Enums.Categories.Error
-                });
+              
                 SelectedCategoryIndex = ind;
             }
             finally
@@ -216,7 +151,8 @@ namespace Kebler.ViewModels
 
         public Task HandleAsync(ServersUpdated message, CancellationToken cancellationToken)
         {
-            ReInitServers();
+            Servers = new BindableCollection<MenuItem>(ReInitServers(StorageRepository.GetServersList().FindAll() ?? new List<Server>(), ServerClicked));
+
             return Task.CompletedTask;
         }
 
@@ -253,13 +189,8 @@ namespace Kebler.ViewModels
         {
             var sw = new Stopwatch();
             sw.Start();
-            if (_eventAggregator != null)
-                manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
-            else
-            {
-                sw.Stop();
-                Log.Error(sw, $"{nameof(KeblerViewModel)}.{nameof(ShowConnectionManager)}() => {nameof(_eventAggregator)} is null");
-            }
+            manager.ShowDialogAsync(new ConnectionManagerViewModel(_eventAggregator));
+            sw.Stop();
         }
 
         private Task GetLongChecker()
@@ -292,7 +223,7 @@ namespace Kebler.ViewModels
         }
 
 
-    
+
 
         #region Config
 
@@ -398,7 +329,7 @@ namespace Kebler.ViewModels
                     //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
                     //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
                 }
-                else if(_view.MoreInfoColumn.ActualHeight !=0)
+                else if (_view.MoreInfoColumn.ActualHeight != 0)
                 {
                     _oldMoreInfoColumnHeight = _view.MoreInfoColumn.ActualHeight;
                     _view.MoreInfoColumn.MinHeight = 0;
@@ -406,7 +337,7 @@ namespace Kebler.ViewModels
                     return;
                 }
 
-                else if(_view.MoreInfoColumn.ActualHeight == 0D && !string.IsNullOrEmpty(FilterText) )
+                else if (_view.MoreInfoColumn.ActualHeight == 0D && !string.IsNullOrEmpty(FilterText))
                 {
                     ClearFilter();
                 }
@@ -424,15 +355,15 @@ namespace Kebler.ViewModels
 
         #region Connection
 
-        
 
-    
 
-     
 
-    
 
-      
+
+
+
+
+
 
         public void OpenPaseedWithArgsFiles()
         {
@@ -452,7 +383,7 @@ namespace Kebler.ViewModels
             }
         }
 
-     
+
 
         private async Task<TransmissionResponse<T>> Get<T>(Task<TransmissionResponse<T>> task, string statusText)
         {
@@ -473,19 +404,19 @@ namespace Kebler.ViewModels
             }
         }
 
-        
-
-      
-
-    
-
-    
 
 
-    
 
 
-     
+
+
+
+
+
+
+
+
+
 
         #endregion
     }
@@ -560,7 +491,7 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel //TorrentActions
     {
-      
+
 
         public async void SetLoc()
         {
@@ -803,23 +734,7 @@ namespace Kebler.ViewModels
                 MessageBoxViewModel.ShowDialog("Please select torrent");
         }
 
-        private async void RemoveTorrent(uint id)
-        {
-            var toRemove = new[] { id };
-
-            var result = await _transmissionClient?.TorrentRemoveAsync(toRemove, new CancellationToken(), false);
-
-
-            foreach (var rm in toRemove)
-            {
-                var itm = TorrentList.First(x => x.Id == rm);
-                TorrentList.Remove(itm);
-
-                allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
-            }
-
-
-        }
+   
 
         private void RemoveTorrent(bool removeData = false)
         {
@@ -967,7 +882,7 @@ namespace Kebler.ViewModels
         public async void AddFromNewTrack()
         {
             if (await MessageBoxViewModel.ShowDialog(
-                "Kebler will get trackers from newtrackon.com and add for each torrent. Are you sure?", manager,
+                "Kebler will get trackers from newtrackon.com and add all to each torrent. Are you sure?", manager,
                 "Confirm action",
                 Enums.MessageBoxDilogButtons.YesNo) == true)
             {
@@ -1016,8 +931,8 @@ namespace Kebler.ViewModels
 
         public void ExportTorrents()
         {
-            var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 foreach (var torrent in _torrentList)
                 {
@@ -1105,7 +1020,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public MoreInfoViewModel MoreInfoView { get; set; } = new MoreInfoViewModel(_view, null, null);
+        public MoreInfoViewModel? MoreInfoView { get; set; }
 
         public BindableCollection<FolderCategory> Categories
         {
@@ -1131,11 +1046,7 @@ namespace Kebler.ViewModels
             set => Set(ref _selectedTorrent, value);
         }
 
-        public BindableCollection<StatusCategory> CategoriesList
-        {
-            get => _categoriesList;
-            set => Set(ref _categoriesList, value);
-        }
+   
 
         public Bind<TorrentInfo> TorrentList
         {
@@ -1262,22 +1173,7 @@ namespace Kebler.ViewModels
             set => Set(ref _state, value);
         }
 
-        public static string HeaderTitle
-        {
-            get
-            {
-#if DEBUG
-                return "Kebler [DEBUG]";
-#elif PORTABLE
-                return "Kebler [Portable]";
-#else
-                var assembly = Assembly.GetExecutingAssembly();
-                System.Diagnostics.FileVersionInfo fileVersionInfo =
- System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta";
-#endif
-            }
-        }
+
 
         public bool IsShowMoreInfo
         {

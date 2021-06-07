@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Kebler.Test
 {
-    public class CatTest
+    internal class CatTest
     {
         [Test]
         public void CatEquals_true()
