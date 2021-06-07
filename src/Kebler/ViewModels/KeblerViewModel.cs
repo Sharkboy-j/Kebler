@@ -1058,7 +1058,7 @@ namespace Kebler.ViewModels
 
         private string? _uploadSpeed, _downloadSpeed, _filterText, _longStatusText;
 
-        private BindableCollection<MenuItem> _languages = new BindableCollection<MenuItem>();
+        private BindableCollection<System.Windows.Controls.MenuItem> _languages = new BindableCollection<System.Windows.Controls.MenuItem>();
         private DateTimeOffset _longActionTimeStart;
         private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
@@ -1086,7 +1086,7 @@ namespace Kebler.ViewModels
         private bool requested;
         private uint[] selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
-        private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
+        private BindableCollection<System.Windows.Controls.MenuItem> servers = new BindableCollection<System.Windows.Controls.MenuItem>();
 
         public ICommand ShowConnectionManagerCommand => new DelegateCommand(ShowConnectionManager);
         public ICommand AddCommand => new DelegateCommand(Add);
@@ -1113,13 +1113,13 @@ namespace Kebler.ViewModels
             set => Set(ref _folderCategory, value);
         }
 
-        public BindableCollection<MenuItem> Languages
+        public BindableCollection<System.Windows.Controls.MenuItem> Languages
         {
             get => _languages;
             set => Set(ref _languages, value);
         }
 
-        public BindableCollection<MenuItem> Servers
+        public BindableCollection<System.Windows.Controls.MenuItem> Servers
         {
             get => servers;
             set => Set(ref servers, value);
