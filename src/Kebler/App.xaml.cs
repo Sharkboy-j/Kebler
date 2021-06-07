@@ -15,6 +15,8 @@ using log4net.Config;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
 
 namespace Kebler
 {
