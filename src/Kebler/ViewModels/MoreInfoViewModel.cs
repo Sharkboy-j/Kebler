@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
@@ -17,7 +19,7 @@ using Kebler.TransmissionCore;
 using Kebler.Views;
 using Microsoft.VisualBasic;
 using static Kebler.Models.Messages;
-
+using Strings = Kebler.Resources.Strings;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -51,7 +53,7 @@ namespace Kebler.ViewModels
         private bool _loading, _isMore;
 
 
-        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
+        private IEnumerable<TransmissionTorrentPeers> _peers = new TransmissionTorrentPeers[0];
         private double _percentDone;
         private int _selectedCount, _maxPeers;
         private IList? _selectedTrackers;
@@ -77,7 +79,7 @@ namespace Kebler.ViewModels
             set => Set(ref _trackerStats, value);
         }
 
-        public TransmissionTorrentPeers[] Peers
+        public IEnumerable<TransmissionTorrentPeers> Peers
         {
             get => _peers;
             set => Set(ref _peers, value);
@@ -306,7 +308,7 @@ namespace Kebler.ViewModels
         public MoreInfoViewModel(KeblerView view, Action<bool>? unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
-            IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
+            //IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;
             if (unselect != null)
             {
@@ -326,7 +328,7 @@ namespace Kebler.ViewModels
             }
             else
             {
-                trn.Done = _ti.FileStats[trn.Index].BytesCompleted;
+                trn.Done = _ti.FileStats.ToArray()[trn.Index].BytesCompleted;
                 if (trn.Done > 0)
                 {
                     double p = (trn.Done * 100) / trn.Size;
@@ -346,7 +348,7 @@ namespace Kebler.ViewModels
             model = null;
             source = new CancellationTokenSource();
             _client = client;
-            id = ids;
+            this.id = ids;
 
             FormsVisibility = Visibility.Collapsed;
 
@@ -404,14 +406,14 @@ namespace Kebler.ViewModels
                         DownloadSpeed = _ti.RateDownload;
                         DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
 
-                        if (_ti.TrackerStats.Length > 0)
+                        if (_ti.TrackerStats.Count() > 0)
                         {
                             Seeds =
-                                $"{_ti.PeersSendingToUs} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsOF))}" +
-                                $" {_ti.TrackerStats.Max(x => x.SeederCount)} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsConnected))}";
+                                $"{_ti.PeersSendingToUs} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsOF))}" +
+                                $" {_ti.TrackerStats.Max(x => x.SeederCount)} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsConnected))}";
                             PeersCount =
-                                $"{_ti.PeersConnected} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsOF))}" +
-                                $" {_ti.TrackerStats.Max(x => x.LeecherCount)} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsConnected))}";
+                                $"{_ti.PeersConnected} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsOF))}" +
+                                $" {_ti.TrackerStats.Max(x => x.LeecherCount)} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsConnected))}";
                         }
 
                         Error = Utils.GetErrorString(_ti);
@@ -422,9 +424,9 @@ namespace Kebler.ViewModels
                         Remaining = _ti.LeftUntilDone;
                         //Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
 
-                        var home = Application.Current.Resources;
+                        //var home = Application.Current.Resources;
 
-                        Wasted = $"({_ti.CorruptEver} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_hashfails))})";
+                        Wasted = $"({_ti.CorruptEver} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_hashfails))})";
                         Ratio = $"{_ti.UploadRatio}";
                         MaxPeers = _ti.MaxConnectedPeers;
 
@@ -516,7 +518,7 @@ namespace Kebler.ViewModels
             if (trackers.Any())
             {
                 var mgr = IoC.Get<IWindowManager>();
-                var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_RemoveTracker)),
+                var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.DialogBox_RemoveTracker)),
                     trackers.Select(x => x.announce)));
 
                 if (result == true && _client != null)
@@ -554,7 +556,7 @@ namespace Kebler.ViewModels
             var ids = id;
             var mgr = IoC.Get<IWindowManager>();
 
-            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.AddTrackerTitile)), string.Empty, false);
+            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.AddTrackerTitile)), string.Empty, false);
             var result = await mgr.ShowDialogAsync(dialog);
 
             if (result == true && _client != null)
@@ -596,36 +598,16 @@ namespace Kebler.ViewModels
             var counter = 0U;
             foreach (var item in ti.Files)
             {
-                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted, counter);
+                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats.ToArray()[counter].Wanted, counter);
 
                 counter++;
             }
 
-            recalcForParent(p);
+
             model.Root.Children.Add(p.Children.First());
             return model;
         }
 
-        static void recalcForParent(TorrentFile item)
-        {
-           
-            if (item.Children.Count == 0 && item.Parent!=null)
-            {               
-                var wee =  item.Parent.Children.Where(x => x.Checked == true);
-
-                item.Parent.Size = wee.Sum(x => x.Size);
-                item.Parent.Done = item.Parent.Children.Sum(x => x.Done);
-            }
-            else
-            {
-                foreach (var itm in item.Children)
-                {
-                    recalcForParent(itm.Children.First());
-                }
-            }
-        }
-        
-        
         public static FilesModel CreateTestModel(BencodeNET.Torrents.Torrent ti)
         {
             var model = new FilesModel();
@@ -638,6 +620,7 @@ namespace Kebler.ViewModels
                 foreach (var item in ti.Files)
                 {
                     createNodes(ref p, item.Path.ToArray(), item.FileSize, 0, true, counter);
+
                     counter++;
                 }
 
@@ -677,7 +660,7 @@ namespace Kebler.ViewModels
                     }
                     else
                     {
-                        var pth = new TorrentFile(pathPart,size,done,check,index);
+                        var pth = new TorrentFile(pathPart);
                         pth.Parent = last;
                         last.Children.Add(pth);
                         last = pth;
