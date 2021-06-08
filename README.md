@@ -12,11 +12,12 @@ Kebler developed using .Net 5 and still in beta
 
 ## Installation
 
-Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net Core 5](https://dotnet.microsoft.com/download/dotnet/5.0)
+Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 Be carefull, portable version doesnot include auto update feature yet
 
-Also you can download <B>prerelease installer</B> and receive updates from <B>develop</B> branch
+Also you can download <B>prerelease installer</B> and receive updates from <B>develop</B> branch.
+Or edit `app.config` at `C:\Users\{USERNAME}\AppData\Roaming\Kebler` and set `AllowPreRelease=True`
 
 
 #### Using [WinGet](https://docs.microsoft.com/en-us/windows/package-manager/winget/)
