@@ -1,5 +1,4 @@
 ﻿using Kebler.Models.Interfaces;
-using System.Windows;
 
 namespace Kebler.UI.Dialogs
 {
@@ -10,6 +9,6 @@ namespace Kebler.UI.Dialogs
             InitializeComponent();
         }
 
-        public object FilesTreeView => this.FileTreeViewControl.tree;
+        public object FilesTreeView => FileTreeViewControl.tree;
     }
 }

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using Kebler.Const;
 using Kebler.Update.Core;
@@ -284,7 +283,7 @@ namespace Kebler.Update
         {
 
 
-            if (_webClient is not null)
+            if (_webClient != null)
             {
                 _webClient.CancelAsync();
                 _webClient.DownloadProgressChanged -= OnDownloadProgressChanged;

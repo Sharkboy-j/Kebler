@@ -1,8 +1,6 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Kebler.Models
 {
@@ -41,9 +39,14 @@ namespace Kebler.Models
             get => checked1; set
             {
                 if (checked1 != value)
+                {
                     Set(ref checked1, value);
+                }
             }
         }
+        
+
+        
         public uint Index;
 
         static int _i;
@@ -54,8 +57,8 @@ namespace Kebler.Models
         public TorrentFile(string name, long size, long done, bool check, uint index)
         {
             Id = ++_i;
-            this.Name = name;
-            this.Size = size;
+            Name = name;
+            Size = size;
             Done = done;
             Checked = check;
             Index = index;
@@ -71,7 +74,7 @@ namespace Kebler.Models
         public TorrentFile(string name)
         {
             Id = ++_i;
-            this.Name = name;
+            Name = name;
         }
 
         public TorrentFile()

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
-using System.Collections;
 
 namespace Kebler.Update
 {
@@ -28,7 +24,7 @@ namespace Kebler.Update
                 if (!ReferenceEquals(base.Child, value))
                 {
 
-                    if (base.Child is not null)
+                    if (base.Child != null)
                     {
                         base.Child.SetValue(ClipProperty, _oldClip);
                     }
@@ -43,7 +39,7 @@ namespace Kebler.Update
         protected virtual void OnApplyChildClip()
         {
             var child = Child;
-            if (child is not null)
+            if (child != null)
             {
                 _clipRect.RadiusX = _clipRect.RadiusY = Math.Max(0.0, CornerRadius.TopLeft - (BorderThickness.Left * 0.5));
                 _clipRect.Rect = new Rect(Child.RenderSize);
@@ -51,7 +47,7 @@ namespace Kebler.Update
             }
         }
 
-        private readonly RectangleGeometry _clipRect = new();
+        private readonly RectangleGeometry _clipRect = new RectangleGeometry();
         private object _oldClip;
     }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using System.Windows;
 using Caliburn.Micro;
 using Kebler.Models.Torrent;
 using Kebler.Models.Torrent.Args;
-using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
 
@@ -53,7 +51,7 @@ namespace Kebler.ViewModels
                     if (answ != null && answ.Torrents.Length > 0)
                     {
                         var ti = answ.Torrents.First();
-                        Name = ids.Length > 1 ? $"{ids.Length} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TP_TorrentsSelected))}" : ti?.Name;
+                        Name = ids.Length > 1 ? $"{ids.Length} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TP_TorrentsSelected))}" : ti?.Name;
                         MaxDownSp = ti.DownloadLimit;
                         MaxUpSp = ti.UploadLimit;
                         PeerLimit = ti.PeerLimit;
@@ -111,7 +109,7 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TorretPropertiesSetError)), _manager);
+                    await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TorretPropertiesSetError)), _manager);
                 }
 
 
@@ -153,7 +151,7 @@ namespace Kebler.ViewModels
         {
             var mgr = IoC.Get<IWindowManager>();
 
-            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.AddTrackerTitile)), string.Empty, false);
+            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.AddTrackerTitile)), string.Empty, false);
             var result = await mgr.ShowDialogAsync(dialog);
 
             var maxId = Trackers.Max(x => x.ID) + 1;

@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Color = System.Drawing.Color;
 
 namespace Kebler.UI.Controls
@@ -106,7 +96,7 @@ namespace Kebler.UI.Controls
                                   Color.FromArgb(0, 122, 204) :
                                   Color.FromArgb(50, 50, 50);
 
-                            g.DrawLine(new System.Drawing.Pen(fill), n, 0, n, bmp.Height);
+                            g.DrawLine(new Pen(fill), n, 0, n, bmp.Height);
 
                             c_bit += num_bits;
                         }

@@ -57,7 +57,6 @@ namespace Kebler.UI.Controls
                 Set(trnt, chk.IsChecked);
                 RecalParent(trnt);
                 //tree.Items.Refresh();
-
                 Checked?.Invoke();
             }
         }
@@ -93,6 +92,22 @@ namespace Kebler.UI.Controls
                     trn.Parent.Checked = null;
                 }
                 RecalParent(trn.Parent);
+            }
+        }
+        
+        static void recalcForParent(TorrentFile item)
+        {
+            if (item.Children.Count == 0 && item.Parent!=null)
+            {               
+                var wee =  item.Parent.Children.Where(x => x.Checked == true).ToList();
+                item.Parent.Size = wee.Sum(x => x.Size);
+            }
+            else
+            {
+                foreach (var itm in item.Children)
+                {
+                    recalcForParent(itm.Children.First());
+                }
             }
         }
 

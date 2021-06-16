@@ -10,7 +10,6 @@ using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
 using Kebler.Models.Torrent.Common;
-using Kebler.Resources;
 using Kebler.Services;
 using Kebler.TransmissionCore;
 using LiteDB;
@@ -156,12 +155,12 @@ namespace Kebler.ViewModels
                 var msg = resp.WebException.Status switch
                 {
                     WebExceptionStatus.NameResolutionFailure =>
-                        $"{LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'",
+                        $"{LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'",
                     _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
                 };
 
 
-                await MessageBoxViewModel.ShowDialog(msg, manager, LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.Error)));
+                await MessageBoxViewModel.ShowDialog(msg, manager, LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Error)));
 
                 return false;
             }
@@ -177,7 +176,7 @@ namespace Kebler.ViewModels
             string pswd = null;
             if (SelectedServer.AskForPassword)
             {
-                var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
+                var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
                 var res = await manager.ShowDialogAsync(dialog);
                 if (res == false)
                 {
@@ -191,8 +190,8 @@ namespace Kebler.ViewModels
             var result = await TesConnection(pswd);
 
             ConnectStatusResult = result
-                ? LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.CM_TestConnectionGood))
-                : LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.CM_TestConnectionBad));
+                ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
+                : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
 
             ConnectStatusColor = result
                 ? new SolidColorBrush {Color = Colors.Green}

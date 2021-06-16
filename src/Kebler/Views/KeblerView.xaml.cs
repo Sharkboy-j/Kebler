@@ -71,11 +71,11 @@ namespace Kebler.Views
                             {
                                 if (e.OldValue != null && e.NewValue == null)
                                 {
-                                    listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                                    listView.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                                 }
                                 if (e.OldValue == null && e.NewValue != null)
                                 {
-                                    listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                                    listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                                 }
                             }
                         }
@@ -112,11 +112,11 @@ namespace Kebler.Views
                                 bool newValue = (bool)e.NewValue;
                                 if (oldValue && !newValue)
                                 {
-                                    listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                                    listView.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                                 }
                                 if (!oldValue && newValue)
                                 {
-                                    listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                                    listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                                 }
                             }
                         }
@@ -186,10 +186,8 @@ namespace Kebler.Views
             {
                 parent = VisualTreeHelper.GetParent(parent);
             }
-            if (parent != null)
-                return (T)parent;
-            else
-                return null;
+
+            return (T)parent;
         }
 
         public static void ApplySort(ICollectionView view, string propertyName)

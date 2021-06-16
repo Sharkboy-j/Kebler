@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using Kebler.Models.Torrent.Common;
 using log4net;
-using WPFLocalizeExtension.Extensions;
 using Expression = System.Linq.Expressions.Expression;
-using WPFLocalizeExtension.Engine;
-using Kebler.Resources;
 
 namespace Kebler
 {

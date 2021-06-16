@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Caliburn.Micro;
 using Hardcodet.Wpf.TaskbarNotification;
 using Kebler.Services;
 using Kebler.SI;
@@ -15,9 +14,9 @@ using Kebler.ViewModels;
 using log4net.Config;
 using ILog = log4net.ILog;
 using LogManager = log4net.LogManager;
+using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 
 namespace Kebler
 {

@@ -16,12 +16,22 @@ namespace Kebler.Models
 
         public class ConnectedServerChanged
         {
-            public Server? srv;
+            public ConnectedServerChanged(Server? server)
+            {
+                Server = server;
+            }
+            
+            public readonly Server? Server;
         }
 
         public class ReconnectRequested
         {
-            public Server srv;
+            public ReconnectRequested(Server server)
+            {
+                Server = server;
+            }
+
+            public Server Server;
         }
 
         public class ReconnectAllowed

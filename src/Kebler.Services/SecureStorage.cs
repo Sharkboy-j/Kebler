@@ -57,7 +57,7 @@ namespace Kebler.Services
             }
             catch
             {
-                return null;
+                return string.Empty;
             }
         }
 

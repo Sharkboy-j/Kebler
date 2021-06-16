@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Kebler.Models.Torrent.Args
+﻿namespace Kebler.Models.Torrent.Args
 {
     public class TorrentSettings : ArgumentsBase
     {

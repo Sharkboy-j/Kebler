@@ -20,7 +20,7 @@ namespace Kebler.Services.Converters
                 return res ?? Application.Current.TryFindResource("Icon.File");
             }
 
-            return null;
+            return new object();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

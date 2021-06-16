@@ -18,19 +18,21 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
-
-            return torrInf switch
+            if (value is double torrInf)
             {
-                -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#CA2327"),
-                1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#FFB4B3F1"),
-                2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B0CB73E1"),
-                0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#E0FF9502"),
-                4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B01CADF8"),
-                6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B064DA38"),
-                _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
-            };
+                return torrInf switch
+                {
+                    -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#CA2327"),
+                    1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#FFB4B3F1"),
+                    2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B0CB73E1"),
+                    0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#E0FF9502"),
+                    4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B01CADF8"),
+                    6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#B064DA38"),
+                    _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
+                };
+            }
+
+            return new object();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -43,18 +45,18 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
-            return torrInf switch
-            {
-                -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF3B30"),
-                1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#33B4B3F1"),
-                2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40CB73E1"),
-                0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF9502"),
-                4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#401CADF8"),
-                6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#4064DA38"),
-                _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
-            };
+            if (value is double torrInf)
+                return torrInf switch
+                {
+                    -1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF3B30"),
+                    1 => (SolidColorBrush) new BrushConverter().ConvertFrom("#33B4B3F1"),
+                    2 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40CB73E1"),
+                    0 => (SolidColorBrush) new BrushConverter().ConvertFrom("#40FF9502"),
+                    4 => (SolidColorBrush) new BrushConverter().ConvertFrom("#401CADF8"),
+                    6 => (SolidColorBrush) new BrushConverter().ConvertFrom("#4064DA38"),
+                    _ => (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc")
+                };
+            return new object();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -67,19 +69,19 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is double torrInf))
-                return null;
+            if (value is double torrInf)
+                return torrInf switch
+                {
+                    -1 => Application.Current.FindResource("Icon.Error"),
+                    1 => Application.Current.FindResource("Icon.Check"),
+                    2 => Application.Current.FindResource("Icon.Check"),
+                    0 => Application.Current.FindResource("Icon.Stopped"),
+                    4 => Application.Current.FindResource("Icon.Download"),
+                    6 => Application.Current.FindResource("Icon.Upload"),
+                    _ => Application.Current.FindResource("Icon.WTF")
+                };
+            return new object();
 
-            return torrInf switch
-            {
-                -1 => Application.Current.FindResource("Icon.Error"),
-                1 => Application.Current.FindResource("Icon.Check"),
-                2 => Application.Current.FindResource("Icon.Check"),
-                0 => Application.Current.FindResource("Icon.Stopped"),
-                4 => Application.Current.FindResource("Icon.Download"),
-                6 => Application.Current.FindResource("Icon.Upload"),
-                _ => Application.Current.FindResource("Icon.WTF")
-            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

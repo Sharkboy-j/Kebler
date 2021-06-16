@@ -256,7 +256,7 @@
     <value>Exit</value>
   </data>
   <data name="MI_Props" xml:space="preserve">
-    <value>Settings</value>
+    <value>Kebler Preferences</value>
   </data>
   <data name="QA_Rename" xml:space="preserve">
     <value>Rename</value>
@@ -487,7 +487,7 @@
     <value>Connected</value>
   </data>
   <data name="MI_Prefs" xml:space="preserve">
-    <value>Kebler Preferences</value>
+    <value>Server Settings</value>
   </data>
   <data name="MI_State" xml:space="preserve">
     <value>State:</value>

@@ -17,6 +17,25 @@ namespace Kebler.Models.Torrent
         public TorrentInfo(uint id)
         {
             Id = id;
+            Comment = string.Empty;
+            Creator = string.Empty;
+            DownloadDir = string.Empty;
+            ErrorString = string.Empty;
+            MagnetLink = string.Empty;
+            Pieces = string.Empty;
+            HashString = string.Empty;
+            TorrentFile = string.Empty;
+
+            Peers = new List<TransmissionTorrentPeers>();
+            PeersFrom = new TransmissionTorrentPeersFrom();
+            Trackers = new List<TransmissionTorrentTrackers>();
+            Files = new List<TransmissionTorrentFiles>();
+            FileStats = new List<TransmissionTorrentFileStats>();
+            Priorities = new List<int>();
+
+            TrackerStats = new List<TransmissionTorrentTrackerStats>();
+            Wanted = new List<bool>();
+            WebSeeds = new List<string>();
         }
 
         [JsonProperty(TorrentFields.ID)]
@@ -30,12 +49,14 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.BANDWIDTH_PRIORITY)]
         public int BandwidthPriority { get; set; }
 
-        [JsonProperty(TorrentFields.COMMENT)] public string Comment { get; set; }
+        [JsonProperty(TorrentFields.COMMENT)]
+        public string Comment { get; set; }
 
         [JsonProperty(TorrentFields.CORRUPT_EVER)]
         public int CorruptEver { get; set; }
 
-        [JsonProperty(TorrentFields.CREATOR)] public string Creator { get; set; }
+        [JsonProperty(TorrentFields.CREATOR)]
+        public string Creator { get; set; }
 
         [JsonProperty(TorrentFields.DATE_CREATED)]
         [SetIgnore]
@@ -59,20 +80,23 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.DOWNLOAD_LIMITED)]
         public bool DownloadLimited { get; set; }
 
-        [JsonProperty(TorrentFields.ERROR)] public int Error { get; set; }
+        [JsonProperty(TorrentFields.ERROR)]
+        public int Error { get; set; }
 
         [JsonProperty(TorrentFields.ERROR_STRING)]
         public string ErrorString { get; set; }
 
-        [JsonProperty(TorrentFields.ETA)] public int ETA { get; set; }
+        [JsonProperty(TorrentFields.ETA)]
+        public int ETA { get; set; }
 
-        [JsonProperty(TorrentFields.ETA_IDLE)] public int ETAIdle { get; set; }
+        [JsonProperty(TorrentFields.ETA_IDLE)]
+        public int ETAIdle { get; set; }
 
         [JsonProperty(TorrentFields.FILES)]
-        public TransmissionTorrentFiles[] Files { get; set; }
+        public IEnumerable<TransmissionTorrentFiles> Files { get; set; }
 
         [JsonProperty(TorrentFields.FILE_STATS)]
-        public TransmissionTorrentFileStats[] FileStats { get; set; }
+        public IEnumerable<TransmissionTorrentFileStats> FileStats { get; set; }
 
         [JsonProperty(TorrentFields.HASH_STRING)]
         public string HashString { get; set; }
@@ -123,7 +147,7 @@ namespace Kebler.Models.Torrent
         public int PeerLimit { get; set; }
 
         [JsonProperty(TorrentFields.PEERS)]
-        public TransmissionTorrentPeers[] Peers { get; set; }
+        public IEnumerable<TransmissionTorrentPeers> Peers { get; set; }
 
         [JsonProperty(TorrentFields.PEERS_CONNECTED)]
         public int PeersConnected { get; set; }
@@ -137,13 +161,12 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.PERCENT_DONE)]
         public double PercentDone
         {
-            get => percentDone; set
-            {
-                Set(ref percentDone, value);
-            }
+            get => percentDone;
+            set => Set(ref percentDone, value);
         }
 
-        [JsonProperty(TorrentFields.PIECES)] public string Pieces { get; set; }
+        [JsonProperty(TorrentFields.PIECES)]
+        public string Pieces { get; set; }
 
         [JsonProperty(TorrentFields.PIECE_COUNT)]
         public int PieceCount { get; set; }
@@ -152,7 +175,7 @@ namespace Kebler.Models.Torrent
         public int PieceSize { get; set; }
 
         [JsonProperty(TorrentFields.PRIORITIES)]
-        public int[] Priorities { get; set; }
+        public IEnumerable<int> Priorities { get; set; }
 
         [JsonProperty(TorrentFields.QUEUE_POSITION)]
         public int QueuePosition { get; set; }
@@ -232,13 +255,15 @@ namespace Kebler.Models.Torrent
         }
 
         [JsonProperty(TorrentFields.TRACKERS)]
-        public TransmissionTorrentTrackers[] Trackers { get; set; }
+        public IEnumerable<TransmissionTorrentTrackers> Trackers { get; set; }
 
         [JsonProperty(TorrentFields.TRACKER_STATS)]
-        public TransmissionTorrentTrackerStats[] TrackerStats { get; set; }
+        public IEnumerable<TransmissionTorrentTrackerStats> TrackerStats { get; set; }
 
         [JsonProperty(TorrentFields.TOTAL_SIZE)]
-        public long TotalSize { get => totalSize;  set
+        public long TotalSize
+        {
+            get => totalSize; set
             {
                 Set(ref totalSize, value);
             }
@@ -265,10 +290,11 @@ namespace Kebler.Models.Torrent
         [JsonProperty(TorrentFields.UPLOAD_RATIO)]
         public double UploadRatio { get; set; }
 
-        [JsonProperty(TorrentFields.WANTED)] public bool[] Wanted { get; set; }
+        [JsonProperty(TorrentFields.WANTED)] 
+        public IEnumerable<bool> Wanted { get; set; }
 
         [JsonProperty(TorrentFields.WEB_SEEDS)]
-        public string[] Webseeds { get; set; }
+        public IEnumerable<string> WebSeeds { get; set; }
 
         [JsonProperty(TorrentFields.WEB_SEEDS_SENDING_TO_US)]
         public int WebseedsSendingToUs { get; set; }
@@ -341,18 +367,15 @@ namespace Kebler.Models.Torrent
             Byte
         }
 
-        private readonly BinaryReader _reader;
-        private long _infoStart;
-        private long _infoEnd;
-        private long _totalValues;
+        private readonly BinaryReader _reader = default!;
         private int rateUpload;
         private int rateDownload;
-        private string name;
+        private string name = string.Empty;
         private double percentDone;
         private int status;
         private long uploadedEver;
         private long totalSize;
-        private readonly Dictionary<string, TransmissionValue> _root;
+        private readonly Dictionary<string, TransmissionValue> _root = new Dictionary<string, TransmissionValue>();
 
         [JsonIgnore]
         public Dictionary<string, TransmissionValue> Info =>
@@ -391,7 +414,7 @@ namespace Kebler.Models.Torrent
             while (_reader.PeekChar() != 101)
             {
                 var str = parseString();
-                if (str == "info") _infoStart = _reader.BaseStream.Position;
+     
                 if (str != "pieces")
                 {
                     var tVal = ProcessVal();
@@ -403,7 +426,6 @@ namespace Kebler.Models.Torrent
                 }
 
                 if (str != "info") continue;
-                _infoEnd = _reader.BaseStream.Position - _infoStart;
             }
 
             _reader.Read();
@@ -426,7 +448,6 @@ namespace Kebler.Models.Torrent
 
         private TransmissionValue ProcessVal()
         {
-            _totalValues++;
             var str = char.ConvertFromUtf32(_reader.PeekChar());
             if (str == "d")
             {

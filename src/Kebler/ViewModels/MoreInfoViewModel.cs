@@ -53,7 +53,7 @@ namespace Kebler.ViewModels
         private bool _loading, _isMore;
 
 
-        private TransmissionTorrentPeers[] _peers = new TransmissionTorrentPeers[0];
+        private IEnumerable<TransmissionTorrentPeers> _peers = new TransmissionTorrentPeers[0];
         private double _percentDone;
         private int _selectedCount, _maxPeers;
         private IList? _selectedTrackers;
@@ -79,7 +79,7 @@ namespace Kebler.ViewModels
             set => Set(ref _trackerStats, value);
         }
 
-        public TransmissionTorrentPeers[] Peers
+        public IEnumerable<TransmissionTorrentPeers> Peers
         {
             get => _peers;
             set => Set(ref _peers, value);
@@ -308,7 +308,7 @@ namespace Kebler.ViewModels
         public MoreInfoViewModel(KeblerView view, Action<bool>? unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
-            IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
+            //IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;
             if (unselect != null)
             {
@@ -328,7 +328,7 @@ namespace Kebler.ViewModels
             }
             else
             {
-                trn.Done = _ti.FileStats[trn.Index].BytesCompleted;
+                trn.Done = _ti.FileStats.ToArray()[trn.Index].BytesCompleted;
                 if (trn.Done > 0)
                 {
                     double p = (trn.Done * 100) / trn.Size;
@@ -406,7 +406,7 @@ namespace Kebler.ViewModels
                         DownloadSpeed = _ti.RateDownload;
                         DownloadLimit = _ti.DownloadLimited ? _ti.DownloadLimit.ToString() : "-";
 
-                        if (_ti.TrackerStats.Length > 0)
+                        if (_ti.TrackerStats.Count() > 0)
                         {
                             Seeds =
                                 $"{_ti.PeersSendingToUs} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsOF))}" +
@@ -424,7 +424,7 @@ namespace Kebler.ViewModels
                         Remaining = _ti.LeftUntilDone;
                         //Wasted = $"({_ti.CorruptEver} {Strings.TI_hashfails})";
 
-                        var home = Application.Current.Resources;
+                        //var home = Application.Current.Resources;
 
                         Wasted = $"({_ti.CorruptEver} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_hashfails))})";
                         Ratio = $"{_ti.UploadRatio}";
@@ -598,7 +598,7 @@ namespace Kebler.ViewModels
             var counter = 0U;
             foreach (var item in ti.Files)
             {
-                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats[counter].Wanted, counter);
+                createNodes(ref p, item.NameParts, item.Length, item.BytesCompleted, ti.FileStats.ToArray()[counter].Wanted, counter);
 
                 counter++;
             }
