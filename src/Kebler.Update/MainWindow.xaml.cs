@@ -283,7 +283,7 @@ namespace Kebler.Update
         {
 
 
-            if (_webClient is not null)
+            if (_webClient != null)
             {
                 _webClient.CancelAsync();
                 _webClient.DownloadProgressChanged -= OnDownloadProgressChanged;

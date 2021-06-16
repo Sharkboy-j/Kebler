@@ -24,7 +24,7 @@ namespace Kebler.Update
                 if (!ReferenceEquals(base.Child, value))
                 {
 
-                    if (base.Child is not null)
+                    if (base.Child != null)
                     {
                         base.Child.SetValue(ClipProperty, _oldClip);
                     }
@@ -39,7 +39,7 @@ namespace Kebler.Update
         protected virtual void OnApplyChildClip()
         {
             var child = Child;
-            if (child is not null)
+            if (child != null)
             {
                 _clipRect.RadiusX = _clipRect.RadiusY = Math.Max(0.0, CornerRadius.TopLeft - (BorderThickness.Left * 0.5));
                 _clipRect.Rect = new Rect(Child.RenderSize);
