@@ -34,9 +34,11 @@ namespace Kebler.ViewModels
             var selectedTorrent = SelectedTorrent;
             var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MSG_InterNewName)), selectedTorrent.Name, false);
 
+            var result = await manager.ShowDialogAsync(dialog);
+            
             var newName = dialog.Value.ToString();
             
-            if (await manager.ShowDialogAsync(dialog) is not true || _transmissionClient is null || newName is null)
+            if (result is not true || _transmissionClient is null || newName is null)
                 return;
             
             var resp = await _transmissionClient.TorrentRenamePathAsync(selectedTorrent.Id, selectedTorrent.Name, newName,
