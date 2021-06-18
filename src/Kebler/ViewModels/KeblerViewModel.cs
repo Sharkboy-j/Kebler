@@ -710,21 +710,6 @@ namespace Kebler.ViewModels
             }
         }
 
-        public void Properties()
-        {
-            if (_transmissionClient != null)
-            {
-                if (selectedIDs.Length > 1)
-                {
-                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient,
-                        SelectedTorrents.Select(x => x.Id).ToArray(), manager));
-                }
-                else
-                {
-                    manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { SelectedTorrents.Select(x => x.Id).First() }, manager));
-                }
-            }
-        }
 
         public void CopyMagnet()
         {
