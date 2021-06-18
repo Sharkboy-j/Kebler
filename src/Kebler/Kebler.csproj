@@ -69,6 +69,7 @@
 	<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bencode\BencodeNET\BencodeNET.csproj" />
     <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler.Resources\Kebler.Resources.csproj" />
