@@ -70,5 +70,10 @@ namespace Kebler.ViewModels
                 }
             }
         }
+
+        public void Properties()
+        {
+            Properties(null, null);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,6 +8,8 @@ using Caliburn.Micro;
 using Kebler.Dialogs;
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
 using LogManager = log4net.LogManager;
 
 namespace Kebler.Views
@@ -48,15 +51,47 @@ namespace Kebler.Views
 
         private void OpenLogs(object sender, RoutedEventArgs e)
         {
-            var rootAppender = ((Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly()))
-                .Root.Appenders.OfType<FileAppender>()
-                .FirstOrDefault();
-            var filename = rootAppender != null ? rootAppender.File : string.Empty;
+            try
+            {
+                var rootAppender = ((Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly()))
+                    .Root.Appenders.OfType<FileAppender>().FirstOrDefault();
 
-            var filein = new FileInfo(filename);
+                var filename = rootAppender != null ? rootAppender.File : string.Empty;
 
-            Process.Start(new ProcessStartInfo("explorer.exe", $"{filein.DirectoryName}") { CreateNoWindow = true });
+                var filein = new FileInfo(filename);
+
+                Process.Start(new ProcessStartInfo("explorer.exe", $"{filein.DirectoryName}") { CreateNoWindow = true });
+            }
+            catch (Exception ex)
+            {
+#if RELEASE
+
+//                System.IO
+//Path.GetFullPath(String path)
+//System.IO.FileInfo
+//System.IO.FileInfo..ctor(String originalPath, String fullPath, String fileName, Boolean isNormalized)
+//System.IO.FileInfo
+//System.IO.FileInfo..ctor(String fileName)
+//Kebler.Views
+//TopBarView.OpenLogs(Object sender, RoutedEventArgs e)
+//System.Windows
+//RoutedEventHandlerInfo.InvokeHandler(Object target, RoutedEventArgs routedEventArgs)
+//System.Windows
+//EventRoute.InvokeHandlersImpl(Object source, RoutedEventArgs args, Boolean reRaised)
+//System.Windows
+//UIElement.RaiseEventImpl(DependencyObject sender, RoutedEventArgs args)
+//System.Windows
+//UIElement.RaiseEvent(RoutedEventArgs e)
+//System.Windows.Controls
+//MenuItem.InvokeClickAfterRender(Object arg)
+//System.Windows.Threading
+//ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+//System.Windows.Threading
+//ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+
+                Crashes.TrackError(ex);
+#endif
+            }
         }
-
     }
 }

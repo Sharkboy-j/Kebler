@@ -43,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kebler.Core\Kebler.Core.csproj" />
     <ProjectReference Include="..\Kebler.Models\Kebler.Models.csproj" />
     <ProjectReference Include="..\Kebler.Resources\Kebler.Resources.csproj" />
     <ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />

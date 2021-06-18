@@ -13,15 +13,15 @@ namespace Kebler.ViewModels
 {
     public class TorrentPropsViewModel : Screen
     {
-        private readonly TransmissionClient _transmissionClient;
+        private readonly TransmissionClient _transmissionClient = new TransmissionClient(string.Empty);
         private Visibility _isBusy;
         private long _maxDownSp, _maxUpSp;
         private bool _MXD_Bool, _MXU_Bool, _SeedR_Bool, _StopSeed_Bool;
-        private string _name;
+        private string _name = string.Empty;
         private int _peerLimit, _stopSeed;
         private double _seedRation;
-        private uint[] tors;
-        private BindableCollection<TransmissionTorrentTrackers> _trackers;
+        private uint[] tors = new List<uint>().ToArray();
+        private BindableCollection<TransmissionTorrentTrackers> _trackers = new BindableCollection<TransmissionTorrentTrackers>();
 
         private int _trackerIndex;
         private TransmissionTorrentTrackers? _selectedTracker;
@@ -33,6 +33,12 @@ namespace Kebler.ViewModels
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transmissionClient">TransmissionClient.</param>
+        /// <param name="ids">Torrent ids</param>
+        /// <param name="manager">IWindowManager</param>
         public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids, IWindowManager manager)
         {
             _transmissionClient = transmissionClient;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kebler.Core.Extensions;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -60,9 +61,13 @@ namespace Kebler.UI.CSControls
 
         protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
         {
-            if (CopyOnly)
-                Clipboard.SetText(Text);
-            else if (isLink) Process.Start(new ProcessStartInfo("cmd", $"/c start {Text}") {CreateNoWindow = true});
+            if(Text.IsNotNullOrNotEmpty())
+            {
+                if (CopyOnly)
+                    Clipboard.SetText(Text);
+                else if (isLink) 
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {Text}") { CreateNoWindow = true });
+            }
         }
 
 
