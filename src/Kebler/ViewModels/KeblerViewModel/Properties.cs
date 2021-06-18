@@ -79,11 +79,11 @@ namespace Kebler.ViewModels
                 return "Kebler [DEBUG]";
 #elif PORTABLE
                 return "Kebler [Portable]";
-#else
+#elif RELEASE 
                 var assembly = Assembly.GetExecutingAssembly();
                 System.Diagnostics.FileVersionInfo fileVersionInfo =
                     System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta";
+                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} x64";
 #endif
             }
         }
