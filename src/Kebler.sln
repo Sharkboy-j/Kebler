@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Update.Core", "Keble
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{07DB111A-534A-4CC7-9C8D-F008EDD833F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET", "Bencode\BencodeNET\BencodeNET.csproj", "{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET", "Bencode\BencodeNET\BencodeNET.csproj", "{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,12 +119,12 @@ Global
 		{E677D474-531F-4ACE-B99A-9C36682C6BE6}.Portable|x64.ActiveCfg = Portable|x64
 		{E677D474-531F-4ACE-B99A-9C36682C6BE6}.Release|x64.ActiveCfg = Release|x64
 		{E677D474-531F-4ACE-B99A-9C36682C6BE6}.Release|x64.Build.0 = Release|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Debug|x64.ActiveCfg = Debug|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Debug|x64.Build.0 = Debug|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Portable|x64.ActiveCfg = Debug|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Portable|x64.Build.0 = Debug|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Release|x64.ActiveCfg = Release|x64
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC}.Release|x64.Build.0 = Release|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Debug|x64.ActiveCfg = Debug|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Debug|x64.Build.0 = Debug|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Portable|x64.ActiveCfg = Debug|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Portable|x64.Build.0 = Debug|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Release|x64.ActiveCfg = Release|x64
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,11 +132,11 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1E37E20F-3AF8-43A1-B8F4-81F1AABA4612} = {07DB111A-534A-4CC7-9C8D-F008EDD833F1}
 		{CD953F00-6042-4F80-BEE7-CDBE3BB7FF47} = {07DB111A-534A-4CC7-9C8D-F008EDD833F1}
-		{D21FFA32-3CF8-4BAB-886C-5957AE5B1DAC} = {F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}
+		{CD3867A7-EE3B-442A-83A2-A8D5668F6AEA} = {F0B100A8-07F2-46CC-9DFF-1FB32DF9CCC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowErrorsInErrorList = False
-		RESX_TaskErrorCategory = Message
 		SolutionGuid = {766B4CBD-887D-4996-9083-18D2B57BE66F}
+		RESX_TaskErrorCategory = Message
+		RESX_ShowErrorsInErrorList = False
 	EndGlobalSection
 EndGlobal
