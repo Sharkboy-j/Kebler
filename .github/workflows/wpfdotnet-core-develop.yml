@@ -31,18 +31,22 @@ jobs:
       run: dotnet test src/Kebler.sln
     
     - name: Release86
-      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release64.pubxml
 
     - name: dir
-      run: dir src\publish
+      run: dir src\
       shell: cmd
 
     - name: dir
-      run: dir src\publish\RELEASE
+      run: dir src\publish\
       shell: cmd
 
     - name: dir
-      run: dir src\publish\RELEASE\App
+      run: dir src\publish\RELEASE\
+      shell: cmd
+
+    - name: dir
+      run: dir src\publish\RELEASE\App\
       shell: cmd
 
     - name: Get version
