@@ -8,6 +8,7 @@
     <AssemblyName>Installer</AssemblyName>
 	  <ApplicationIcon>KeblerD.ico</ApplicationIcon>
 	  <Nullable>enable</Nullable>
+	  <Platforms>x64</Platforms>
   </PropertyGroup>
 	<PropertyGroup>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
