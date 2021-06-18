@@ -1,3 +1,3 @@
-[submodule "src/BencodeNET"]
-	path = src/BencodeNET
-	url = https://github.com/Krusen/BencodeNET.git
+[submodule "src/Bencode"]
+	path = src/Bencode
+	url = https://github.com/JeremiSharkboy/BencodeNET.git

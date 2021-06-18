@@ -88,8 +88,8 @@ jobs:
     - name: TEST
       run: dotnet test src/Kebler.sln
     
-    - name: Release86
-      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release86.pubxml
+    - name: Release x64
+      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release64.pubxml
 
     - name: Get version
       id: vars
@@ -101,14 +101,11 @@ jobs:
     # - name: Next Step
     #   run: echo "${{ steps.vars.outputs.ASSEMBLY_VERSION }}"
 
-    - name: Portable64
+    - name: Portable x64
       run: dotnet publish src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable64.pubxml
     
     - run: move src\publish\Kebler.exe src\publish\KeblerPortable64.exe
       shell: cmd
-
-    # - name: Portable86
-    #   run: dotnet publish ./src/Kebler/Kebler.csproj -p:PublishProfile=Properties\PublishProfiles\Portable86.pubxml
 
     - name: Installer
       run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
@@ -156,17 +153,7 @@ jobs:
         asset_name: Release ${{ steps.vars.outputs.ASSEMBLY_VERSION  }}.zip
         asset_content_type: application/zip
 
-    # - name: Upload Portable86
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{steps.create_release.outputs.upload_url}} 
-    #     asset_path: .\src\publish\KeblerPortable86.exe
-    #     asset_name: KeblerPortable86.exe
-    #     asset_content_type: application/exe
-
-    - name: Upload Portable64
+    - name: Upload Portable x64
       uses: actions/upload-release-asset@v1
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
