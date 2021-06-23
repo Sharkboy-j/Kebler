@@ -1,4 +1,4 @@
-# Kebler - Transmission Remote GUI (Windows only)
+# Kebler - Transmission Remote GUI (Windows only) x64
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)
 ![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/2.png)
 
