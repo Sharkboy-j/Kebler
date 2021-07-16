@@ -110,7 +110,7 @@ namespace Kebler.ViewModels
 
                 var ind = SelectedCategoryIndex;
 
-              
+
                 SelectedCategoryIndex = ind;
             }
             finally
@@ -130,14 +130,22 @@ namespace Kebler.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(ReconnectRequested message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ReconnectRequested message, CancellationToken cancellationToken)
         {
             if (IsConnected)
             {
                 requested = true;
                 _cancelTokenSource.Cancel();
                 IsConnecting = true;
+                if (_SelectedServer != message.Server)
+                    _SelectedServer = message.Server;
+            }
+            else if (IsConnecting)
+            {
+                _cancelTokenSource.Cancel();
+                await Task.Delay(1000);
                 _SelectedServer = message.Server;
+                GetServerAndInitConnection();
             }
             else
             {
@@ -145,8 +153,6 @@ namespace Kebler.ViewModels
                 _SelectedServer = message.Server;
                 GetServerAndInitConnection();
             }
-
-            return Task.CompletedTask;
         }
 
         public Task HandleAsync(ServersUpdated message, CancellationToken cancellationToken)
@@ -719,7 +725,7 @@ namespace Kebler.ViewModels
                 MessageBoxViewModel.ShowDialog("Please select torrent");
         }
 
-   
+
 
         private void RemoveTorrent(bool removeData = false)
         {
@@ -1031,7 +1037,7 @@ namespace Kebler.ViewModels
             set => Set(ref _selectedTorrent, value);
         }
 
-   
+
 
         public Bind<TorrentInfo> TorrentList
         {
@@ -1070,7 +1076,7 @@ namespace Kebler.ViewModels
             set => Set(ref _isConnected, value);
         }
 
-        public Server SelectedServer
+        public Server? SelectedServer
         {
             get => _SelectedServer;
             set => Set(ref _SelectedServer, value);

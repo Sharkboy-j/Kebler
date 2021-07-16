@@ -27,6 +27,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
       <Deterministic>false</Deterministic>
+      <MinimumPlatformVersion>7.0</MinimumPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>

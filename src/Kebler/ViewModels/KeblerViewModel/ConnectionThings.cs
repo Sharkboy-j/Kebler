@@ -85,7 +85,7 @@ namespace Kebler.ViewModels
                 _checkerTask.Start();
             }
             
-            SelectedServer = ServersList.First();
+            SelectedServer = SelectedServer ?? ServersList.First();
             TryConnect();
         }
         
@@ -99,54 +99,58 @@ namespace Kebler.ViewModels
             IsErrorOccuredWhileConnecting = false;
             IsConnectedStatusText = LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_ConnectingText));
             
-            try
+            if(SelectedServer != null)
             {
-                IsConnecting = true;
-                var password = string.Empty;
-                if (SelectedServer.AskForPassword)
-                {
-                    Log.Info("Manual ask password");
-                    password = await GetPassword();
-                    
-                    
-                    if (string.IsNullOrEmpty(password))
-                    {
-                        IsErrorOccuredWhileConnecting = true;
-                        Log.Info("Manual ask password return empty string");
-                        return;
-                    }
-                }
-
                 try
                 {
-                    _transmissionClient = new TransmissionClient(
-                        url: SelectedServer.FullUriPath, 
-                        login : SelectedServer.UserName,
-                        password: SelectedServer.AskForPassword
-                            ? password
-                            : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
-                    Log.Info("TransmissionClient object created");
-                    
-                    StartCycle();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message, ex);
-                    Crashes.TrackError(ex);
+                    IsConnecting = true;
+                    var password = string.Empty;
+                    if (SelectedServer.AskForPassword)
+                    {
+                        Log.Info("Manual ask password");
+                        password = await GetPassword();
 
-                    IsConnectedStatusText = ex.Message;
-                    IsConnected = false;
-                    IsErrorOccuredWhileConnecting = true;
+
+                        if (string.IsNullOrEmpty(password))
+                        {
+                            IsErrorOccuredWhileConnecting = true;
+                            Log.Info("Manual ask password return empty string");
+                            return;
+                        }
+                    }
+
+                    try
+                    {
+                        _transmissionClient = new TransmissionClient(
+                            url: SelectedServer.FullUriPath,
+                            login: SelectedServer.UserName,
+                            password: SelectedServer.AskForPassword
+                                ? password
+                                : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
+                        Log.Info("TransmissionClient object created");
+
+                        StartCycle();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message, ex);
+                        Crashes.TrackError(ex);
+
+                        IsConnectedStatusText = ex.Message;
+                        IsConnected = false;
+                        IsErrorOccuredWhileConnecting = true;
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    IsConnectedStatusText = "Canceled";
+                }
+                finally
+                {
+                    IsConnecting = false;
                 }
             }
-            catch (TaskCanceledException)
-            {
-                IsConnectedStatusText = "Canceled";
-            }
-            finally
-            {
-                IsConnecting = false;
-            }
+           
         }
         
         

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using Caliburn.Micro;
 using LiteDB;
 using Newtonsoft.Json;
 
 namespace Kebler.Models
 {
+
+    [DebuggerDisplay("{Host}")]
     public class Server : PropertyChangedBase
     {
         private bool _sslEnabled = true;
