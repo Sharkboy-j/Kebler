@@ -64,7 +64,7 @@ namespace Kebler.ViewModels
         public void Add()
         {
             var server = new Server
-                {Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false};
+            { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
             _dbServersList.Insert(server);
 
             Log.Info($"Add new Server {server}");
@@ -173,7 +173,7 @@ namespace Kebler.ViewModels
         {
             IsTesting = true;
 
-            string pswd = null;
+            string? pswd = null;
             if (SelectedServer.AskForPassword)
             {
                 var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
@@ -189,16 +189,22 @@ namespace Kebler.ViewModels
 
             var result = await TesConnection(pswd);
 
-            ConnectStatusResult = result
+            ConnectStatusResult = result.Item1
                 ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
                 : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
 
-            ConnectStatusColor = result
-                ? new SolidColorBrush {Color = Colors.Green}
-                : new SolidColorBrush {Color = Colors.Red};
+            ConnectStatusColor = result.Item1
+                ? new SolidColorBrush { Color = Colors.Green }
+                : new SolidColorBrush { Color = Colors.Red };
+
+            if (result.Item1 == false)
+            {
+                var dialogres = await manager.ShowDialogAsync(new MessageBoxViewModel(result.Item2, string.Empty,
+                    Enums.MessageBoxDilogButtons.Ok, true));
+            }
         }
 
-        private async Task<bool> TesConnection(string pass)
+        private async Task<(bool, string)> TesConnection(string pass)
         {
             Log.Info("Start TestConnection");
             var scheme = SelectedServer.SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
@@ -214,14 +220,14 @@ namespace Kebler.ViewModels
 
                 var sessionInfo = await _client.GetSessionInformationAsync(CancellationToken.None);
 
-                return await CheckResponse(sessionInfo.Response);
+                return (await CheckResponse(sessionInfo.Response), string.Empty);
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message, ex);
                 Crashes.TrackError(ex);
 
-                return false;
+                return (false, ex.Message);
             }
             finally
             {

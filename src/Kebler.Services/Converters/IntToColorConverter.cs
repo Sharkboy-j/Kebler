@@ -78,7 +78,7 @@ namespace Kebler.Services.Converters
                     0 => Application.Current.FindResource("Icon.Stopped"),
                     4 => Application.Current.FindResource("Icon.Download"),
                     6 => Application.Current.FindResource("Icon.Upload"),
-                    _ => Application.Current.FindResource("Icon.WTF")
+                    _ => Application.Current.FindResource("Icon.Wtf")
                 };
             return new object();
 

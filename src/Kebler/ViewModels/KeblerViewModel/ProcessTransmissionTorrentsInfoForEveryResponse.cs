@@ -8,6 +8,8 @@ using Kebler.Models.Torrent;
 using Kebler.Services;
 using Kebler.Services.Converters;
 using System.Windows;
+using Microsoft.AppCenter.Crashes;
+
 // ReSharper disable once CheckNamespace
 
 namespace Kebler.ViewModels
@@ -22,28 +24,37 @@ namespace Kebler.ViewModels
         /// </summary>
         private void ParseStats()
         {
-            Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
+                Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
 
-            IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                    $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+                IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
+                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
 
-            var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
-            var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
+                var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
+                var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
 
-            var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
-            var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-            var altUp = _settings?.AlternativeSpeedEnabled == true
-                ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
-                : string.Empty;
-            var altD = _settings?.AlternativeSpeedEnabled == true
-                ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
-                : string.Empty;
+                var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
+                var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
+                var altUp = _settings?.AlternativeSpeedEnabled == true
+                    ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
+                    : string.Empty;
+                var altD = _settings?.AlternativeSpeedEnabled == true
+                    ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
+                    : string.Empty;
 
-            DownloadSpeed = $"D: {dSpeed}{altD}";
-            UploadSpeed = $"U: {uSpeed}{altUp}";
+                DownloadSpeed = $"D: {dSpeed}{altD}";
+                UploadSpeed = $"U: {uSpeed}{altUp}";
+            }
+            catch (Exception ex)
+            {
+                //#1665431308
+                Log.Error(ex);
+                Crashes.TrackError(ex);
+            }
         }
 
 

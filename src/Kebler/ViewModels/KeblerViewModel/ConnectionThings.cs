@@ -131,6 +131,12 @@ namespace Kebler.ViewModels
 
                         StartCycle();
                     }
+                    catch (UriFormatException uriEx)
+                    {
+                        var msg = $"URI:'{SelectedServer.FullUriPath}' cant be parsed";
+                        Log.Error(msg, uriEx);
+                        Crashes.TrackError(new Exception(msg));
+                    }
                     catch (Exception ex)
                     {
                         Log.Error(ex.Message, ex);
@@ -232,7 +238,6 @@ namespace Kebler.ViewModels
                 {
                     Log.Error(ex);
                     Crashes.TrackError(ex);
-
                 }
                 finally
                 {
