@@ -39,6 +39,10 @@ namespace Kebler.Models
         {
             get
             {
+
+                if (string.IsNullOrEmpty(Host))
+                    return string.Empty;
+
                 var scheme = SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
 
                 var uri = new UriBuilder(scheme, Host, Port, RpcPath);
