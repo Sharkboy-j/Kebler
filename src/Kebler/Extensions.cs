@@ -6,21 +6,13 @@ using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using Kebler.Models.Torrent.Common;
-using log4net;
+using Kebler.Services.Interfaces;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace Kebler
 {
     public static class LocalExtensions
     {
-        #region Log
-        public static void Error(this ILog log, System.Diagnostics.Stopwatch watch, object error, [CallerMemberName] string data = "")
-        {
-            log.Error($"{data} done with error in {watch.ElapsedMilliseconds}ms");
-            log.Error(error);
-        }
-        #endregion
-
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
             if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
@@ -70,6 +62,7 @@ namespace Kebler
 
                 if (resp.CustomException != null)
                     sb.Append(resp.CustomException).Append(Environment.NewLine);
+
                 logger.Error($"[{resp.Method}] RESULT '{resp.Result}'{Environment.NewLine}{sb}");
             }
         }

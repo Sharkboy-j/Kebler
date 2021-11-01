@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Windows;
-using Caliburn.Micro;
 using Kebler.Dialogs;
-using log4net.Appender;
-using log4net.Repository.Hierarchy;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Crashes;
-using LogManager = log4net.LogManager;
+using Kebler.Services;
 
 namespace Kebler.Views
 {
@@ -19,7 +11,6 @@ namespace Kebler.Views
     /// </summary>
     public partial class TopBarView
     {
-        private IWindowManager manager = new WindowManager();
 
         public TopBarView()
         {
@@ -29,38 +20,42 @@ namespace Kebler.Views
 
         private void Report(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/JeremiSharkboy/Kebler/issues")
+            App.Log.Ui(nameof(Report));
+            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81/Kebler/issues")
             { CreateNoWindow = true });
         }
 
         private void About(object sender, RoutedEventArgs e)
         {
+            App.Log.Ui(nameof(About));
+
             var dialog = new About(Application.Current.MainWindow);
             dialog.ShowDialog();
         }
 
         private async void Check(object sender, RoutedEventArgs e)
         {
+#if RELEASE
+            App.Log.Ui(nameof(Check));
+
             await Updater.CheckUpdates();
+#endif
         }
 
         private void Contact(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("cmd", "/c start https://t.me/jeremiSharkboy") { CreateNoWindow = true });
+            App.Log.Ui(nameof(Contact));
+
+            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81") { CreateNoWindow = true });
         }
 
         private void OpenLogs(object sender, RoutedEventArgs e)
         {
+            App.Log.Ui(nameof(OpenLogs));
+
             try
             {
-                var rootAppender = ((Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly()))
-                    .Root.Appenders.OfType<FileAppender>().FirstOrDefault();
-
-                var filename = rootAppender != null ? rootAppender.File : string.Empty;
-
-                var filein = new FileInfo(filename);
-
-                Process.Start(new ProcessStartInfo("explorer.exe", $"{filein.DirectoryName}") { CreateNoWindow = true });
+                Process.Start(new ProcessStartInfo("explorer.exe", $"{Log.LogFileInfo.DirectoryName}") { CreateNoWindow = true });
             }
             catch (Exception ex)
             {
@@ -89,7 +84,7 @@ namespace Kebler.Views
 //System.Windows.Threading
 //ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
 
-                Crashes.TrackError(ex);
+                App.Log.Error(ex);
 #endif
             }
         }

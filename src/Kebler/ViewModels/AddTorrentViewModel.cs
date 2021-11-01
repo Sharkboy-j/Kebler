@@ -22,8 +22,6 @@ namespace Kebler.ViewModels
     using Services;
     using TransmissionCore;
     using Microsoft.Win32;
-    using ILog = log4net.ILog;
-    using LogManager = log4net.LogManager;
     using Models.Interfaces;
     using UI.CSControls.TreeListView;
     using Views;
@@ -37,7 +35,7 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;

@@ -383,16 +383,18 @@
                     Name="CategoriesListBox"
                     cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
                     BorderThickness="0"
-                    DisplayMemberPath="Title"
                     ItemsSource="{Binding CategoriesList}"
                     SelectedIndex="{Binding SelectedCategoryIndex}"
                     SelectedValue="{Binding SelectedCat}"
                     SelectionMode="Single">
-                    <!--<ListBox.ItemTemplate>
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock>
+                                <Run Text="{Binding Title}" />
+                                <Run Text="{Binding Count, StringFormat=({0})}" />
+                            </TextBlock>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>-->
+                    </ListBox.ItemTemplate>
                 </ListBox>
 
                 <Grid

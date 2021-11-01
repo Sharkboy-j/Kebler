@@ -5,15 +5,13 @@ using System.Threading;
 using Caliburn.Micro;
 using Kebler.Models;
 using WPFLocalizeExtension.Engine;
-using ILog = log4net.ILog;
-using LogManager = log4net.LogManager;
 
 namespace Kebler.Services
 {
     public static class LocalizationManager
     {
         private static List<CultureInfo>? _cultureList;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LocalizationManager));
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
 
         private static CultureInfo _currentCulture = new CultureInfo("en");
 

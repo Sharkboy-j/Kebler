@@ -41,7 +41,7 @@ namespace Kebler.ViewModels
         /// <exception cref="TaskCanceledException"></exception>
         private async Task<string> GetPassword()
         {
-            string? passwordResult = null;
+            string passwordResult = null;
             await Execute.OnUIThreadAsync(async () =>
             {
                 var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
@@ -134,12 +134,12 @@ namespace Kebler.ViewModels
                     catch (UriFormatException uriEx)
                     {
                         var msg = $"URI:'{SelectedServer.FullUriPath}' cant be parsed";
-                        Log.Error(msg, uriEx);
+                        Log.Error(uriEx);
                         Crashes.TrackError(new Exception(msg));
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex.Message, ex);
+                        Log.Error(ex);
                         Crashes.TrackError(ex);
 
                         IsConnectedStatusText = ex.Message;
@@ -185,7 +185,7 @@ namespace Kebler.ViewModels
                         Log.Info($"Connected {_sessionInfo.Version}");
                         ConnectedServer = SelectedServer;
 
-                        if (App.Instance.torrentsToAdd.Count > 0)
+                        if (App.Instance.TorrentsToAdd.Count > 0)
                             OpenPaseedWithArgsFiles();
 
                         while (IsConnected && !token.IsCancellationRequested)

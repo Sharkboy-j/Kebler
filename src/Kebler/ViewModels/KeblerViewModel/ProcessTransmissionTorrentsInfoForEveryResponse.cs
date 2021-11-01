@@ -67,11 +67,35 @@ namespace Kebler.ViewModels
             if (!IsConnected)
                 return;
 
+            _categoriesCount.Clear();
+
+            _categoriesCount.Add(Enums.Categories.All, data.Torrents.Length);
+
+            _categoriesCount.Add(Enums.Categories.Downloading, data.Torrents.Where(x => x.Status == 3 || x.Status == 4).ToArray().Length);
+            var counts = data.Torrents.Where(x => x.Status == 4 || x.Status == 6 || x.Status == 2)
+                .ToArray();
+            counts = counts.Where(x => x.RateDownload > 1 || x.RateUpload > 1).ToArray();
+            _categoriesCount.Add(Enums.Categories.Active, counts.Length);
+            _categoriesCount.Add(Enums.Categories.Stopped, data.Torrents.Where(x => x.Status == 0 && string.IsNullOrEmpty(x.ErrorString))
+                .ToArray().Length);
+            _categoriesCount.Add(Enums.Categories.Error, data.Torrents.Where(x => !string.IsNullOrEmpty(x.ErrorString)).ToArray().Length);
+            _categoriesCount.Add(Enums.Categories.Inactive, data.Torrents.Where(x => x.RateDownload <= 0 && x.RateUpload <= 0 && x.Status != 2)
+                .ToArray().Length);
+            _categoriesCount.Add(Enums.Categories.Ended, data.Torrents.Where(x => x.Status == 6).ToArray().Length);
+
+
+
+            foreach (var cat in CategoriesList)
+            {
+                var val = _categoriesCount[cat.Cat].ToString();
+                cat.Count = val;
+            }
+            
+
             lock (_syncTorrentList)
             {
                 //1: 'check pending',
                 //2: 'checking',
-
                 //5: 'seed pending',
                 //6: 'seeding',
                 switch (_filterCategory)
@@ -121,6 +145,8 @@ namespace Kebler.ViewModels
                         break;
                 }
 
+
+
                 if (!string.IsNullOrEmpty(FilterText))
                 {
                     //var txtfilter = FilterText;
@@ -149,8 +175,11 @@ namespace Kebler.ViewModels
                 //Debug.WriteLine("E" + DateTime.Now.ToString("HH:mm:ss:ffff"));
 
                 UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
+
+
             }
         }
+
 
 
         /// <summary>
@@ -262,7 +291,7 @@ namespace Kebler.ViewModels
         private void ParseTransmissionServerSettings()
         {
             if (_settings?.AlternativeSpeedEnabled != null)
-                IsSlowModeEnabled = (bool) _settings.AlternativeSpeedEnabled;
+                IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
         }
 
         /// TODO: remove maybe 

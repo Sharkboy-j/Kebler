@@ -14,8 +14,6 @@ using Kebler.Services;
 using Kebler.TransmissionCore;
 using LiteDB;
 using Microsoft.AppCenter.Crashes;
-using ILog = log4net.ILog;
-using LogManager = log4net.LogManager;
 
 namespace Kebler.ViewModels
 {
@@ -224,7 +222,7 @@ namespace Kebler.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message, ex);
+                Log.Error(ex);
                 Crashes.TrackError(ex);
 
                 return (false, ex.Message);
@@ -250,7 +248,7 @@ namespace Kebler.ViewModels
 
     public partial class ConnectionManagerViewModel
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
         private readonly IWindowManager manager = new WindowManager();
         private TransmissionClient _client;
         private SolidColorBrush _connectStatusColor;

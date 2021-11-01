@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -29,9 +30,7 @@ using Microsoft.AppCenter.Crashes;
 using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
-using ILog = log4net.ILog;
 using ListView = System.Windows.Controls.ListView;
-using LogManager = log4net.LogManager;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using TorrentFields = Kebler.Models.Torrent.TorrentFields;
 
@@ -48,10 +47,55 @@ namespace Kebler.ViewModels
 
     {
         private readonly IEventAggregator _eventAggregator;
+        private static object _lockObject = new object();
 
         public KeblerViewModel()
         {
             _eventAggregator = new EventAggregator();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                BindingOperations.EnableCollectionSynchronization(CategoriesList, _lockObject);
+            });
+
+            CategoriesList = new BindableCollection<StatusCategory>()
+            {
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
+                    Cat = Enums.Categories.All
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
+                    Cat = Enums.Categories.Downloading
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
+                    Cat = Enums.Categories.Active
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
+                    Cat = Enums.Categories.Inactive
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
+                    Cat = Enums.Categories.Ended
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
+                    Cat = Enums.Categories.Stopped
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
+                    Cat = Enums.Categories.Error
+                }
+            };
         }
 
 
@@ -68,10 +112,55 @@ namespace Kebler.ViewModels
 
             SelectedFolderIndex = -1;
 
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                BindingOperations.EnableCollectionSynchronization(CategoriesList, _lockObject);
+            });
+
+            CategoriesList = new BindableCollection<StatusCategory>()
+            {
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
+                    Cat = Enums.Categories.All
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
+                    Cat = Enums.Categories.Downloading
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
+                    Cat = Enums.Categories.Active
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
+                    Cat = Enums.Categories.Inactive
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
+                    Cat = Enums.Categories.Ended
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
+                    Cat = Enums.Categories.Stopped
+                },
+                new StatusCategory
+                {
+                    Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
+                    Cat = Enums.Categories.Error
+                }
+            };
+
+
             SelectedCat = CategoriesList.First();
 
 
-            App.Instance.KeblerVM = this;
+            App.Instance.KeblerVm = this;
         }
 
         public Task HandleAsync(ConnectedServerChanged message, CancellationToken cancellationToken)
@@ -373,7 +462,7 @@ namespace Kebler.ViewModels
 
         public void OpenPaseedWithArgsFiles()
         {
-            if (App.Instance.torrentsToAdd.Count > 0)
+            if (App.Instance.TorrentsToAdd.Count > 0)
             {
                 var ch = new Task(() =>
                 {
@@ -381,8 +470,8 @@ namespace Kebler.ViewModels
                     {
                         State = WindowState.Normal;
                         Application.Current.MainWindow?.Activate();
-                        await OpenTorrent(App.Instance.torrentsToAdd);
-                        App.Instance.torrentsToAdd.Clear();
+                        await OpenTorrent(App.Instance.TorrentsToAdd);
+                        App.Instance.TorrentsToAdd.Clear();
                     });
                 }, _cancelTokenSource.Token);
                 ch.Start();
@@ -432,6 +521,7 @@ namespace Kebler.ViewModels
     {
         public void Exit()
         {
+            Log.Ui();
             TryCloseAsync();
         }
 
@@ -946,12 +1036,11 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
         private readonly object _syncTorrentList = new object();
         private readonly IWindowManager manager = new WindowManager();
         private readonly object syncObjKeys = new object();
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
-        private BindableCollection<StatusCategory> _categoriesList = new BindableCollection<StatusCategory>();
         private Task? _checkerTask;
         private Server? _ConnectedServer;
 

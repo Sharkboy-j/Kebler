@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 
 namespace Kebler.ViewModels
 {
@@ -16,55 +17,18 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     {
+        private BindableCollection<StatusCategory> _categoriesList = new();
 
 
         /// <summary>
         /// Torrent type categories.
         /// </summary>
-        public IReadOnlyCollection<StatusCategory> CategoriesList
+        public BindableCollection<StatusCategory> CategoriesList
         {
-            get
+            get => _categoriesList;
+            set
             {
-                var lst = new List<StatusCategory>()
-                {
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_AllTorrents)),
-                        Cat = Enums.Categories.All
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Downloading)),
-                        Cat = Enums.Categories.Downloading
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Active)),
-                        Cat = Enums.Categories.Active
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_InActive)),
-                        Cat = Enums.Categories.Inactive
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Ended)),
-                        Cat = Enums.Categories.Ended
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Stopped)),
-                        Cat = Enums.Categories.Stopped
-                    },
-                    new StatusCategory
-                    {
-                        Title = LocalizationProvider.GetLocalizedValue(nameof(Strings.Cat_Error)),
-                        Cat = Enums.Categories.Error
-                    }
-                };
-
-                return new ReadOnlyCollection<StatusCategory>(lst);
+                var dd = Set(ref _categoriesList, value);
             }
         }
 
@@ -87,5 +51,10 @@ namespace Kebler.ViewModels
 #endif
             }
         }
+    }
+
+    public partial class KeblerViewModel
+    {
+        private Dictionary<Enums.Categories, int> _categoriesCount = new();
     }
 }

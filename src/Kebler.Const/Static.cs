@@ -7,6 +7,7 @@ namespace Kebler.Const
     {
         public const string GITHUB_USER = "JeremiSharkboy";
         public const string CONFIGNAME = "app.config";
+        public const string LOG_FOLDER = "log";
 
         public static string KeblerRoamingFolder =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(Kebler));

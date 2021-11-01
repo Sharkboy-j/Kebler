@@ -2,14 +2,13 @@
 using System.IO;
 using Kebler.Const;
 using Kebler.Models;
-using log4net;
 using SharpConfig;
 
 namespace Kebler.Services
 {
     public static class ConfigService
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ConfigService));
+        private static Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;

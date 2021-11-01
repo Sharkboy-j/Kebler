@@ -19,7 +19,6 @@
     <RepositoryUrl>https://github.com/JeremiSharkboy/Kebler</RepositoryUrl>
     <NoWin32Manifest>true</NoWin32Manifest>
     <Configurations>Debug;Release;Portable</Configurations>
-    <Nullable>enable</Nullable>
 	<ApplicationIcon>KeblerD.ico</ApplicationIcon>
 	<Platforms>x64</Platforms>
 
@@ -59,7 +58,6 @@
     <PackageReference Include="FamFamFam.Flags.Wpf" Version="1.2.1" />
 	<PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18" />
 	<PackageReference Include="LiteDB" Version="4.1.4" />
-	<PackageReference Include="log4net" Version="2.0.11" />
 	<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
 	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
 	<PackageReference Include="Microsoft.WindowsDesktop.App" Version="3.0.0-preview7-27912-14" />

@@ -29,8 +29,7 @@ namespace Kebler.ViewModels
     {
         #region Props
 
-        private static readonly log4net.ILog Log =
-          log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
 
 
         private DateTime _addedOn, _createdOn, _completedOn;

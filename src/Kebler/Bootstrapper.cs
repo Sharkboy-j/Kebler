@@ -47,7 +47,10 @@ namespace Kebler
                     x.TwoLetterISOLanguageName == ConfigService.Instanse.Language.TwoLetterISOLanguageName);
 
             await DisplayRootViewFor<KeblerViewModel>();
+
+#if RELEASE
             await Updater.CheckUpdates();
+#endif
         }
 
         protected override object GetInstance(Type service, string key)
