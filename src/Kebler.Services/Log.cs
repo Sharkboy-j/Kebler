@@ -14,7 +14,7 @@ namespace Kebler.Services
         private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Const.ConstStrings.LOG_FOLDER, FileName);
         private static readonly object Lock = new();
         public static readonly FileInfo LogFileInfo = new(FilePath);
-        private enum LogType {Info, Warn, Error, ui}
+        private enum LogType {Info, Warn, Error, Ui, Trace}
         private static ILog _logger;
 
         public static ILog Instance => _logger ??= new Log();
@@ -23,6 +23,16 @@ namespace Kebler.Services
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
             var data = Format(message, LogType.Info, lineNumber, caller, GetClassName(sourceFilePath));
+
+            Task.Run(() =>
+            {
+                WriteToFile(data);
+            });
+        }
+
+        public void Trace(TimeSpan time, int lineNumber = 0, string caller = "", string sourceFilePath = "")
+        {
+            var data = Format($"Elapsed time {time}", LogType.Trace, lineNumber, caller, GetClassName(sourceFilePath));
 
             Task.Run(() =>
             {
@@ -72,7 +82,7 @@ namespace Kebler.Services
         public void Ui(string button, [CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
-            var data = Format( $"User clicked '{button}'", LogType.ui, lineNumber, caller, GetClassName(sourceFilePath));
+            var data = Format( $"User clicked '{button}'", LogType.Ui, lineNumber, caller, GetClassName(sourceFilePath));
 
             Task.Run(() =>
             {
@@ -83,7 +93,7 @@ namespace Kebler.Services
         public void Ui([CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
-            var data = Format($"User clicked", LogType.ui, lineNumber, caller, GetClassName(sourceFilePath));
+            var data = Format($"User clicked", LogType.Ui, lineNumber, caller, GetClassName(sourceFilePath));
 
             Task.Run(() =>
             {

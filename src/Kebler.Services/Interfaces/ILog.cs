@@ -8,6 +8,9 @@ namespace Kebler.Services.Interfaces
         public void Info(string message, [CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "");
 
+        public void Trace(TimeSpan time, [CallerLineNumber] int lineNumber = 0,
+            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "");
+
         public void Warn(string message, [CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "");
 
