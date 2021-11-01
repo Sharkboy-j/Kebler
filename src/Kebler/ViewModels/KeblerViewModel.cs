@@ -337,6 +337,7 @@ namespace Kebler.ViewModels
                     _view.WindowState = ConfigService.Instanse.MainWindowState;
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                     IsShowMoreInfo = ConfigService.Instanse.MoreInfoShow;
+                    ShowCategoriesCount = ConfigService.Instanse.ShowCategoryCount;
                 }
                 else
                 {
@@ -1021,6 +1022,11 @@ namespace Kebler.ViewModels
             }
         }
 
+
+
+        #endregion
+
+        #region View menu item
         public void MoreInfoShow()
         {
             ConfigService.Instanse.MoreInfoShow = IsShowMoreInfo;
@@ -1030,6 +1036,11 @@ namespace Kebler.ViewModels
                 UpdateMoreInfoPosition(false);
         }
 
+        public void CategoryCountingShow()
+        {
+            ConfigService.Instanse.ShowCategoryCount = ShowCategoriesCount;
+            ConfigService.Save();
+        }
         #endregion
     }
 

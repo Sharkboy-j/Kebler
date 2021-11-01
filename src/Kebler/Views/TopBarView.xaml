@@ -108,6 +108,12 @@
                 Header="{lex:BLoc MI_MoreInoShow}"
                 IsCheckable="True"
                 IsChecked="{Binding IsShowMoreInfo}" />
+            <MenuItem
+                cal:Message.Attach="CategoryCountingShow"
+                CommandParameter="{Binding .}"
+                Header="{lex:BLoc MI_ShowCategoriesCount}"
+                IsCheckable="True"
+                IsChecked="{Binding ShowCategoriesCount}" />
         </MenuItem>
         <MenuItem Header="{lex:BLoc MI_Tools}">
             <MenuItem

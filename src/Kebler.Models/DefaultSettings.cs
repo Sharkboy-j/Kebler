@@ -24,5 +24,6 @@ namespace Kebler.Models
         public bool MoreInfoShow { get; set; } = true;
         public bool CanSearchForSimilatTorrentsWhenAddingNewOne { get; set; } = true;
 
+        public bool ShowCategoryCount { get; set; } = true;
     }
 }

@@ -389,10 +389,14 @@
                     SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock>
-                                <Run Text="{Binding Title}" />
-                                <Run Text="{Binding Count, StringFormat=({0})}" />
-                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Title}" />
+                                <TextBlock
+                                    Margin="3,0"
+                                    Text="{Binding Count, StringFormat=({0})}"
+                                    Visibility="{Binding DataContext.ShowCategoriesCount, RelativeSource={RelativeSource AncestorType=ui11:KeblerView}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

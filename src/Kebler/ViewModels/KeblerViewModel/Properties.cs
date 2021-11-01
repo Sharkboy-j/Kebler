@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Caliburn.Micro;
 
 namespace Kebler.ViewModels
@@ -17,19 +15,22 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     {
-        private BindableCollection<StatusCategory> _categoriesList = new();
-
-
         /// <summary>
         /// Torrent type categories.
         /// </summary>
         public BindableCollection<StatusCategory> CategoriesList
         {
             get => _categoriesList;
-            set
-            {
-                var dd = Set(ref _categoriesList, value);
-            }
+            set=> Set(ref _categoriesList, value);
+        }
+
+        /// <summary>
+        /// Preference to show/hide categories count.
+        /// </summary>
+        public bool ShowCategoriesCount
+        {
+            get => _showCategoriesCount;
+            set => Set(ref _showCategoriesCount, value);
         }
 
         /// <summary>
@@ -55,6 +56,8 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel
     {
-        private Dictionary<Enums.Categories, int> _categoriesCount = new();
+        private BindableCollection<StatusCategory> _categoriesList = new();
+        private bool _showCategoriesCount = true;
+        private readonly Dictionary<Enums.Categories, int> _categoriesCount = new();
     }
 }
