@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -61,6 +62,8 @@ namespace Kebler.ViewModels
 
         public void Add()
         {
+            Log.Ui();
+
             var server = new Server
             { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
             _dbServersList.Insert(server);
@@ -76,6 +79,8 @@ namespace Kebler.ViewModels
 
         public void Remove()
         {
+            Log.Ui();
+
             if (SelectedServer == null) return;
 
 
@@ -102,6 +107,8 @@ namespace Kebler.ViewModels
 
         public void Save()
         {
+            Log.Ui();
+
             Log.Info($"Try save Server {SelectedServer}");
 
             if (ValidateServer(SelectedServer, out var error))
@@ -125,6 +132,7 @@ namespace Kebler.ViewModels
 
         public void Cancel()
         {
+            Log.Ui();
             SelectedServer = null;
             ServerIndex = -1;
         }
@@ -145,7 +153,7 @@ namespace Kebler.ViewModels
             //TODO: CheckUpdates ipadress port
         }
 
-        private async Task<bool> CheckResponse(TransmissionResponse resp)
+        private async Task<bool> CheckResponse(ITransmissionReponse resp)
         {
             if (resp.WebException != null)
             {
@@ -163,15 +171,20 @@ namespace Kebler.ViewModels
                 return false;
             }
 
-            if (resp.CustomException != null) return false;
+            if (resp.CustomException != null)
+                return false;
             return true;
         }
 
         public async void Test()
         {
+            Log.Ui();
+            var st = new Stopwatch();
+            st.Start();
+
             IsTesting = true;
 
-            string? pswd = null;
+            string pswd = null;
             if (SelectedServer.AskForPassword)
             {
                 var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_EnterPWD)), string.Empty, true);
@@ -186,23 +199,35 @@ namespace Kebler.ViewModels
             }
 
             var result = await TesConnection(pswd);
+            st.Stop();
+            Log.Trace(st.Elapsed);
 
-            ConnectStatusResult = result.Item1
-                ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
-                : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
-
-            ConnectStatusColor = result.Item1
-                ? new SolidColorBrush { Color = Colors.Green }
-                : new SolidColorBrush { Color = Colors.Red };
-
-            if (result.Item1 == false)
+            if (result.Item2 != null)
             {
-                var dialogres = await manager.ShowDialogAsync(new MessageBoxViewModel(result.Item2, string.Empty,
+
+                await manager.ShowDialogAsync(new MessageBoxViewModel(result.Item2.Message, string.Empty,
                     Enums.MessageBoxDilogButtons.Ok, true));
+
+                ConnectStatusResult =
+                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
+
+                ConnectStatusColor = new SolidColorBrush {Color = Colors.Red};
+            }
+            else
+            {
+                var answer = await CheckResponse(result.Item1);
+                    
+                ConnectStatusResult = answer
+                    ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
+                    : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
+
+                ConnectStatusColor = answer
+                    ? new SolidColorBrush { Color = Colors.Green }
+                    : new SolidColorBrush { Color = Colors.Red };
             }
         }
 
-        private async Task<(bool, string)> TesConnection(string pass)
+        private async Task<(TransmissionResponse, Exception)> TesConnection(string pass)
         {
             Log.Info("Start TestConnection");
             var scheme = SelectedServer.SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
@@ -218,17 +243,20 @@ namespace Kebler.ViewModels
 
                 var sessionInfo = await _client.GetSessionInformationAsync(CancellationToken.None);
 
-                return (await CheckResponse(sessionInfo.Response), string.Empty);
+                Log.Info("Test connection OK");
+                return (sessionInfo.Response, null);
             }
             catch (Exception ex)
             {
+                Log.Info("Test connection failed");
                 Log.Error(ex);
                 Crashes.TrackError(ex);
 
-                return (false, ex.Message);
+                return (null, ex);
             }
             finally
             {
+                Log.Info("Test connection end");
                 _client = null;
                 IsTesting = false;
             }

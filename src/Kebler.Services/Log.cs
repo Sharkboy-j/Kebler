@@ -32,12 +32,15 @@ namespace Kebler.Services
 
         public void Trace(TimeSpan time, int lineNumber = 0, string caller = "", string sourceFilePath = "")
         {
-            var data = Format($"Elapsed time {time}", LogType.Trace, lineNumber, caller, GetClassName(sourceFilePath));
-
-            Task.Run(() =>
+            if (ConfigService.Instanse.TraceEnabled)
             {
-                WriteToFile(data);
-            });
+                var data = Format($"Elapsed time {time}", LogType.Trace, lineNumber, caller, GetClassName(sourceFilePath));
+
+                Task.Run(() =>
+                {
+                    WriteToFile(data);
+                });
+            }
         }
 
         public void Warn(string message, [CallerLineNumber] int lineNumber = 0,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     {
-        
+
         /// <summary>
         /// Retry connect to server.
         /// </summary>
@@ -32,8 +33,8 @@ namespace Kebler.ViewModels
             _servers = GetServers();
             GetServerAndInitConnection();
         }
-        
-        
+
+
         /// <summary>
         /// Ask user for password using UI thread.
         /// </summary>
@@ -54,7 +55,7 @@ namespace Kebler.ViewModels
             return passwordResult ?? string.Empty;
         }
 
-        
+
         /// <summary>
         /// Get servers from storageRepository
         /// </summary>
@@ -63,8 +64,8 @@ namespace Kebler.ViewModels
             var bdServers = StorageRepository.GetServersList();
             return bdServers.FindAll().ToList();
         }
-        
-        
+
+
         /// <summary>
         /// Find server and init connection to him.
         /// </summary>
@@ -75,21 +76,21 @@ namespace Kebler.ViewModels
             _servers = GetServers();
 
 
-            if (!ServersList.Any()) 
+            if (!ServersList.Any())
                 return;
-            
-            
+
+
             if (_checkerTask is null)
             {
                 _checkerTask = GetLongChecker();
                 _checkerTask.Start();
             }
-            
+
             SelectedServer = SelectedServer ?? ServersList.First();
             TryConnect();
         }
-        
-        
+
+
         /// <summary>
         /// Try connect to selected server.
         /// </summary>
@@ -98,8 +99,8 @@ namespace Kebler.ViewModels
             Log.Info("Try initialize connection");
             IsErrorOccuredWhileConnecting = false;
             IsConnectedStatusText = LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_ConnectingText));
-            
-            if(SelectedServer != null)
+
+            if (SelectedServer != null)
             {
                 try
                 {
@@ -156,10 +157,10 @@ namespace Kebler.ViewModels
                     IsConnecting = false;
                 }
             }
-           
+
         }
-        
-        
+
+
         /// <summary>
         /// Start recursive polling the server.
         /// </summary>
@@ -169,9 +170,9 @@ namespace Kebler.ViewModels
             var token = _cancelTokenSource.Token;
             _whileCycleTask = new Task(async () =>
             {
-                if (_transmissionClient is null) 
+                if (_transmissionClient is null)
                     return;
-                
+
                 try
                 {
                     var info = await Get(
@@ -184,7 +185,7 @@ namespace Kebler.ViewModels
                         IsConnected = true;
                         Log.Info($"Connected {_sessionInfo.Version}");
                         ConnectedServer = SelectedServer;
-
+                        var st = new Stopwatch();
                         if (App.Instance.TorrentsToAdd.Count > 0)
                             OpenPaseedWithArgsFiles();
 
@@ -193,27 +194,37 @@ namespace Kebler.ViewModels
                             if (Application.Current?.Dispatcher != null &&
                                 Application.Current.Dispatcher.HasShutdownStarted)
                                 throw new TaskCanceledException();
+                            st.Start();
 
+                            if (_transmissionClient != null)
+                            {
+                                _stats = (await Get(
+                                    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
+                                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
 
-                            _stats = (await Get(
-                                _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
+                                allTorrents =
+                                    (await Get(
+                                        _transmissionClient.TorrentGetAsync(
+                                            TorrentFields.WORK,
+                                            _cancelTokenSource.Token),
+                                        LocalizationProvider.GetLocalizedValue(
+                                            nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
+                                _settings = (await Get(
+                                    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
+                                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
+                                ParseTransmissionServerSettings();
+                                ParseStats();
 
-                            allTorrents =
-                                (await Get(
-                                    _transmissionClient.TorrentGetAsync(
-                                        TorrentFields.WORK,
-                                        _cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(
-                                        nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
-                            _settings = (await Get(
-                                _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
-                            ParseTransmissionServerSettings();
-                            ParseStats();
-
-                            if (allTorrents.Clone() is TransmissionTorrents data)
-                                ProcessParsingTransmissionResponse(data);
+                                if (allTorrents.Clone() is TransmissionTorrents data)
+                                    ProcessParsingTransmissionResponse(data);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            st.Stop();
+                            Log.Trace(st.Elapsed);
+                            st.Reset();
 
                             await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                         }
@@ -256,7 +267,7 @@ namespace Kebler.ViewModels
 
             _whileCycleTask.Start();
         }
-        
+
         private bool IsResponseStatusOk(TransmissionResponse resp)
         {
             if (resp.WebException != null)
