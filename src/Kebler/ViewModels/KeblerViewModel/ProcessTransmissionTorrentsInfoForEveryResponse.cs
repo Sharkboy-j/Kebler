@@ -83,8 +83,6 @@ namespace Kebler.ViewModels
                 .ToArray().Length);
             _categoriesCount.Add(Enums.Categories.Ended, data.Torrents.Where(x => x.Status == 6).ToArray().Length);
 
-
-
             foreach (var cat in CategoriesList)
             {
                 var val = _categoriesCount[cat.Cat].ToString();
