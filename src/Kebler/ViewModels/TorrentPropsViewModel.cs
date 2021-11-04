@@ -79,10 +79,6 @@ namespace Kebler.ViewModels
             });
         }
 
-
-       
-
-
         public void Cancel()
         {
             TryCloseAsync();

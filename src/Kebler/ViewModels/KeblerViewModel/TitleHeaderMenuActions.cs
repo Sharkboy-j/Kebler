@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using Kebler.Const;
 using Kebler.Models;
 using Kebler.Services;
-using LiteDB;
+
 // ReSharper disable once CheckNamespace
 
 namespace Kebler.ViewModels

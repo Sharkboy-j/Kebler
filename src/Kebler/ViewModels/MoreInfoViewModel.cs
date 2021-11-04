@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
@@ -19,7 +16,7 @@ using Kebler.TransmissionCore;
 using Kebler.Views;
 using Microsoft.VisualBasic;
 using static Kebler.Models.Messages;
-using Strings = Kebler.Resources.Strings;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 

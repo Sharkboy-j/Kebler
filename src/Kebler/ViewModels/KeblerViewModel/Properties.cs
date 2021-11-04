@@ -1,11 +1,5 @@
 ﻿using Kebler.Models;
-using Kebler.Resources;
-using Kebler.Services;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
 using Caliburn.Micro;
 
 namespace Kebler.ViewModels
