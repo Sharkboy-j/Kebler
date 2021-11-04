@@ -310,7 +310,7 @@
         /// <returns>
         /// True if OK was pressed.
         /// </returns>
-        public bool? ShowDialog()
+        public bool ShowDialog()
         {
             return PInvokeSHBrowseForFolder(null);
         }
@@ -322,7 +322,7 @@
         /// <returns>
         /// True if OK was pressed.
         /// </returns>
-        public bool? ShowDialog(Window owner)
+        public bool ShowDialog(Window owner)
         {
             return PInvokeSHBrowseForFolder(owner);
         }
@@ -433,7 +433,7 @@
         /// <returns>
         /// True if OK was pressed.
         /// </returns>
-        private bool? PInvokeSHBrowseForFolder(Window owner)
+        private bool PInvokeSHBrowseForFolder(Window owner)
         {
             WindowInteropHelper windowhelper;
             if (null != owner)

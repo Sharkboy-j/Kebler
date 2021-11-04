@@ -56,7 +56,7 @@ namespace Kebler.ViewModels
             ServerList.Clear();
             ServerList.AddRange(items);
 
-            ServerIndex = selectedId != -1 ? selectedId : 0;
+            ServerIndex = selectedId != -1  ? selectedId : 0;
         }
 
 
@@ -113,8 +113,8 @@ namespace Kebler.ViewModels
 
             if (ValidateServer(SelectedServer, out var error))
             {
-                SelectedServer.Password = SelectedServer.AskForPassword
-                    ? string.Empty
+                SelectedServer.Password = SelectedServer.AskForPassword?
+                     string.Empty
                     : SecureStorage.EncryptString(_view.pwd.Password);
 
                 var res = _dbServersList.Upsert(SelectedServer);
@@ -217,12 +217,12 @@ namespace Kebler.ViewModels
             {
                 var answer = await CheckResponse(result.Item1);
                     
-                ConnectStatusResult = answer
-                    ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
+                ConnectStatusResult = answer?
+                     LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
                     : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
 
-                ConnectStatusColor = answer
-                    ? new SolidColorBrush { Color = Colors.Green }
+                ConnectStatusColor = answer?
+                     new SolidColorBrush { Color = Colors.Green }
                     : new SolidColorBrush { Color = Colors.Red };
             }
         }
@@ -236,8 +236,8 @@ namespace Kebler.ViewModels
 
             try
             {
-                var user = SelectedServer.AuthEnabled ? SelectedServer.UserName : null;
                 var pswd = SelectedServer.AuthEnabled ? pass ?? _view.pwd.Password : null;
+                var user = SelectedServer.AuthEnabled ? SelectedServer.UserName : null;
 
                 _client = new TransmissionClient(uri.Uri.AbsoluteUri, null, user, pswd);
 

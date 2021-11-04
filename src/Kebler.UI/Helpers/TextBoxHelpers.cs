@@ -197,10 +197,10 @@ namespace Kebler.UI.Helpers
 
         public static decimal? GetMinValue(DependencyObject obj)
         {
-            return (decimal?) obj.GetValue(MinValue);
+            return (decimal?)obj.GetValue(MinValue);
         }
 
-        public static void SetMinValue(DependencyObject obj, decimal? value)
+        public static void SetMinValue(DependencyObject obj, decimal value)
         {
             obj.SetValue(MinValue, value);
         }
@@ -229,7 +229,7 @@ namespace Kebler.UI.Helpers
             return (decimal?) obj.GetValue(MaxValue);
         }
 
-        public static void SetMaxValue(DependencyObject obj, decimal? value)
+        public static void SetMaxValue(DependencyObject obj, decimal value)
         {
             obj.SetValue(MaxValue, value);
         }

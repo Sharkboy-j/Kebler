@@ -18,7 +18,7 @@ namespace Kebler.Update.Core
 
                     return new Tuple<bool, Release>(currentVersion < release.name, release);
                 }
-                catch (Exception ex)
+                catch
                 {
                     return new Tuple<bool, Release>(false, null);
                 }
@@ -32,7 +32,7 @@ namespace Kebler.Update.Core
                     var release = await gitHub.GetLatestReleaseJSONAsync(user, repository);
                     return new Tuple<bool, Release>(currentVersion < release.name, release);
                 }
-                catch (Exception ex)
+                catch
                 {
                     return new Tuple<bool, Release>(false, null);
                 }

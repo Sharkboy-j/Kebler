@@ -10,7 +10,7 @@ namespace Kebler.Services
 {
     public static class LocalizationManager
     {
-        private static List<CultureInfo>? _cultureList;
+        private static List<CultureInfo> _cultureList;
         private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
 
         private static CultureInfo _currentCulture = new CultureInfo("en");
@@ -54,7 +54,7 @@ namespace Kebler.Services
         }
 
 
-        private static void SetCurrentThreadCulture(CultureInfo? culture)
+        private static void SetCurrentThreadCulture(CultureInfo culture)
         {
             try
             {

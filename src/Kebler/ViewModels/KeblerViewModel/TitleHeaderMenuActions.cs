@@ -24,7 +24,7 @@ namespace Kebler.ViewModels
         /// <param name="cultureList">Cultures.</param>
         /// <param name="languageChanged">Event, that will be raised.</param>
         /// <returns><see cref="IEnumerable{T}"/> where T is <see cref="System.Windows.Controls.MenuItem"/></returns>
-        public IEnumerable<System.Windows.Controls.MenuItem> InitMenu(
+        public IEnumerable<MenuItem> InitMenu(
             IEnumerable<CultureInfo> cultureList,
             RoutedEventHandler languageChanged,
             CultureInfo checkingLanguage)
@@ -40,7 +40,7 @@ namespace Kebler.ViewModels
             }
 
 
-            var languages = new List<System.Windows.Controls.MenuItem>();
+            var languages = new List<MenuItem>();
 
             foreach (var item in cultureList)
             {
@@ -66,7 +66,7 @@ namespace Kebler.ViewModels
         /// <summary>
         /// Reinitialise servers.
         /// </summary>
-        public IEnumerable<System.Windows.Controls.MenuItem> ReInitServers(
+        public IEnumerable<MenuItem> ReInitServers(
             IEnumerable<Server> dbServers,
             RoutedEventHandler serverClicked)
         {
@@ -80,7 +80,7 @@ namespace Kebler.ViewModels
                 throw new ArgumentNullException(nameof(serverClicked));
             }
 
-            var servers = new List<System.Windows.Controls.MenuItem>();
+            var servers = new List<MenuItem>();
 
             foreach (var server in dbServers)
             {

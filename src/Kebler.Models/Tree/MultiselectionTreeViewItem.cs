@@ -183,7 +183,7 @@ namespace Kebler.Models.Tree
         {
         }
 
-        protected virtual IDataObject? GetDataObject(MultiselectionTreeViewItem[] nodes)
+        protected virtual IDataObject GetDataObject(MultiselectionTreeViewItem[] nodes)
         {
             return null;
         }
@@ -194,7 +194,7 @@ namespace Kebler.Models.Tree
                 yield return node.ParentItem;
         }
 
-        public MultiselectionTreeViewItem? Previous()
+        public MultiselectionTreeViewItem Previous()
         {
             var treeFlattener = GetListRoot()._treeFlattener;
             if (treeFlattener == null) return null;
@@ -206,7 +206,7 @@ namespace Kebler.Models.Tree
             return null;
         }
 
-        public MultiselectionTreeViewItem? Next()
+        public MultiselectionTreeViewItem Next()
         {
             var treeFlattener = GetListRoot()._treeFlattener;
             if (treeFlattener == null) return null;

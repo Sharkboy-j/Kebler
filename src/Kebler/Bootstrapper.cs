@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using Kebler.Services;
@@ -49,7 +50,9 @@ namespace Kebler
             await DisplayRootViewFor<KeblerViewModel>();
 
 #if RELEASE
-            await Updater.CheckUpdates();
+#pragma warning disable 4014
+            Task.Run(Updater.CheckUpdates);
+#pragma warning restore 4014
 #endif
         }
 

@@ -9,8 +9,8 @@ namespace Kebler.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var res = (bool) value
-                ? Application.Current.FindResource("Icon.SnailColor")
+            var res = (bool) value ?
+                 Application.Current.FindResource("Icon.SnailColor")
                 : Application.Current.FindResource("Icon.SnailFill");
             return res;
         }

@@ -24,7 +24,7 @@ namespace Kebler.ViewModels
         private BindableCollection<TransmissionTorrentTrackers> _trackers = new BindableCollection<TransmissionTorrentTrackers>();
 
         private int _trackerIndex;
-        private TransmissionTorrentTrackers? _selectedTracker;
+        private TransmissionTorrentTrackers _selectedTracker;
         private readonly IWindowManager _manager = new WindowManager();
 
 
@@ -255,7 +255,7 @@ namespace Kebler.ViewModels
             set => Set(ref _trackerIndex, value);
         }
 
-        public TransmissionTorrentTrackers? SelectedTracker
+        public TransmissionTorrentTrackers SelectedTracker
         {
             get => _selectedTracker;
             set => Set(ref _selectedTracker, value);

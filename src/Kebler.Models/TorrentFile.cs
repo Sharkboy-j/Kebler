@@ -12,7 +12,7 @@ namespace Kebler.Models
             get { return _children; }
         }
 
-        public TorrentFile? Parent;
+        public TorrentFile Parent;
 
         public string Name { get; set; }
         public int Id { get; set; }

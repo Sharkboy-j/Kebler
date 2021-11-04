@@ -16,10 +16,10 @@ namespace Kebler.ViewModels
         private object _value;
         private int _selectedIndex;
         private IEnumerable<object> _values;
-        private string? _emptyText;
+        private string _emptyText;
 
         public DialogBoxViewModel(string message, string boxHint, bool isPassword,
-            Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel, string? emptyText = null)
+            Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel, string emptyText = null)
         {
             ShowPasswordBox = isPassword;
             ShowTextBox = !ShowPasswordBox;

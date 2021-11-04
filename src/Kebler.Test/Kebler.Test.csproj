@@ -7,7 +7,7 @@
 
     <Configurations>Debug;Release;Portable</Configurations>
 
-    <Nullable>enable</Nullable>
+   
 
     <Platforms>x64</Platforms>
   </PropertyGroup>

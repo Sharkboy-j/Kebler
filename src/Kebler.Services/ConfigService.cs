@@ -9,7 +9,7 @@ namespace Kebler.Services
     public static class ConfigService
     {
         public static bool IsInited;
-        private static Kebler.Services.Interfaces.ILog Log;
+        private static Interfaces.ILog Log;
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;

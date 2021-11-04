@@ -39,11 +39,11 @@ namespace Kebler.ViewModels
 
                 var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
                 var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-                var altUp = _settings?.AlternativeSpeedEnabled == true
-                    ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
+                var altUp = _settings?.AlternativeSpeedEnabled == true ?
+                     $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
                     : string.Empty;
-                var altD = _settings?.AlternativeSpeedEnabled == true
-                    ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
+                var altD = _settings?.AlternativeSpeedEnabled == true ?
+                     $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
                     : string.Empty;
 
                 DownloadSpeed = $"D: {dSpeed}{altD}";

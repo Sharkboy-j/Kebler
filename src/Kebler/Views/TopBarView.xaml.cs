@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using Kebler.Dialogs;
 using Kebler.Services;
@@ -33,12 +34,12 @@ namespace Kebler.Views
             dialog.ShowDialog();
         }
 
-        private async void Check(object sender, RoutedEventArgs e)
+        private void Check(object sender, RoutedEventArgs e)
         {
 #if RELEASE
             App.Log.Ui(nameof(Check));
 
-            await Updater.CheckUpdates();
+            Task.Run(Updater.CheckUpdates);
 #endif
         }
 

@@ -47,7 +47,7 @@ namespace Kebler.Models
 
                 var uri = new UriBuilder(scheme, Host, Port, RpcPath);
 
-                //var type = SslEnabled ? "https://" : "http://";
+                //var type = SslEnabled  "https://" : "http://";
 
                 //if (!RpcPath.StartsWith("/")) RpcPath = $"/{RpcPath}";
                 //var uri = $"{type}{Host}:{Port}{RpcPath}";
