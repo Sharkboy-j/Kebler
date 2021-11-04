@@ -13,6 +13,7 @@
     using Services;
     using Kebler.Update.Core;
     using ViewModels;
+    using System.Threading.Tasks;
 #endif
 
     internal static class Updater
@@ -36,12 +37,18 @@
                 App.Instance.IsUpdateReady = result.Item1;
                 if (result.Item1)
                 {
-                    var mgr = new WindowManager();
-                    var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate));
-                    var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(lt.Replace("%d", result.Item2.tag_name), string.Empty,
-                        Enums.MessageBoxDilogButtons.YesNo, true));
-                    if (dialogres == true)
-                        InstallUpdates();
+
+                    await Application.Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        var mgr = new WindowManager();
+
+                        var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate));
+
+                        var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(lt.Replace("%d", result.Item2.tag_name), string.Empty,
+                          Enums.MessageBoxDilogButtons.YesNo, true));
+                        if (dialogres == true)
+                            await Task.Run(InstallUpdates);
+                    })
                 }
             }
             catch (Exception ex)

@@ -65,66 +65,66 @@ namespace Kebler.Styles.Window
 
         protected CustomizableWindow()
         {
-            
-                SetResourceReference(StyleProperty, typeof(CustomizableWindow));
-                var chrome = new WindowChrome
-                {
-                    CornerRadius = new CornerRadius(),
-                    GlassFrameThickness = new Thickness(0.0, 0.0, 0.0, 1.0),
-                    UseAeroCaptionButtons = false,
-                    ResizeBorderThickness = new Thickness(5)
-                };
-                BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(nameof(HeaderHeight))
-                {
-                    Source = this
-                });
-                WindowChrome.SetWindowChrome(this, chrome);
-                _padding = Padding;
-                Loaded += Onload;
-                RenderSize = new Size(250, 250);
-           
-           
+
+            SetResourceReference(StyleProperty, typeof(CustomizableWindow));
+            var chrome = new WindowChrome
+            {
+                CornerRadius = new CornerRadius(),
+                GlassFrameThickness = new Thickness(0.0, 0.0, 0.0, 1.0),
+                UseAeroCaptionButtons = false,
+                ResizeBorderThickness = new Thickness(5)
+            };
+            BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(nameof(HeaderHeight))
+            {
+                Source = this
+            });
+            WindowChrome.SetWindowChrome(this, chrome);
+            _padding = Padding;
+            Loaded += Onload;
+            RenderSize = new Size(250, 250);
+
+
         }
 
 
         public double HeaderHeight
         {
-            get => (double) GetValue(HeaderHeightProperty);
+            get => (double)GetValue(HeaderHeightProperty);
             private set => SetValue(HeaderHeightProperty, value);
         }
 
         public bool FullScreen
         {
-            get => (bool) GetValue(FullScreenProperty);
+            get => (bool)GetValue(FullScreenProperty);
             set => SetValue(FullScreenProperty, value);
         }
 
         public bool ShowHeaderLine
         {
-            get => (bool) GetValue(ShowHeaderLineProperty);
+            get => (bool)GetValue(ShowHeaderLineProperty);
             set => SetValue(ShowHeaderLineProperty, value);
         }
 
         public Visibility HeaderVisibility
         {
-            get => (Visibility) GetValue(HeaderVisibilityProperty);
+            get => (Visibility)GetValue(HeaderVisibilityProperty);
             set => SetValue(HeaderVisibilityProperty, value);
         }
 
         public bool HideMinimizeMaximizeButtons
         {
-            get => (bool) GetValue(HideMinimizeMaximizeButtonsProperty);
+            get => (bool)GetValue(HideMinimizeMaximizeButtonsProperty);
             set => SetValue(HideMinimizeMaximizeButtonsProperty, value);
         }
 
         public bool IsTitleVisible
         {
-            get => (bool) GetValue(IsTitleVisibleProperty);
+            get => (bool)GetValue(IsTitleVisibleProperty);
             set => SetValue(IsTitleVisibleProperty, value);
         }
 
         private static Thickness WindowMaximizedPadding =>
-            new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8,8,8,8);
+            new Thickness(WindowLocationStateExtensions.AutoHideEnabled() ? 0.0 : 8, 8, 8, 8);
 
 
         protected override void OnContentRendered(EventArgs e)
@@ -258,7 +258,7 @@ namespace Kebler.Styles.Window
             DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            ((CustomizableWindow) d).SwitchIsFullScreen((bool) e.NewValue);
+            ((CustomizableWindow)d).SwitchIsFullScreen((bool)e.NewValue);
         }
 
         private void SwitchIsFullScreen(bool isFullScreen)
