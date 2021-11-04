@@ -131,7 +131,7 @@
         /// <summary>
         ///     Strings of announce URLs to add
         /// </summary>
-        public string[]? TrackerAdd
+        public string[] TrackerAdd
         {
             get => GetValue<string[]>("trackerAdd");
             set => this["trackerAdd"] = value;
@@ -140,7 +140,7 @@
         /// <summary>
         ///     Ids of trackers to remove
         /// </summary>
-        public uint[]? TrackerRemove
+        public uint[] TrackerRemove
         {
             get => GetValue<uint[]>("trackerRemove");
             set => this["trackerRemove"] = value;

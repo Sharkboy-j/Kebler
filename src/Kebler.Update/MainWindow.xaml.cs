@@ -124,8 +124,8 @@ namespace Kebler.Update
             }
             else
             {
-                string? getEnv = null;
-                Version? current = null;
+                string getEnv = null;
+                Version current = null;
                 getEnv = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
 
                 if (!string.IsNullOrEmpty(getEnv))
@@ -182,7 +182,7 @@ namespace Kebler.Update
             StartDownlaod(updateUrl);
         }
 
-        private void StartDownlaod(string? uri)
+        private void StartDownlaod(string uri)
         {
 
             if (string.IsNullOrEmpty(uri))
@@ -201,7 +201,7 @@ namespace Kebler.Update
             _webClient.DownloadFileAsync(new Uri(uri), tempfile);
         }
 
-        private void _webClient_DownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+        private void _webClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             try
             {
@@ -279,7 +279,7 @@ namespace Kebler.Update
             return $"{(Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture)} {suf[place]}";
         }
 
-        private void CustomizableWindow_Closing(object? sender, CancelEventArgs? e)
+        private void CustomizableWindow_Closing(object sender, CancelEventArgs e)
         {
 
 

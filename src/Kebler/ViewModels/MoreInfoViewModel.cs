@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using Caliburn.Micro;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
@@ -19,7 +16,7 @@ using Kebler.TransmissionCore;
 using Kebler.Views;
 using Microsoft.VisualBasic;
 using static Kebler.Models.Messages;
-using Strings = Kebler.Resources.Strings;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -35,7 +32,7 @@ namespace Kebler.ViewModels
         private DateTime _addedOn, _createdOn, _completedOn;
         private long _downloaded, _downloadSpeed, _uploadSpeed, _uploaded, _remaining, _size;
 
-        private string? _downloadLimit,
+        private string _downloadLimit,
             _uploadLimit,
             _seeds,
             _error,
@@ -55,15 +52,15 @@ namespace Kebler.ViewModels
         private IEnumerable<TransmissionTorrentPeers> _peers = new TransmissionTorrentPeers[0];
         private double _percentDone;
         private int _selectedCount, _maxPeers;
-        private IList? _selectedTrackers;
+        private IList _selectedTrackers;
         private int _status, _piecesCount;
-        private TorrentInfo? _ti;
+        private TorrentInfo _ti;
         private Visibility _formsVisibility;
         private bool _isShowMoreInfoCheck;
         private BindableCollection<TransmissionTorrentTrackerStats> _trackerStats =
             new BindableCollection<TransmissionTorrentTrackerStats>();
 
-        private uint[]? id;
+        private uint[] id;
 
 
         public IList SelectedTrackers
@@ -300,11 +297,11 @@ namespace Kebler.ViewModels
         //static CancellationToken _token;
 
         KeblerView view;
-        static FilesModel? model;
-        private static TransmissionClient? _client;
+        static FilesModel model;
+        private static TransmissionClient _client;
         IEventAggregator _eventAggregator;
         Action<bool> hide;
-        public MoreInfoViewModel(KeblerView view, Action<bool>? unselect, IEventAggregator eventAggregator)
+        public MoreInfoViewModel(KeblerView view, Action<bool> unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
             Log = Kebler.Services.Log.Instance;
@@ -340,7 +337,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public void Update(uint[] ids, TransmissionClient? client, CancellationToken token)
+        public void Update(uint[] ids, TransmissionClient client, CancellationToken token)
         {
             if (token.IsCancellationRequested)
                 return;
@@ -349,7 +346,7 @@ namespace Kebler.ViewModels
             model = null;
             source = new CancellationTokenSource();
             _client = client;
-            this.id = ids;
+            id = ids;
 
             FormsVisibility = Visibility.Collapsed;
 
@@ -391,7 +388,7 @@ namespace Kebler.ViewModels
                             PiecesCount = _ti.PieceCount;
                             PercentDone = _ti.PercentDone;
 
-                            var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
+                            var decodedPices = _piecesBase64.Length > 0  ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
                             OnUIThread(() =>
                             {
                                 view.MoreView.Pieces.Init(decodedPices, _ti.PieceCount, DonePices);
@@ -410,11 +407,11 @@ namespace Kebler.ViewModels
                         if (_ti.TrackerStats.Count() > 0)
                         {
                             Seeds =
-                                $"{_ti.PeersSendingToUs} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsOF))}" +
-                                $" {_ti.TrackerStats.Max(x => x.SeederCount)} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsConnected))}";
+                                $"{_ti.PeersSendingToUs} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsOF))}" +
+                                $" {_ti.TrackerStats.Max(x => x.SeederCount)} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsConnected))}";
                             PeersCount =
-                                $"{_ti.PeersConnected} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsOF))}" +
-                                $" {_ti.TrackerStats.Max(x => x.LeecherCount)} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_webSeedsConnected))}";
+                                $"{_ti.PeersConnected} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsOF))}" +
+                                $" {_ti.TrackerStats.Max(x => x.LeecherCount)} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_webSeedsConnected))}";
                         }
 
                         Error = Utils.GetErrorString(_ti);
@@ -427,7 +424,7 @@ namespace Kebler.ViewModels
 
                         //var home = Application.Current.Resources;
 
-                        Wasted = $"({_ti.CorruptEver} {LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.TI_hashfails))})";
+                        Wasted = $"({_ti.CorruptEver} {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.TI_hashfails))})";
                         Ratio = $"{_ti.UploadRatio}";
                         MaxPeers = _ti.MaxConnectedPeers;
 
@@ -519,7 +516,7 @@ namespace Kebler.ViewModels
             if (trackers.Any())
             {
                 var mgr = IoC.Get<IWindowManager>();
-                var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.DialogBox_RemoveTracker)),
+                var result = await mgr.ShowDialogAsync(new RemoveListDialogViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.DialogBox_RemoveTracker)),
                     trackers.Select(x => x.announce)));
 
                 if (result == true && _client != null)
@@ -557,7 +554,7 @@ namespace Kebler.ViewModels
             var ids = id;
             var mgr = IoC.Get<IWindowManager>();
 
-            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Kebler.Resources.Strings.AddTrackerTitile)), string.Empty, false);
+            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.AddTrackerTitile)), string.Empty, false);
             var result = await mgr.ShowDialogAsync(dialog);
 
             if (result == true && _client != null)

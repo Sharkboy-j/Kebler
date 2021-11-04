@@ -125,8 +125,8 @@ namespace Kebler.ViewModels
                         _transmissionClient = new TransmissionClient(
                             url: SelectedServer.FullUriPath,
                             login: SelectedServer.UserName,
-                            password: SelectedServer.AskForPassword
-                                ? password
+                            password: SelectedServer.AskForPassword?
+                                 password
                                 : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
                         Log.Info("TransmissionClient object created");
 

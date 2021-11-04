@@ -5,7 +5,7 @@ namespace Kebler.SI
 {
     internal static class SerializationExtensions
     {
-        private static readonly BinaryFormatter Formatter = new BinaryFormatter();
+        private static readonly BinaryFormatter Formatter = new();
 
         internal static byte[] Serialize<T>(this T obj)
         {

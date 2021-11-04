@@ -138,7 +138,7 @@ namespace Kebler.Services
                     }
                 }
             }
-            catch(Exception ex)
+            catch
             {
 
             }
@@ -155,7 +155,7 @@ namespace Kebler.Services
                 return (array[index >> 3] & (1 << ((7 - index) & 7))) != 0;
 
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

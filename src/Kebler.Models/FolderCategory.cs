@@ -39,7 +39,7 @@ namespace Kebler.Models
             }
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is FolderCategory cat) return cat.FullPath.Equals(FullPath);
             return false;

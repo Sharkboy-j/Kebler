@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -109,7 +107,7 @@ namespace Kebler.ViewModels
 
             var menus = InitMenu(LocalizationManager.CultureList, LanguageChanged, Thread.CurrentThread.CurrentCulture);
 
-            Languages = new BindableCollection<System.Windows.Controls.MenuItem>(menus);
+            Languages = new BindableCollection<MenuItem>(menus);
             Servers = new BindableCollection<MenuItem>(ReInitServers(StorageRepository.GetServersList().FindAll() ?? new List<Server>(), ServerClicked));
 
             SelectedFolderIndex = -1;
@@ -423,7 +421,7 @@ namespace Kebler.ViewModels
                     _view.MoreInfoColumn.MinHeight = 300D;
                     _view.MoreInfoColumn.Height = new GridLength(_oldMoreInfoColumnHeight);
                     //ConfigService.Instanse.MoreInfoHeight >= DefaultSettings.MoreInfoColumnMaxHeight
-                    //    ? new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
+                    //     new GridLength(DefaultSettings.MoreInfoColumnMaxHeight)
                     //    : new GridLength(ConfigService.Instanse.MoreInfoHeight);
                     //_view.MoreInfoColumn.MaxHeight = DefaultSettings.MoreInfoColumnMaxHeight;
                 }
@@ -596,8 +594,8 @@ namespace Kebler.ViewModels
         {
             if (IsConnected && SelectedTorrent != null)
             {
-                var question = SelectedTorrents.Length > 1
-                    ? LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocForMany)).Replace("%d", selectedIDs.Length.ToString())
+                var question = SelectedTorrents.Length > 1?
+                     LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocForMany)).Replace("%d", selectedIDs.Length.ToString())
                     : LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocOnce));
 
                 var path = SelectedTorrent.DownloadDir;
@@ -625,7 +623,7 @@ namespace Kebler.ViewModels
 
         public void Pause() => Pause(null);
 
-        public async void Pause(uint[]? ids)
+        public async void Pause(uint[] ids)
         {
             if (IsConnected && _transmissionClient != null)
             {
@@ -687,7 +685,7 @@ namespace Kebler.ViewModels
 
         public void Start() => Start(null);
 
-        public async void Start(uint[]? ids)
+        public async void Start(uint[] ids)
         {
             if (IsConnected && _transmissionClient != null)
             {
@@ -723,7 +721,7 @@ namespace Kebler.ViewModels
                         var tor = TorrentList.FirstOrDefault(x => x.Id == item);
                         if (tor != null)
                         {
-                            tor.Status = tor.PercentDone == 1 ? 6 : 4;
+                            tor.Status = tor.PercentDone == 1  ?6 : 4;
                         }
                     }
                 }
@@ -1054,47 +1052,47 @@ namespace Kebler.ViewModels
         private readonly IWindowManager manager = new WindowManager();
         private readonly object syncObjKeys = new object();
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
-        private Task? _checkerTask;
-        private Server? _ConnectedServer;
+        private Task _checkerTask;
+        private Server _ConnectedServer;
 
 
         private Enums.Categories _filterCategory;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
-        private string? _isConnectedStatusText;
+        private string _isConnectedStatusText;
         private bool _isConnecting, _isDoingStuff, _isConnected, _isErrorOccuredWhileConnecting, _isSlowModeEnabled;
         private bool _isLongTaskRunning, isShowMoreInfo, _isAddWindOpened;
 
-        private string? _uploadSpeed, _downloadSpeed, _filterText, _longStatusText;
+        private string _uploadSpeed, _downloadSpeed, _filterText, _longStatusText;
 
-        private BindableCollection<System.Windows.Controls.MenuItem> _languages = new BindableCollection<System.Windows.Controls.MenuItem>();
+        private BindableCollection<MenuItem> _languages = new BindableCollection<MenuItem>();
         private DateTimeOffset _longActionTimeStart;
         private CancellationTokenSource _moreInfoCancelTokeSource = new CancellationTokenSource();
         private double _MoreInfoColumnHeight, _oldMoreInfoColumnHeight, _minMoreInfoColumnHeight;
 
-        private StatusCategory? _selectedCat;
+        private StatusCategory _selectedCat;
         private int _selectedCategoryIndex = -1;
-        private FolderCategory? _selectedFolder;
+        private FolderCategory _selectedFolder;
         private int _selectedFolderIndex;
-        private Server? _SelectedServer;
-        private TorrentInfo? _selectedTorrent;
-        private List<Server>? _servers;
-        private SessionInfo? _sessionInfo;
-        private SessionSettings? _settings;
+        private Server _SelectedServer;
+        private TorrentInfo _selectedTorrent;
+        private List<Server> _servers;
+        private SessionInfo _sessionInfo;
+        private SessionSettings _settings;
         private WindowState _state;
         private Statistic _stats;
         private Bind<TorrentInfo> _torrentList = new Bind<TorrentInfo>();
-        private TransmissionClient? _transmissionClient;
+        private TransmissionClient _transmissionClient;
         private bool _isChangingLang;
 
-        private static KeblerView? _view;
+        private static KeblerView _view;
 
-        //private Task? _whileCycleMoreInfoTask;
-        private Task? _whileCycleTask;
+        //private Task _whileCycleMoreInfoTask;
+        private Task _whileCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private bool requested;
         private uint[] selectedIDs;
         private TorrentInfo[] SelectedTorrents = new TorrentInfo[0];
-        private BindableCollection<System.Windows.Controls.MenuItem> servers = new BindableCollection<System.Windows.Controls.MenuItem>();
+        private BindableCollection<MenuItem> servers = new BindableCollection<MenuItem>();
 
         public ICommand ShowConnectionManagerCommand => new DelegateCommand(ShowConnectionManager);
         public ICommand AddCommand => new DelegateCommand(Add);
@@ -1113,7 +1111,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public MoreInfoViewModel? MoreInfoView { get; set; }
+        public MoreInfoViewModel MoreInfoView { get; set; }
 
         public BindableCollection<FolderCategory> Categories
         {
@@ -1121,19 +1119,19 @@ namespace Kebler.ViewModels
             set => Set(ref _folderCategory, value);
         }
 
-        public BindableCollection<System.Windows.Controls.MenuItem> Languages
+        public BindableCollection<MenuItem> Languages
         {
             get => _languages;
             set => Set(ref _languages, value);
         }
 
-        public BindableCollection<System.Windows.Controls.MenuItem> Servers
+        public BindableCollection<MenuItem> Servers
         {
             get => servers;
             set => Set(ref servers, value);
         }
 
-        public TorrentInfo? SelectedTorrent
+        public TorrentInfo SelectedTorrent
         {
             get => _selectedTorrent;
             set => Set(ref _selectedTorrent, value);
@@ -1178,7 +1176,7 @@ namespace Kebler.ViewModels
             set => Set(ref _isConnected, value);
         }
 
-        public Server? SelectedServer
+        public Server SelectedServer
         {
             get => _SelectedServer;
             set => Set(ref _SelectedServer, value);
@@ -1190,7 +1188,7 @@ namespace Kebler.ViewModels
             set => Set(ref _isErrorOccuredWhileConnecting, value);
         }
 
-        public Server? ConnectedServer
+        public Server ConnectedServer
         {
             get => _ConnectedServer;
             set

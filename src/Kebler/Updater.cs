@@ -5,15 +5,14 @@
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
-    using System.Threading.Tasks;
     using System.Windows;
     using Caliburn.Micro;
-    using Kebler.Const;
-    using Kebler.Models;
-    using Kebler.Resources;
-    using Kebler.Services;
+    using Const;
+    using Models;
+    using Resources;
+    using Services;
     using Kebler.Update.Core;
-    using Kebler.ViewModels;
+    using ViewModels;
 #endif
 
     internal static class Updater
@@ -22,10 +21,10 @@
 
         private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
 
-        public static async Task CheckUpdates()
+        public static async void CheckUpdates()
         {
 
-     Log.Info("Check updates");
+            Log.Info("Start check updates");
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
@@ -38,10 +37,10 @@
                 if (result.Item1)
                 {
                     var mgr = new WindowManager();
-                    var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate)); 
+                    var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate));
                     var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(lt.Replace("%d", result.Item2.tag_name), string.Empty,
                         Enums.MessageBoxDilogButtons.YesNo, true));
-                    if (dialogres == true) 
+                    if (dialogres == true)
                         InstallUpdates();
                 }
             }
@@ -49,17 +48,15 @@
             {
                 App.Instance.IsUpdateReady = false;
                 Log.Error(ex);
-                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
             }
+        }
 
-    }
-
-    public static void InstallUpdates()
+        public static void InstallUpdates()
         {
             Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
             File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
 
-            using (Process process = new Process())
+            using (var process = new Process())
             {
                 var info = new ProcessStartInfo
                 {

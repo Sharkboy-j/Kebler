@@ -7,13 +7,16 @@ namespace Kebler.Test.Kebler.ViewModels.KeblerViewModel
     internal class KeblerViewModel
     {
 
-        private readonly global::Kebler.ViewModels.KeblerViewModel keblerViewModel;
+        //private readonly global::Kebler.ViewModels.KeblerViewModel keblerViewModel;
 
         [Test]
         public void Test_InitViwModel_ShouldThrow()
         {
             //Assert
-            Assert.Throws<ArgumentNullException>(() => new global::Kebler.ViewModels.KeblerViewModel(default!));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var model = new global::Kebler.ViewModels.KeblerViewModel(default!);
+            });
         }
     }
 }

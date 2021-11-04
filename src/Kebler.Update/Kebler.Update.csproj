@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>Installer</AssemblyName>
 	  <ApplicationIcon>Kebler.ico</ApplicationIcon>
-	  <Nullable>enable</Nullable>
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
 	<PropertyGroup>

@@ -6,7 +6,7 @@ namespace Kebler.ViewModels
 {
     public class MessageBoxViewModel : BoxViewModel
     {
-        public MessageBoxViewModel(string message, string? title = null,
+        public MessageBoxViewModel(string message, string title = null,
             MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok, bool showLogo = false)
         {
             MinWidth = 350;
@@ -16,7 +16,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public static Task<bool?> ShowDialog(string msg, IWindowManager? manager = null, string? titile = "",
+        public static Task<bool?> ShowDialog(string msg, IWindowManager manager = null, string titile = "",
             MessageBoxDilogButtons buttons = MessageBoxDilogButtons.Ok)
         {
             var mgr = manager ?? new WindowManager();

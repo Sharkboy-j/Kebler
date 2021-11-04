@@ -13,9 +13,10 @@ namespace Kebler.TransmissionCore
             }
             catch (Exception e)
             {
-                if (e.InnerException != null) throw e.InnerException;
+                if (e.InnerException != null) 
+                    throw e.InnerException;
 
-                throw e;
+                throw;
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using Kebler.Models.Torrent;
-using Kebler.Services;
+﻿using Kebler.Services;
 using System.Linq;
 using System.Threading;
 // ReSharper disable MemberCanBePrivate.Global
@@ -73,6 +72,7 @@ namespace Kebler.ViewModels
 
         public void Properties()
         {
+            Log.Ui();
             Properties(null, null);
         }
     }

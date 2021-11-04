@@ -9,7 +9,6 @@ namespace Kebler.ViewModels
     using System;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
@@ -31,7 +30,7 @@ namespace Kebler.ViewModels
     {
         #region Properties
 
-        private readonly IEventAggregator? _eventAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
@@ -39,22 +38,22 @@ namespace Kebler.ViewModels
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
-        private FileInfo? _fileInfo;
+        private FileInfo _fileInfo;
         private BindableCollection<string> _dirs;
-        private SessionSettings? settings;
+        private SessionSettings settings;
         public AddTorrentResponse TorrentResult;
         public bool Result;
         private IEnumerable<TorrentInfo> _infos;
         private IEnumerable<(string, uint)> _torrents;
-        private string? _torrentPath, _downlaodDirPath;
+        private string _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
         private int _peerLimit, _uploadLimit, _downlaodDirIndex;
-        private ITreeModel _files;
+        //private ITreeModel _files;
         private Action<uint> _remove;
         private Visibility _resultVisibility = Visibility.Collapsed,
             _loadingGridVisibility = Visibility.Collapsed;
 
-        //private FilesTreeViewModel? _filesTree;
+        //private FilesTreeViewModel _filesTree;
 
         // ReSharper disable once MemberCanBePrivate.Global
         //public FilesTreeViewModel FilesTree
@@ -138,9 +137,9 @@ namespace Kebler.ViewModels
 
         #endregion
         KeblerView _wnd;
-        public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings,
+        public AddTorrentViewModel(string path, TransmissionClient transmissionClient, SessionSettings settings,
             IEnumerable<TorrentInfo> infos,
-            BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator,
+            BindableCollection<FolderCategory> folderCategory, IEventAggregator eventAggregator,
             IEnumerable<(string, uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
         {
             isWindOpened = true;

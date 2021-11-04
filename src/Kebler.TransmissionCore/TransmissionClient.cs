@@ -36,7 +36,7 @@ namespace Kebler.TransmissionCore
         /// <param name="sessionId">Session ID</param>
         /// <param name="login">Login</param>
         /// <param name="password">Password</param>
-        public TransmissionClient(string url, string? sessionId = default, string? login = default, string? password = default)
+        public TransmissionClient(string url, string sessionId = default, string login = default, string password = default)
         {
             Url = url;
             SessionId = sessionId;
@@ -58,7 +58,7 @@ namespace Kebler.TransmissionCore
         /// <summary>
         ///     Session ID
         /// </summary>
-        private string? SessionId { get; set; }
+        private string SessionId { get; set; }
 
         /// <summary>
         ///     Current Tag
@@ -318,8 +318,8 @@ namespace Kebler.TransmissionCore
             var response = await SendRequestAsync(request, token);
 
             var resp = response.WebException == null && response.HttpWebResponse == null &&
-                       response.CustomException == null
-                ? Enums.RemoveResult.Ok
+                       response.CustomException == null?
+                 Enums.RemoveResult.Ok
                 : Enums.RemoveResult.Error;
 
             return resp;

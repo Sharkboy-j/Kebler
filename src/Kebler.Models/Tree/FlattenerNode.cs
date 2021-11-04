@@ -173,8 +173,8 @@ namespace Kebler.Models.Tree
         private static void RebalanceUntilRoot(FlattenerNode pos)
         {
             for (; pos._Parent != null; pos = pos._Parent)
-                pos = pos != pos._Parent._left
-                    ? pos._Parent._right = Rebalance(pos)
+                pos = pos != pos._Parent._left ?
+                     pos._Parent._right = Rebalance(pos)
                     : pos._Parent._left = Rebalance(pos);
             var flattenerNode = Rebalance(pos);
             if (flattenerNode == pos || pos._treeFlattener == null)
@@ -390,8 +390,8 @@ namespace Kebler.Models.Tree
             public int IndexOf(object item)
             {
                 return item is MultiselectionTreeViewItem multiselectionTreeViewItem &&
-                       multiselectionTreeViewItem.IsVisible && multiselectionTreeViewItem.GetListRoot() == _root
-                    ? GetVisibleIndexForNode(multiselectionTreeViewItem) - 1
+                       multiselectionTreeViewItem.IsVisible && multiselectionTreeViewItem.GetListRoot() == _root ?
+                     GetVisibleIndexForNode(multiselectionTreeViewItem) - 1
                     : -1;
             }
 

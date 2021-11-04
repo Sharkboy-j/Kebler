@@ -13,7 +13,7 @@ namespace Kebler.UI.Controls
     public partial class Pieces : IDisposable
     {
         private byte[] pieces;
-        private Bitmap? bmp;
+        private Bitmap bmp;
         private int len;
         private Action done;
 
@@ -92,7 +92,7 @@ namespace Kebler.UI.Controls
                             else
                                 chunk_done = false;
 
-                            var fill = chunk_done ? 
+                            var fill = chunk_done  ?
                                   Color.FromArgb(0, 122, 204) :
                                   Color.FromArgb(50, 50, 50);
 

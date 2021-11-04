@@ -20,9 +20,9 @@ namespace Kebler.Views
 
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            if(DataContext is KeblerViewModel vm)
+            if (DataContext is KeblerViewModel vm)
             {
-               vm.SaveConfig();
+                vm.SaveConfig();
             }
         }
 
@@ -126,7 +126,12 @@ namespace Kebler.Views
 
         public static string GetPropertyName(DependencyObject obj)
         {
-            return (string)obj.GetValue(PropertyNameProperty);
+            if (obj is not null)
+            {
+                return obj.GetValue(PropertyNameProperty)?.ToString() ?? string.Empty;
+            }
+
+            return string.Empty;
         }
 
         public static void SetPropertyName(DependencyObject obj, string value)
@@ -152,7 +157,7 @@ namespace Kebler.Views
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
             if (headerClicked != null)
             {
-                string propertyName = GetPropertyName(headerClicked.Column);
+                var propertyName = GetPropertyName(headerClicked.Column);
                 if (!string.IsNullOrEmpty(propertyName))
                 {
                     ListView listView = GetAncestor<ListView>(headerClicked);
