@@ -62,7 +62,7 @@ namespace Kebler
             foreach (var arg in args)
             {
                 var fileInfo = new FileInfo(arg);
-                if (fileInfo.Extension.Equals(Const.ConstStrings.TORRENT_EXT)) 
+                if (fileInfo.Extension.Equals(Const.ConstStrings.TORRENT_EXT))
                     TorrentsToAdd.Add(fileInfo.FullName);
             }
 
@@ -94,12 +94,13 @@ namespace Kebler
         }
 
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
 #if RELEASE
             Microsoft.AppCenter.AppCenter.Start(AppcenterGuid, typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes));
             Microsoft.AppCenter.AppCenter.LogLevel = Microsoft.AppCenter.LogLevel.Verbose;
 #endif
+            _= await Microsoft.AppCenter.AppCenter.IsEnabledAsync();
 
 
             var isFirstInstance = SingleInstance<App>.InitializeAsFirstInstance(nameof(Kebler));

@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Services.Interfaces;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
 
 namespace Kebler.Services
 {
@@ -30,6 +32,7 @@ namespace Kebler.Services
 
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
                 WriteToFile(data);
             });
         }
@@ -42,6 +45,8 @@ namespace Kebler.Services
 
                 Task.Run(() =>
                 {
+                    Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                     WriteToFile(data);
                 });
             }
@@ -55,6 +60,8 @@ namespace Kebler.Services
 
                 Task.Run(() =>
                 {
+                    Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                     WriteToFile(data);
                 });
             }
@@ -64,9 +71,10 @@ namespace Kebler.Services
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
             var data = Format(message, LogType.Warn, lineNumber, caller, GetClassName(sourceFilePath));
-
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                 WriteToFile(data);
             });
         }
@@ -78,6 +86,8 @@ namespace Kebler.Services
 
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                 WriteToFile(data);
             });
 #if RELEASE
@@ -92,6 +102,8 @@ namespace Kebler.Services
 
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                 WriteToFile(data);
             });
 #if RELEASE
@@ -106,6 +118,8 @@ namespace Kebler.Services
 
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                 WriteToFile(data);
             });
         }
@@ -117,6 +131,8 @@ namespace Kebler.Services
 
             Task.Run(() =>
             {
+                Microsoft.AppCenter.Analytics.Analytics.TrackEvent(data);
+
                 WriteToFile(data);
             });
         }
