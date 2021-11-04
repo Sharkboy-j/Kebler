@@ -19,7 +19,7 @@ namespace Kebler.ViewModels
         {
             if (_transmissionClient != null)
             {
-                if (selectedIDs.ToArray() is uint[] ids && ids.Length > 0)
+                if (selectedIDs?.ToArray() is uint[] ids && ids.Length > 0)
                 {
                     manager.ShowDialogAsync(new TorrentPropsViewModel(
                         _transmissionClient,
