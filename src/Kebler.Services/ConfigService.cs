@@ -8,7 +8,8 @@ namespace Kebler.Services
 {
     public static class ConfigService
     {
-        private static Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
+        public static bool IsInited;
+        private static Kebler.Services.Interfaces.ILog Log;
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;
@@ -28,6 +29,8 @@ namespace Kebler.Services
 
         public static void LoadConfig()
         {
+            Log = Kebler.Services.Log.Instance;
+
             lock (_sync)
             {
                 if (IsExist())
@@ -37,12 +40,12 @@ namespace Kebler.Services
             }
 
             Log.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
+            IsInited = true;
         }
 
         private static void CreateNewConfig()
         {
             ConfigurationObj = new Configuration();
-
             Instanse = new DefaultSettings();
 
             ConfigurationObj.Add(Section.FromObject(nameof(DefaultSettings), Instanse));

@@ -223,7 +223,7 @@ namespace Kebler.ViewModels
                                 break;
                             }
                             st.Stop();
-                            Log.Trace(st.Elapsed);
+                            Log.Trace(st);
                             st.Reset();
 
                             await Task.Delay(ConfigService.Instanse.UpdateTime, token);

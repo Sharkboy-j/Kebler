@@ -35,7 +35,7 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
-        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
+        private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
@@ -150,6 +150,8 @@ namespace Kebler.ViewModels
             _remove = remove;
             _wnd = wnd;
             _wnd?.Activate();
+
+            Log = Kebler.Services.Log.Instance;
 
             if (_wnd?.WindowState == WindowState.Minimized)
                 _wnd.WindowState = WindowState.Normal;

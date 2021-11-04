@@ -52,6 +52,7 @@ namespace Kebler.ViewModels
         public KeblerViewModel()
         {
             _eventAggregator = new EventAggregator();
+            Log = Kebler.Services.Log.Instance;
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -102,6 +103,7 @@ namespace Kebler.ViewModels
         public KeblerViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            Log = Kebler.Services.Log.Instance;
 
             _eventAggregator.SubscribeOnPublishedThread(this);
 
@@ -1047,7 +1049,7 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel
     {
-        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
+        private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly object _syncTorrentList = new object();
         private readonly IWindowManager manager = new WindowManager();
         private readonly object syncObjKeys = new object();

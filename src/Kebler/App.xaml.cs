@@ -20,24 +20,38 @@ namespace Kebler
     /// </summary>
     public partial class App : ISingle
     {
+#if RELEASE
+        public bool IsUpdateReady;
+        private const string AppcenterGuid = "b4abb5a6-9873-466e-97af-2b3879c23e42";
+#endif
+
+
         public delegate void Langhandler();
 
-        public static readonly ILog Log = Kebler.Services.Log.Instance;
+        public static ILog Log;
         public static App Instance;
 
-        public bool IsUpdateReady;
         public KeblerViewModel KeblerVm;
         private TaskbarIcon _notifyIcon;
         public List<string> TorrentsToAdd = new();
-        private const string AppcenterGuid = "b4abb5a6-9873-466e-97af-2b3879c23e42";
 
 
         private App()
         {
             Instance = this;
+            Log = Kebler.Services.Log.Instance;
 
             ConfigService.LoadConfig();
             SetEnv();
+
+#if DEBUG   
+            if (Debugger.IsAttached)
+            {
+                ConfigService.Instanse.TraceEnabled = true;
+            }
+#endif
+
+
 
 
             var args = Environment.GetCommandLineArgs();
@@ -48,7 +62,8 @@ namespace Kebler
             foreach (var arg in args)
             {
                 var fileInfo = new FileInfo(arg);
-                if (fileInfo.Extension.Equals(".torrent")) TorrentsToAdd.Add(fileInfo.FullName);
+                if (fileInfo.Extension.Equals(Const.ConstStrings.TORRENT_EXT)) 
+                    TorrentsToAdd.Add(fileInfo.FullName);
             }
 
 
@@ -71,22 +86,28 @@ namespace Kebler
 
         private static void SetEnv()
         {
-            var glb = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
-            Environment.SetEnvironmentVariable(nameof(Kebler), Process.GetCurrentProcess().MainModule.FileName,
-                EnvironmentVariableTarget.User);
+            _ = Environment.GetEnvironmentVariable(nameof(Kebler), EnvironmentVariableTarget.User);
+            var processModule = Process.GetCurrentProcess().MainModule;
+            if (processModule != null)
+                Environment.SetEnvironmentVariable(nameof(Kebler), processModule.FileName,
+                    EnvironmentVariableTarget.User);
         }
 
 
         protected override void OnStartup(StartupEventArgs e)
         {
-#if !DEBUG
+#if RELEASE
             Microsoft.AppCenter.AppCenter.Start(AppcenterGuid, typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes));
             Microsoft.AppCenter.AppCenter.LogLevel = Microsoft.AppCenter.LogLevel.Verbose;
 #endif
 
 
             var isFirstInstance = SingleInstance<App>.InitializeAsFirstInstance(nameof(Kebler));
-            if (!isFirstInstance) Current.Shutdown();
+            if (!isFirstInstance)
+            {
+                Log.Info($"{nameof(Kebler)} instance is already running.");
+                Current.Shutdown(0);
+            }
             base.OnStartup(e);
 
             _notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
@@ -132,7 +153,8 @@ namespace Kebler
             foreach (var arg in args)
             {
                 var fileInfo = new FileInfo(arg);
-                if (fileInfo.Extension.Equals(".torrent") || arg.StartsWith("magnet")) TorrentsToAdd.Add(arg);
+                if (fileInfo.Extension.Equals(Const.ConstStrings.TORRENT_EXT) || arg.StartsWith(Const.ConstStrings.MAGNET))
+                    TorrentsToAdd.Add(arg);
             }
 
             KeblerVm.OpenPaseedWithArgsFiles();

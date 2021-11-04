@@ -25,6 +25,7 @@ namespace Kebler.ViewModels
         public ConnectionManagerViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            Log = Kebler.Services.Log.Instance;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -200,7 +201,7 @@ namespace Kebler.ViewModels
 
             var result = await TesConnection(pswd);
             st.Stop();
-            Log.Trace(st.Elapsed);
+            Log.Trace(st);
 
             if (result.Item2 != null)
             {
@@ -276,7 +277,7 @@ namespace Kebler.ViewModels
 
     public partial class ConnectionManagerViewModel
     {
-        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
+        private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly IWindowManager manager = new WindowManager();
         private TransmissionClient _client;
         private SolidColorBrush _connectStatusColor;
