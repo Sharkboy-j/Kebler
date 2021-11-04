@@ -38,11 +38,11 @@ namespace Kebler.ViewModels
                 return "Kebler [DEBUG]";
 #elif PORTABLE
                 return "Kebler [Portable]";
-#else
-                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+#elif RELEASE 
+ var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 System.Diagnostics.FileVersionInfo fileVersionInfo =
                     System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta";
+                return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta x64";
 #endif
             }
         }
