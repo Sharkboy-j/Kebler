@@ -48,7 +48,7 @@
                           Enums.MessageBoxDilogButtons.YesNo, true));
                         if (dialogres == true)
                             await Task.Run(InstallUpdates);
-                    })
+                    });
                 }
             }
             catch (Exception ex)
