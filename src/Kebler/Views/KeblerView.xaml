@@ -383,16 +383,22 @@
                     Name="CategoriesListBox"
                     cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
                     BorderThickness="0"
-                    DisplayMemberPath="Title"
                     ItemsSource="{Binding CategoriesList}"
                     SelectedIndex="{Binding SelectedCategoryIndex}"
                     SelectedValue="{Binding SelectedCat}"
                     SelectionMode="Single">
-                    <!--<ListBox.ItemTemplate>
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Title}" />
+                                <TextBlock
+                                    Margin="3,0"
+                                    Text="{Binding Count, StringFormat=({0})}"
+                                    Visibility="{Binding DataContext.ShowCategoriesCount, RelativeSource={RelativeSource AncestorType=ui11:KeblerView}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+
                         </DataTemplate>
-                    </ListBox.ItemTemplate>-->
+                    </ListBox.ItemTemplate>
                 </ListBox>
 
                 <Grid

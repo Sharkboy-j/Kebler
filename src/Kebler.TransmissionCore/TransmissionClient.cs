@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ using Kebler.Models.Torrent.Args;
 using Kebler.Models.Torrent.Common;
 using Kebler.Models.Torrent.Entity;
 using Kebler.Models.Torrent.Response;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,9 +18,6 @@ namespace Kebler.TransmissionCore
 {
     public partial class TransmissionClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
         private readonly string _authorization;
         private readonly bool _needAuthorization;
         private int _numberOfAttempts = 4;
@@ -124,7 +119,7 @@ namespace Kebler.TransmissionCore
                     if (responseStream == null)
                     {
                         result.CustomException = new Exception("Stream resonse is null");
-                        Log.Error(result.WebException);
+                        //Log.Error(result.WebException);
                         return result;
                     }
 

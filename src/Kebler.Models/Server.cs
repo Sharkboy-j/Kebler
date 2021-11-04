@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using Caliburn.Micro;
 using LiteDB;
 using Newtonsoft.Json;
 
 namespace Kebler.Models
 {
+
+    [DebuggerDisplay("{Host}")]
     public class Server : PropertyChangedBase
     {
         private bool _sslEnabled = true;
@@ -36,6 +39,10 @@ namespace Kebler.Models
         {
             get
             {
+
+                if (string.IsNullOrEmpty(Host))
+                    return string.Empty;
+
                 var scheme = SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
 
                 var uri = new UriBuilder(scheme, Host, Port, RpcPath);

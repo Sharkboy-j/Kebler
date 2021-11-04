@@ -29,8 +29,7 @@ namespace Kebler.ViewModels
     {
         #region Props
 
-        private static readonly log4net.ILog Log =
-          log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private readonly Kebler.Services.Interfaces.ILog Log;
 
 
         private DateTime _addedOn, _createdOn, _completedOn;
@@ -308,6 +307,8 @@ namespace Kebler.ViewModels
         public MoreInfoViewModel(KeblerView view, Action<bool>? unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
+            Log = Kebler.Services.Log.Instance;
+
             //IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;
             if (unselect != null)

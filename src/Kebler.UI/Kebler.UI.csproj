@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
+    <PackageReference Include="Caliburn.Micro" Version="4.0.173" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
   </ItemGroup>
 

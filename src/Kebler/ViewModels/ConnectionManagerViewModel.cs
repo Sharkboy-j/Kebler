@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -14,8 +15,6 @@ using Kebler.Services;
 using Kebler.TransmissionCore;
 using LiteDB;
 using Microsoft.AppCenter.Crashes;
-using ILog = log4net.ILog;
-using LogManager = log4net.LogManager;
 
 namespace Kebler.ViewModels
 {
@@ -26,6 +25,7 @@ namespace Kebler.ViewModels
         public ConnectionManagerViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            Log = Kebler.Services.Log.Instance;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -63,8 +63,10 @@ namespace Kebler.ViewModels
 
         public void Add()
         {
+            Log.Ui();
+
             var server = new Server
-                {Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false};
+            { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
             _dbServersList.Insert(server);
 
             Log.Info($"Add new Server {server}");
@@ -78,6 +80,8 @@ namespace Kebler.ViewModels
 
         public void Remove()
         {
+            Log.Ui();
+
             if (SelectedServer == null) return;
 
 
@@ -104,6 +108,8 @@ namespace Kebler.ViewModels
 
         public void Save()
         {
+            Log.Ui();
+
             Log.Info($"Try save Server {SelectedServer}");
 
             if (ValidateServer(SelectedServer, out var error))
@@ -127,6 +133,7 @@ namespace Kebler.ViewModels
 
         public void Cancel()
         {
+            Log.Ui();
             SelectedServer = null;
             ServerIndex = -1;
         }
@@ -147,7 +154,7 @@ namespace Kebler.ViewModels
             //TODO: CheckUpdates ipadress port
         }
 
-        private async Task<bool> CheckResponse(TransmissionResponse resp)
+        private async Task<bool> CheckResponse(ITransmissionReponse resp)
         {
             if (resp.WebException != null)
             {
@@ -165,12 +172,17 @@ namespace Kebler.ViewModels
                 return false;
             }
 
-            if (resp.CustomException != null) return false;
+            if (resp.CustomException != null)
+                return false;
             return true;
         }
 
         public async void Test()
         {
+            Log.Ui();
+            var st = new Stopwatch();
+            st.Start();
+
             IsTesting = true;
 
             string pswd = null;
@@ -188,17 +200,35 @@ namespace Kebler.ViewModels
             }
 
             var result = await TesConnection(pswd);
+            st.Stop();
+            Log.Trace(st);
 
-            ConnectStatusResult = result
-                ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
-                : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
+            if (result.Item2 != null)
+            {
 
-            ConnectStatusColor = result
-                ? new SolidColorBrush {Color = Colors.Green}
-                : new SolidColorBrush {Color = Colors.Red};
+                await manager.ShowDialogAsync(new MessageBoxViewModel(result.Item2.Message, string.Empty,
+                    Enums.MessageBoxDilogButtons.Ok, true));
+
+                ConnectStatusResult =
+                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
+
+                ConnectStatusColor = new SolidColorBrush {Color = Colors.Red};
+            }
+            else
+            {
+                var answer = await CheckResponse(result.Item1);
+                    
+                ConnectStatusResult = answer
+                    ? LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionGood))
+                    : LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.CM_TestConnectionBad));
+
+                ConnectStatusColor = answer
+                    ? new SolidColorBrush { Color = Colors.Green }
+                    : new SolidColorBrush { Color = Colors.Red };
+            }
         }
 
-        private async Task<bool> TesConnection(string pass)
+        private async Task<(TransmissionResponse, Exception)> TesConnection(string pass)
         {
             Log.Info("Start TestConnection");
             var scheme = SelectedServer.SslEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
@@ -214,17 +244,20 @@ namespace Kebler.ViewModels
 
                 var sessionInfo = await _client.GetSessionInformationAsync(CancellationToken.None);
 
-                return await CheckResponse(sessionInfo.Response);
+                Log.Info("Test connection OK");
+                return (sessionInfo.Response, null);
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message, ex);
+                Log.Info("Test connection failed");
+                Log.Error(ex);
                 Crashes.TrackError(ex);
 
-                return false;
+                return (null, ex);
             }
             finally
             {
+                Log.Info("Test connection end");
                 _client = null;
                 IsTesting = false;
             }
@@ -244,7 +277,7 @@ namespace Kebler.ViewModels
 
     public partial class ConnectionManagerViewModel
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly IWindowManager manager = new WindowManager();
         private TransmissionClient _client;
         private SolidColorBrush _connectStatusColor;

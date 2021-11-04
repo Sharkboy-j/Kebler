@@ -45,7 +45,7 @@ namespace Kebler.Models
             return false;
         }
 
-    
+
 
 
 
@@ -72,9 +72,20 @@ namespace Kebler.Models
         }
     }
 
-    public class StatusCategory
+    [DebuggerDisplay("{Title} ({Count})")]
+    public class StatusCategory : PropertyChangedBase
     {
+        private string _count = "~";
         public string Title { get; set; } = "~";
         public Enums.Categories Cat { get; set; }
+
+        public string Count
+        {
+            get => _count;
+            set
+            {
+                var dd = Set(ref _count, value);
+            }
+        }
     }
 }

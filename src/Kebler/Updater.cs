@@ -1,29 +1,31 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using Kebler.Const;
-using Kebler.Models;
-using Kebler.Resources;
-using Kebler.Services;
-using Kebler.Update.Core;
-using Kebler.ViewModels;
-using Microsoft.AppCenter.Crashes;
-using ILog = log4net.ILog;
-using LogManager = log4net.LogManager;
-
-namespace Kebler
+﻿namespace Kebler
 {
+#if RELEASE
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using Caliburn.Micro;
+    using Kebler.Const;
+    using Kebler.Models;
+    using Kebler.Resources;
+    using Kebler.Services;
+    using Kebler.Update.Core;
+    using Kebler.ViewModels;
+#endif
+
     internal static class Updater
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+#if RELEASE
+
+        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
 
         public static async Task CheckUpdates()
         {
-            Log.Info("Check updates");
+
+     Log.Info("Check updates");
             try
             {
                 var current = Assembly.GetExecutingAssembly().GetName().Version;
@@ -47,11 +49,12 @@ namespace Kebler
             {
                 App.Instance.IsUpdateReady = false;
                 Log.Error(ex);
-                Crashes.TrackError(ex);
+                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
             }
-        }
 
-        public static void InstallUpdates()
+    }
+
+    public static void InstallUpdates()
         {
             Directory.CreateDirectory(ConstStrings.TempInstallerFolder);
             File.Copy(ConstStrings.InstallerExePath, ConstStrings.TempInstallerExePath, true);
@@ -77,5 +80,6 @@ namespace Kebler
 
             Application.Current.Shutdown();
         }
+#endif
     }
 }

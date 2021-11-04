@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Kebler.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:KeblerViewModel}"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
@@ -15,83 +17,82 @@
         Name="TopBarMenu"
         Background="Transparent"
         IsMainMenu="True">
-        <MenuItem Header="{lex:BLoc  MI_Kebler}">
+        <MenuItem Header="{lex:BLoc MI_Kebler}">
             <MenuItem
                 cal:Message.Attach="ShowConnectionManager"
-                Header="{lex:BLoc  MI_CM}"
+                Header="{lex:BLoc MI_CM}"
                 InputGestureText="Ctrl+C" />
-            <MenuItem Header="{lex:BLoc  MI_Servers}" ItemsSource="{Binding Servers}" />
-            <MenuItem cal:Message.Attach="Settings" Header="{lex:BLoc  MI_Props}" />
-            <MenuItem cal:Message.Attach="Preferences" Header="{lex:BLoc  MI_Prefs}" />
+            <MenuItem Header="{lex:BLoc MI_Servers}" ItemsSource="{Binding Servers}" />
+            <MenuItem cal:Message.Attach="Settings" Header="{lex:BLoc MI_Props}" />
+            <MenuItem cal:Message.Attach="Preferences" Header="{lex:BLoc MI_Prefs}" />
             <Separator />
             <MenuItem
                 cal:Message.Attach="Exit"
-                Header="{lex:BLoc  MI_Exit}"
+                Header="{lex:BLoc MI_Exit}"
                 InputGestureText="Alt+X" />
         </MenuItem>
-        <MenuItem Header="{lex:BLoc  MI_Torrent}">
+        <MenuItem Header="{lex:BLoc MI_Torrent}">
             <MenuItem
                 cal:Message.Attach="Add"
-                Header="{lex:BLoc  MI_AddTorrent}"
+                Header="{lex:BLoc MI_AddTorrent}"
                 InputGestureText="Ctrl+N"
                 IsEnabled="{Binding IsConnected}" />
             <MenuItem
                 cal:Message.Attach="AddMagnet"
-                Header="{lex:BLoc  MI_AddMagnet}"
+                Header="{lex:BLoc MI_AddMagnet}"
                 InputGestureText="Ctrl+M"
                 IsEnabled="{Binding IsConnected}" />
             <Separator />
             <MenuItem
                 cal:Message.Attach="Start"
-                Header="{lex:BLoc  QA_Resume}"
+                Header="{lex:BLoc QA_Resume}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="Pause"
-                Header="{lex:BLoc  QA_Pause}"
+                Header="{lex:BLoc QA_Pause}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="Remove"
-                Header="{lex:BLoc  QA_Remove}"
+                Header="{lex:BLoc QA_Remove}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="RemoveWithData"
-                Header="{lex:BLoc  QA_RemoveData}"
+                Header="{lex:BLoc QA_RemoveData}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <Separator />
-            <MenuItem Header="{lex:BLoc  QA_Queue}"
-                      IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
+            <MenuItem Header="{lex:BLoc QA_Queue}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
                 <MenuItem
                     cal:Message.Attach="MoveTop"
-                    Header="{lex:BLoc  QA_MoveTop}"
+                    Header="{lex:BLoc QA_MoveTop}"
                     IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
                 <MenuItem
                     cal:Message.Attach="MoveUp"
-                    Header="{lex:BLoc  QA_MoveUp}"
+                    Header="{lex:BLoc QA_MoveUp}"
                     IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
                 <MenuItem
                     cal:Message.Attach="MoveDown"
-                    Header="{lex:BLoc  QA_MoveDown}"
+                    Header="{lex:BLoc QA_MoveDown}"
                     IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
                 <MenuItem
                     cal:Message.Attach="MoveBot"
-                    Header="{lex:BLoc  QA_MoveBot}"
+                    Header="{lex:BLoc QA_MoveBot}"
                     IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             </MenuItem>
             <MenuItem
                 cal:Message.Attach="Reannounce"
-                Header="{lex:BLoc  QA_Reannounce}"
+                Header="{lex:BLoc QA_Reannounce}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="Verify"
-                Header="{lex:BLoc  QA_Verify}"
+                Header="{lex:BLoc QA_Verify}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="SetLoc"
-                Header="{lex:BLoc  QA_SetLoc}"
+                Header="{lex:BLoc QA_SetLoc}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <MenuItem
                 cal:Message.Attach="Rename"
-                Header="{lex:BLoc  QA_Rename}"
+                Header="{lex:BLoc QA_Rename}"
                 IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
             <Separator />
             <MenuItem
@@ -101,56 +102,62 @@
         </MenuItem>
 
         <MenuItem Header="{lex:BLoc MI_View}">
-            <MenuItem 
-                IsCheckable="True"
-                IsChecked="{Binding IsShowMoreInfo}"
+            <MenuItem
                 cal:Message.Attach="MoreInfoShow"
                 CommandParameter="{Binding .}"
-                Header="{lex:BLoc MI_MoreInoShow}"/>
+                Header="{lex:BLoc MI_MoreInoShow}"
+                IsCheckable="True"
+                IsChecked="{Binding IsShowMoreInfo}" />
+            <MenuItem
+                cal:Message.Attach="CategoryCountingShow"
+                CommandParameter="{Binding .}"
+                Header="{lex:BLoc MI_ShowCategoriesCount}"
+                IsCheckable="True"
+                IsChecked="{Binding ShowCategoriesCount}" />
         </MenuItem>
         <MenuItem Header="{lex:BLoc MI_Tools}">
             <MenuItem
                 cal:Message.Attach="ClearTrackers"
-                Header="{lex:BLoc  MI_ClearTrackers}"
-                IsEnabled="{Binding IsConnected}"/>
+                Header="{lex:BLoc MI_ClearTrackers}"
+                IsEnabled="{Binding IsConnected}" />
             <MenuItem
                 cal:Message.Attach="AddFromNewTrack"
-                Header="{lex:BLoc  MI_AddFromNewTrack}"
-                IsEnabled="{Binding IsConnected}"/>
+                Header="{lex:BLoc MI_AddFromNewTrack}"
+                IsEnabled="{Binding IsConnected}" />
             <MenuItem
                 cal:Message.Attach="ExportTorrents"
-                Header="{lex:BLoc  MI_ExportTorrents}"
-                Visibility="Collapsed"
-                IsEnabled="{Binding IsConnected}"/>
+                Header="{lex:BLoc MI_ExportTorrents}"
+                IsEnabled="{Binding IsConnected}"
+                Visibility="Collapsed" />
         </MenuItem>
         <MenuItem
             Name="LangMenu"
             Header="{lex:BLoc MI_lang}"
             ItemsSource="{Binding Languages}" />
         <MenuItem
-            Header="{lex:BLoc  Mi_Info}"
+            Header="{lex:BLoc Mi_Info}"
             IsEnabled="True"
             Style="{DynamicResource TopBarMenuButton}">
             <MenuItem
                 Click="Report"
-                Header="{lex:BLoc  MI_Report}"
+                Header="{lex:BLoc MI_Report}"
                 IsCheckable="False" />
             <MenuItem
                 Click="OpenLogs"
-                Header="{lex:BLoc  MI_Logs}"
+                Header="{lex:BLoc MI_Logs}"
                 IsCheckable="False" />
             <Separator />
             <MenuItem
                 Click="About"
-                Header="{lex:BLoc  MI_About}"
+                Header="{lex:BLoc MI_About}"
                 IsCheckable="False" />
             <MenuItem
                 Click="Check"
-                Header="{lex:BLoc  MI_Check}"
+                Header="{lex:BLoc MI_Check}"
                 IsCheckable="False" />
             <MenuItem
                 Click="Contact"
-                Header="{lex:BLoc  MI_Contact}"
+                Header="{lex:BLoc MI_Contact}"
                 IsCheckable="False" />
         </MenuItem>
     </Menu>

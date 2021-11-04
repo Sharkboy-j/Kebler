@@ -684,4 +684,7 @@
   <data name="ASK_REMOVE_SIMILAR" xml:space="preserve">
     <value>We found similar torrent '%d'. Remove it?</value>
   </data>
+  <data name="MI_ShowCategoriesCount" xml:space="preserve">
+    <value>Torrents in category count</value>
+  </data>
 </root>

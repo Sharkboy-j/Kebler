@@ -684,4 +684,7 @@
   <data name="ASK_REMOVE_SIMILAR" xml:space="preserve">
     <value>Найден похожий торрент: '%d' Удалить его?</value>
   </data>
+  <data name="MI_ShowCategoriesCount" xml:space="preserve">
+    <value>Кол-во торрентов в категории</value>
+  </data>
 </root>

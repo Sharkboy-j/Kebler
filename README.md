@@ -1,6 +1,6 @@
 # Kebler - Transmission Remote GUI (Windows only) x64
-![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/1.png)
-![Kebler](https://github.com/JeremiSharkboy/Kebler/raw/master/Images/2.png)
+![Kebler](https://github.com/Rebell81/Kebler/raw/master/Images/1.png)
+![Kebler](https://github.com/Rebell81/Kebler/raw/master/Images/2.png)
 
 ## Some info
 
@@ -12,7 +12,7 @@ Kebler developed using .Net 5 and still in beta
 
 ## Installation
 
-Go to [Releases](https://github.com/JeremiSharkboy/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net 5](https://dotnet.microsoft.com/download/dotnet/5.0)
+Go to [Releases](https://github.com/Rebell81/Kebler/releases/latest) page and download one of builds. Or clone repository and build it by ur self using [Visual Studio 2019](https://visualstudio.microsoft.com/) and preinstalled [.Net 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 Be carefull, portable version doesnot include auto update feature yet
 
@@ -39,8 +39,8 @@ Run `winget install Kebler` to install the latest version of Kebler Transmission
 - <kbd>Space</kbd> : Start or Pause torrent
 ## License
 
-Copyright (c)2019 by JeremiSharkboy
+Copyright (c) 2019 by Rebell81
 
 Kebler is free opensource software;
 
-KeblerI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the MIT License for more details.
+KeblerI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache-2.0 License for more details.

@@ -22,8 +22,6 @@ namespace Kebler.ViewModels
     using Services;
     using TransmissionCore;
     using Microsoft.Win32;
-    using ILog = log4net.ILog;
-    using LogManager = log4net.LogManager;
     using Models.Interfaces;
     using UI.CSControls.TreeListView;
     using Views;
@@ -37,7 +35,7 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly TransmissionClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
@@ -47,7 +45,7 @@ namespace Kebler.ViewModels
         public AddTorrentResponse TorrentResult;
         public bool Result;
         private IEnumerable<TorrentInfo> _infos;
-        private IEnumerable<(string,uint)> _torrents;
+        private IEnumerable<(string, uint)> _torrents;
         private string? _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
         private int _peerLimit, _uploadLimit, _downlaodDirIndex;
@@ -143,7 +141,7 @@ namespace Kebler.ViewModels
         public AddTorrentViewModel(string path, TransmissionClient? transmissionClient, SessionSettings? settings,
             IEnumerable<TorrentInfo> infos,
             BindableCollection<FolderCategory> folderCategory, IEventAggregator? eventAggregator,
-            IEnumerable<(string,uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
+            IEnumerable<(string, uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
         {
             isWindOpened = true;
             _torrents = torrents;
@@ -152,6 +150,8 @@ namespace Kebler.ViewModels
             _remove = remove;
             _wnd = wnd;
             _wnd?.Activate();
+
+            Log = Kebler.Services.Log.Instance;
 
             if (_wnd?.WindowState == WindowState.Minimized)
                 _wnd.WindowState = WindowState.Normal;
@@ -341,137 +341,148 @@ namespace Kebler.ViewModels
                     }
 
                     var torrentBytes = _torrent.EncodeAsBytes();
-                    var newTorrent = new NewTorrent
-                    {
-                        Metainfo = Convert.ToBase64String(torrentBytes),
-                        Paused = !IsAutoStart,
-                        DownloadDirectory = DownlaodDirPath,
-                        PeerLimit = PeerLimit,
-                        FilesUnwanted = unWant.ToArray(),
-                        FilesWanted = want.ToArray()
-                    };
 
-                    Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
-
-                    while (true)
+                    if (torrentBytes != null)
                     {
-                        if (Dispatcher.CurrentDispatcher.HasShutdownStarted) return;
-                        try
+                        var newTorrent = new NewTorrent
                         {
-                            cancellationToken.ThrowIfCancellationRequested();
-                            var parser = new BencodeParser();
-                            var torrent = parser.Parse<Torrent>(torrentBytes);
-                            TorrentResult =
-                                await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
+                            Metainfo = Convert.ToBase64String(torrentBytes),
+                            Paused = !IsAutoStart,
+                            DownloadDirectory = DownlaodDirPath,
+                            PeerLimit = PeerLimit,
+                            FilesUnwanted = unWant.ToArray(),
+                            FilesWanted = want.ToArray()
+                        };
 
-                            if (TorrentResult.Result == Enums.ReponseResult.Ok)
+                        Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
+
+                        while (true)
+                        {
+                            if (Dispatcher.CurrentDispatcher.HasShutdownStarted) return;
+                            try
                             {
-                                switch (TorrentResult.Value.Status)
+                                cancellationToken.ThrowIfCancellationRequested();
+                                var parser = new BencodeParser();
+                                var torrent = parser.Parse<Torrent>(torrentBytes);
+                                TorrentResult =
+                                    await _transmissionClient.TorrentAddAsync(newTorrent, cancellationToken);
+
+                                if (TorrentResult.Result == Enums.ReponseResult.Ok)
                                 {
-                                    case Enums.AddTorrentStatus.Added:
-                                        {
-                                            Log.Info(
-                                                $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
-                                            IsWorking = false;
-
-
-                                            if (ConfigService.Instanse.CanSearchForSimilatTorrentsWhenAddingNewOne)
+                                    switch (TorrentResult.Value.Status)
+                                    {
+                                        case Enums.AddTorrentStatus.Added:
                                             {
-                                                Log.Info($"Search for similar");
+                                                Log.Info(
+                                                    $"Torrent {newTorrent.Filename} added as '{TorrentResult.Value.Name}'");
+                                                IsWorking = false;
 
-                                                await _wnd.Dispatcher.InvokeAsync(async () => 
+
+                                                if (ConfigService.Instanse.CanSearchForSimilatTorrentsWhenAddingNewOne)
                                                 {
-                                                    if (_torrents.Select(x=>x.Item1).Contains(torrent.DisplayName))
+                                                    Log.Info($"Search for similar");
+
+                                                    await _wnd.Dispatcher.InvokeAsync(async () =>
                                                     {
-                                                        Log.Info($"Here is similar torrent");
-
-                                                        var title = LocalizationProvider.GetLocalizedValue(
-                                                                nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
-                                                        var res = await MessageBoxViewModel.ShowDialog(title,
-                                                            null, null, Enums.MessageBoxDilogButtons.YesNo);
-                                                        Log.Info($"Response for removing similar => {res}");
-
-                                                        if (res == true)
+                                                        if (_torrents.Select(x => x.Item1).Contains(torrent.DisplayName))
                                                         {
-                                                            _remove(_torrents.First(x=>x.Item1.Equals(torrent.DisplayName)).Item2);
+                                                            Log.Info($"Here is similar torrent");
+
+                                                            var title = LocalizationProvider.GetLocalizedValue(
+                                                                    nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
+                                                            var res = await MessageBoxViewModel.ShowDialog(title,
+                                                                null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                            Log.Info($"Response for removing similar => {res}");
+
+                                                            if (res == true)
+                                                            {
+                                                                _remove(_torrents.First(x => x.Item1.Equals(torrent.DisplayName)).Item2);
+                                                            }
                                                         }
-                                                    }
 
-                                                });
+                                                    });
 
-                                            }
-
-                                            ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
-                                            ConfigService.Save();
-                                            Result = true;
-                                            await TryCloseAsync();
-                                            return;
-                                        }
-                                    case Enums.AddTorrentStatus.Duplicate:
-                                        {
-                                            Log.Info(
-                                                $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
-
-                                            if (_torrent != null)
-                                            {
-                                                var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
-
-
-
-
-                                                await _wnd.Dispatcher.InvokeAsync(async () =>
-                                                {
-                                                    var result = await MessageBoxViewModel.ShowDialog(
-                                                        LocalizationProvider.GetLocalizedValue(
-                                                        nameof(Strings.ASK_UpdateTrackers))
-                                                        , null, null, Enums.MessageBoxDilogButtons.YesNo);
-
-                                                    if (result == true)
-                                                    {
-
-                                                        await _transmissionClient.TorrentSetAsync(new TorrentSettings()
-                                                        {
-                                                            IDs = new[] { TorrentResult.Value.ID },
-                                                            TrackerAdd = toAdd
-                                                        }, cancellationToken);
-                                                    }
-
-                                                });
-
-
-
-                                                foreach (var tr in toAdd)
-                                                {
-                                                    Log.Info($"Tracker added: {tr}'");
                                                 }
 
-
+                                                ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
+                                                ConfigService.Save();
                                                 Result = true;
                                                 await TryCloseAsync();
+                                                return;
                                             }
+                                        case Enums.AddTorrentStatus.Duplicate:
+                                            {
+                                                Log.Info(
+                                                    $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{TorrentResult.Value.Name}'");
 
-                                            return;
-                                        }
+                                                if (_torrent != null)
+                                                {
+                                                    var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
+
+
+
+
+                                                    await _wnd.Dispatcher.InvokeAsync(async () =>
+                                                    {
+                                                        var result = await MessageBoxViewModel.ShowDialog(
+                                                            LocalizationProvider.GetLocalizedValue(
+                                                            nameof(Strings.ASK_UpdateTrackers))
+                                                            , null, null, Enums.MessageBoxDilogButtons.YesNo);
+
+                                                        if (result == true)
+                                                        {
+
+                                                            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+                                                            {
+                                                                IDs = new[] { TorrentResult.Value.ID },
+                                                                TrackerAdd = toAdd
+                                                            }, cancellationToken);
+                                                        }
+
+                                                    });
+
+
+
+                                                    foreach (var tr in toAdd)
+                                                    {
+                                                        Log.Info($"Tracker added: {tr}'");
+                                                    }
+
+
+                                                    Result = true;
+                                                    await TryCloseAsync();
+                                                }
+
+                                                return;
+                                            }
+                                    }
+                                }
+                                else
+                                {
+                                    Log?.Info(
+                                        $"Adding torrentFileInfo result '{TorrentResult?.Value?.Status}' '{newTorrent?.Filename}'");
+                                    await Task.Delay(100, cancellationToken);
                                 }
                             }
-                            else
+                            catch (OperationCanceledException)
                             {
-                                Log.Info(
-                                    $"Adding torrentFileInfo result '{TorrentResult.Value.Status}' '{newTorrent.Filename}'");
-                                await Task.Delay(100, cancellationToken);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex);
+                                Crashes.TrackError(ex);
+
+                                return;
                             }
                         }
-                        catch (OperationCanceledException)
-                        {
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex);
-                            Crashes.TrackError(ex);
-
-                            return;
-                        }
                     }
+
+                    else
+                    {
+                        Log.Error("Could not parse torrent file");
+                    }
+
+
                 }
                 catch (Exception ex)
                 {
