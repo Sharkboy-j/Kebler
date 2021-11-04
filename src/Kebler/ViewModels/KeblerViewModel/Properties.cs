@@ -39,7 +39,7 @@ namespace Kebler.ViewModels
 #elif PORTABLE
                 return "Kebler [Portable]";
 #elif RELEASE 
-                var assembly = Assembly.GetExecutingAssembly();
+ var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 System.Diagnostics.FileVersionInfo fileVersionInfo =
                     System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} x64";
