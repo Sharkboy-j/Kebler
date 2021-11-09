@@ -26,6 +26,8 @@ namespace Kebler.Models
 
         public bool ShowCategoryCount { get; set; } = true;
         public bool TraceEnabled { get; set; } = false;
+        public bool TraceRequestsEnabled { get; set; } = false;
+
 
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using Kebler.Models.Torrent.Common;
+using Kebler.Services;
 using Kebler.Services.Interfaces;
 using Expression = System.Linq.Expressions.Expression;
 
@@ -46,23 +47,29 @@ namespace Kebler
 
         public static void ParseTransmissionReponse(this TransmissionResponse resp, ILog logger)
         {
-            if (resp.Success)
+            if (ConfigService.Instanse.TraceRequestsEnabled)
             {
-                //logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
-            }
-            else
-            {
-                var sb = new StringBuilder();
-                if (resp.HttpWebResponse != null)
-                    sb.Append(resp.HttpWebResponse).Append(Environment.NewLine);
+                if (resp.Success)
+                {
+                    logger.Info($"[{resp.Method}] RESULT '{resp.Result}'");
 
-                if (resp.WebException != null)
-                    sb.Append(resp.WebException).Append(Environment.NewLine);
 
-                if (resp.CustomException != null)
-                    sb.Append(resp.CustomException).Append(Environment.NewLine);
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    if (resp.HttpWebResponse != null)
+                        sb.Append(resp.HttpWebResponse).Append(Environment.NewLine);
 
-                logger.Error($"[{resp.Method}] RESULT '{resp.Result}'{Environment.NewLine}{sb}");
+                    if (resp.WebException != null)
+                        sb.Append(resp.WebException).Append(Environment.NewLine);
+
+                    if (resp.CustomException != null)
+                        sb.Append(resp.CustomException).Append(Environment.NewLine);
+
+                    logger.Error($"[{resp.Method}] RESULT '{resp.Result}'{Environment.NewLine}{sb}");
+                }
+
             }
         }
 
@@ -71,7 +78,7 @@ namespace Kebler
             resp.Response.ParseTransmissionReponse(logger);
         }
 
-      
+
     }
 
 }

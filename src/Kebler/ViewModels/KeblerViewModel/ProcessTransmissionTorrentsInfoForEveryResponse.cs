@@ -88,7 +88,7 @@ namespace Kebler.ViewModels
                 var val = _categoriesCount[cat.Cat].ToString();
                 cat.Count = val;
             }
-            
+
 
             lock (_syncTorrentList)
             {
@@ -288,7 +288,7 @@ namespace Kebler.ViewModels
         /// </summary>
         private void ParseTransmissionServerSettings()
         {
-            if (_settings?.AlternativeSpeedEnabled != null)
+            if (_settings?.AlternativeSpeedEnabled != null && _settings != null)
                 IsSlowModeEnabled = (bool)_settings.AlternativeSpeedEnabled;
         }
 
