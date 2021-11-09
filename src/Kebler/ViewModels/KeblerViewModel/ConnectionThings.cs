@@ -251,10 +251,25 @@ namespace Kebler.ViewModels
                 }
                 catch (WebException ex)
                 {
-                    Log.Error(ex);
+                    string msg;
+                    switch (ex.Status)
+                    {
+                        case WebExceptionStatus.NameResolutionFailure:
+                            msg =
+                                $"{LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'";
+                            break;
+                        case WebExceptionStatus.UnknownError:
+                            msg = ex.Message;
+                            break;
+                        default:
+                            msg = $"{ex.Status} {Environment.NewLine} {ex?.Message}";
+                            break;
+                    }
+
+                    Log.Error(ex.Message);
                     Application.Current?.Dispatcher?.Invoke(() =>
                     {
-                        MessageBoxViewModel.ShowDialog(ex.Message, manager, string.Empty);
+                        MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
                     });
                 }
                 catch (Exception ex)
@@ -284,17 +299,17 @@ namespace Kebler.ViewModels
         {
             if (resp.WebException != null)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var msg = resp.WebException.Status switch
-                    {
-                        WebExceptionStatus.NameResolutionFailure =>
-                            $"{LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'",
-                        _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
-                    };
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
+                //    var msg = resp.WebException.Status switch
+                //    {
+                //        WebExceptionStatus.NameResolutionFailure =>
+                //            $"{LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'",
+                //        _ => $"{resp.WebException.Status} {Environment.NewLine} {resp.WebException?.Message}"
+                //    };
 
-                    MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
-                });
+                //    MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
+                //});
                 return false;
             }
 
