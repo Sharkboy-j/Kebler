@@ -125,7 +125,7 @@ namespace Kebler.ViewModels
                         _transmissionClient = new TransmissionClient(
                             url: SelectedServer.FullUriPath,
                             login: SelectedServer.UserName,
-                            password: SelectedServer.AskForPassword?
+                            password: SelectedServer.AskForPassword ?
                                  password
                                 : SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password));
                         Log.Info("TransmissionClient object created");
@@ -177,7 +177,8 @@ namespace Kebler.ViewModels
                 {
                     var info = await Get(
                         task: _transmissionClient.GetSessionInformationAsync(_cancelTokenSource.Token),
-                        statusText: LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Session)));
+                        statusText: LocalizationProvider.GetLocalizedValue(
+                            nameof(Resources.Strings.MW_StatusText_Session)));
 
                     if (IsResponseStatusOk(info.Response))
                     {
@@ -200,7 +201,8 @@ namespace Kebler.ViewModels
                             {
                                 _stats = (await Get(
                                     _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
+                                    LocalizationProvider.GetLocalizedValue(
+                                        nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
 
                                 allTorrents =
                                     (await Get(
@@ -211,7 +213,8 @@ namespace Kebler.ViewModels
                                             nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
                                 _settings = (await Get(
                                     _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
+                                    LocalizationProvider.GetLocalizedValue(
+                                        nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
                                 ParseTransmissionServerSettings();
                                 ParseStats();
 
@@ -222,6 +225,7 @@ namespace Kebler.ViewModels
                             {
                                 break;
                             }
+
                             st.Stop();
                             Log.Trace(st);
                             st.Reset();
@@ -244,6 +248,14 @@ namespace Kebler.ViewModels
                 }
                 catch (TaskCanceledException)
                 {
+                }
+                catch (WebException ex)
+                {
+                    Log.Error(ex);
+                    Application.Current?.Dispatcher?.Invoke(() =>
+                    {
+                        MessageBoxViewModel.ShowDialog(ex.Message, manager, string.Empty);
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -268,7 +280,7 @@ namespace Kebler.ViewModels
             _whileCycleTask.Start();
         }
 
-        private bool IsResponseStatusOk(TransmissionResponse resp)
+        private bool IsResponseStatusOk(ITransmissionReponse resp)
         {
             if (resp.WebException != null)
             {
