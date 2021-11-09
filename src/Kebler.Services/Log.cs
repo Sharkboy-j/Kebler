@@ -14,9 +14,12 @@ namespace Kebler.Services
     {
         private static readonly string FileName = $"{nameof(Kebler)}_{DateTime.Now:dd-MM-yyyy}.log";
         private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Const.ConstStrings.LOG_FOLDER, FileName);
-        private static readonly object Lock = new();
+        private static readonly object _writeLock = new();
+        private const long MAX_LOG_FILE_SIZE = 209715200;
         public static readonly FileInfo LogFileInfo = new(FilePath);
-        private enum LogType { Info, Warn, Error, Ui, Trace }
+
+
+        private enum LogType { Info, Warning, Error, Ui, Trace }
         private static ILog _logger;
         public static ILog Instance => _logger ??= new Log();
 
@@ -65,7 +68,7 @@ namespace Kebler.Services
         public void Warn(string message, [CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
-            var data = Format(message, LogType.Warn, lineNumber, caller, GetClassName(sourceFilePath));
+            var data = Format(message, LogType.Warning, lineNumber, caller, GetClassName(sourceFilePath));
             Task.Run(() =>
             {
                 WriteToFile(data);
@@ -125,7 +128,7 @@ namespace Kebler.Services
         private static string Format(string message, LogType type, int lineNumber = 0, string caller = "", string className = "")
         {
             var thread = Thread.CurrentThread.ManagedThreadId == 1 ? "Main" : $"{Thread.CurrentThread.ManagedThreadId}";
-            return $"[{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff}] [{thread}] [{type.ToString().ToLower()}] [{className}({caller}):{lineNumber}] {message}{Environment.NewLine}";
+            return $"[{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff}] [{thread}] [{type.ToString().ToLower()}] [{className}:{lineNumber}->({caller})] {message}{Environment.NewLine}";
         }
 
         private static string FormatException(Exception ex)
@@ -140,7 +143,8 @@ namespace Kebler.Services
 
         private static void WriteToFile(string data)
         {
-            lock (Lock)
+            CheckFileLength();
+            lock (_writeLock)
             {
                 try
                 {
@@ -152,6 +156,24 @@ namespace Kebler.Services
                 catch
                 {
                     // ignored
+                }
+            }
+        }
+
+        private static void CheckFileLength()
+        {
+            lock (_writeLock)
+            {
+                try
+                {
+                    if (LogFileInfo.Length >= MAX_LOG_FILE_SIZE)
+                    {
+                        LogFileInfo.Delete();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
                 }
             }
         }
