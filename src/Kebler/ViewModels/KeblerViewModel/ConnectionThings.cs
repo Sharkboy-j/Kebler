@@ -215,11 +215,16 @@ namespace Kebler.ViewModels
                                     _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
                                     LocalizationProvider.GetLocalizedValue(
                                         nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
-                                ParseTransmissionServerSettings();
-                                ParseStats();
 
-                                if (allTorrents.Clone() is TransmissionTorrents data)
-                                    ProcessParsingTransmissionResponse(data);
+                                if (allTorrents != null)
+                                {
+                                    ParseTransmissionServerSettings();
+                                    ParseStats();
+
+                                    if (allTorrents?.Clone() is TransmissionTorrents data)
+                                        ProcessParsingTransmissionResponse(data);
+                                }
+                              
                             }
                             else
                             {

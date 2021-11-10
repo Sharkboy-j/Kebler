@@ -133,7 +133,7 @@ namespace Kebler.Services
 
         private static string FormatException(Exception ex)
         {
-            return $"{ex.Message}{Environment.NewLine}{ex.StackTrace}";
+            return $"{ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}{ex.InnerException}";
         }
 
         private static string GetClassName(string path)
