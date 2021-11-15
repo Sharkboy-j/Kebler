@@ -173,7 +173,7 @@ namespace Kebler.Services
                 }
                 catch (Exception ex)
                 {
-                    File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
+                    //File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
                 }
             }
         }
