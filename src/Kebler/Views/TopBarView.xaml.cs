@@ -56,8 +56,13 @@ namespace Kebler.Views
 
             try
             {
-                var args = $@"/c start ""{Log.LogFileInfo.DirectoryName}""";
-                Process.Start(new ProcessStartInfo("explorer.exe", args) { CreateNoWindow = true });
+                App.Log.Info($"Try start => cmd {Log.LogFileInfo.DirectoryName}");
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(@Log.LogFileInfo.DirectoryName)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
             }
             catch (Exception ex)
             {

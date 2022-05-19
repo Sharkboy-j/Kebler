@@ -101,8 +101,13 @@ namespace Kebler.ViewModels
         public void Settings()
         {
             Log.Ui();
-            var args = $@"/c start ""{ConstStrings.CONFIGPATH}""";
-            Process.Start(new ProcessStartInfo("cmd", args) { CreateNoWindow = true });
+            Log.Info($"Try start => cmd {ConstStrings.CONFIGPATH}");
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo(@ConstStrings.CONFIGPATH)
+            {
+                UseShellExecute = true
+            };
+            p.Start();
         }
 
 
