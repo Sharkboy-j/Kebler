@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: 5.0.102     
 
-    - name: setup-msbuild
-      uses: microsoft/setup-msbuild@v1   
+    #- name: setup-msbuild
+    # uses: microsoft/setup-msbuild@v1   
       
     - name: TEST
       run: dotnet test src/Kebler.sln
