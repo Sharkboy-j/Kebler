@@ -11,11 +11,17 @@ jobs:
         configuration: [Release]
     runs-on: self-hosted
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@master
-      
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@master
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.CI_TOKEN }}
+        submodules: true
+
+    # Update references
+    - name: Git Sumbodule Update
+      run: |
+        git pull --recurse-submodules
+        git submodule update --remote --recursive
     
     #- name: Checkout
     # uses: actions/checkout@v2
