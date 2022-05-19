@@ -57,7 +57,7 @@ jobs:
 
     - name: Get version
       id: vars
-      shell: pwsh
+      shell: PowerShell
       run: |
         $data = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\src\publish\RELEASE\App\Kebler.exe").ProductVersion
         echo "::set-output name=ASSEMBLY_VERSION::$data"
