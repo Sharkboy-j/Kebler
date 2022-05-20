@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using System.Diagnostics;
 using System.IO;
+using Kebler.Core.Models;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.Models
 {

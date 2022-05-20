@@ -3,8 +3,8 @@ using System.Collections;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Kebler.Models.Torrent;
 using Kebler.Resources;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.Services
 {

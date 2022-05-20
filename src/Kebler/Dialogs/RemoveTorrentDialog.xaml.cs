@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Kebler.Models;
-using Kebler.TransmissionCore;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.Dialogs
 {
@@ -17,11 +19,11 @@ namespace Kebler.Dialogs
         private readonly CancellationToken _cancellationToken;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly uint[] _toRemove;
-        private readonly TransmissionClient _transmissionClient;
+        private readonly IRemoteTorrentClient _transmissionClient;
         public Enums.RemoveResult Result;
 
 
-        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref TransmissionClient transmissionClient,
+        public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref IRemoteTorrentClient transmissionClient,
             bool witData = false)
         {
             Log = Services.Log.Instance;

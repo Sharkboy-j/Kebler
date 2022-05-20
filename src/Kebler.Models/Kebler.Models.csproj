@@ -26,4 +26,14 @@
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Torrent\Args\" />
+    <Folder Include="Torrent\Attributes\" />
+    <Folder Include="Torrent\Entity\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Kebler.TransmissionTorrentClient\Kebler.TransmissionTorrentClient.csproj" />
+  </ItemGroup>
 </Project>

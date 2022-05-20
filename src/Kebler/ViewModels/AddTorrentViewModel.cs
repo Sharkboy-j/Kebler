@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
-using Kebler.Models.Torrent;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
+using Kebler.Core.Models.Arguments;
 using Kebler.Resources;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.ViewModels
 {
@@ -16,10 +20,7 @@ namespace Kebler.ViewModels
     using BencodeNET.Parsing;
     using BencodeNET.Torrents;
     using Models;
-    using Models.Torrent.Args;
-    using Models.Torrent.Response;
     using Services;
-    using TransmissionCore;
     using Microsoft.Win32;
     using Models.Interfaces;
     using UI.CSControls.TreeListView;
@@ -35,7 +36,7 @@ namespace Kebler.ViewModels
         private Torrent _torrent;
         private object view;
         private readonly Kebler.Services.Interfaces.ILog Log;
-        private readonly TransmissionClient _transmissionClient;
+        private readonly IRemoteTorrentClient _transmissionClient;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
         private FileInfo _fileInfo;
@@ -137,7 +138,7 @@ namespace Kebler.ViewModels
 
         #endregion
         KeblerView _wnd;
-        public AddTorrentViewModel(string path, TransmissionClient transmissionClient, SessionSettings settings,
+        public AddTorrentViewModel(string path, IRemoteTorrentClient transmissionClient, SessionSettings settings,
             IEnumerable<TorrentInfo> infos,
             BindableCollection<FolderCategory> folderCategory, IEventAggregator eventAggregator,
             IEnumerable<(string, uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)

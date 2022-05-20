@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Kebler.Models.Torrent.Args;
+using Kebler.Core.Models.Arguments;
 
 namespace Kebler.UI.Controls
 {

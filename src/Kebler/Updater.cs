@@ -8,7 +8,6 @@
     using System.Windows;
     using Caliburn.Micro;
     using Const;
-    using Models;
     using Resources;
     using Services;
     using Kebler.Update.Core;
@@ -45,7 +44,7 @@
                         var lt = LocalizationProvider.GetLocalizedValue(nameof(Strings.NewUpdate));
 
                         var dialogres = await mgr.ShowDialogAsync(new MessageBoxViewModel(lt.Replace("%d", result.Item2.tag_name), string.Empty,
-                          Enums.MessageBoxDilogButtons.YesNo, true));
+                          Core.Models.Enums.MessageBoxDilogButtons.YesNo, true));
                         if (dialogres == true)
                             await Task.Run(InstallUpdates);
                     });

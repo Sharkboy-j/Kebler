@@ -14,15 +14,16 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Caliburn.Micro;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
+using Kebler.Core.Models.Arguments;
+using Kebler.Core.Models.Entities;
 using Kebler.Dialogs;
 using Kebler.Models;
-using Kebler.Models.Torrent;
-using Kebler.Models.Torrent.Args;
-using Kebler.Models.Torrent.Common;
-using Kebler.Models.Torrent.Entity;
 using Kebler.Resources;
 using Kebler.Services;
-using Kebler.TransmissionCore;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.AppCenter.Crashes;
 using static Kebler.Models.Messages;
@@ -30,7 +31,7 @@ using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
 using ListView = System.Windows.Controls.ListView;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using TorrentFields = Kebler.Models.Torrent.TorrentFields;
+using TorrentFields = Kebler.TransmissionTorrentClient.Models.TorrentFields;
 
 namespace Kebler.ViewModels
 {
@@ -1081,7 +1082,7 @@ namespace Kebler.ViewModels
         private WindowState _state;
         private Statistic _stats;
         private Bind<TorrentInfo> _torrentList = new Bind<TorrentInfo>();
-        private TransmissionClient _transmissionClient;
+        private IRemoteTorrentClient _transmissionClient;
         private bool _isChangingLang;
 
         private static KeblerView _view;

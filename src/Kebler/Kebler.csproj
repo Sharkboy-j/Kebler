@@ -10,46 +10,24 @@
     <PublishReadyToRun>false</PublishReadyToRun>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-    <Authors>https://github.com/JeremiSharkboy/</Authors>
+    <Authors>https://github.com/Rebell81/Kebler</Authors>
     <Company>Kebler</Company>
     <PackageLicenseExpression>Apache-2.0 License</PackageLicenseExpression>
     <SignAssembly>true</SignAssembly>
-    <PackageProjectUrl>https://github.com/JeremiSharkboy/Kebler</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Rebell81/Kebler</PackageProjectUrl>
     <PackageIcon>KeblerVided.png</PackageIcon>
-    <RepositoryUrl>https://github.com/JeremiSharkboy/Kebler</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Rebell81/Kebler</RepositoryUrl>
     <NoWin32Manifest>true</NoWin32Manifest>
     <Configurations>Debug;Release;Portable</Configurations>
 	<ApplicationIcon>Kebler.ico</ApplicationIcon>
 	<Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
       <Deterministic>false</Deterministic>
       <MinimumPlatformVersion>7.0</MinimumPlatformVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Portable|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;PORTABLE</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <PlatformTarget>x64</PlatformTarget>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
+	<ItemGroup>
     <None Remove="Kebler.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +51,6 @@
     <ProjectReference Include="..\Kebler.Resources\Kebler.Resources.csproj" />
     <ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
     <ProjectReference Include="..\Kebler.SI\Kebler.SI.csproj" />
-    <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
     <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
     <ProjectReference Include="..\Kebler.Update.Core\Kebler.Update.Core.csproj" />
   </ItemGroup>

@@ -7,11 +7,11 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using Kebler.Core.Models;
 using Kebler.Models;
-using Kebler.Models.Torrent;
-using Kebler.Models.Torrent.Common;
 using Kebler.Services;
-using Kebler.TransmissionCore;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 using Microsoft.AppCenter.Crashes;
 // ReSharper disable once CheckNamespace
 
@@ -300,7 +300,7 @@ namespace Kebler.ViewModels
             _whileCycleTask.Start();
         }
 
-        private bool IsResponseStatusOk(ITransmissionReponse resp)
+        private bool IsResponseStatusOk(ITransmissionResponse resp)
         {
             if (resp.WebException != null)
             {

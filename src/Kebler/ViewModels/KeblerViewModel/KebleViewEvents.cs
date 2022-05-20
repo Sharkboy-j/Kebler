@@ -1,6 +1,6 @@
-﻿using Kebler.Models.Torrent;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.ViewModels
 {

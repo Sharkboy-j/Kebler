@@ -7,12 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
+using Kebler.Core.Models.Arguments;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
-using Kebler.Models.Torrent;
-using Kebler.Models.Torrent.Args;
 using Kebler.Services;
-using Kebler.TransmissionCore;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.VisualBasic;
 using static Kebler.Models.Messages;
@@ -298,7 +300,7 @@ namespace Kebler.ViewModels
 
         KeblerView view;
         static FilesModel model;
-        private static TransmissionClient _client;
+        private static IRemoteTorrentClient _client;
         IEventAggregator _eventAggregator;
         Action<bool> hide;
         public MoreInfoViewModel(KeblerView view, Action<bool> unselect, IEventAggregator eventAggregator)
@@ -337,7 +339,7 @@ namespace Kebler.ViewModels
         }
 
 
-        public void Update(uint[] ids, TransmissionClient client, CancellationToken token)
+        public void Update(uint[] ids, IRemoteTorrentClient client, CancellationToken token)
         {
             if (token.IsCancellationRequested)
                 return;
@@ -354,7 +356,7 @@ namespace Kebler.ViewModels
             {
                 while (!source.IsCancellationRequested)
                 {
-                    var answ = await _client.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
+                    var answ = await _client.TorrentGetAsyncWithId(TorrentFields.ALL_FIELDS, new CancellationToken(), id);
                     if (token.IsCancellationRequested)
                         return;
 

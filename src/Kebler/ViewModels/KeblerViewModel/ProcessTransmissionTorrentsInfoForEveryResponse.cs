@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading;
 using Caliburn.Micro;
 using Kebler.Models;
-using Kebler.Models.Torrent;
 using Kebler.Services;
 using Kebler.Services.Converters;
 using System.Windows;
+using Kebler.Core.Models;
+using Kebler.TransmissionTorrentClient.Models;
 using Microsoft.AppCenter.Crashes;
 
 // ReSharper disable once CheckNamespace

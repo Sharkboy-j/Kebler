@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Kebler.Models.Torrent;
+using Kebler.Core.Models;
 using NUnit.Framework;
 
 namespace Kebler.Test

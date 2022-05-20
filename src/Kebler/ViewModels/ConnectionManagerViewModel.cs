@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Caliburn.Micro;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
 using Kebler.Models;
 using Kebler.Models.Interfaces;
-using Kebler.Models.Torrent.Common;
 using Kebler.Services;
-using Kebler.TransmissionCore;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 using LiteDB;
 using Microsoft.AppCenter.Crashes;
 
@@ -153,7 +155,7 @@ namespace Kebler.ViewModels
             //TODO: CheckUpdates ipadress port
         }
 
-        private async Task<bool> CheckResponse(ITransmissionReponse resp)
+        private async Task<bool> CheckResponse(ITransmissionResponse resp)
         {
             if (resp.WebException != null)
             {
@@ -278,7 +280,7 @@ namespace Kebler.ViewModels
     {
         private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly IWindowManager manager = new WindowManager();
-        private TransmissionClient _client;
+        private IRemoteTorrentClient _client;
         private SolidColorBrush _connectStatusColor;
         private string _connectStatusResult;
         private LiteCollection<Server> _dbServersList;

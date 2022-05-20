@@ -4,9 +4,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
-using Kebler.Models.Torrent.Common;
+using Kebler.Core.Models;
 using Kebler.Services;
 using Kebler.Services.Interfaces;
+using Kebler.TransmissionTorrentClient.Models;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace Kebler
