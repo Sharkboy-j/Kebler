@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Kebler.Models.Torrent;
+using Kebler.TransmissionTorrentClient.Models;
 using NUnit.Framework;
 
 namespace Kebler.Test

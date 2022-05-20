@@ -5,17 +5,20 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Services.Interfaces;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
 
 namespace Kebler.Services
 {
+    /// <summary>
+    /// I DON'T WANT TO USE FUCKING NLOG OR SIMILAR SHIT. THAT IS PEACE OF SHITY WIZZARD
+    /// </summary>
     public class Log : ILog
     {
         private static readonly string FileName = $"{nameof(Kebler)}_{DateTime.Now:dd-MM-yyyy}.log";
         private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Const.ConstStrings.LOG_FOLDER, FileName);
-        private static readonly object _writeLock = new();
-        private const long MAX_LOG_FILE_SIZE = 209715200;
+        private static readonly object WriteLock = new();
+
+        //200MB
+        private const long MAX_LOG_FILE_SIZE_BYTES = 209_715_200;
         public static readonly FileInfo LogFileInfo = new(FilePath);
 
 
@@ -106,7 +109,9 @@ namespace Kebler.Services
         public void Ui(string button, [CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
-            var data = Format($"User clicked '{button}'", LogType.Ui, lineNumber, caller, GetClassName(sourceFilePath));
+            var message = button == null ? string.Empty : $" '{button}'";
+
+            var data = Format($"User clicked{message}", LogType.Ui, lineNumber, caller, GetClassName(sourceFilePath));
 
             Task.Run(() =>
             {
@@ -117,12 +122,8 @@ namespace Kebler.Services
         public void Ui([CallerLineNumber] int lineNumber = 0,
             [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
         {
-            var data = Format($"User clicked", LogType.Ui, lineNumber, caller, GetClassName(sourceFilePath));
 
-            Task.Run(() =>
-            {
-                WriteToFile(data);
-            });
+            Ui(null, lineNumber, caller, sourceFilePath);
         }
 
         private static string Format(string message, LogType type, int lineNumber = 0, string caller = "", string className = "")
@@ -143,9 +144,9 @@ namespace Kebler.Services
 
         private static void WriteToFile(string data)
         {
-            CheckFileLength();
-            lock (_writeLock)
+            lock (WriteLock)
             {
+                CheckFileLength();
                 try
                 {
                     if (LogFileInfo?.DirectoryName != null)
@@ -162,19 +163,16 @@ namespace Kebler.Services
 
         private static void CheckFileLength()
         {
-            lock (_writeLock)
+            try
             {
-                try
+                if (LogFileInfo.Length >= MAX_LOG_FILE_SIZE_BYTES)
                 {
-                    if (LogFileInfo.Length >= MAX_LOG_FILE_SIZE)
-                    {
-                        LogFileInfo.Delete();
-                    }
+                    LogFileInfo.Delete();
                 }
-                catch (Exception ex)
-                {
-                    //File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
-                }
+            }
+            catch (Exception)
+            {
+                //File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
             }
         }
 

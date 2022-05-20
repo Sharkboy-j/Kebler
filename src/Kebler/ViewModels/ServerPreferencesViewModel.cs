@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Caliburn.Micro;
-using Kebler.Models.Torrent.Args;
+using Kebler.Core.Models.Arguments;
 using Newtonsoft.Json;
 
 namespace Kebler.ViewModels

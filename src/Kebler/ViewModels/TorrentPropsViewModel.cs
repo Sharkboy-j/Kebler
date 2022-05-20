@@ -4,16 +4,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using Kebler.Models.Torrent;
-using Kebler.Models.Torrent.Args;
+using Kebler.Core.Domain.Intrfaces;
+using Kebler.Core.Models;
+using Kebler.Core.Models.Arguments;
 using Kebler.Services;
-using Kebler.TransmissionCore;
+using Kebler.TransmissionTorrentClient;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.ViewModels
 {
     public class TorrentPropsViewModel : Screen
     {
-        private readonly TransmissionClient _transmissionClient = new TransmissionClient(string.Empty);
+        private readonly IRemoteTorrentClient _transmissionClient = new TransmissionClient(string.Empty);
         private Visibility _isBusy;
         private long _maxDownSp, _maxUpSp;
         private bool _MXD_Bool, _MXU_Bool, _SeedR_Bool, _StopSeed_Bool;
@@ -39,7 +41,7 @@ namespace Kebler.ViewModels
         /// <param name="transmissionClient">TransmissionClient.</param>
         /// <param name="ids">Torrent ids</param>
         /// <param name="manager">IWindowManager</param>
-        public TorrentPropsViewModel(TransmissionClient transmissionClient, uint[] ids, IWindowManager manager)
+        public TorrentPropsViewModel(IRemoteTorrentClient transmissionClient, uint[] ids, IWindowManager manager)
         {
             _transmissionClient = transmissionClient;
             tors = ids;
@@ -49,7 +51,7 @@ namespace Kebler.ViewModels
             {
                 try
                 {
-                    var answ = await _transmissionClient.TorrentGetAsyncWithID(TorrentFields.ALL_FIELDS,
+                    var answ = await _transmissionClient.TorrentGetAsyncWithId(TorrentFields.ALL_FIELDS,
                         new CancellationToken(), tors);
                     if (Application.Current.Dispatcher.HasShutdownStarted)
                         return;

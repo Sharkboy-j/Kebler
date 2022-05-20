@@ -15,25 +15,25 @@
 		<Deterministic>false</Deterministic>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="KeblerVided.png" />
+		<None Remove="KeblerVided.png" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
-    <ProjectReference Include="..\Kebler.Styles\Kebler.Styles.csproj" />
-    <ProjectReference Include="..\Kebler.Update.Core\Kebler.Update.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Kebler.Const\Kebler.Const.csproj" />
+		<ProjectReference Include="..\Kebler.Styles\Kebler.Styles.csproj" />
+		<ProjectReference Include="..\Kebler.Update.Core\Kebler.Update.Core.csproj" />
+	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\AssemblyInfo.cs">
 			<Link>Properties\AssemblyInfo.cs</Link>
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-	  <Resource Include="KeblerVided.png" />
+		<Resource Include="KeblerVided.png" />
 	</ItemGroup>
 </Project>

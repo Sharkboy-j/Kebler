@@ -48,7 +48,6 @@
     <ProjectReference Include="..\Kebler.Resources\Kebler.Resources.csproj" />
     <ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
     <ProjectReference Include="..\Kebler.Styles\Kebler.Styles.csproj" />
-    <ProjectReference Include="..\Kebler.TransmissionCore\Kebler.TransmissionCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

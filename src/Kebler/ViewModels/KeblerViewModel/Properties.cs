@@ -1,6 +1,8 @@
 ﻿using Kebler.Models;
 using System.Collections.Generic;
 using Caliburn.Micro;
+using Kebler.Core.Models;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.ViewModels
 {

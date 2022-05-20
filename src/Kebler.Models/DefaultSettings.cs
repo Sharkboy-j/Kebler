@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
-using Kebler.Models.Torrent;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.Models
 {

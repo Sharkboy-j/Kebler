@@ -1,10 +1,11 @@
 ﻿using Caliburn.Micro;
-using Kebler.Models;
 using Kebler.Models.Interfaces;
 using Kebler.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kebler.Core.Models;
+using Kebler.TransmissionTorrentClient.Models;
 
 namespace Kebler.ViewModels
 {

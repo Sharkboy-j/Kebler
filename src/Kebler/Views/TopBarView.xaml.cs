@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using Kebler.Dialogs;
 using Kebler.Services;
@@ -23,7 +22,10 @@ namespace Kebler.Views
         {
             App.Log.Ui(nameof(Report));
             Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81/Kebler/issues")
-            { CreateNoWindow = true });
+            {
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
         }
 
         private void About(object sender, RoutedEventArgs e)
@@ -39,7 +41,7 @@ namespace Kebler.Views
 #if RELEASE
             App.Log.Ui(nameof(Check));
 
-            Task.Run(Updater.CheckUpdates);
+            System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
         }
 
@@ -47,7 +49,11 @@ namespace Kebler.Views
         {
             App.Log.Ui(nameof(Contact));
 
-            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
         }
 
         private void OpenLogs(object sender, RoutedEventArgs e)
