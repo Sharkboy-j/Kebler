@@ -37,8 +37,8 @@ namespace Kebler.ViewModels
         private object view;
         private readonly Kebler.Services.Interfaces.ILog Log;
         private readonly IRemoteTorrentClient _transmissionClient;
-        private readonly CancellationToken cancellationToken;
-        private readonly CancellationTokenSource cancellationTokenSource;
+        private CancellationToken cancellationToken;
+        private CancellationTokenSource cancellationTokenSource;
         private FileInfo _fileInfo;
         private BindableCollection<string> _dirs;
         private SessionSettings settings;
@@ -199,9 +199,12 @@ namespace Kebler.ViewModels
                 LoadingGridVisibility = Visibility.Collapsed;
             }
 
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
             if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
             {
-                var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
+                //var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
 
                 //DownlaodDir = info.DownloadDir;
                 var manager = IoC.Get<IWindowManager>();
@@ -418,10 +421,7 @@ namespace Kebler.ViewModels
                                                 if (_torrent != null)
                                                 {
                                                     var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
-
-
-
-
+                                                    
                                                     await _wnd.Dispatcher.InvokeAsync(async () =>
                                                     {
                                                         var result = await MessageBoxViewModel.ShowDialog(
@@ -456,6 +456,22 @@ namespace Kebler.ViewModels
                                                 return;
                                             }
                                     }
+                                }
+
+                                if (TorrentResult.Result == Enums.ReponseResult.NotOk &&
+                                    TorrentResult.CustomException != null)
+                                {
+
+                                    await _wnd.Dispatcher.InvokeAsync(async () =>
+                                    {
+                                        await MessageBoxViewModel.ShowDialog(TorrentResult.CustomException.Message
+                                            , null, string.Empty);
+
+                                    });
+
+                                    Log?.Error(TorrentResult.CustomException);
+                                    break;
+
                                 }
                                 else
                                 {
