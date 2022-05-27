@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Deterministic>false</Deterministic>
+		<MinimumPlatformVersion>7.0</MinimumPlatformVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro" Version="4.0.173" />
+		<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
+		<ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
+	</ItemGroup>
+
+</Project>

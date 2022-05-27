@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Icons\Kebler.ico" />
+		<None Remove="Icons\Kebler.svg" />
+		<None Remove="Icons\KeblerVided.png" />
+		<None Remove="Icons\Kebler_16x16.png" />
+		<None Remove="Icons\Kebler_32x32.png" />
+		<None Remove="Icons\Kebler_512x512.png" />
+		<None Remove="Icons\Kebler_64x64.png" />
+		<None Remove="Icons\Kebler_dark_512x512.png" />
+		<None Remove="Icons\Kebler_darl2_512x512.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Icons\Kebler.ico" />
+		<EmbeddedResource Include="Icons\Kebler.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Icons\KeblerVided.png" />
+		<Resource Include="Icons\Kebler_16x16.png" />
+		<Resource Include="Icons\Kebler_32x32.png" />
+		<Resource Include="Icons\Kebler_512x512.png" />
+		<Resource Include="Icons\Kebler_64x64.png" />
+		<Resource Include="Icons\Kebler_dark_512x512.png" />
+		<Resource Include="Icons\Kebler_darl2_512x512.png" />
+	</ItemGroup>
+</Project>
