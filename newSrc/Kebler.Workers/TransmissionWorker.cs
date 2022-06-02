@@ -36,11 +36,28 @@ namespace Kebler.Workers
 
                 _logger.Trace($"{nameof(CheckConnectionAsync)} Start");
 
-                _ = await _client.GetSessionInformationAsync(tokenSource.Token);
+                var info = await _client.GetSessionInformationAsync(tokenSource.Token);
 
-                _logger.Trace($"{nameof(CheckConnectionAsync)} Success");
-
-                return (true, null);
+                if (info.Response.Success)
+                {
+                    _logger.Trace($"{nameof(CheckConnectionAsync)} Success");
+                    return (true, null);
+                }
+                else
+                {
+                    if (info.Response?.WebException != null)
+                    {
+                        return (false, info.Response?.WebException);
+                    }
+                    else if(info.Response.CustomException!=null)
+                    {
+                        return (false, info.Response?.CustomException);
+                    }
+                    else
+                    {
+                        return (false, new Exception("Unknown"));
+                    }
+                }
             }
             catch (Exception ex)
             {

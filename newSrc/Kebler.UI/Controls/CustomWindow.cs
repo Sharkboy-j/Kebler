@@ -93,8 +93,6 @@ namespace Kebler.UI.Controls
             DependencyProperty.Register(nameof(MaximizeButtonVisibility), typeof(Visibility), typeof(CustomWindow),
                 new PropertyMetadata(System.Windows.Visibility.Visible));
 
-
-
         public Visibility MinimizeButtonVisibility
         {
             get => (Visibility)GetValue(MinimizeButtonVisibilityProperty);
@@ -105,16 +103,14 @@ namespace Kebler.UI.Controls
             DependencyProperty.Register(nameof(MinimizeButtonVisibility), typeof(Visibility), typeof(CustomWindow),
                 new PropertyMetadata(System.Windows.Visibility.Visible));
 
+        public bool IsTitleBarVisible
+        {
+            get => (bool)GetValue(dp: IsTitleBarVisibleProperty);
+            set => SetValue(dp: IsTitleBarVisibleProperty, value: value);
+        }
 
-
-        //public bool IsTitleBarVisible
-        //{
-        //    get => (bool)GetValue(dp: IsTitleBarVisibleProperty);
-        //    set => SetValue(dp: IsTitleBarVisibleProperty, value: value);
-        //}
-
-        //public static readonly DependencyProperty IsTitleBarVisibleProperty =
-        //    DependencyProperty.Register(name: nameof(IsTitleBarVisible), propertyType: typeof(bool), ownerType: typeof(CustomWindow), typeMetadata: new PropertyMetadata(defaultValue: false));
+        public static readonly DependencyProperty IsTitleBarVisibleProperty =
+            DependencyProperty.Register(name: nameof(IsTitleBarVisible), propertyType: typeof(bool), ownerType: typeof(CustomWindow), typeMetadata: new PropertyMetadata(defaultValue: false));
 
         static CustomWindow()
         {
@@ -139,8 +135,6 @@ namespace Kebler.UI.Controls
             _rectSizeSouthEast = new Rectangle();
             _windowBorder = new Border();
             _topBarMenu = new Menu();
-            this.MinWidth = 800;
-            this.MinHeight = 600;
 
             SizeChanged += CustomWindow_SizeChanged;
         }

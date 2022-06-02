@@ -37,14 +37,6 @@
             Path
         }
 
-        public enum MessageBoxDilogButtons
-        {
-            YesNo,
-            OkCancel,
-            Ok,
-            None
-        }
-
         public enum RemoveResult
         {
             Ok,

@@ -37,18 +37,15 @@ namespace Kebler
             _container.Singleton<ICustomLocalizationProvider, LocalizationProvider>();
             _container.Singleton<ITorrentClientsWorker, TorrentClientsWorker>();
             _container.Singleton<KeblerViewModel>();
-
+            _container.Singleton<DialogBoxViewModel>();
+            _container.Singleton<MessageBoxViewModel>();
+            _container.Singleton<BoxViewModel>();
 
             _configService = ConfigService.Instance;
-
             _localizationManager = LocalizationManager.Instance;
 
             _configService.LoadConfig();
-            //container.Singleton<KeblerViewModel>();
-            //container.Singleton<ConnectionManagerViewModel>();
-            //container.Singleton<BoxViewModel>();
-            //container.Singleton<DialogBoxViewModel>();
-            //container.Singleton<MessageBoxViewModel>();
+
             //container.Singleton<TaskBarIconViewModel>();
             //container.Singleton<TorrentPropsViewModel>();
             //container.Singleton<RemoveListDialogViewModel>();
@@ -66,6 +63,11 @@ namespace Kebler
             FrameworkElement.StyleProperty.OverrideMetadata(typeof(CustomWindow), new FrameworkPropertyMetadata
             {
                 DefaultValue = Application.FindResource(typeof(CustomWindow))
+            });
+
+            FrameworkElement.StyleProperty.OverrideMetadata(typeof(DialogWindow), new FrameworkPropertyMetadata
+            {
+                DefaultValue = Application.FindResource(typeof(DialogWindow))
             });
 
             if (string.IsNullOrEmpty(_configService.DefaultSettingsInstanse.Language.Name))

@@ -1,0 +1,46 @@
+﻿<UserControl
+    x:Class="Kebler.UI.CustomControls.BoxDialogButtons"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:Kebler.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <Button
+            Height="26"
+            HorizontalAlignment="Right"
+            cm:Message.Attach="NoCancel"
+            Content="{lex:BLoc BTNS_No}"
+            Visibility="{Binding NoVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <Button
+            Height="26"
+            HorizontalAlignment="Right"
+            cm:Message.Attach="OkYes"
+            Content="{lex:BLoc BTNS_Yes}"
+            IsDefault="{Binding YesDefault}"
+            Visibility="{Binding YesVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <Button
+            Height="26"
+            cm:Message.Attach="NoCancel"
+            Content="{lex:BLoc BTNS_Cancel}"
+            Visibility="{Binding CancelVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <Button
+            Height="26"
+            HorizontalAlignment="Right"
+            cm:Message.Attach="OkYes"
+            Content="{lex:BLoc BTNS_Ok}"
+            IsDefault="{Binding OkDefault}"
+            Visibility="{Binding OkVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+    </StackPanel>
+</UserControl>

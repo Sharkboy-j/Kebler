@@ -41,6 +41,8 @@
         <Setter Property="Background" Value="{DynamicResource Window.Background}" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
         <Setter Property="TopBarMenuVisibility" Value="Collapsed" />
+        <Setter Property="MinWidth" Value="800" />
+        <Setter Property="MinHeight" Value="600" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:CustomWindow}">
@@ -323,6 +325,18 @@
                             <Setter TargetName="PART_BackGrid" Property="Margin" Value="7" />
 
                         </Trigger>
+                        <Trigger Property="ResizeMode" Value="NoResize">
+                            <Setter TargetName="lnSizeNorth" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="lnSizeSouth" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="lnSizeWest" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="lnSizeEast" Property="Visibility" Value="Collapsed" />
+
+                            <Setter TargetName="rectSizeNorthWest" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="rectSizeNorthEast" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="rectSizeSouthWest" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="rectSizeSouthEast" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
                         <Trigger Property="IsActive" Value="False">
                             <Setter TargetName="PART_Border" Property="BorderBrush" Value="{DynamicResource Window.BorderBrush.Inactive}" />
                         </Trigger>
@@ -330,6 +344,16 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource {x:Type controls:CustomWindow}}" TargetType="{x:Type controls:DialogWindow}">
+        <Setter Property="ResizeMode" Value="NoResize" />
+        <Setter Property="ShowHeaderLine" Value="false" />
+        <Setter Property="MaximizeButtonVisibility" Value="Collapsed" />
+        <Setter Property="MinimizeButtonVisibility" Value="Collapsed" />
+        <Setter Property="ShowInTaskbar" Value="true" />
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="MinHeight" Value="100" />
     </Style>
 
 </ResourceDictionary>
