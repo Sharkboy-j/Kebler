@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using Humanizer;
+using Humanizer.Bytes;
 
 namespace Kebler.UI.Converters
 {
@@ -19,41 +21,46 @@ namespace Kebler.UI.Converters
             throw new NotImplementedException();
         }
 
-        public static string GetSizeString(long length, bool showEmpty = false)
+        public static string GetSizeString(in long length, in bool showEmpty = false)
         {
-            long B = 0, KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
-            double size = length;
-            var suffix = nameof(B);
+            var size = ByteSize.FromBytes(length);
+            var text = size.Per(TimeSpan.FromSeconds(1)).Humanize();
+            return text;
 
-            double SelSize;
-            if (length >= TB)
-            {
-                SelSize = TB;
-                suffix = nameof(TB);
-            }
-            else if (length >= GB)
-            {
-                SelSize = GB;
-                suffix = nameof(GB);
-            }
-            else if (length >= MB)
-            {
-                SelSize = MB;
-                suffix = nameof(MB);
-            }
-            else if (length >= KB)
-            {
-                SelSize = KB;
-                suffix = nameof(KB);
-            }
-            else
-            {
-                return showEmpty ? "0 KB/s" : string.Empty;
-            }
 
-            size = Math.Round(length / SelSize, 2);
+            //long B = 0, KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
+            //double size = length;
+            //var suffix = nameof(B);
 
-            return $"{size} {suffix}/s";
+            //double SelSize;
+            //if (length >= TB)
+            //{
+            //    SelSize = TB;
+            //    suffix = nameof(TB);
+            //}
+            //else if (length >= GB)
+            //{
+            //    SelSize = GB;
+            //    suffix = nameof(GB);
+            //}
+            //else if (length >= MB)
+            //{
+            //    SelSize = MB;
+            //    suffix = nameof(MB);
+            //}
+            //else if (length >= KB)
+            //{
+            //    SelSize = KB;
+            //    suffix = nameof(KB);
+            //}
+            //else
+            //{
+            //    return showEmpty ? "0 KB/s" : string.Empty;
+            //}
+
+            //size = Math.Round(length / SelSize, 2);
+
+            //return $"{size} {suffix}/s";
         }
     }
 }

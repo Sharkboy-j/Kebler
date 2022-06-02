@@ -7,36 +7,35 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Kebler.Domain;
 using Kebler.Domain.Interfaces;
-using ILog = Kebler.Domain.Interfaces.ILog;
 
 namespace Kebler.Services
 {
     /// <summary>
     /// I DON'T WANT TO USE FUCKING NLOG OR SIMILAR SHIT. THAT IS PEACE OF SHITY WIZZARD
     /// </summary>
-    public class Log : ILog
+    public class Logger : ILogger
     {
         private readonly IConfigService _configService = ConfigService.Instance;
         private static readonly string FileName = $"{nameof(Kebler)}_{DateTime.Now:dd-MM-yyyy}.log";
         private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstStrings.LOG_FOLDER, FileName);
         private static readonly object WriteLock = new();
-        private static ILog _logger;
+        private static ILogger _logger;
         private enum LogType { Info, Warning, Error, Ui, Trace }
 
         //200MB
         private const long MaxLogFileSizeBytes = 209_715_200;
 
-        public static ILog Instance => _logger ??= new Log();
+        public static ILogger Instance => _logger ??= new Logger();
 
         public static readonly FileInfo LogFileInfo = new(FilePath);
 
-        public Log()
+        public Logger()
         {
             Task.Run(ClearOldLogs);
         }
 
-        public void Info(string message, [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Info(in string message, [CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
             var data = Format(message, LogType.Info, lineNumber, caller, GetClassName(sourceFilePath));
 
@@ -46,7 +45,7 @@ namespace Kebler.Services
             });
         }
 
-        public void Trace(Stopwatch time, int lineNumber = 0, string caller = "", string sourceFilePath = "")
+        public void Trace(in Stopwatch time, in int lineNumber = 0, in string caller = "", in string sourceFilePath = "")
         {
             if (_configService.DefaultSettingsInstanse.TraceEnabled)
             {
@@ -59,7 +58,7 @@ namespace Kebler.Services
             }
         }
 
-        public void Trace(string customMessage = null, int lineNumber = 0, string caller = "", string sourceFilePath = "")
+        public void Trace(in string customMessage = null, in int lineNumber = 0, in string caller = "", in string sourceFilePath = "")
         {
             if (!_configService.IsInited || _configService.DefaultSettingsInstanse.TraceEnabled)
             {
@@ -72,8 +71,8 @@ namespace Kebler.Services
             }
         }
 
-        public void Warn(string message, [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Warn(in string message, [CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
             var data = Format(message, LogType.Warning, lineNumber, caller, GetClassName(sourceFilePath));
             Task.Run(() =>
@@ -82,8 +81,8 @@ namespace Kebler.Services
             });
         }
 
-        public void Error(Exception exception, [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Error(in Exception exception, [CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
             var data = Format(FormatException(exception), LogType.Error, lineNumber, caller, GetClassName(sourceFilePath));
 
@@ -96,8 +95,8 @@ namespace Kebler.Services
 #endif
         }
 
-        public void Error(string exception, [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Error(in string exception, [CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
             var data = Format(exception, LogType.Error, lineNumber, caller, GetClassName(sourceFilePath));
 
@@ -110,8 +109,8 @@ namespace Kebler.Services
 #endif
         }
 
-        public void Ui(string button, [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Ui(in string button, [CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
             var message = button == null ? string.Empty : $" '{button}'";
 
@@ -123,30 +122,29 @@ namespace Kebler.Services
             });
         }
 
-        public void Ui([CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string caller = "", [CallerFilePath] string sourceFilePath = "")
+        public void Ui([CallerLineNumber] in int lineNumber = 0,
+            [CallerMemberName] in string caller = "", [CallerFilePath] in string sourceFilePath = "")
         {
-
             Ui(null, lineNumber, caller, sourceFilePath);
         }
 
-        private static string Format(string message, LogType type, int lineNumber = 0, string caller = "", string className = "")
+        private static string Format(in string message, in LogType type, in int lineNumber = 0, in string caller = "", in string className = "")
         {
             var thread = Thread.CurrentThread.ManagedThreadId == 1 ? "Main" : $"{Thread.CurrentThread.ManagedThreadId}";
             return $"[{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff}] [{thread}] [{type.ToString().ToLower()}] [{className}:{lineNumber}->({caller})] {message}{Environment.NewLine}";
         }
 
-        private static string FormatException(Exception ex)
+        private static string FormatException(in Exception ex)
         {
             return $"{ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}{ex.InnerException}";
         }
 
-        private static string GetClassName(string path)
+        private static string GetClassName(in string path)
         {
             return new FileInfo(path).Name;
         }
 
-        private static void WriteToFile(string data)
+        private static void WriteToFile(in string data)
         {
             lock (WriteLock)
             {
@@ -176,7 +174,7 @@ namespace Kebler.Services
             }
             catch (Exception)
             {
-                //File.AppendAllTextAsync(FilePath, $"Log file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
+                //File.AppendAllTextAsync(FilePath, $"Logger file size more than 200mb, but error occured when deleting it.{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -215,7 +213,7 @@ namespace Kebler.Services
                     try
                     {
                         logFile.Delete();
-                        Instance.Info($"Log file '{logFile.Name}' removed");
+                        Instance.Info($"Logger file '{logFile.Name}' removed");
                     }
                     catch (Exception ex)
                     {

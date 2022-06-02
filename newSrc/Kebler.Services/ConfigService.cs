@@ -5,7 +5,6 @@ using Kebler.Domain;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Models;
 using SharpConfig;
-using ILog = Kebler.Domain.Interfaces.ILog;
 
 namespace Kebler.Services
 {
@@ -16,7 +15,7 @@ namespace Kebler.Services
         public static IConfigService Instance => _configService ??= new ConfigService();
 
 
-        private static readonly ILog Log = Services.Log.Instance;
+        private static readonly ILogger Logger = Services.Logger.Instance;
         private static Configuration _configurationObj;
 
         private static IConfigService _configService;
@@ -44,7 +43,7 @@ namespace Kebler.Services
                     CreateNewConfig();
             }
 
-            Log.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
+            Logger.Info($"Configuration:{Environment.NewLine}" + GetConfigString());
             IsInited = true;
         }
 
@@ -65,16 +64,16 @@ namespace Kebler.Services
             try
             {
                 _configurationObj = Configuration.LoadFromFile(ConstStrings.CONFIGPATH);
-                Log.Info("Configuration exists");
+                Logger.Info("Configuration exists");
                 return true;
             }
             catch (FileNotFoundException)
             {
-                Log.Info("Configuration file not found");
+                Logger.Info("Configuration file not found");
             }
             catch (Exception ex)
             {
-                Log.Error(ex);
+                Logger.Error(ex);
             }
             return false;
 
@@ -89,7 +88,7 @@ namespace Kebler.Services
             }
             catch (Exception e)
             {
-                Log.Error(e.ToString());
+                Logger.Error(e.ToString());
                 CreateNewConfig();
             }
         }

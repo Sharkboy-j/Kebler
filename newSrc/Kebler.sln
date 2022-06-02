@@ -9,7 +9,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Services", "Kebler.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Domain", "Kebler.Domain\Kebler.Domain.csproj", "{77471CF3-FE6C-47D9-865E-4A37EB8027F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.UI", "Kebler.UI\Kebler.UI.csproj", "{8C1606A5-9124-4178-8F2B-C435856D92EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.UI", "Kebler.UI\Kebler.UI.csproj", "{8C1606A5-9124-4178-8F2B-C435856D92EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{48E81D15-4183-4334-A573-955D830C384F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Transmission", "Kebler.Transmission\Kebler.Transmission.csproj", "{0F745ACE-8A0E-454C-B7D0-849CC6159A29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Workers", "Kebler.Workers\Kebler.Workers.csproj", "{A6B2011E-D6E7-4129-8432-F17CFD055F09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +42,14 @@ Global
 		{8C1606A5-9124-4178-8F2B-C435856D92EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C1606A5-9124-4178-8F2B-C435856D92EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C1606A5-9124-4178-8F2B-C435856D92EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F745ACE-8A0E-454C-B7D0-849CC6159A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F745ACE-8A0E-454C-B7D0-849CC6159A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F745ACE-8A0E-454C-B7D0-849CC6159A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F745ACE-8A0E-454C-B7D0-849CC6159A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

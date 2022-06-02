@@ -6,7 +6,6 @@ using Caliburn.Micro;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Models.Events;
 using WPFLocalizeExtension.Engine;
-using ILog = Kebler.Domain.Interfaces.ILog;
 
 namespace Kebler.Services
 {
@@ -14,7 +13,7 @@ namespace Kebler.Services
     {
         private List<CultureInfo> _cultureList;
 
-        private readonly ILog _log = Log.Instance;
+        private readonly ILogger _logger = Logger.Instance;
         private readonly IConfigService _configService = ConfigService.Instance;
 
 
@@ -55,16 +54,16 @@ namespace Kebler.Services
                     });
 
                     SetCurrentThreadCulture(CurrentCulture);
-                    _log.Info($"Lang changed {_currentCulture}");
+                    _logger.Info($"Lang changed {_currentCulture}");
                 }
                 catch (Exception ex)
                 {
-                    _log.Error(ex);
+                    _logger.Error(ex);
                 }
             }
         }
 
-        private void SetCurrentThreadCulture(CultureInfo culture)
+        private void SetCurrentThreadCulture(in CultureInfo culture)
         {
             try
             {
@@ -83,7 +82,7 @@ namespace Kebler.Services
             }
             catch (Exception ex)
             {
-                _log.Error(ex);
+                _logger.Error(ex);
             }
         }
     }

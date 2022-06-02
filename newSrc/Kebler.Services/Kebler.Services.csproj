@@ -9,10 +9,13 @@
 		<PackageReference Include="Caliburn.Micro.Core" Version="4.0.173" />
 		<PackageReference Include="SharpConfig" Version="3.2.9.1" />
 		<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
+		<PackageReference Include="LiteDB" Version="4.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
+	  <ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
+	  <ProjectReference Include="..\Kebler.Workers\Kebler.Workers.csproj" />
 	</ItemGroup>
 
 </Project>

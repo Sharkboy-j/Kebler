@@ -10,7 +10,6 @@ using Kebler.Services;
 using Kebler.UI;
 using Kebler.UI.Controls;
 using Kebler.ViewModels;
-using ILog = Kebler.Domain.Interfaces.ILog;
 
 namespace Kebler
 {
@@ -33,11 +32,15 @@ namespace Kebler
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.Singleton<IConfigService, ConfigService>();
-            _container.Singleton<ILog, Log>();
+            _container.Singleton<ILogger, Logger>();
             _container.Singleton<ILocalizationManager, LocalizationManager>();
+            _container.Singleton<ICustomLocalizationProvider, LocalizationProvider>();
+            _container.Singleton<ITorrentClientsWorker, TorrentClientsWorker>();
             _container.Singleton<KeblerViewModel>();
 
+
             _configService = ConfigService.Instance;
+
             _localizationManager = LocalizationManager.Instance;
 
             _configService.LoadConfig();
@@ -50,12 +53,15 @@ namespace Kebler
             //container.Singleton<TorrentPropsViewModel>();
             //container.Singleton<RemoveListDialogViewModel>();
             //container.Singleton<AddTorrentViewModel>();
+
+            _container.PerRequest<ConnectionManagerViewModel>();
+
         }
 
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            ReadTheme();
+            ThemeManager.ChangeAppTheme(themeName: ConstStrings.ThemeName);
 
             FrameworkElement.StyleProperty.OverrideMetadata(typeof(CustomWindow), new FrameworkPropertyMetadata
             {
@@ -73,11 +79,6 @@ namespace Kebler
 #if RELEASE
            //System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
-        }
-
-        private void ReadTheme()
-        {
-            ThemeManager.ChangeAppTheme(themeName: ConstStrings.ThemeName);
         }
 
         protected override object GetInstance(Type service, string key)

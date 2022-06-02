@@ -82,6 +82,31 @@ namespace Kebler.UI.Controls
             set => SetValue(ShowHeaderLineProperty, value);
         }
 
+
+        public Visibility MaximizeButtonVisibility
+        {
+            get => (Visibility)GetValue(MaximizeButtonVisibilityProperty);
+            set => SetValue(MaximizeButtonVisibilityProperty, value);
+        }
+
+        public static readonly DependencyProperty MaximizeButtonVisibilityProperty =
+            DependencyProperty.Register(nameof(MaximizeButtonVisibility), typeof(Visibility), typeof(CustomWindow),
+                new PropertyMetadata(System.Windows.Visibility.Visible));
+
+
+
+        public Visibility MinimizeButtonVisibility
+        {
+            get => (Visibility)GetValue(MinimizeButtonVisibilityProperty);
+            set => SetValue(MinimizeButtonVisibilityProperty, value);
+        }
+
+        public static readonly DependencyProperty MinimizeButtonVisibilityProperty =
+            DependencyProperty.Register(nameof(MinimizeButtonVisibility), typeof(Visibility), typeof(CustomWindow),
+                new PropertyMetadata(System.Windows.Visibility.Visible));
+
+
+
         //public bool IsTitleBarVisible
         //{
         //    get => (bool)GetValue(dp: IsTitleBarVisibleProperty);
@@ -93,7 +118,6 @@ namespace Kebler.UI.Controls
 
         static CustomWindow()
         {
-
             DefaultStyleKeyProperty.OverrideMetadata(
                     typeof(CustomWindow),
                  new FrameworkPropertyMetadata(typeof(CustomWindow)));
@@ -193,20 +217,20 @@ namespace Kebler.UI.Controls
             {
                 _rectSizeSouthEast = rectSizeSouthEast;
                 _rectSizeSouthEast.MouseDown += OnSizeSouthEast;
-            } 
-            
+            }
+
             if (GetTemplateChild(childName: WindowBorderTemplateName) is Border windowBorder)
             {
                 _windowBorder = windowBorder;
             }
-            
+
             if (GetTemplateChild(childName: TopBarMenuTemplateName) is Menu menu)
             {
                 _topBarMenu = menu;
             }
         }
 
-     
+
 
         private static void MaxButton_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -226,7 +250,7 @@ namespace Kebler.UI.Controls
         private static void OnSizeSouthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthEast); }
         private static void OnSizeSouthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthWest); }
 
-   
+
 
         private static void OnSize(object sender, SizingAction action)
         {
@@ -261,15 +285,12 @@ namespace Kebler.UI.Controls
             _windowBorder.BorderThickness = this.WindowState == WindowState.Normal ? new Thickness(1) : new Thickness(0);
         }
 
-        private static void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount > 1)
             {
-                MaxButtonClick(sender, e);
-            }
-            else if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                sender.ForWindowFromTemplate(w => w.DragMove());
+                if (MaximizeButtonVisibility != Visibility.Collapsed)
+                    MaxButtonClick(sender, e);
             }
         }
 
@@ -277,6 +298,8 @@ namespace Kebler.UI.Controls
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                sender.ForWindowFromTemplate(w => w.DragMove());
+
                 sender.ForWindowFromTemplate(w =>
                 {
                     if (w.WindowState == WindowState.Maximized)

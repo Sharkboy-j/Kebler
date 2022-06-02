@@ -31,8 +31,8 @@ namespace Kebler.UI.Controls
         /// </summary>
         public SprocketControl()
         {
-            renderTimer = new Timer(Interval);
-            renderTimer.Elapsed += OnRenderTimerElapsed;
+            _renderTimer = new Timer(Interval);
+            _renderTimer.Elapsed += OnRenderTimerElapsed;
 
             // Set the minimum size of the SprocketControl
             //MinWidth = MINIMUM_CONTROL_SIZE.Width;
@@ -41,21 +41,19 @@ namespace Kebler.UI.Controls
             // Calculate the spoke points based on the current size
             CalculateSpokesPoints();
 
-            RoutedEventHandler handler = null;
-            handler = async delegate
-            {
-                Loaded -= handler;
-                await Dispatcher.InvokeAsync(() =>
-                {
-                    if (IsIndeterminate && IsVisible)
-                        Start();
-                });
-            };
-
-            Loaded += handler;
+            Loaded += Handler;
 
             // Event handler added to stop the timer if the control is no longer visible
             IsVisibleChanged += OnVisibilityChanged;
+        }
+
+        private async void Handler(object sender, RoutedEventArgs e)
+        {
+            Loaded -= Handler;
+            await Dispatcher.InvokeAsync(() =>
+            {
+                if (IsIndeterminate && IsVisible) Start();
+            });
         }
 
         #endregion
@@ -88,9 +86,9 @@ namespace Kebler.UI.Controls
         private const int DefaultTickCount = 12;
 
         //private readonly Size MINIMUM_CONTROL_SIZE = new Size(2, 2);
-/*
-        private const double MinimumPenWidth = 2;
-*/
+        /*
+                private const double MinimumPenWidth = 2;
+        */
         private const double DefaultStartAngle = 270;
         private const double MinimumInnerRadiusFactor = 0.175;
 
@@ -108,14 +106,14 @@ namespace Kebler.UI.Controls
 
         #region Fields
 
-        private Point centerPoint;
-        private double innerRadius;
-        private double outerRadius;
-        private double alphaChange;
-        private double angleIncrement;
-        private double renderStartAngle;
-        private readonly Timer renderTimer;
-        private List<Spoke> spokes;
+        private Point _centerPoint;
+        private double _innerRadius;
+        private double _outerRadius;
+        private double _alphaChange;
+        private double _angleIncrement;
+        private double _renderStartAngle;
+        private readonly Timer _renderTimer;
+        private List<Spoke> _spokes;
 
         #endregion
 
@@ -127,7 +125,7 @@ namespace Kebler.UI.Controls
         ///     AlphaTicksPercentage Dependency Property
         /// </summary>
         public static readonly DependencyProperty AlphaTicksPercentageProperty =
-            DependencyProperty.Register("AlphaTicksPercentage", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(AlphaTicksPercentage), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(100.0, OnAlphaTicksPercentageChanged, CoerceAlphaTicksPercentage));
 
         /// <summary>
@@ -137,7 +135,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double AlphaTicksPercentage
         {
-            get => (double) GetValue(AlphaTicksPercentageProperty);
+            get => (double)GetValue(AlphaTicksPercentageProperty);
             set => SetValue(AlphaTicksPercentageProperty, value);
         }
 
@@ -146,30 +144,32 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static void OnAlphaTicksPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldAlphaTicksPercentage = (double) e.OldValue;
+            var sprocket = (SprocketControl)d;
+            var oldAlphaTicksPercentage = (double)e.OldValue;
             var newAlphaTicksPercentage = sprocket.AlphaTicksPercentage;
-            sprocket.OnAlphaTicksPercentageChanged(oldAlphaTicksPercentage, newAlphaTicksPercentage);
+            //sprocket.OnAlphaTicksPercentageChanged(oldAlphaTicksPercentage, newAlphaTicksPercentage);
         }
 
-        /// <summary>
-        ///     Provides derived classes an opportunity to handle changes to the AlphaTicksPercentage property.
-        /// </summary>
-        protected void OnAlphaTicksPercentageChanged(double oldAlphaTicksPercentage, double newAlphaTicksPercentage)
-        {
-        }
+        ///// <summary>
+        /////     Provides derived classes an opportunity to handle changes to the AlphaTicksPercentage property.
+        ///// </summary>
+        //protected void OnAlphaTicksPercentageChanged(double oldAlphaTicksPercentage, double newAlphaTicksPercentage)
+        //{
+        //}
 
         /// <summary>
         ///     Coerces the AlphaTicksPercentage value.
         /// </summary>
         private static object CoerceAlphaTicksPercentage(DependencyObject d, object value)
         {
-            var desiredAlphaTicksPercentage = (double) value;
+            var desiredAlphaTicksPercentage = (double)value;
 
-            if (desiredAlphaTicksPercentage > 100.0)
-                desiredAlphaTicksPercentage = 100.0;
-            else if (desiredAlphaTicksPercentage < AlphaTickPercentageLowerLimit)
-                desiredAlphaTicksPercentage = AlphaTickPercentageLowerLimit;
+            desiredAlphaTicksPercentage = desiredAlphaTicksPercentage switch
+            {
+                > 100.0 => 100.0,
+                < AlphaTickPercentageLowerLimit => AlphaTickPercentageLowerLimit,
+                _ => desiredAlphaTicksPercentage
+            };
 
             return desiredAlphaTicksPercentage;
         }
@@ -182,7 +182,7 @@ namespace Kebler.UI.Controls
         ///     Interval Dependency Property
         /// </summary>
         public static readonly DependencyProperty IntervalProperty =
-            DependencyProperty.Register("Interval", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(Interval), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultInterval,
                     OnIntervalChanged));
 
@@ -192,7 +192,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double Interval
         {
-            get => (double) GetValue(IntervalProperty);
+            get => (double)GetValue(IntervalProperty);
             set => SetValue(IntervalProperty, value);
         }
 
@@ -203,8 +203,8 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnIntervalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldInterval = (double) e.OldValue;
+            var sprocket = (SprocketControl)d;
+            var oldInterval = (double)e.OldValue;
             var newInterval = sprocket.Interval;
             sprocket.OnIntervalChanged(oldInterval, newInterval);
         }
@@ -216,12 +216,12 @@ namespace Kebler.UI.Controls
         /// <param name="newInterval">New Value</param>
         protected void OnIntervalChanged(double oldInterval, double newInterval)
         {
-            if (renderTimer == null)
+            if (_renderTimer == null)
                 return;
-            var isEnabled = renderTimer.Enabled;
-            renderTimer.Enabled = false;
-            renderTimer.Interval = newInterval;
-            renderTimer.Enabled = isEnabled;
+            var isEnabled = _renderTimer.Enabled;
+            _renderTimer.Enabled = false;
+            _renderTimer.Interval = newInterval;
+            _renderTimer.Enabled = isEnabled;
         }
 
         #endregion
@@ -232,7 +232,7 @@ namespace Kebler.UI.Controls
         ///     IsIndeterminate Dependency Property
         /// </summary>
         public static readonly DependencyProperty IsIndeterminateProperty =
-            DependencyProperty.Register("IsIndeterminate", typeof(bool), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(IsIndeterminateProperty), typeof(bool), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(true, OnIsIndeterminateChanged));
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public bool IsIndeterminate
         {
-            get => (bool) GetValue(IsIndeterminateProperty);
+            get => (bool)GetValue(IsIndeterminateProperty);
             set => SetValue(IsIndeterminateProperty, value);
         }
 
@@ -252,8 +252,8 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnIsIndeterminateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var target = (SprocketControl) d;
-            var oldIsIndeterminate = (bool) e.OldValue;
+            var target = (SprocketControl)d;
+            var oldIsIndeterminate = (bool)e.OldValue;
             var newIsIndeterminate = target.IsIndeterminate;
             target.OnIsIndeterminateChanged(oldIsIndeterminate, newIsIndeterminate);
         }
@@ -263,7 +263,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldIsIndeterminate">Old Value</param>
         /// <param name="newIsIndeterminate">New Value</param>
-        protected void OnIsIndeterminateChanged(bool oldIsIndeterminate, bool newIsIndeterminate)
+        protected void OnIsIndeterminateChanged(in bool oldIsIndeterminate, in bool newIsIndeterminate)
         {
             if (oldIsIndeterminate == newIsIndeterminate)
                 return;
@@ -289,7 +289,7 @@ namespace Kebler.UI.Controls
         ///     InnerRadius Dependency Property
         /// </summary>
         public static readonly DependencyProperty InnerRadiusProperty =
-            DependencyProperty.Register("InnerRadius", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(InnerRadius), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(MinimumInnerRadiusFactor, OnInnerRadiusChanged, CoerceInnerRadius));
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double InnerRadius
         {
-            get => (double) GetValue(InnerRadiusProperty);
+            get => (double)GetValue(InnerRadiusProperty);
             set => SetValue(InnerRadiusProperty, value);
         }
 
@@ -307,16 +307,16 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static void OnInnerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldInnerRadius = (double) e.OldValue;
-            var newInnerRadius = sprocket.InnerRadius;
-            sprocket.OnInnerRadiusChanged(oldInnerRadius, newInnerRadius);
+            var sprocket = (SprocketControl)d;
+            //var oldInnerRadius = (double)e.OldValue;
+            //var newInnerRadius = sprocket.InnerRadius;
+            sprocket.OnInnerRadiusChanged();
         }
 
         /// <summary>
         ///     Provides derived classes an opportunity to handle changes to the InnerRadius property.
         /// </summary>
-        protected void OnInnerRadiusChanged(double oldInnerRadius, double newInnerRadius)
+        protected void OnInnerRadiusChanged()
         {
             // Recalculate the spoke points
             CalculateSpokesPoints();
@@ -327,8 +327,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static object CoerceInnerRadius(DependencyObject d, object value)
         {
-            var desiredInnerRadius = (double) value;
-
+            var desiredInnerRadius = (double)value;
             return desiredInnerRadius;
         }
 
@@ -340,7 +339,7 @@ namespace Kebler.UI.Controls
         ///     LowestAlpha Dependency Property
         /// </summary>
         public static readonly DependencyProperty LowestAlphaProperty =
-            DependencyProperty.Register("LowestAlpha", typeof(int), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(LowestAlpha), typeof(int), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(AlphaLowerLimit, OnLowestAlphaChanged, CoerceLowestAlpha));
 
         /// <summary>
@@ -349,7 +348,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public int LowestAlpha
         {
-            get => (int) GetValue(LowestAlphaProperty);
+            get => (int)GetValue(LowestAlphaProperty);
             set => SetValue(LowestAlphaProperty, value);
         }
 
@@ -358,30 +357,32 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static void OnLowestAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldLowestAlpha = (int) e.OldValue;
-            var newLowestAlpha = sprocket.LowestAlpha;
-            sprocket.OnLowestAlphaChanged(oldLowestAlpha, newLowestAlpha);
+            //var sprocket = (SprocketControl)d;
+            //var oldLowestAlpha = (int)e.OldValue;
+            //var newLowestAlpha = sprocket.LowestAlpha;
+            //sprocket.OnLowestAlphaChanged(oldLowestAlpha, newLowestAlpha);
         }
 
         /// <summary>
         ///     Provides derived classes an opportunity to handle changes to the LowestAlpha property.
         /// </summary>
-        protected void OnLowestAlphaChanged(int oldLowestAlpha, int newLowestAlpha)
-        {
-        }
+        //protected void OnLowestAlphaChanged(int oldLowestAlpha, int newLowestAlpha)
+        //{
+        //}
 
         /// <summary>
         ///     Coerces the LowestAlpha value.
         /// </summary>
         private static object CoerceLowestAlpha(DependencyObject d, object value)
         {
-            var desiredLowestAlpha = (int) value;
+            var desiredLowestAlpha = (int)value;
 
-            if (desiredLowestAlpha < AlphaLowerLimit)
-                desiredLowestAlpha = AlphaLowerLimit;
-            else if (desiredLowestAlpha > AlphaUpperLimit)
-                desiredLowestAlpha = AlphaUpperLimit;
+            desiredLowestAlpha = desiredLowestAlpha switch
+            {
+                < AlphaLowerLimit => AlphaLowerLimit,
+                > AlphaUpperLimit => AlphaUpperLimit,
+                _ => desiredLowestAlpha
+            };
 
             return desiredLowestAlpha;
         }
@@ -394,7 +395,7 @@ namespace Kebler.UI.Controls
         ///     OuterRadius Dependency Property
         /// </summary>
         public static readonly DependencyProperty OuterRadiusProperty =
-            DependencyProperty.Register("OuterRadius", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(OuterRadius), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(MinimumOuterRadiusFactor, OnOuterRadiusChanged, CoerceOuterRadius));
 
         /// <summary>
@@ -403,7 +404,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double OuterRadius
         {
-            get => (double) GetValue(OuterRadiusProperty);
+            get => (double)GetValue(OuterRadiusProperty);
             set => SetValue(OuterRadiusProperty, value);
         }
 
@@ -412,7 +413,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static void OnOuterRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
+            var sprocket = (SprocketControl)d;
             sprocket.OnOuterRadiusChanged();
         }
 
@@ -430,7 +431,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         private static object CoerceOuterRadius(DependencyObject d, object value)
         {
-            var desiredOuterRadius = (double) value;
+            var desiredOuterRadius = (double)value;
 
             return desiredOuterRadius;
         }
@@ -443,7 +444,7 @@ namespace Kebler.UI.Controls
         ///     Progress Dependency Property
         /// </summary>
         public static readonly DependencyProperty ProgressProperty =
-            DependencyProperty.Register("Progress", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(Progress), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultProgress, OnProgressChanged, CoerceProgress));
 
         /// <summary>
@@ -452,7 +453,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double Progress
         {
-            get => (double) GetValue(ProgressProperty);
+            get => (double)GetValue(ProgressProperty);
             set => SetValue(ProgressProperty, value);
         }
 
@@ -464,7 +465,7 @@ namespace Kebler.UI.Controls
         /// <returns>Coerced Value</returns>
         private static object CoerceProgress(DependencyObject d, object value)
         {
-            var progress = (double) value;
+            var progress = (double)value;
 
             if (progress < 0.0) return 0.0;
 
@@ -478,10 +479,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldProgress = (double) e.OldValue;
-            var newProgress = sprocket.Progress;
-            sprocket.OnProgressChanged(oldProgress, newProgress);
+            var sprocket = (SprocketControl)d;
+            //var oldProgress = (double)e.OldValue;
+            //var newProgress = sprocket.Progress;
+            sprocket.OnProgressChanged();
         }
 
         /// <summary>
@@ -489,7 +490,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldProgress">Old Value</param>
         /// <param name="newProgress">New Value</param>
-        protected void OnProgressChanged(double oldProgress, double newProgress)
+        protected void OnProgressChanged()
         {
             InvalidateVisual();
         }
@@ -502,7 +503,7 @@ namespace Kebler.UI.Controls
         ///     Rotation Dependency Property
         /// </summary>
         public static readonly DependencyProperty RotationProperty =
-            DependencyProperty.Register("Rotation", typeof(Direction), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(Rotation), typeof(Direction), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(Direction.Clockwise, OnRotationChanged));
 
         /// <summary>
@@ -511,7 +512,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public Direction Rotation
         {
-            get => (Direction) GetValue(RotationProperty);
+            get => (Direction)GetValue(RotationProperty);
             set => SetValue(RotationProperty, value);
         }
 
@@ -522,10 +523,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnRotationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldRotation = (Direction) e.OldValue;
-            var newRotation = sprocket.Rotation;
-            sprocket.OnRotationChanged(oldRotation, newRotation);
+            var sprocket = (SprocketControl)d;
+            //var oldRotation = (Direction)e.OldValue;
+            //var newRotation = sprocket.Rotation;
+            sprocket.OnRotationChanged();
         }
 
         /// <summary>
@@ -533,7 +534,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldRotation">Old Value</param>
         /// <param name="newRotation">New Value</param>
-        protected void OnRotationChanged(Direction oldRotation, Direction newRotation)
+        protected void OnRotationChanged()
         {
             // Recalculate the spoke points
             CalculateSpokesPoints();
@@ -547,7 +548,7 @@ namespace Kebler.UI.Controls
         ///     StartAngle Dependency Property
         /// </summary>
         public static readonly DependencyProperty StartAngleProperty =
-            DependencyProperty.Register("StartAngle", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(StartAngle), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultStartAngle, OnStartAngleChanged));
 
         /// <summary>
@@ -556,7 +557,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double StartAngle
         {
-            get => (double) GetValue(StartAngleProperty);
+            get => (double)GetValue(StartAngleProperty);
             set => SetValue(StartAngleProperty, value);
         }
 
@@ -567,10 +568,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnStartAngleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldStartAngle = (double) e.OldValue;
-            var newStartAngle = sprocket.StartAngle;
-            sprocket.OnStartAngleChanged(oldStartAngle, newStartAngle);
+            var sprocket = (SprocketControl)d;
+            //var oldStartAngle = (double)e.OldValue;
+            //var newStartAngle = sprocket.StartAngle;
+            sprocket.OnStartAngleChanged();
         }
 
         /// <summary>
@@ -578,7 +579,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldStartAngle">Old Value</param>
         /// <param name="newStartAngle">New Value</param>
-        protected void OnStartAngleChanged(double oldStartAngle, double newStartAngle)
+        protected void OnStartAngleChanged()
         {
             // Recalculate the spoke points
             CalculateSpokesPoints();
@@ -592,7 +593,7 @@ namespace Kebler.UI.Controls
         ///     TickColor Dependency Property
         /// </summary>
         public static readonly DependencyProperty TickColorProperty =
-            DependencyProperty.Register("TickColor", typeof(Color), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(TickColor), typeof(Color), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultTickColor, OnTickColorChanged));
 
         /// <summary>
@@ -601,7 +602,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public Color TickColor
         {
-            get => (Color) GetValue(TickColorProperty);
+            get => (Color)GetValue(TickColorProperty);
             set => SetValue(TickColorProperty, value);
         }
 
@@ -612,10 +613,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnTickColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldTickColor = (Color) e.OldValue;
-            var newTickColor = sprocket.TickColor;
-            sprocket.OnTickColorChanged(oldTickColor, newTickColor);
+            var sprocket = (SprocketControl)d;
+            //var oldTickColor = (Color)e.OldValue;
+            //var newTickColor = sprocket.TickColor;
+            sprocket.OnTickColorChanged();
         }
 
         /// <summary>
@@ -623,7 +624,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldTickColor">Old Value</param>
         /// <param name="newTickColor">New Value</param>
-        protected void OnTickColorChanged(Color oldTickColor, Color newTickColor)
+        protected void OnTickColorChanged()
         {
             InvalidateVisual();
         }
@@ -636,7 +637,7 @@ namespace Kebler.UI.Controls
         ///     TickCount Dependency Property
         /// </summary>
         public static readonly DependencyProperty TickCountProperty =
-            DependencyProperty.Register("TickCount", typeof(int), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultTickCount, OnTickCountChanged, CoerceTickCount));
 
         /// <summary>
@@ -645,7 +646,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public int TickCount
         {
-            get => (int) GetValue(TickCountProperty);
+            get => (int)GetValue(TickCountProperty);
             set => SetValue(TickCountProperty, value);
         }
 
@@ -657,7 +658,7 @@ namespace Kebler.UI.Controls
         /// <returns>Coerced Value</returns>
         private static object CoerceTickCount(DependencyObject d, object value)
         {
-            return (int) value <= 0 ? DefaultTickCount : value;
+            return (int)value <= 0 ? DefaultTickCount : value;
         }
 
         /// <summary>
@@ -667,10 +668,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnTickCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldTickCount = (int) e.OldValue;
-            var newTickCount = sprocket.TickCount;
-            sprocket.OnTickCountChanged(oldTickCount, newTickCount);
+            var sprocket = (SprocketControl)d;
+            //var oldTickCount = (int)e.OldValue;
+            //var newTickCount = sprocket.TickCount;
+            sprocket.OnTickCountChanged();
         }
 
         /// <summary>
@@ -678,7 +679,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldTickCount">Old Value</param>
         /// <param name="newTickCount">New Value</param>
-        protected void OnTickCountChanged(int oldTickCount, int newTickCount)
+        protected void OnTickCountChanged()
         {
             // Recalculate the spoke points
             CalculateSpokesPoints();
@@ -692,7 +693,7 @@ namespace Kebler.UI.Controls
         ///     TickStyle Dependency Property
         /// </summary>
         public static readonly DependencyProperty TickStyleProperty =
-            DependencyProperty.Register("TickStyle", typeof(PenLineCap), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(TickStyle), typeof(PenLineCap), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(PenLineCap.Round, OnTickStyleChanged));
 
         /// <summary>
@@ -701,7 +702,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public PenLineCap TickStyle
         {
-            get => (PenLineCap) GetValue(TickStyleProperty);
+            get => (PenLineCap)GetValue(TickStyleProperty);
             set => SetValue(TickStyleProperty, value);
         }
 
@@ -712,10 +713,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnTickStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var sprocket = (SprocketControl) d;
-            var oldTickStyle = (PenLineCap) e.OldValue;
-            var newTickStyle = sprocket.TickStyle;
-            sprocket.OnTickStyleChanged(oldTickStyle, newTickStyle);
+            var sprocket = (SprocketControl)d;
+            //var oldTickStyle = (PenLineCap)e.OldValue;
+            //var newTickStyle = sprocket.TickStyle;
+            sprocket.OnTickStyleChanged( );
         }
 
         /// <summary>
@@ -723,7 +724,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldTickStyle">Old Value</param>
         /// <param name="newTickStyle">New Value</param>
-        protected void OnTickStyleChanged(PenLineCap oldTickStyle, PenLineCap newTickStyle)
+        protected void OnTickStyleChanged()
         {
             InvalidateVisual();
         }
@@ -736,7 +737,7 @@ namespace Kebler.UI.Controls
         ///     TickWidth Dependency Property
         /// </summary>
         public static readonly DependencyProperty TickWidthProperty =
-            DependencyProperty.Register("TickWidth", typeof(double), typeof(SprocketControl),
+            DependencyProperty.Register(nameof(TickWidth), typeof(double), typeof(SprocketControl),
                 new FrameworkPropertyMetadata(DefaultTickWidth, OnTickWidthChanged, CoerceTickWidth));
 
         /// <summary>
@@ -745,7 +746,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         public double TickWidth
         {
-            get => (double) GetValue(TickWidthProperty);
+            get => (double)GetValue(TickWidthProperty);
             set => SetValue(TickWidthProperty, value);
         }
 
@@ -757,7 +758,7 @@ namespace Kebler.UI.Controls
         /// <returns>Coerced Value</returns>
         private static object CoerceTickWidth(DependencyObject d, object value)
         {
-            return (double) value < 0.0 ? DefaultTickWidth : value;
+            return (double)value < 0.0 ? DefaultTickWidth : value;
         }
 
         /// <summary>
@@ -767,10 +768,10 @@ namespace Kebler.UI.Controls
         /// <param name="e">DependencyProperty changed event arguments</param>
         private static void OnTickWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var target = (SprocketControl) d;
-            var oldTickWidth = (double) e.OldValue;
-            var newTickWidth = target.TickWidth;
-            target.OnTickWidthChanged(oldTickWidth, newTickWidth);
+            var target = (SprocketControl)d;
+            //var oldTickWidth = (double)e.OldValue;
+            //var newTickWidth = target.TickWidth;
+            target.OnTickWidthChanged();
         }
 
         /// <summary>
@@ -778,7 +779,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="oldTickWidth">Old Value</param>
         /// <param name="newTickWidth">New Value</param>
-        protected void OnTickWidthChanged(double oldTickWidth, double newTickWidth)
+        protected void OnTickWidthChanged()
         {
             InvalidateVisual();
         }
@@ -794,11 +795,11 @@ namespace Kebler.UI.Controls
         /// </summary>
         private void Start()
         {
-            if (renderTimer == null || renderTimer.Enabled)
+            if (_renderTimer == null || _renderTimer.Enabled)
                 return;
 
-            renderTimer.Interval = Interval;
-            renderTimer.Enabled = true;
+            _renderTimer.Interval = Interval;
+            _renderTimer.Enabled = true;
         }
 
         /// <summary>
@@ -806,7 +807,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         private void Stop()
         {
-            if (renderTimer != null) renderTimer.Enabled = false;
+            if (_renderTimer != null) _renderTimer.Enabled = false;
         }
 
         /// <summary>
@@ -814,7 +815,7 @@ namespace Kebler.UI.Controls
         /// </summary>
         /// <param name="degrees">Degrees</param>
         /// <returns>Radians</returns>
-        private static double ConvertDegreesToRadians(double degrees)
+        private static double ConvertDegreesToRadians(in double degrees)
         {
             return Math.PI / 180 * degrees;
         }
@@ -824,19 +825,19 @@ namespace Kebler.UI.Controls
         /// </summary>
         private void CalculateSpokesPoints()
         {
-            spokes = new List<Spoke>();
+            _spokes = new List<Spoke>();
 
             // Calculate the angle between adjacent spokes
-            angleIncrement = 360 / (double) TickCount;
+            _angleIncrement = 360 / (double)TickCount;
             // Calculate the change in alpha between adjacent spokes
-            alphaChange = (int) ((255 - LowestAlpha) / (AlphaTicksPercentage / 100.0 * TickCount));
+            _alphaChange = (int)((255 - LowestAlpha) / (AlphaTicksPercentage / 100.0 * TickCount));
 
             // Set the start angle for rendering
-            renderStartAngle = StartAngle;
+            _renderStartAngle = StartAngle;
 
             // Calculate the location around which the spokes will be drawn
             var width = Width < Height ? Width : Height;
-            centerPoint = new Point(Width / 2, Height / 2);
+            _centerPoint = new Point(Width / 2, Height / 2);
             // Calculate the inner and outer radii of the control. The radii should not be less than the
             // Minimum values
             //_innerRadius = (int)(width * INNER_RADIUS_FACTOR);
@@ -846,34 +847,34 @@ namespace Kebler.UI.Controls
             //if (_outerRadius < MINIMUM_OUTER_RADIUS)
             //    _outerRadius = MINIMUM_OUTER_RADIUS;
 
-            innerRadius = (int) (width * InnerRadius);
-            outerRadius = (int) (width * OuterRadius);
+            _innerRadius = (int)(width * InnerRadius);
+            _outerRadius = (int)(width * OuterRadius);
             double angle = 0;
 
             for (var i = 0; i < TickCount; i++)
             {
-                var pt1 = new Point(innerRadius * (float) Math.Cos(ConvertDegreesToRadians(angle)),
-                    innerRadius * (float) Math.Sin(ConvertDegreesToRadians(angle)));
-                var pt2 = new Point(outerRadius * (float) Math.Cos(ConvertDegreesToRadians(angle)),
-                    outerRadius * (float) Math.Sin(ConvertDegreesToRadians(angle)));
+                var pt1 = new Point(_innerRadius * (float)Math.Cos(ConvertDegreesToRadians(angle)),
+                    _innerRadius * (float)Math.Sin(ConvertDegreesToRadians(angle)));
+                var pt2 = new Point(_outerRadius * (float)Math.Cos(ConvertDegreesToRadians(angle)),
+                    _outerRadius * (float)Math.Sin(ConvertDegreesToRadians(angle)));
 
                 // Create a spoke based on the points generated
                 var spoke = new Spoke(pt1, pt2);
                 // Add the spoke to the List
-                spokes.Add(spoke);
+                _spokes.Add(spoke);
 
                 // If it is not it Indeterminate state, 
                 // ensure that the spokes are drawn in clockwise manner
                 if (!IsIndeterminate)
-                    angle += angleIncrement;
+                    angle += _angleIncrement;
                 else
                     switch (Rotation)
                     {
                         case Direction.Clockwise:
-                            angle -= angleIncrement;
+                            angle -= _angleIncrement;
                             break;
                         case Direction.Anticlockwise:
-                            angle += angleIncrement;
+                            angle += _angleIncrement;
                             break;
                     }
             }
@@ -893,18 +894,18 @@ namespace Kebler.UI.Controls
 
         protected override void OnRender(DrawingContext dc)
         {
-            if (spokes == null)
+            if (_spokes == null)
                 return;
 
-            var translate = new TranslateTransform(centerPoint.X, centerPoint.Y);
+            var translate = new TranslateTransform(_centerPoint.X, _centerPoint.Y);
             dc.PushTransform(translate);
-            var rotate = new RotateTransform(renderStartAngle);
+            var rotate = new RotateTransform(_renderStartAngle);
             dc.PushTransform(rotate);
 
-            var alpha = (byte) 255;
+            var alpha = (byte)255;
 
             // Get the number of spokes that can be drawn with zero transparency
-            var progressSpokes = (int) Math.Floor(Progress * TickCount / 100.0);
+            var progressSpokes = (int)Math.Floor(Progress * TickCount / 100.0);
 
             // Render the spokes
             for (var i = 0; i < TickCount; i++)
@@ -912,21 +913,21 @@ namespace Kebler.UI.Controls
                 if (!IsIndeterminate)
                 {
                     if (progressSpokes > 0)
-                        alpha = (byte) (i < progressSpokes ? 255 : DefaultProgressAlpha);
+                        alpha = (byte)(i < progressSpokes ? 255 : DefaultProgressAlpha);
                     else
-                        alpha = (byte) DefaultProgressAlpha;
+                        alpha = (byte)DefaultProgressAlpha;
                 }
 
                 var p = new Pen(new SolidColorBrush(Color.FromArgb(alpha, TickColor.R, TickColor.G, TickColor.B)),
                     TickWidth);
                 p.StartLineCap = p.EndLineCap = TickStyle;
-                dc.DrawLine(p, spokes[i].StartPoint, spokes[i].EndPoint);
+                dc.DrawLine(p, _spokes[i].StartPoint, _spokes[i].EndPoint);
 
                 if (IsIndeterminate)
                 {
-                    alpha -= (byte) alphaChange;
+                    alpha -= (byte)_alphaChange;
                     if (alpha < LowestAlpha)
-                        alpha = (byte) LowestAlpha;
+                        alpha = (byte)LowestAlpha;
                 }
             }
 
@@ -951,17 +952,19 @@ namespace Kebler.UI.Controls
                 switch (Rotation)
                 {
                     case Direction.Clockwise:
-                        renderStartAngle += angleIncrement;
+                        _renderStartAngle += _angleIncrement;
 
-                        if (renderStartAngle >= 360)
-                            renderStartAngle -= 360;
+                        if (_renderStartAngle >= 360)
+                            _renderStartAngle -= 360;
                         break;
                     case Direction.Anticlockwise:
-                        renderStartAngle -= angleIncrement;
+                        _renderStartAngle -= _angleIncrement;
 
-                        if (renderStartAngle <= -360)
-                            renderStartAngle += 360;
+                        if (_renderStartAngle <= -360)
+                            _renderStartAngle += 360;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 // Force re-rendering of control
@@ -981,7 +984,7 @@ namespace Kebler.UI.Controls
             if (!IsIndeterminate)
                 return;
 
-            if ((bool) e.NewValue)
+            if ((bool)e.NewValue)
                 Start();
             else
                 Stop();
@@ -1029,10 +1032,10 @@ namespace Kebler.UI.Controls
         {
             if (!disposing)
                 return;
-            if (renderTimer != null)
+            if (_renderTimer != null)
             {
-                renderTimer.Elapsed -= OnRenderTimerElapsed;
-                renderTimer.Dispose();
+                _renderTimer.Elapsed -= OnRenderTimerElapsed;
+                _renderTimer.Dispose();
             }
 
             IsVisibleChanged -= OnVisibilityChanged;

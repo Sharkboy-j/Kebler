@@ -14,6 +14,8 @@
             <converters:GridWidthConverter x:Key="GridWidthConverter" />
             <converters:BytesToUserFriendlySpeed x:Key="BytesToUserFriendlySpeed" />
             <converters:BytesToUserFriendlyString x:Key="BytesToUserFriendlyString" />
+            <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+            <converters:ReverseBoolToBoolConverter x:Key="ReverseBoolToBoolConverter" />
 
         </ResourceDictionary>
 

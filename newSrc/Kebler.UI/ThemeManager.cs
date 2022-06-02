@@ -12,7 +12,7 @@ namespace Kebler.UI
 
         private static ResourceDictionary _currentThemeResourceDictionary;
 
-        public static void ChangeAppTheme(string themeName)
+        public static void ChangeAppTheme(in string themeName)
         {
             if (TryGetTheme(themeName: themeName, themeResources: out var themeResources))
             {
@@ -20,7 +20,7 @@ namespace Kebler.UI
             }
         }
 
-        private static bool TryGetTheme(string themeName, out ResourceDictionary themeResources)
+        private static bool TryGetTheme(in string themeName, out ResourceDictionary themeResources)
         {
             var result = true;
             themeResources = null;
@@ -38,7 +38,7 @@ namespace Kebler.UI
             return result;
         }
 
-        private static void UpdateAppResources(ResourceDictionary themeResources)
+        private static void UpdateAppResources(in ResourceDictionary themeResources)
         {
             var resources = Application.Current.Resources;
 
@@ -50,7 +50,7 @@ namespace Kebler.UI
             _currentThemeResourceDictionary = themeResources;
         }
 
-        private static void DeleteDoubleGenericResources(ResourceDictionary resources)
+        private static void DeleteDoubleGenericResources(in ResourceDictionary resources)
         {
             var resourceDictionary = new Dictionary<Uri, ResourceDictionary>();
 
@@ -72,7 +72,7 @@ namespace Kebler.UI
         }
 
 
-        private static IEnumerable<ResourceDictionary> FindAllResources(ResourceDictionary resourcesDictionary)
+        private static IEnumerable<ResourceDictionary> FindAllResources(in ResourceDictionary resourcesDictionary)
         {
             var resourcesList = new List<ResourceDictionary>();
 
@@ -90,14 +90,13 @@ namespace Kebler.UI
         }
 
 
-        private static bool AreResourceDictionarySourcesEqual(ResourceDictionary first, ResourceDictionary second)
+        private static void AreResourceDictionarySourcesEqual(in ResourceDictionary first, in ResourceDictionary second, out bool result)
         {
             if (first == null || second == null)
             {
-                return false;
+                result = false;
             }
-
-            if (first.Source == null || second.Source == null)
+            else if (first.Source == null || second.Source == null)
             {
                 try
                 {
@@ -106,20 +105,25 @@ namespace Kebler.UI
                         var isTheSame = second.Contains(key: key) && Equals(objA: first[key: key], objB: second[key: key]);
                         if (!isTheSame)
                         {
-                            return false;
+                            result = false;
+                            return;
                         }
                     }
                 }
                 catch (Exception exception)
                 {
                     Trace.TraceError(message: $"Could not compare resource dictionaries: {exception} {Environment.NewLine} {exception.StackTrace}");
-                    return false;
+                    result = false;
+                    return;
                 }
 
-                return true;
+                result = true;
             }
+            else
+            {
+                result = Uri.Compare(uri1: first.Source, uri2: second.Source, partsToCompare: UriComponents.Host | UriComponents.Path, compareFormat: UriFormat.SafeUnescaped, comparisonType: StringComparison.OrdinalIgnoreCase) == 0;
 
-            return Uri.Compare(uri1: first.Source, uri2: second.Source, partsToCompare: UriComponents.Host | UriComponents.Path, compareFormat: UriFormat.SafeUnescaped, comparisonType: StringComparison.OrdinalIgnoreCase) == 0;
+            }
         }
     }
 }
