@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Resources;
 using Caliburn.Micro;
 using Kebler.Domain.Interfaces;
-using Microsoft.VisualBasic;
 using WPFLocalizeExtension.Engine;
 
 namespace Kebler.Services
@@ -13,11 +11,15 @@ namespace Kebler.Services
         {
             try
             {
-                var temp = new ResourceManager("Kebler.Resources.Strings", typeof(Strings).Assembly);
-                var value = temp.GetString(key, LocalizeDictionary.Instance.Culture);
+                var value = LocalizeDictionary.Instance.GetLocalizedObject(key, null, LocalizeDictionary.Instance.Culture) as string;
 
-                return value ?? key;
+                if (string.IsNullOrEmpty(value))
+                {
+                    IoC.Get<ILogger>().Error(new Exception($"Not found localised key {key}"));
+                    return key;
+                }
 
+                return value;
             }
             catch (Exception ex)
             {

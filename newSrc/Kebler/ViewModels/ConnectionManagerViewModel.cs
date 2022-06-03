@@ -12,6 +12,7 @@ using Kebler.Domain.Interfaces;
 using Kebler.Domain.Models;
 using Kebler.Domain.Models.Events;
 using Kebler.Interfaces;
+using Kebler.Localisation;
 using Kebler.Services;
 using Kebler.Transmission.Models;
 using LiteDB;
@@ -213,7 +214,7 @@ namespace Kebler.ViewModels
                     var msg = webExc.Status switch
                     {
                         WebExceptionStatus.NameResolutionFailure =>
-                            $"{_localizationProvider.GetLocalizedValue("EX_Host"/*nameof(Resources.Strings.EX_Host)*/)} '{SelectedServer.FullUriPath}'",
+                            $"{Strings.EX_Host} '{SelectedServer.FullUriPath}'",
                         _ => $"{webExc.Status} {Environment.NewLine} {webExc?.Message}"
                     };
 
@@ -225,15 +226,15 @@ namespace Kebler.ViewModels
                 }
 
                 ConnectStatusResult =
-                    _localizationProvider.GetLocalizedValue("CM_TestConnectionBad"/*nameof(Resources.Strings.CM_TestConnectionBad)*/);
+                    _localizationProvider.GetLocalizedValue(nameof(Strings.CM_TestConnectionBad));
 
                 ConnectStatusColor = new SolidColorBrush { Color = Colors.Red };
             }
             else
             {
                 ConnectStatusResult = result ?
-                    _localizationProvider.GetLocalizedValue("CM_TestConnectionGood"/*nameof(Resources.Strings.CM_TestConnectionGood)*/)
-                    : _localizationProvider.GetLocalizedValue("CM_TestConnectionBad"/*nameof(Resources.Strings.CM_TestConnectionBad)*/);
+                    _localizationProvider.GetLocalizedValue(nameof(Strings.CM_TestConnectionGood))
+                    : _localizationProvider.GetLocalizedValue(nameof(Strings.CM_TestConnectionBad));
 
                 ConnectStatusColor = result ?
                     new SolidColorBrush { Color = Colors.Green }

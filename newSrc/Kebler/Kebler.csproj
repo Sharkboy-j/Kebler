@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
+		<ProjectReference Include="..\Kebler.Localisation\Kebler.Localisation.csproj" />
 		<ProjectReference Include="..\Kebler.Services\Kebler.Services.csproj" />
 		<ProjectReference Include="..\Kebler.UI\Kebler.UI.csproj" />
 	</ItemGroup>

@@ -1,0 +1,690 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Kebler" xml:space="preserve">
+    <value>Kebler</value>
+  </data>
+  <data name="time_days_short" xml:space="preserve">
+    <value>дн</value>
+  </data>
+  <data name="time_hours_short" xml:space="preserve">
+    <value>ч</value>
+  </data>
+  <data name="time_minutes_short" xml:space="preserve">
+    <value>м</value>
+  </data>
+  <data name="time_seconds_short" xml:space="preserve">
+    <value>с</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="AddTrackerTitile" xml:space="preserve">
+    <value>URL анонса</value>
+  </data>
+  <data name="ATD_Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="ATD_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="ATD_Connection" xml:space="preserve">
+    <value>Соединение:</value>
+  </data>
+  <data name="ATD_DontShowAddTorrentDialog" xml:space="preserve">
+    <value>Не спрашивать</value>
+  </data>
+  <data name="ATD_DownloadDIr" xml:space="preserve">
+    <value>Директория загрузки:</value>
+  </data>
+  <data name="ATD_DownloadLimit" xml:space="preserve">
+    <value>Лимит загрузки:</value>
+  </data>
+  <data name="ATD_Files" xml:space="preserve">
+    <value>Файлы:</value>
+  </data>
+  <data name="ATD_PeerLimit" xml:space="preserve">
+    <value>Лимит пиров:</value>
+  </data>
+  <data name="ATD_RetrievingSettings" xml:space="preserve">
+    <value>Ожидайте</value>
+  </data>
+  <data name="ATD_StartTorrent" xml:space="preserve">
+    <value>Начать загрузку</value>
+  </data>
+  <data name="ATD_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="ATD_TorrentExist" xml:space="preserve">
+    <value>Торрент уже создан</value>
+  </data>
+  <data name="ATD_TorrentFilePath" xml:space="preserve">
+    <value>Путь к торренту:</value>
+  </data>
+  <data name="ATD_UploadLimit" xml:space="preserve">
+    <value>Лимит отдачи:</value>
+  </data>
+  <data name="BTNS_Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="BTNS_No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="BTNS_OK" xml:space="preserve">
+    <value>Ок</value>
+  </data>
+  <data name="BTNS_Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Cat_Active" xml:space="preserve">
+    <value>Текущие</value>
+  </data>
+  <data name="Cat_Downloading" xml:space="preserve">
+    <value>Загружаемые</value>
+  </data>
+  <data name="Cat_Ended" xml:space="preserve">
+    <value>Готовые</value>
+  </data>
+  <data name="Cat_Error" xml:space="preserve">
+    <value>Ошибочные</value>
+  </data>
+  <data name="Cat_InActive" xml:space="preserve">
+    <value>Неактивные</value>
+  </data>
+  <data name="Cat_Stopped" xml:space="preserve">
+    <value>Остановленные</value>
+  </data>
+  <data name="CM_AskForPassword" xml:space="preserve">
+    <value>Всегда спрашивать пароль</value>
+  </data>
+  <data name="CM_AuthSection" xml:space="preserve">
+    <value>Авторизация</value>
+  </data>
+  <data name="CM_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="CM_IsAuthEnabled" xml:space="preserve">
+    <value>Авторизацию включена</value>
+  </data>
+  <data name="CM_LanSection" xml:space="preserve">
+    <value>Соединение</value>
+  </data>
+  <data name="CM_Ok" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="CM_PSWD" xml:space="preserve">
+    <value>Пароль:</value>
+  </data>
+  <data name="CM_RPCPath" xml:space="preserve">
+    <value>RPC путь:</value>
+  </data>
+  <data name="CM_ServerHost" xml:space="preserve">
+    <value>Хост:</value>
+  </data>
+  <data name="CM_ServerPort" xml:space="preserve">
+    <value>Порт:</value>
+  </data>
+  <data name="CM_ServerTitle" xml:space="preserve">
+    <value>Заголовок:</value>
+  </data>
+  <data name="CM_SSLEnabled" xml:space="preserve">
+    <value>SSL</value>
+  </data>
+  <data name="CM_Tab_General" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="CM_TestConnection" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="CM_TestConnectionBad" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="CM_TestConnectionGood" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="CM_Title" xml:space="preserve">
+    <value>Менеджер серверов</value>
+  </data>
+  <data name="ConfigApllyError" xml:space="preserve">
+    <value>Не получилось сохранить настройки. Некоторые параметры могли быть записаны не корректно</value>
+  </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Соединение потеряно. Переподключитесь и попробуйте заново</value>
+  </data>
+  <data name="DialogBox_EnterPWD" xml:space="preserve">
+    <value>Ввод пароля</value>
+  </data>
+  <data name="DialogBox_RemoveTracker" xml:space="preserve">
+    <value>Подтверждаете удаление трекера:</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="EX_Host" xml:space="preserve">
+    <value>Не известный Хост</value>
+  </data>
+  <data name="MI_About" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="MI_AddFromNewTrack" xml:space="preserve">
+    <value>Заполнить трекеры...</value>
+  </data>
+  <data name="MI_AddMagnet" xml:space="preserve">
+    <value>Добавить магнет ссылку</value>
+  </data>
+  <data name="MI_AddTorrent" xml:space="preserve">
+    <value>Добавить торрент файл</value>
+  </data>
+  <data name="MI_Check" xml:space="preserve">
+    <value>Проверить наличие обновлений</value>
+  </data>
+  <data name="MI_ClearTrackers" xml:space="preserve">
+    <value>Удалить все трекеры...</value>
+  </data>
+  <data name="MI_CM" xml:space="preserve">
+    <value>Менеджер серверов</value>
+  </data>
+  <data name="MI_Contact" xml:space="preserve">
+    <value>Контакты разработчика</value>
+  </data>
+  <data name="MI_Downloaded" xml:space="preserve">
+    <value>Загружено:</value>
+  </data>
+  <data name="MI_DownloadLimit" xml:space="preserve">
+    <value>Лимит загрузки:</value>
+  </data>
+  <data name="MI_Error" xml:space="preserve">
+    <value>Ошибка:</value>
+  </data>
+  <data name="MI_Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="MI_ExportTorrents" xml:space="preserve">
+    <value>Экспорт торрент файлов...</value>
+  </data>
+  <data name="Mi_Info" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="MI_Kebler" xml:space="preserve">
+    <value>Kebler</value>
+  </data>
+  <data name="MI_lang" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="MI_LastActive" xml:space="preserve">
+    <value>Последний активный:</value>
+  </data>
+  <data name="MI_Logs" xml:space="preserve">
+    <value>Открыть логи</value>
+  </data>
+  <data name="MI_MaxPeers" xml:space="preserve">
+    <value>Макс. пиров:</value>
+  </data>
+  <data name="MI_Peers" xml:space="preserve">
+    <value>Пиров:</value>
+  </data>
+  <data name="MI_Prefs" xml:space="preserve">
+    <value>Настройки Cервера</value>
+  </data>
+  <data name="MI_Props" xml:space="preserve">
+    <value>Настройки Kebler</value>
+  </data>
+  <data name="MI_Remaining" xml:space="preserve">
+    <value>Осталось:</value>
+  </data>
+  <data name="MI_Report" xml:space="preserve">
+    <value>Сообщить о Проблеме</value>
+  </data>
+  <data name="MI_Seeds" xml:space="preserve">
+    <value>Сиды:</value>
+  </data>
+  <data name="MI_Servers" xml:space="preserve">
+    <value>Сервера</value>
+  </data>
+  <data name="MI_ShareRatio" xml:space="preserve">
+    <value>Ратио:</value>
+  </data>
+  <data name="MI_Sort_AddedDate" xml:space="preserve">
+    <value>Дата добавления</value>
+  </data>
+  <data name="MI_Sort_DownloadSpeed" xml:space="preserve">
+    <value>Скорость загрузки</value>
+  </data>
+  <data name="MI_Sort_Uploaded" xml:space="preserve">
+    <value>Отдано</value>
+  </data>
+  <data name="MI_Sort_UploadSpeed" xml:space="preserve">
+    <value>Скорость отдачи</value>
+  </data>
+  <data name="MI_SortHigh" xml:space="preserve">
+    <value>Старший</value>
+  </data>
+  <data name="MI_SortLow" xml:space="preserve">
+    <value>Низший</value>
+  </data>
+  <data name="MI_SpeedDownload" xml:space="preserve">
+    <value>Скорость загрузки:</value>
+  </data>
+  <data name="MI_State" xml:space="preserve">
+    <value>Состояние:</value>
+  </data>
+  <data name="MI_Tools" xml:space="preserve">
+    <value>Утилиты</value>
+  </data>
+  <data name="MI_Torrent" xml:space="preserve">
+    <value>Торрент</value>
+  </data>
+  <data name="MI_TrackerUpate" xml:space="preserve">
+    <value>Трекер обновлен:</value>
+  </data>
+  <data name="MI_Uploaded" xml:space="preserve">
+    <value>Отдано:</value>
+  </data>
+  <data name="MI_UploadLimit" xml:space="preserve">
+    <value>Лимит отдачи:</value>
+  </data>
+  <data name="MI_UploadSpeed" xml:space="preserve">
+    <value>Скорость отдачи:</value>
+  </data>
+  <data name="MI_View" xml:space="preserve">
+    <value>Вид</value>
+  </data>
+  <data name="MI_Wasted" xml:space="preserve">
+    <value>Утрачено:</value>
+  </data>
+  <data name="MoreInfo_AddTackerBtn" xml:space="preserve">
+    <value>Добавить трекер</value>
+  </data>
+  <data name="MoreInfo_DeleteTrackerBtn" xml:space="preserve">
+    <value>Удалить трекер</value>
+  </data>
+  <data name="MoreInfo_FilesTab" xml:space="preserve">
+    <value>Файлы</value>
+  </data>
+  <data name="MoreInfo_HideHint" xml:space="preserve">
+    <value>ESC, что бы спрятать</value>
+  </data>
+  <data name="MoreInfo_Peers" xml:space="preserve">
+    <value>Пиры</value>
+  </data>
+  <data name="MoreInfo_Peers_Client" xml:space="preserve">
+    <value>Клиент</value>
+  </data>
+  <data name="MoreInfo_Peers_Encryption" xml:space="preserve">
+    <value>Шифрование</value>
+  </data>
+  <data name="MoreInfo_Peers_Host" xml:space="preserve">
+    <value>Хост</value>
+  </data>
+  <data name="MoreInfo_Peers_Progress" xml:space="preserve">
+    <value>Прогресс</value>
+  </data>
+  <data name="MoreInfo_PeersRateToClient" xml:space="preserve">
+    <value>Скорость загрузки</value>
+  </data>
+  <data name="MoreInfo_PeersRateToPeer" xml:space="preserve">
+    <value>Скорость отдачи</value>
+  </data>
+  <data name="MoreInfo_Trackers" xml:space="preserve">
+    <value>Трекеры</value>
+  </data>
+  <data name="MoreInfo_Trackers_Name" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="MoreInfo_Trackers_Seeds" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="MoreInfo_Trackers_Status" xml:space="preserve">
+    <value>Сиды</value>
+  </data>
+  <data name="MSG_InterNewName" xml:space="preserve">
+    <value>Введите новое название</value>
+  </data>
+  <data name="MSG_LinkOrMagnet" xml:space="preserve">
+    <value>Вставьте ссылку на торрент файл или магнет</value>
+  </data>
+  <data name="MSG_OnlyOneTorrent" xml:space="preserve">
+    <value>Выберите только один торрент</value>
+  </data>
+  <data name="MSG_SelectOneTorrent" xml:space="preserve">
+    <value>Выберите торрент</value>
+  </data>
+  <data name="MW_ConnectingText" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="MW_PAsswordCantBeEmpty" xml:space="preserve">
+    <value>Пароль не может быть пустым</value>
+  </data>
+  <data name="MW_StatusText_CloseSession" xml:space="preserve">
+    <value>Зыкрытие сессии</value>
+  </data>
+  <data name="MW_StatusText_Session" xml:space="preserve">
+    <value>Инициализация</value>
+  </data>
+  <data name="MW_StatusText_Settings" xml:space="preserve">
+    <value>Обновление настроек</value>
+  </data>
+  <data name="Cat_AllTorrents" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="CM_Login" xml:space="preserve">
+    <value>Логин:</value>
+  </data>
+  <data name="MW_StatusText_Stats" xml:space="preserve">
+    <value>Выгрузка статистики</value>
+  </data>
+  <data name="MW_StatusText_Torrents" xml:space="preserve">
+    <value>Получение торрентов</value>
+  </data>
+  <data name="NewUpdate" xml:space="preserve">
+    <value>Вышла новая версия (%d). Устанавливаем?</value>
+  </data>
+  <data name="QA_AddTorrent" xml:space="preserve">
+    <value>Добавить торрент</value>
+  </data>
+  <data name="QA_CopyMagnet" xml:space="preserve">
+    <value>Копировать магнет ссылку</value>
+  </data>
+  <data name="QA_MoveBot" xml:space="preserve">
+    <value>Ниже</value>
+  </data>
+  <data name="QA_MoveDown" xml:space="preserve">
+    <value>Вниз</value>
+  </data>
+  <data name="QA_MoveTop" xml:space="preserve">
+    <value>Выше</value>
+  </data>
+  <data name="QA_MoveUp" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="QA_Pause" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="QA_PauseAll" xml:space="preserve">
+    <value>Стоп все</value>
+  </data>
+  <data name="QA_Priority" xml:space="preserve">
+    <value>Приоритет</value>
+  </data>
+  <data name="QA_Properties" xml:space="preserve">
+    <value>Свойства</value>
+  </data>
+  <data name="QA_Queue" xml:space="preserve">
+    <value>Очередь</value>
+  </data>
+  <data name="QA_Reannounce" xml:space="preserve">
+    <value>Переанонсировать (получение пиров)</value>
+  </data>
+  <data name="QA_Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="QA_RemoveData" xml:space="preserve">
+    <value>Удалить вместе с данными</value>
+  </data>
+  <data name="QA_Rename" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="QA_Resume" xml:space="preserve">
+    <value>Возобновить</value>
+  </data>
+  <data name="QA_ResumeAll" xml:space="preserve">
+    <value>Возобновить всё</value>
+  </data>
+  <data name="QA_SetLoc" xml:space="preserve">
+    <value>Установить дирректорию загрузки...</value>
+  </data>
+  <data name="QA_Slow" xml:space="preserve">
+    <value>Режим черепахи</value>
+  </data>
+  <data name="QA_Verify" xml:space="preserve">
+    <value>Проверить целостность</value>
+  </data>
+  <data name="RetryConnection" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+  <data name="RMT_RemoveWithData" xml:space="preserve">
+    <value>Удалить вместе с данными</value>
+  </data>
+  <data name="RMT_Title" xml:space="preserve">
+    <value>Подтверждаете удаление данных и торрента?</value>
+  </data>
+  <data name="SetLocForMany" xml:space="preserve">
+    <value>Введите новый путь для %d торрентов</value>
+  </data>
+  <data name="SetLocOnce" xml:space="preserve">
+    <value>Введите новый путь</value>
+  </data>
+  <data name="Stats_ActiveTime" xml:space="preserve">
+    <value>Активное время:</value>
+  </data>
+  <data name="Stats_Downloaded" xml:space="preserve">
+    <value>Загружено:</value>
+  </data>
+  <data name="Stats_Uploaded" xml:space="preserve">
+    <value>Отдано:</value>
+  </data>
+  <data name="TI_AddedOn" xml:space="preserve">
+    <value>Дата добавления:</value>
+  </data>
+  <data name="TI_Comment" xml:space="preserve">
+    <value>Комментарий:</value>
+  </data>
+  <data name="TI_CompletedOn" xml:space="preserve">
+    <value>Дата завершения:</value>
+  </data>
+  <data name="TI_CreatedOn" xml:space="preserve">
+    <value>Дата создания:</value>
+  </data>
+  <data name="TI_Hash" xml:space="preserve">
+    <value>Хеш:</value>
+  </data>
+  <data name="TI_hashfails" xml:space="preserve">
+    <value>Ошибочно</value>
+  </data>
+  <data name="TI_Magnet" xml:space="preserve">
+    <value>Магнет ссылка:</value>
+  </data>
+  <data name="TI_path" xml:space="preserve">
+    <value>Путь:</value>
+  </data>
+  <data name="TI_Pieces" xml:space="preserve">
+    <value>Частей:</value>
+  </data>
+  <data name="TI_Progress" xml:space="preserve">
+    <value>Прогресс:</value>
+  </data>
+  <data name="TI_Status_Checking" xml:space="preserve">
+    <value>Проверка</value>
+  </data>
+  <data name="TI_Status_CheckPending" xml:space="preserve">
+    <value>Проверка в очереди</value>
+  </data>
+  <data name="TI_Status_download_pending" xml:space="preserve">
+    <value>Загрузка в очереди</value>
+  </data>
+  <data name="TI_Status_Downloading" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="TI_Status_Seeding" xml:space="preserve">
+    <value>Раздаём</value>
+  </data>
+  <data name="TI_Status_SeedPending" xml:space="preserve">
+    <value>Отдача в очереди</value>
+  </data>
+  <data name="TI_Status_Stopped" xml:space="preserve">
+    <value>Остановлено</value>
+  </data>
+  <data name="TI_TotalSize" xml:space="preserve">
+    <value>Размер:</value>
+  </data>
+  <data name="TI_webSeedsConnected" xml:space="preserve">
+    <value>подключено</value>
+  </data>
+  <data name="TI_webSeedsOF" xml:space="preserve">
+    <value>из</value>
+  </data>
+  <data name="Title_AddTorrentDialog" xml:space="preserve">
+    <value>Добавить торрент</value>
+  </data>
+  <data name="TP_MaximumDownloadSp" xml:space="preserve">
+    <value>Максимальная скорость загрузки:</value>
+  </data>
+  <data name="TP_MaximumUploadSp" xml:space="preserve">
+    <value>Максимальная скорость отдачи:</value>
+  </data>
+  <data name="TP_PeerLimit" xml:space="preserve">
+    <value>Лимит пиров:</value>
+  </data>
+  <data name="TP_Properties" xml:space="preserve">
+    <value>Свойства:</value>
+  </data>
+  <data name="TP_SeedRatio" xml:space="preserve">
+    <value>Ратио:</value>
+  </data>
+  <data name="TP_StopSeed" xml:space="preserve">
+    <value>Остановить раздачу если неактивно более чем:</value>
+  </data>
+  <data name="TP_TorrentsSelected" xml:space="preserve">
+    <value>выбрано торрентов</value>
+  </data>
+  <data name="ATD_TorrentExist_UpdateTrackers" xml:space="preserve">
+    <value>Торрент уже создан, обновить трекеры?</value>
+  </data>
+  <data name="MI_MoreInoShow" xml:space="preserve">
+    <value>Отображать подробности торрента</value>
+  </data>
+  <data name="MoreInfo_DontShowMoreInfo" xml:space="preserve">
+    <value>Не отображать подробную информацию</value>
+  </data>
+  <data name="Error_EmptyString" xml:space="preserve">
+    <value>Значение не может быть пустым</value>
+  </data>
+  <data name="TorretPropertiesSetError" xml:space="preserve">
+    <value>Ошибка во время сохранения настроек</value>
+  </data>
+  <data name="ASK_UpdateTrackers" xml:space="preserve">
+    <value>Торрент уже добавлен. Обновить трекеры?</value>
+  </data>
+  <data name="ASK_REMOVE_SIMILAR" xml:space="preserve">
+    <value>Найден похожий торрент: '%d' Удалить его?</value>
+  </data>
+  <data name="MI_ShowCategoriesCount" xml:space="preserve">
+    <value>Кол-во торрентов в категории</value>
+  </data>
+</root>

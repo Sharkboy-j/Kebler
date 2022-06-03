@@ -7,9 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
-    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>

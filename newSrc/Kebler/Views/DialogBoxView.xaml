@@ -9,9 +9,6 @@
     MinHeight="155"
     MaxWidth="400"
     MaxHeight="155"
-    lex:LocalizeDictionary.DesignCulture="en"
-    lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Resources"
-    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType"
     UseLayoutRounding="True">

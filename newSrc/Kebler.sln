@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Transmission", "Kebl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Workers", "Kebler.Workers\Kebler.Workers.csproj", "{A6B2011E-D6E7-4129-8432-F17CFD055F09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Localisation", "Kebler.Localisation\Kebler.Localisation.csproj", "{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6B2011E-D6E7-4129-8432-F17CFD055F09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

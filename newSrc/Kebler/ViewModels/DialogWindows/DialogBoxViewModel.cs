@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Models;
 using Kebler.Interfaces;
+using Kebler.Localisation;
 
 namespace Kebler.ViewModels
 {
@@ -124,7 +125,7 @@ namespace Kebler.ViewModels
                 {
                     var manager = IoC.Get<IWindowManager>();
 
-                    _ = await manager.ShowMessageBoxDialog(_emptyText, _localizationProvider.GetLocalizedValue("Error" /*nameof(Resources.Strings.Error)*/));
+                    _ = await manager.ShowMessageBoxDialog(_emptyText, _localizationProvider.GetLocalizedValue(Strings.Error));
                 }
             }
 
