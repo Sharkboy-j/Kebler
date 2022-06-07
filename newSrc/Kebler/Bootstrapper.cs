@@ -10,6 +10,7 @@ using Kebler.Services;
 using Kebler.UI;
 using Kebler.UI.Controls;
 using Kebler.ViewModels;
+using Kebler.ViewModels.DialogWindows;
 
 namespace Kebler
 {
@@ -23,6 +24,7 @@ namespace Kebler
         public Bootstrapper()
         {
             ViewLocator.AddNamespaceMapping("Kebler.ViewModels", new[] { "Kebler.Views", "Kebler.UI.Dialogs" });
+            ViewLocator.AddNamespaceMapping("Kebler.ViewModels.DialogWindows", new[] { "Kebler.Views" });
             Initialize();
         }
 

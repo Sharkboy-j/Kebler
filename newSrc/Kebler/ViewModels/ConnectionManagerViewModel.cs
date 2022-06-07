@@ -15,6 +15,7 @@ using Kebler.Interfaces;
 using Kebler.Localisation;
 using Kebler.Services;
 using Kebler.Transmission.Models;
+using Kebler.ViewModels.DialogWindows;
 using LiteDB;
 
 namespace Kebler.ViewModels
@@ -36,6 +37,7 @@ namespace Kebler.ViewModels
         private bool _isTesting;
         private string _connectStatusResult;
         private SolidColorBrush _connectStatusColor;
+        private BindableCollection<ClientType> _clientTypes;
 
         #region Caliburn properties
 
@@ -43,6 +45,12 @@ namespace Kebler.ViewModels
         {
             get => _connectStatusColor;
             set => Set(ref _connectStatusColor, value);
+        }
+
+        public BindableCollection<ClientType> ClientTypes
+        {
+            get => _clientTypes;
+            set => Set(ref _clientTypes, value);
         }
 
         public string ConnectStatusResult
@@ -90,6 +98,12 @@ namespace Kebler.ViewModels
             _localizationProvider = localizationProvider;
             _worker = worker;
             _manager = manager;
+
+            ClientTypes = new BindableCollection<ClientType>()
+            {
+                ClientType.QBittorrent,
+                ClientType.Transmission
+            };
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -187,10 +201,11 @@ namespace Kebler.ViewModels
 
             IsTesting = true;
 
-            string password = null;
-            if (SelectedServer.AskForPassword)
+
+            var password = _view.PasswordBox.Password;
+            if (SelectedServer.AuthEnabled && SelectedServer.AskForPassword)
             {
-                var (resultPassword, dialogResult) = await _manager.AskPasswordDialog("DialogBox_EnterPWD"/*nameof(Resources.Strings.DialogBox_EnterPWD)*/);
+                var (resultPassword, dialogResult) = await _manager.AskPasswordDialog(_localizationProvider.GetLocalizedValue(nameof(Strings.DialogBox_EnterPWD)));
                 if (dialogResult == true)
                 {
                     password = resultPassword;
@@ -201,6 +216,10 @@ namespace Kebler.ViewModels
                     return;
                 }
             }
+
+            password = string.IsNullOrEmpty(password)
+                ? SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password)
+                : password;
 
             var (result, resultException) = await TesConnection(password);
             st.Stop();
@@ -290,10 +309,12 @@ namespace Kebler.ViewModels
             return false;
         }
 
-        private async Task<(bool, Exception)> TesConnection(string pass)
+        private async Task<(bool, Exception)> TesConnection(string password)
         {
             try
             {
+                _worker.Init(SelectedServer, password);
+
                 var result = await _worker.CheckConnectionAsync(SelectedServer);
 
                 return result.Item2 != null ? (false, result.Item2) : result;

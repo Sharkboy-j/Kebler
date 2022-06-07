@@ -8,7 +8,6 @@ namespace Kebler.UI.Models
     [DebuggerDisplay("{Name} | {RateDownload} {RateUpload}")]
     public class Torrent : PropertyChangedBase, ITorrent
     {
-        private readonly uint _id;
         private long _addedDate;
         private int _bandwidthPriority;
         private string _comment;
@@ -78,11 +77,11 @@ namespace Kebler.UI.Models
 
         public Torrent(uint id, string name)
         {
-            _id = id;
+            Id = id;
             Name = name;
         }
 
-        public uint Id => _id;
+        public uint Id { get; }
 
         public long AddedDate
         {
@@ -485,23 +484,26 @@ namespace Kebler.UI.Models
             set => Set(ref _webseedsSendingToUs, value);
         }
 
-        public void Notify(ITorrent inf)
+        public void UpdateData(ITorrent inf)
         {
-            RateUpload = inf.RateUpload;
-            RateDownload = inf.RateDownload;
             Name = inf.Name;
+            RateDownload = inf.RateDownload;
+            RateUpload = inf.RateUpload;
+            RecheckProgress = inf.RecheckProgress;
             PercentDone = inf.PercentDone;
-            Status = inf.Status;
             UploadedEver = inf.UploadedEver;
+            Status = inf.Status;
+            DownloadDir = inf.DownloadDir;
             TotalSize = inf.TotalSize;
+            Error = inf.Error;
+            ErrorString = inf.ErrorString;
         }
-        
+
         //TODO: Add tests!!!!!
         public override bool Equals(object obj)
         {
             if (obj is ITorrent torrentInfo)
-                return torrentInfo.Id == Id &&
-                       torrentInfo.HashString == HashString;
+                return torrentInfo.HashString == HashString;
             return false;
         }
 
@@ -509,7 +511,7 @@ namespace Kebler.UI.Models
         {
             unchecked
             {
-                var hashCode = Id.GetHashCode();
+                var hashCode = HashString?.GetHashCode() ?? string.Empty.GetHashCode();
                 hashCode = (hashCode * 397) ^ hashCode;
                 return hashCode;
             }

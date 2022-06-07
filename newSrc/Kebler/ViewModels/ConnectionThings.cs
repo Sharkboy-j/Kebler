@@ -19,6 +19,7 @@ using Kebler.Services;
 using Kebler.UI;
 using Kebler.UI.Converters;
 using Kebler.UI.Models;
+using Kebler.ViewModels.DialogWindows;
 
 namespace Kebler.ViewModels
 {
@@ -156,8 +157,7 @@ namespace Kebler.ViewModels
 
             if (_checkerTask is null)
             {
-                _checkerTask = GetLongChecker();
-                _checkerTask.Start();
+                _checkerTask = Task.Run(GetLongChecker);
             }
 
             SelectedServer ??= ServersList.First();
@@ -173,33 +173,30 @@ namespace Kebler.ViewModels
             return bdServers.FindAll().ToList();
         }
 
-        private Task GetLongChecker()
+        private async Task GetLongChecker()
         {
-            return new Task(async () =>
+            while (true)
             {
-                while (true)
+                try
                 {
-                    try
-                    {
-                        if (Application.Current != null && Application.Current.Dispatcher.HasShutdownStarted)
-                            throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
+                    if (Application.Current != null && Application.Current.Dispatcher.HasShutdownStarted)
+                        throw new TaskCanceledException("Dispatcher.HasShutdownStarted  = true");
 
-                        var date = DateTimeOffset.Now;
-                        var time = date - _longActionTimeStart;
-                        if (time.TotalSeconds > 2 && _isLongTaskRunning) IsDoingStuff = true;
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        return;
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
-
-                    await Task.Delay(1000);
+                    var date = DateTimeOffset.Now;
+                    var time = date - _longActionTimeStart;
+                    if (time.TotalSeconds > 2 && _isLongTaskRunning) IsDoingStuff = true;
                 }
-            });
+                catch (TaskCanceledException)
+                {
+                    return;
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                await Task.Delay(1000);
+            }
         }
 
 
@@ -251,6 +248,8 @@ namespace Kebler.ViewModels
 
                     try
                     {
+                        password ??= SecureStorage.DecryptStringAndUnSecure(SelectedServer.Password);
+
                         _worker.Init(SelectedServer, password);
 
                         //_transmissionClient = new TransmissionClient(
@@ -262,7 +261,6 @@ namespace Kebler.ViewModels
                         _logger.Info("TransmissionClient object created");
 
                         _collectDataCycleTask = CreateCollectDataCycleTask();
-                        _collectDataCycleTask.Start();
                     }
                     catch (UriFormatException uriEx)
                     {
@@ -403,7 +401,10 @@ namespace Kebler.ViewModels
             if (!IsConnected)
                 return Task.CompletedTask;
 
-            var preProcessingData = _torrentCache.ToList();
+            var preProcessingData = _torrentCache?.ToList() ?? new List<ITorrent>();
+
+
+            //update counter on categories
 
             _categoriesCount.Clear();
 
@@ -524,13 +525,10 @@ namespace Kebler.ViewModels
             var toRm = new List<ITorrent>(TorrentList.Except(info).ToList());
 
             if (toRm.Any())
-                OnUIThread(() =>
+                foreach (var item in toRm)
                 {
-                    foreach (var item in toRm)
-                    {
-                        TorrentList.RemoveWithoutNotify(item);
-                    }
-                });
+                    TorrentList.RemoveWithoutNotify(item);
+                }
 
             foreach (var item in info)
             {
@@ -541,7 +539,7 @@ namespace Kebler.ViewModels
                 }
                 else
                 {
-                    TorrentList[ind].Notify(item);
+                    TorrentList[ind].UpdateData(item);
                 }
             }
         }
@@ -645,20 +643,28 @@ namespace Kebler.ViewModels
 
                 if (_sessionInfo != null)
                 {
+                    IsConnectedStatusText = ConnectedServer.ClientType switch
+                    {
+                        ClientType.Transmission =>
+                            $"{nameof(ClientType.Transmission)} {_sessionInfo?.Version} (RPC:{_sessionInfo.RpcVersion})         " +
+                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Uploaded))} {_bytesToUserFriendlyString.Convert(_sessionInfo.UploadedBytes)}" +
+                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Downloaded))}  {_bytesToUserFriendlyString.Convert(_sessionInfo.DownloadedBytes)}" +
+                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_sessionInfo.Uptime).Humanize(5, culture: _localizationManager.CurrentCulture)}",
 
-                    IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo.RpcVersion})         " +
-                                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Uploaded))} {_bytesToUserFriendlyString.Convert(_sessionInfo.UploadedBytes)}" +
-                                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Downloaded))}  {_bytesToUserFriendlyString.Convert(_sessionInfo.DownloadedBytes)}" +
-                                            $"      {_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_sessionInfo.Uptime).Humanize(5, culture: _localizationManager.CurrentCulture)}";
-
+                        ClientType.QBittorrent =>
+                            $"{nameof(ClientType.QBittorrent)} {_sessionInfo?.Version}         " +
+                            $"{_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Uploaded))} {_bytesToUserFriendlyString.Convert(_sessionInfo.UploadedBytes)} " +
+                            $"{_localizationProvider.GetLocalizedValue(nameof(Strings.Stats_Downloaded))} {_bytesToUserFriendlyString.Convert(_sessionInfo.DownloadedBytes)}",
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
 
                     var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_sessionInfo.DownloadSpeed);
                     var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_sessionInfo.UploadSpeed);
 
                     var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
                     var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
-                    var altUp = "";//_settings?.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]" : string.Empty;
-                    var altD = "";// _settings?.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]" : string.Empty;
+                    var altUp = _settings?.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]" : string.Empty;
+                    var altD = _settings?.AlternativeSpeedEnabled == true ? $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]" : string.Empty;
 
                     DownloadSpeed = $"D: {dSpeed}{altD}";
                     UploadSpeed = $"U: {uSpeed}{altUp}";

@@ -88,6 +88,6 @@ namespace Kebler.Domain.Interfaces.Torrents
         IEnumerable<string> WebSeeds { get; set; }
         int WebseedsSendingToUs { get; set; }
 
-        public void Notify(ITorrent inf);
+        public void UpdateData(ITorrent inf);
     }
 }

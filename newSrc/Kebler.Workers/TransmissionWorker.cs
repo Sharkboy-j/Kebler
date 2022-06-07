@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Interfaces.Torrents;
 using Kebler.Mapper;
+using Kebler.Transmission.Models;
 
 namespace Kebler.Workers
 {
     public class TransmissionWorker : IWorker
     {
         private readonly Transmission.TransmissionClient _client;
-        private readonly CancellationTokenSource _cancelTokenSource;
         private readonly ILogger _logger;
 
         public static IWorker CreateInstance(in IServer server, in ILogger logger, in string password = null)
@@ -23,11 +23,30 @@ namespace Kebler.Workers
         public TransmissionWorker(in IServer server, in ILogger logger, in string password)
         {
             _logger = logger;
-            _cancelTokenSource = new CancellationTokenSource();
             _client = new Transmission.TransmissionClient(server.FullUriPath, null, server.UserName, in password);
         }
 
-        public async Task<(bool, Exception)> CheckConnectionAsync(int timeOut = default)
+        private void CheckResponce(ITransmissionResponse response, out Exception exception)
+        {
+            exception = null;
+
+            if (response?.WebException != null)
+            {
+                exception = response?.WebException;
+            }
+            else if (response?.CustomException != null)
+            {
+                exception = response?.WebException;
+            }
+
+        }
+
+        public Task<(bool, Exception)> CheckConnectionAsync(int timeOut = default, bool disconnectAfter = false)
+        {
+            return CheckConnectionAsync(TimeSpan.FromSeconds(timeOut));
+        }
+
+        public async Task<(bool, Exception)> CheckConnectionAsync(TimeSpan timeOut = default, bool disconnectAfter = false)
         {
             try
             {
@@ -35,34 +54,21 @@ namespace Kebler.Workers
 
                 _logger.Trace($"{nameof(CheckConnectionAsync)} Start");
 
-                var info = await _client.GetSessionInformationAsync(tokenSource.Token);
+                var result = await _client.GetSessionInformationAsync(tokenSource.Token);
 
-                if (info.Response.Success)
+                CheckResponce(result.Response, out var exception);
+                if (exception != null)
                 {
-                    _logger.Trace($"{nameof(CheckConnectionAsync)} Success");
-                    return (true, null);
+                    _logger.Trace($"{nameof(CheckConnectionAsync)} failed");
+                    return (false, exception);
                 }
-                else
-                {
-                    if (info.Response?.WebException != null)
-                    {
-                        return (false, info.Response?.WebException);
-                    }
-                    else if (info.Response.CustomException != null)
-                    {
-                        return (false, info.Response?.CustomException);
-                    }
-                    else
-                    {
-                        return (false, new Exception("Unknown"));
-                    }
-                }
+                _logger.Trace($"{nameof(CheckConnectionAsync)} Success");
+                return (true, null);
             }
             catch (Exception ex)
             {
                 _logger.Trace($"{nameof(CheckConnectionAsync)} failed");
                 _logger.Error(ex);
-                //Crashes.TrackError(ex);
 
                 return (false, ex);
             }
@@ -72,39 +78,64 @@ namespace Kebler.Workers
             }
         }
 
-        public async Task<IStatistic> GetSessionStatisticAsync(CancellationToken token)
+
+        public async Task<(IStatistic, Exception)> GetSessionStatisticAsync(CancellationToken token)
         {
             var stats = await _client.GetSessionStatisticAsync(token);
             var session = await _client.GetSessionInformationAsync(token);
+
+            CheckResponce(stats.Response, out var exception);
+            if (exception != null)
+            {
+                return (null, exception);
+            }
+
+            CheckResponce(stats.Response, out exception);
+            if (exception != null)
+            {
+                return (null, exception);
+            }
 
             var fromstats = MapStatistic.Mapper.Map<Transmission.Models.Entities.Statistic, UI.Models.Statistic>(stats.Value);
             var fromstatsAndSession = MapStatistic.Mapper.Map(session.Value, fromstats);
 
             token.ThrowIfCancellationRequested();
 
-            return fromstatsAndSession;
+            return (fromstatsAndSession, null);
         }
 
-        public async Task<IEnumerable<ITorrent>> TorrentsGetAsync(CancellationToken token)
+        public async Task<(IEnumerable<ITorrent>, Exception)> TorrentsGetAsync(CancellationToken token)
         {
-            var result = await _client.TorrentGetAsync(Transmission.Models.TorrentFields.WORK, token);
+            var result = await _client.TorrentGetAsync(Transmission.Models.TorrentFields.Work, token);
+
+            CheckResponce(result.Response, out var exception);
+            if (exception != null)
+            {
+                return (null, exception);
+            }
 
             var staticDa = TorrentMapper.Mapper.Map<List<UI.Models.Torrent>>(result.Value.Torrents);
 
             token.ThrowIfCancellationRequested();
 
-            return staticDa;
+            return (staticDa, null);
         }
 
-        public async Task<ITorrentClientSettings> GetTorrentClientSettingsAsync(CancellationToken token)
+        public async Task<(ITorrentClientSettings, Exception)> GetTorrentClientSettingsAsync(CancellationToken token)
         {
             var result = await _client.GetSessionSettingsAsync(token);
+
+            CheckResponce(result.Response, out var exception);
+            if (exception != null)
+            {
+                return (null, exception);
+            }
 
             var settings = SettingsMapper.Mapper.Map<UI.Models.TorrentClientSettings>(result.Value);
 
             token.ThrowIfCancellationRequested();
 
-            return settings;
+            return (settings, null);
         }
     }
 }

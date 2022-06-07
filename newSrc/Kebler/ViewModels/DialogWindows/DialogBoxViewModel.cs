@@ -7,7 +7,7 @@ using Kebler.Domain.Models;
 using Kebler.Interfaces;
 using Kebler.Localisation;
 
-namespace Kebler.ViewModels
+namespace Kebler.ViewModels.DialogWindows
 {
     public class DialogBoxViewModel : BoxViewModel
     {

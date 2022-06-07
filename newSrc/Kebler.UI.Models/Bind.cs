@@ -5,7 +5,7 @@ namespace Kebler.UI.Models
     public class Bind<T> : BindableCollection<T>
     {
         /// <summary>
-        /// Need cuz fucking BindableCollection on Notify reset selected item and index for ListView =\
+        /// Need cuz fucking BindableCollection on UpdateData reset selected item and index for ListView =\
         /// </summary>
         /// <param name="item"></param>
         public void RemoveWithoutNotify(T item)

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Humanizer;
-using Humanizer.Bytes;
+using ByteSizeLib;
 
 namespace Kebler.UI.Converters
 {
@@ -24,10 +23,11 @@ namespace Kebler.UI.Converters
         public static string GetSizeString(in long length, in bool showEmpty = false)
         {
             var size = ByteSize.FromBytes(length);
-            var text = size.Per(TimeSpan.FromSeconds(1)).Humanize();
-            return text;
+            var text = size.ToBinaryString();
 
+            var str = showEmpty ? $"{text}/s" : size == new ByteSize(0) ? string.Empty : $"{text}/s";
 
+            return str;
             //long B = 0, KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
             //double size = length;
             //var suffix = nameof(B);

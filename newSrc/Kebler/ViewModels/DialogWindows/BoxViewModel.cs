@@ -1,8 +1,7 @@
 ﻿using Caliburn.Micro;
 using Kebler.Domain.Models;
-using Kebler.Transmission.Models;
 
-namespace Kebler.ViewModels
+namespace Kebler.ViewModels.DialogWindows
 {
     public class BoxViewModel : Screen
     {

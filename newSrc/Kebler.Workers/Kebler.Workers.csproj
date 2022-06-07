@@ -7,6 +7,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
 		<ProjectReference Include="..\Kebler.Mapper\Kebler.Mapper.csproj" />
+		<ProjectReference Include="..\Kebler.QBittorrent\Kebler.QBittorrent.csproj" />
 		<ProjectReference Include="..\Kebler.Transmission\Kebler.Transmission.csproj" />
 		<ProjectReference Include="..\Kebler.UI.Models\Kebler.UI.Models.csproj" />
 	</ItemGroup>

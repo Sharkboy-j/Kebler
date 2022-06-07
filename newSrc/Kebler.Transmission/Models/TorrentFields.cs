@@ -422,7 +422,7 @@ namespace Kebler.Transmission.Models
             }
         }
 
-        public static string[] WORK
+        public static string[] Work
         {
             get
             {
@@ -444,6 +444,7 @@ namespace Kebler.Transmission.Models
                     TOTAL_SIZE,
                     ERROR,
                     ERROR_STRING,
+
                     #endregion
                 };
             }

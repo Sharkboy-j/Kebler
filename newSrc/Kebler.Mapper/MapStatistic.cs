@@ -29,6 +29,23 @@ namespace Kebler.Mapper
                         FilesAdded = x.CumulativeStats.FilesAdded,
                     });
 
+                cfg.CreateMap<Kebler.QBittorrent.GlobalTransferInfo, UI.Models.Statistic>().ConstructUsing(x =>
+                    new UI.Models.Statistic()
+                    {
+                        UploadedBytes = x.UploadedData ?? default,
+                        DownloadedBytes = x.DownloadedData ?? default,
+                        Uptime = default,
+                        FilesAdded = default,
+                    });
+                cfg.CreateMap<Kebler.QBittorrent.GlobalTransferInfo, Kebler.Domain.Interfaces.Torrents.IStatistic>().ConstructUsing(x =>
+                    new UI.Models.Statistic()
+                    {
+                        UploadedBytes = x.UploadedData ?? default,
+                        DownloadedBytes = x.DownloadedData ?? default,
+                        Uptime = default,
+                        FilesAdded = default,
+                    });
+
                 //cfg.CreateMap<Transmission.Models.Entities.SessionInfo, UI.Models.Statistic>().ConstructUsing(x => new UI.Models.Statistic()
                 //{
                 //    AlternativeSpeedDown = x.AlternativeSpeedDown,

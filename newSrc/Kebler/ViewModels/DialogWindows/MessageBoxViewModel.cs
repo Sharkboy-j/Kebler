@@ -1,6 +1,6 @@
 ﻿using Kebler.Domain.Models;
 
-namespace Kebler.ViewModels
+namespace Kebler.ViewModels.DialogWindows
 {
     public class MessageBoxViewModel : BoxViewModel
     {

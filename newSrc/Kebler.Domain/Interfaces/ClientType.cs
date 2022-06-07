@@ -3,6 +3,6 @@
     public enum ClientType
     {
         Transmission,
-        Qbittorrent
+        QBittorrent
     }
 }

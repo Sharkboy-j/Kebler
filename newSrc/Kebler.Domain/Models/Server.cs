@@ -58,7 +58,7 @@ namespace Kebler.Domain.Models
                     case ClientType.Transmission:
                         builder = new UriBuilder(scheme, Host, Port, RpcPath);
                         break;
-                    case ClientType.Qbittorrent:
+                    case ClientType.QBittorrent:
                         builder = new UriBuilder(scheme, Host, Port);
                         break;
                 }

@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kebler.QBittorrent\Kebler.QBittorrent.csproj" />
     <ProjectReference Include="..\Kebler.Transmission\Kebler.Transmission.csproj" />
     <ProjectReference Include="..\Kebler.UI.Models\Kebler.UI.Models.csproj" />
   </ItemGroup>

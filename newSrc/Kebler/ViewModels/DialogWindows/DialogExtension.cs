@@ -4,7 +4,7 @@ using Caliburn.Micro;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Models;
 
-namespace Kebler.ViewModels
+namespace Kebler.ViewModels.DialogWindows
 {
     public static class DialogExtension
     {

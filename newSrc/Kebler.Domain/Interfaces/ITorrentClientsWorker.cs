@@ -8,7 +8,7 @@ namespace Kebler.Domain.Interfaces
 {
     public interface ITorrentClientsWorker
     {
-        public Task<(bool, Exception)> CheckConnectionAsync(IServer server);
+        public Task<(bool, Exception)> CheckConnectionAsync(IServer server, bool disconnectAfter = false);
 
         public void Init(in IServer server, in string password);
 

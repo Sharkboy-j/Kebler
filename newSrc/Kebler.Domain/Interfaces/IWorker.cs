@@ -8,13 +8,15 @@ namespace Kebler.Domain.Interfaces
 {
     public interface IWorker
     {
-        public Task<(bool, Exception)> CheckConnectionAsync(int timeOut = default);
+        public Task<(bool, Exception)> CheckConnectionAsync(int timeOut = 10000, bool disconnectAfter = false);
 
-        public Task<IStatistic> GetSessionStatisticAsync(CancellationToken token);
+        public Task<(bool, Exception)> CheckConnectionAsync(TimeSpan timeOut, bool disconnectAfter = false);
 
-        public Task<IEnumerable<ITorrent>> TorrentsGetAsync(CancellationToken token);
+        public Task<(IStatistic, Exception)> GetSessionStatisticAsync(CancellationToken token);
 
-        public Task<ITorrentClientSettings> GetTorrentClientSettingsAsync(CancellationToken token);
+        public Task<(IEnumerable<ITorrent>, Exception)> TorrentsGetAsync(CancellationToken token);
+
+        public Task<(ITorrentClientSettings, Exception)> GetTorrentClientSettingsAsync(CancellationToken token);
 
     }
 }
