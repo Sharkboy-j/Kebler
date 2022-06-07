@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kebler.Domain.Models
+{
+    public enum Categories : byte
+    {
+        All,
+        Downloading,
+        Active,
+        Stopped,
+        Ended,
+        Error,
+        Inactive
+    }
+}

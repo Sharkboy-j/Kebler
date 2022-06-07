@@ -5,11 +5,11 @@ namespace Kebler.Domain
 {
     public static class ConstStrings
     {
-        public const string GITHUB_USER = "JeremiSharkboy";
-        public const string CONFIGNAME = "app.config";
-        public const string LOG_FOLDER = "log";
-        public const string TORRENT_EXT = ".torrent";
-        public const string MAGNET = "magnet";
+        public const string GithubUser = "JeremiSharkboy";
+        public const string Configname = "app.config";
+        public const string LogFolder = "log";
+        public const string TorrentExt = ".torrent";
+        public const string Magnet = "magnet";
         public const string ThemeName = "Generic.Dark";
 
         public static string KeblerRoamingFolder =
@@ -26,7 +26,7 @@ namespace Kebler.Domain
 
         public static string TempInstallerFolder = Path.Combine(Path.GetTempPath(), nameof(Kebler));
         public static string TempInstallerExePath = Path.Combine(TempInstallerFolder, InstallerExeName);
-        public static string CONFIGPATH = Path.Combine(GetDataPath().FullName, CONFIGNAME);
+        public static string Configpath = Path.Combine(GetDataPath().FullName, Configname);
 
 
         public static DirectoryInfo GetDataPath()

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Kebler.Transmission.Models
 {
     [DebuggerDisplay("{Name} | {RateDownload} {RateUpload}")]
-    public class TorrentInfo :IComparable
+    public class TorrentInfo : IComparable
     {
         [JsonConstructor]
         public TorrentInfo(uint id)
@@ -177,8 +177,8 @@ namespace Kebler.Transmission.Models
 
         public void Notify(TorrentInfo inf)
         {
-            RateUpload = inf.rateUpload;
-            RateDownload = inf.rateDownload;
+            RateUpload = inf.RateUpload;
+            RateDownload = inf.RateDownload;
             Name = inf.Name;
             PercentDone = inf.PercentDone;
             Status = inf.Status;
@@ -250,7 +250,7 @@ namespace Kebler.Transmission.Models
         [JsonProperty(TorrentFields.UPLOAD_RATIO)]
         public double UploadRatio { get; set; }
 
-        [JsonProperty(TorrentFields.WANTED)] 
+        [JsonProperty(TorrentFields.WANTED)]
         public IEnumerable<bool> Wanted { get; set; }
 
         [JsonProperty(TorrentFields.WEB_SEEDS)]
@@ -328,14 +328,7 @@ namespace Kebler.Transmission.Models
         }
 
         private readonly BinaryReader _reader = default!;
-        private int rateUpload;
-        private int rateDownload;
-        private string name = string.Empty;
-        private double percentDone;
-        private int status;
-        private long uploadedEver;
-        private long totalSize;
-        private readonly Dictionary<string, TransmissionValue> _root = new Dictionary<string, TransmissionValue>();
+        private readonly Dictionary<string, TransmissionValue> _root = new();
 
         [JsonIgnore]
         public Dictionary<string, TransmissionValue> Info =>
@@ -374,7 +367,7 @@ namespace Kebler.Transmission.Models
             while (_reader.PeekChar() != 101)
             {
                 var str = parseString();
-     
+
                 if (str != "pieces")
                 {
                     var tVal = ProcessVal();

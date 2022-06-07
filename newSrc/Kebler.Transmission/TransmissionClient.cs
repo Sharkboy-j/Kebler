@@ -33,7 +33,7 @@ namespace Kebler.Transmission
         /// <param name="sessionId">Session ID</param>
         /// <param name="login">Login</param>
         /// <param name="password">Password</param>
-        public TransmissionClient(string url, string sessionId = default, string login = default, string password = default)
+        public TransmissionClient(in string url, in string sessionId = default, in string login = default, in string password = default)
         {
             Url = url;
             SessionId = sessionId;
@@ -79,7 +79,7 @@ namespace Kebler.Transmission
             return Uri.TryCreate(source, UriKind.Absolute, out _);
         }
 
-      
+
     }
 
 
@@ -101,7 +101,7 @@ namespace Kebler.Transmission
                 {
                     token.ThrowIfCancellationRequested();
 
-                    var webRequest = (HttpWebRequest) WebRequest.Create(Url);
+                    var webRequest = (HttpWebRequest)WebRequest.Create(Url);
                     webRequest.ContentType = "application/json-rpc";
                     webRequest.Method = "POST";
                     if (_needAuthorization)
@@ -273,7 +273,7 @@ namespace Kebler.Transmission
         public async Task<TransmissionResponse<TransmissionTorrents>> TorrentGetAsync(string[] fields,
             CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"fields", fields}};
+            var arguments = new Dictionary<string, object> { { "fields", fields } };
             var request = new TransmissionRequest("torrent-get", arguments);
             var response = await SendRequestAsync(request, token);
             var trans = new TransmissionResponse<TransmissionTorrents>(response);
@@ -289,7 +289,7 @@ namespace Kebler.Transmission
         public async Task<TransmissionTorrents> TorrentGetAsyncWithId(string[] fields, CancellationToken token,
             params uint[] ids)
         {
-            var arguments = new Dictionary<string, object> {{"fields", fields}};
+            var arguments = new Dictionary<string, object> { { "fields", fields } };
 
             if (ids != null && ids.Length > 0)
                 arguments.Add("ids", ids);
@@ -320,7 +320,7 @@ namespace Kebler.Transmission
             var response = await SendRequestAsync(request, token);
 
             var resp = response.WebException == null && response.HttpWebResponse == null &&
-                       response.CustomException == null?
+                       response.CustomException == null ?
                  Enums.RemoveResult.Ok
                 : Enums.RemoveResult.Error;
 
@@ -335,7 +335,7 @@ namespace Kebler.Transmission
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
         public async Task<TransmissionResponse> TorrentStartAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("torrent-start", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
             return resp;
         }
@@ -346,7 +346,7 @@ namespace Kebler.Transmission
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
         public Task TorrentStartForceAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request, token);
         }
 
@@ -356,7 +356,7 @@ namespace Kebler.Transmission
         public Task TorrentStartAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start",
-                new Dictionary<string, object> {{"ids", "recently-active"}});
+                new Dictionary<string, object> { { "ids", "recently-active" } });
             return SendRequestAsync(request, token);
         }
 
@@ -370,7 +370,7 @@ namespace Kebler.Transmission
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
         public Task TorrentStartNowAsync(int[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("torrent-start-now", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request, token);
         }
 
@@ -380,7 +380,7 @@ namespace Kebler.Transmission
         public Task TorrentStartNowAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-start-now",
-                new Dictionary<string, object> {{"ids", "recently-active"}});
+                new Dictionary<string, object> { { "ids", "recently-active" } });
             return SendRequestAsync(request, token);
         }
 
@@ -394,7 +394,7 @@ namespace Kebler.Transmission
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
         public Task<TransmissionResponse> TorrentStopAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("torrent-stop", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request, token);
         }
 
@@ -404,7 +404,7 @@ namespace Kebler.Transmission
         public Task TorrentStopAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-stop",
-                new Dictionary<string, object> {{"ids", "recently-active"}});
+                new Dictionary<string, object> { { "ids", "recently-active" } });
             return SendRequestAsync(request, token);
         }
 
@@ -418,7 +418,7 @@ namespace Kebler.Transmission
         /// <param name="ids">A list of torrent id numbers, sha1 hash strings, or both</param>
         public Task<TransmissionResponse> TorrentVerifyAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("torrent-verify", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("torrent-verify", new Dictionary<string, object> { { "ids", ids } });
             return SendRequestAsync(request, token);
         }
 
@@ -428,7 +428,7 @@ namespace Kebler.Transmission
         public Task TorrentVerifyAsync(CancellationToken token)
         {
             var request = new TransmissionRequest("torrent-verify",
-                new Dictionary<string, object> {{"ids", "recently-active"}});
+                new Dictionary<string, object> { { "ids", "recently-active" } });
             return SendRequestAsync(request, token);
         }
 
@@ -440,7 +440,7 @@ namespace Kebler.Transmission
         /// <param name="ids">Torrents id</param>
         public async Task<TransmissionResponse> TorrentQueueMoveTopAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("queue-move-top", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("queue-move-top", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
             return resp;
         }
@@ -451,7 +451,7 @@ namespace Kebler.Transmission
         /// <param name="ids"></param>
         public async Task<TransmissionResponse> TorrentQueueMoveUpAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("queue-move-up", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("queue-move-up", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
             return resp;
         }
@@ -462,7 +462,7 @@ namespace Kebler.Transmission
         /// <param name="ids"></param>
         public async Task<TransmissionResponse> TorrentQueueMoveDownAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("queue-move-down", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("queue-move-down", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
             return resp;
         }
@@ -473,7 +473,7 @@ namespace Kebler.Transmission
         /// <param name="ids"></param>
         public async Task<TransmissionResponse> TorrentQueueMoveBottomAsync(uint[] ids, CancellationToken token)
         {
-            var request = new TransmissionRequest("queue-move-bottom", new Dictionary<string, object> {{"ids", ids}});
+            var request = new TransmissionRequest("queue-move-bottom", new Dictionary<string, object> { { "ids", ids } });
             var resp = await SendRequestAsync(request, token);
             return resp;
         }
@@ -487,7 +487,7 @@ namespace Kebler.Transmission
         public async Task<TransmissionResponse> TorrentSetLocationAsync(IEnumerable<uint> ids, string location, bool move,
             CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"ids", ids}, {"location", location}, {"move", move}};
+            var arguments = new Dictionary<string, object> { { "ids", ids }, { "location", location }, { "move", move } };
             var request = new TransmissionRequest("torrent-set-location", arguments);
             var response = await SendRequestAsync(request, token);
             return response;
@@ -502,7 +502,7 @@ namespace Kebler.Transmission
         public async Task<TransmissionResponse<RenameTorrentInfo>> TorrentRenamePathAsync(uint id, string path,
             string name, CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"ids", new[] {id}}, {"path", path}, {"name", name}};
+            var arguments = new Dictionary<string, object> { { "ids", new[] { id } }, { "path", path }, { "name", name } };
             var request = new TransmissionRequest("torrent-rename-path", arguments);
             var response = await SendRequestAsync(request, token);
             var trans = new TransmissionResponse<RenameTorrentInfo>(response);
@@ -516,7 +516,7 @@ namespace Kebler.Transmission
         /// <param name="ids"></param>
         public async Task<TransmissionResponse> ReannounceTorrentsAsync(uint[] ids, CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"ids", ids}};
+            var arguments = new Dictionary<string, object> { { "ids", ids } };
 
             var request = new TransmissionRequest("torrent-reannounce", arguments);
             var response = await SendRequestAsync(request, token);
@@ -537,7 +537,7 @@ namespace Kebler.Transmission
             var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
-            var result = (bool) data.GetValue("port-is-open");
+            var result = (bool)data.GetValue("port-is-open");
             return result;
         }
 
@@ -551,7 +551,7 @@ namespace Kebler.Transmission
             var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
-            var result = (int) data.GetValue("blocklist-size");
+            var result = (int)data.GetValue("blocklist-size");
             return result;
         }
 
@@ -561,13 +561,13 @@ namespace Kebler.Transmission
         /// <param name="path">The directory to query</param>
         public async Task<long> FreeSpaceAsync(string path, CancellationToken token)
         {
-            var arguments = new Dictionary<string, object> {{"path", path}};
+            var arguments = new Dictionary<string, object> { { "path", path } };
 
             var request = new TransmissionRequest("free-space", arguments);
             var response = await SendRequestAsync(request, token);
 
             var data = response.Deserialize<JObject>();
-            var result = (long) data.GetValue("size-bytes");
+            var result = (long)data.GetValue("size-bytes");
             return result;
         }
 

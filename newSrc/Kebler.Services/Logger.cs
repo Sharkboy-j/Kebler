@@ -16,7 +16,7 @@ namespace Kebler.Services
     {
         private readonly IConfigService _configService = ConfigService.Instance;
         private static readonly string FileName = $"{nameof(Kebler)}_{DateTime.Now:dd-MM-yyyy}.log";
-        private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstStrings.LOG_FOLDER, FileName);
+        private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstStrings.LogFolder, FileName);
         private static readonly object WriteLock = new();
         private static ILogger _logger;
         private enum LogType { Info, Warning, Error, Ui, Trace }
@@ -46,7 +46,7 @@ namespace Kebler.Services
 
         public void Trace(in Stopwatch time, in int lineNumber = 0, in string caller = "", in string sourceFilePath = "")
         {
-            if (_configService.DefaultSettingsInstanse.TraceEnabled)
+            if (ConfigService.DefaultSettingsInstanse.TraceEnabled)
             {
                 var data = Format($"Elapsed time {time.Elapsed}", LogType.Trace, lineNumber, caller, GetClassName(sourceFilePath));
 
@@ -59,7 +59,7 @@ namespace Kebler.Services
 
         public void Trace(in string customMessage = null, in int lineNumber = 0, in string caller = "", in string sourceFilePath = "")
         {
-            if (!_configService.IsInited || _configService.DefaultSettingsInstanse.TraceEnabled)
+            if (!_configService.IsInited || ConfigService.DefaultSettingsInstanse.TraceEnabled)
             {
                 var data = Format(customMessage, LogType.Trace, lineNumber, caller, GetClassName(sourceFilePath));
 
@@ -186,7 +186,7 @@ namespace Kebler.Services
             FileInfo[] files;
             try
             {
-                logsDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstStrings.LOG_FOLDER));
+                logsDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstStrings.LogFolder));
             }
             catch (Exception ex)
             {

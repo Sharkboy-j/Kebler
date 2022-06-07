@@ -1,4 +1,5 @@
-﻿namespace Kebler.Transmission.Models
+﻿
+namespace Kebler.Transmission.Models
 {
     public static class TorrentFields
     {
@@ -440,8 +441,6 @@
                     UPLOADED_EVER,
                     STATUS,
                     DOWNLOAD_DIR,
-                    FILES,
-                    MAGNET_LINK,
                     TOTAL_SIZE,
                     ERROR,
                     ERROR_STRING,

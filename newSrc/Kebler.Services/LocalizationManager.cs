@@ -43,7 +43,7 @@ namespace Kebler.Services
                 try
                 {
                     _currentCulture = value;
-                    _configService.DefaultSettingsInstanse.Language = _currentCulture;
+                    ConfigService.DefaultSettingsInstanse.Language = _currentCulture;
                     _configService.Save();
 
                     var eventAggraAggregator = IoC.Get<IEventAggregator>();

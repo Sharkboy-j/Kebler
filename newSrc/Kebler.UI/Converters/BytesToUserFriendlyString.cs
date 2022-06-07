@@ -11,8 +11,14 @@ namespace Kebler.UI.Converters
             if (parameter != null && bool.TryParse(parameter.ToString(), out var para))
                 return GetSizeString(System.Convert.ToInt64(value), para);
 
-            return GetSizeString((long) value);
+            return GetSizeString((long)value);
         }
+
+        public string Convert(object value)
+        {
+            return value == null ? string.Empty : GetSizeString((long)value);
+        }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -11,7 +11,7 @@ namespace Kebler.Services
     public class ConfigService : IConfigService
     {
         public bool IsInited { get; private set; }
-        public DefaultSettings DefaultSettingsInstanse { get; set; }
+        public static DefaultSettings DefaultSettingsInstanse;
         public static IConfigService Instance => _configService ??= new ConfigService();
 
 
@@ -29,7 +29,7 @@ namespace Kebler.Services
                 _configurationObj.Clear();
                 _configurationObj.Add(Section.FromObject(nameof(DefaultSettings), DefaultSettingsInstanse));
 
-                _configurationObj.SaveToFile(ConstStrings.CONFIGPATH);
+                _configurationObj.SaveToFile(ConstStrings.Configpath);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Kebler.Services
 
             _configurationObj.Add(Section.FromObject(nameof(DefaultSettings), DefaultSettingsInstanse));
 
-            _configurationObj.SaveToFile(ConstStrings.CONFIGPATH);
+            _configurationObj.SaveToFile(ConstStrings.Configpath);
 
             // var p = Configuration[nameof(DefaultSettings)].ToObject<DefaultSettings>();
         }
@@ -63,7 +63,7 @@ namespace Kebler.Services
         {
             try
             {
-                _configurationObj = Configuration.LoadFromFile(ConstStrings.CONFIGPATH);
+                _configurationObj = Configuration.LoadFromFile(ConstStrings.Configpath);
                 Logger.Info("Configuration exists");
                 return true;
             }
@@ -83,7 +83,7 @@ namespace Kebler.Services
         {
             try
             {
-                _configurationObj = Configuration.LoadFromFile(ConstStrings.CONFIGPATH);
+                _configurationObj = Configuration.LoadFromFile(ConstStrings.Configpath);
                 DefaultSettingsInstanse = _configurationObj[nameof(DefaultSettings)].ToObject<DefaultSettings>();
             }
             catch (Exception e)

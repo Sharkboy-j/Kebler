@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kebler.Transmission\Kebler.Transmission.csproj" />
+    <ProjectReference Include="..\Kebler.UI.Models\Kebler.UI.Models.csproj" />
+  </ItemGroup>
+
+</Project>

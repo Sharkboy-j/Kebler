@@ -8,6 +8,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Kebler.UI.Models;assembly=Kebler.UI.Models"
+    xmlns:torrents="clr-namespace:Kebler.Domain.Interfaces.Torrents;assembly=Kebler.Domain"
+    xmlns:viewModels="clr-namespace:Kebler.ViewModels"
+    xmlns:views="clr-namespace:Kebler.Views"
+    d:DataContext="{d:DesignInstance viewModels:KeblerViewModel}"
     lex:LocalizeDictionary.DesignCulture="en"
     lex:ResxLocalizationProvider.DefaultAssembly="Kebler.Localisation"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
@@ -241,8 +246,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--<ListBox
-                    Name="CategoriesListBox"
+                <ListBox
                     cal:Message.Attach="[Event SelectionChanged] = [Action CatChange]"
                     BorderThickness="0"
                     ItemsSource="{Binding CategoriesList}"
@@ -256,12 +260,12 @@
                                 <TextBlock
                                     Margin="3,0"
                                     Text="{Binding Count, StringFormat=({0})}"
-                                    Visibility="{Binding DataContext.ShowCategoriesCount, RelativeSource={RelativeSource AncestorType=ui11:KeblerView}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    Visibility="{Binding DataContext.ShowCategoriesCount, RelativeSource={RelativeSource AncestorType=views:KeblerView}, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </StackPanel>
 
                         </DataTemplate>
                     </ListBox.ItemTemplate>
-                </ListBox>-->
+                </ListBox>
 
                 <Grid
                     Height="24"
@@ -326,7 +330,7 @@
             </Grid>
 
             <ListView
-                Name="list"
+                Name="List"
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
@@ -344,45 +348,59 @@
                 </ListView.InputBindings>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn x:Name="col1" Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}">
+                        <GridViewColumn
+                            x:Name="col1"
+                            Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}"
+                            d:DataContext="{d:DesignInstance torrents:ITorrent}"
+                            Header="Name">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="90">
+                        <GridViewColumn
+                            x:Name="col2"
+                            Width="90"
+                            d:DataContext="{d:DesignInstance torrents:ITorrent}"
+                            Header="Status">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <!--<controls:TagBorder
+                                    <customControls:TagBorder
                                         Height="20"
                                         Percent="{Binding PercentDone, UpdateSourceTrigger=PropertyChanged}"
                                         Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}">
-                                        <controls:TagBorder.Effect>
+                                        <customControls:TagBorder.Effect>
                                             <DropShadowEffect
                                                 BlurRadius="5"
                                                 Direction="305"
                                                 ShadowDepth="0" />
-                                        </controls:TagBorder.Effect>
-                                    </controls:TagBorder>-->
+                                        </customControls:TagBorder.Effect>
+                                    </customControls:TagBorder>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn>
+                        <GridViewColumn d:DataContext="{d:DesignInstance torrents:ITorrent}" Header="Upload speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="col3">
+                        <GridViewColumn
+                            x:Name="col3"
+                            d:DataContext="{d:DesignInstance torrents:ITorrent}"
+                            Header="Download speed">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="col4">
+                        <GridViewColumn
+                            x:Name="col4"
+                            d:DataContext="{d:DesignInstance torrents:ITorrent}"
+                            Header="Uploaded">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
@@ -393,7 +411,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="col5">
+                        <GridViewColumn
+                            x:Name="col5"
+                            d:DataContext="{d:DesignInstance torrents:ITorrent}"
+                            Header="Size">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock

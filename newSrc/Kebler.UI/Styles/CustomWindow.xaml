@@ -154,12 +154,27 @@
                                                 Header="{lex:BLoc Mi_Info}"
                                                 IsEnabled="True"
                                                 Style="{DynamicResource TopBarMenuButton}">
-                                                <MenuItem Header="{lex:BLoc MI_Report}" IsCheckable="False" />
-                                                <MenuItem Header="{lex:BLoc MI_Logs}" IsCheckable="False" />
+                                                <MenuItem
+                                                    cal:Message.Attach="Report"
+                                                    Header="{lex:BLoc MI_Report}"
+                                                    IsCheckable="False" />
+                                                <MenuItem
+                                                    cal:Message.Attach="OpenLogs"
+                                                    Header="{lex:BLoc MI_Logs}"
+                                                    IsCheckable="False" />
                                                 <Separator />
-                                                <MenuItem Header="{lex:BLoc MI_About}" IsCheckable="False" />
-                                                <MenuItem Header="{lex:BLoc MI_Check}" IsCheckable="False" />
-                                                <MenuItem Header="{lex:BLoc MI_Contact}" IsCheckable="False" />
+                                                <MenuItem
+                                                    cal:Message.Attach="About"
+                                                    Header="{lex:BLoc MI_About}"
+                                                    IsCheckable="False" />
+                                                <MenuItem
+                                                    cal:Message.Attach="Check"
+                                                    Header="{lex:BLoc MI_Check}"
+                                                    IsCheckable="False" />
+                                                <MenuItem
+                                                    cal:Message.Attach="Contact"
+                                                    Header="{lex:BLoc MI_Contact}"
+                                                    IsCheckable="False" />
                                             </MenuItem>
                                         </Menu>
                                         <TextBlock

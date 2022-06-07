@@ -11,7 +11,7 @@ namespace Kebler.Domain.Interfaces
     {
         public bool IsInited { get; }
 
-        public DefaultSettings DefaultSettingsInstanse { get; set; }
+        public static DefaultSettings DefaultSettingsInstanse;
 
         public void Save();
 

@@ -40,11 +40,10 @@ namespace Kebler
             _container.Singleton<DialogBoxViewModel>();
             _container.Singleton<MessageBoxViewModel>();
             _container.Singleton<BoxViewModel>();
+            _container.Singleton<AboutViewModel>();
 
             _configService = ConfigService.Instance;
             _localizationManager = LocalizationManager.Instance;
-
-            _configService.LoadConfig();
 
             //container.Singleton<TaskBarIconViewModel>();
             //container.Singleton<TorrentPropsViewModel>();
@@ -70,11 +69,11 @@ namespace Kebler
                 DefaultValue = Application.FindResource(typeof(DialogWindow))
             });
 
-            if (string.IsNullOrEmpty(_configService.DefaultSettingsInstanse.Language.Name))
+            if (string.IsNullOrEmpty(ConfigService.DefaultSettingsInstanse.Language.Name))
                 _localizationManager.CurrentCulture = _localizationManager.CultureList[0];
             else
                 _localizationManager.CurrentCulture = _localizationManager.CultureList.First(x =>
-                    x.TwoLetterISOLanguageName == _configService.DefaultSettingsInstanse.Language.TwoLetterISOLanguageName);
+                    x.TwoLetterISOLanguageName == ConfigService.DefaultSettingsInstanse.Language.TwoLetterISOLanguageName);
                     
             await DisplayRootViewFor<KeblerViewModel>();
 

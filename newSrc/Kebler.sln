@@ -16,11 +16,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Transmission", "Kebler.Transmission\Kebler.Transmission.csproj", "{0F745ACE-8A0E-454C-B7D0-849CC6159A29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Transmission", "Kebler.Transmission\Kebler.Transmission.csproj", "{0F745ACE-8A0E-454C-B7D0-849CC6159A29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Workers", "Kebler.Workers\Kebler.Workers.csproj", "{A6B2011E-D6E7-4129-8432-F17CFD055F09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Workers", "Kebler.Workers\Kebler.Workers.csproj", "{A6B2011E-D6E7-4129-8432-F17CFD055F09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.Localisation", "Kebler.Localisation\Kebler.Localisation.csproj", "{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Localisation", "Kebler.Localisation\Kebler.Localisation.csproj", "{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Mapper", "Kebler.Mapper\Kebler.Mapper.csproj", "{C16EC13B-4051-4866-8400-A02340C39FB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.UI.Models", "Kebler.UI.Models\Kebler.UI.Models.csproj", "{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +60,14 @@ Global
 		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71E4F9CC-EC78-4D8E-9412-3A636800AAE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C16EC13B-4051-4866-8400-A02340C39FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C16EC13B-4051-4866-8400-A02340C39FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C16EC13B-4051-4866-8400-A02340C39FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C16EC13B-4051-4866-8400-A02340C39FB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

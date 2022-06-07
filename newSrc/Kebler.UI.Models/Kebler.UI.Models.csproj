@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro.Core" Version="4.0.173" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
+	</ItemGroup>
+</Project>
