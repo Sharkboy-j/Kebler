@@ -64,36 +64,23 @@ namespace Kebler.Mapper
                         TrackerStats = Mapper.Map<List<UI.Models.TorrentTrackerStats>>(x.TrackerStats),
                     });
 
-
-
-
+                
                 cfg.CreateMap<QBittorrent.TorrentInfo, Domain.Interfaces.Torrents.ITorrent>()
                     .ConstructUsing(x => new UI.Models.Torrent(default, x.Name)
                     {
                         RateDownload = x.DownloadSpeed,
                         RateUpload = x.UploadSpeed,
                         HashString = x.Hash,
-                        Status = GetState(x.State)
+                        Status = GetState(x.State),
+                        UploadedEver = x.Uploaded ?? default,
+                        PercentDone = x.Progress,
+                        DownloadDir = x.SavePath,
                         //Files = Mapper.Map<List<UI.Models.TorrentFiles>>(x),
                         //FileStats = Mapper.Map<List<UI.Models.TorrentFileStats>>(x.FileStats),
                         //Peers = Mapper.Map<List<UI.Models.TorrentPeers>>(x),
                         //Trackers = Mapper.Map<List<UI.Models.TorrentTrackers>>(x),
                         //TrackerStats = Mapper.Map<List<UI.Models.TorrentTrackerStats>>(x),
                     });
-
-                //cfg.CreateMap<QBittorrent.TorrentInfo, UI.Models.Torrent>()
-                //    .ConstructUsing(x => new UI.Models.Torrent(default, x.Name)
-                //    {
-                //        RateDownload = x.DownloadSpeed,
-                //        RateUpload = x.UploadSpeed,
-                //        HashString = x.Hash,
-                //        //Files = Mapper.Map<List<UI.Models.TorrentFiles>>(x),
-                //        //FileStats = Mapper.Map<List<UI.Models.TorrentFileStats>>(x.FileStats),
-                //        //Peers = Mapper.Map<List<UI.Models.TorrentPeers>>(x),
-                //        //Trackers = Mapper.Map<List<UI.Models.TorrentTrackers>>(x),
-                //        //TrackerStats = Mapper.Map<List<UI.Models.TorrentTrackerStats>>(x),
-                //    });
-
 
 
                 cfg.AddGlobalIgnore(nameof(UI.Models.Torrent.IsNotifying));
@@ -118,14 +105,13 @@ namespace Kebler.Mapper
                 case QBittorrent.TorrentState.PausedDownload:
                 case QBittorrent.TorrentState.QueuedUpload:
                 case QBittorrent.TorrentState.QueuedDownload:
-                case QBittorrent.TorrentState.StalledUpload:
-                case QBittorrent.TorrentState.StalledDownload:
                 case QBittorrent.TorrentState.FetchingMetadata:
                 case QBittorrent.TorrentState.Allocating:
                 case QBittorrent.TorrentState.Moving:
                     return 0;
                 case QBittorrent.TorrentState.ForcedUpload:
                 case QBittorrent.TorrentState.Uploading:
+                case QBittorrent.TorrentState.StalledUpload:
                     return 6;
                 case QBittorrent.TorrentState.CheckingUpload:
                     return 2;
@@ -133,6 +119,7 @@ namespace Kebler.Mapper
                     return 2;
                 case QBittorrent.TorrentState.ForcedDownload:
                 case QBittorrent.TorrentState.Downloading:
+                case QBittorrent.TorrentState.StalledDownload:
                     return 4;
                 case QBittorrent.TorrentState.QueuedForChecking:
                 case QBittorrent.TorrentState.CheckingResumeData:

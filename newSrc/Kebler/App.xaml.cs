@@ -43,7 +43,7 @@ namespace Kebler
             }
 #endif
 
-            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            RenderOptions.ProcessRenderMode = RenderMode.Default;
             Logger.Instance.Trace($"{nameof(Kebler)} app start");
 
             var args = Environment.GetCommandLineArgs();

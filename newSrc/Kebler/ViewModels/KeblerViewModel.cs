@@ -467,7 +467,7 @@ namespace Kebler.ViewModels
 //System.Windows.Threading
 //ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
 
-                App.Log.Error(ex);
+                //App.Log.Error(ex);
 #endif
             }
 
@@ -486,9 +486,9 @@ namespace Kebler.ViewModels
         public void Check()
         {
 #if RELEASE
-            App.Log.Ui(nameof(Check));
+            //App.Log.Ui(nameof(Check));
 
-            System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
+           // System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
         }
 
