@@ -327,7 +327,7 @@ namespace Kebler.TransmissionTorrentClient.Models
 
         public override bool Equals(object obj)
         {
-            if (obj is TorrentInfo torrentInfo)
+            if (obj != null && obj is TorrentInfo torrentInfo)
                 return torrentInfo.Id == Id &&
                        torrentInfo.HashString == HashString;
             return false;

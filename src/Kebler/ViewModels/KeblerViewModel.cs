@@ -521,7 +521,11 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel //WindowActins
     {
-      
+        public void Exit()
+        {
+            Log.Ui();
+            TryCloseAsync();
+        }
 
         public void ClosingW()
         {
@@ -553,7 +557,10 @@ namespace Kebler.ViewModels
         }
 
 
-      
+        public void Unselect()
+        {
+            UpdateMoreInfoPosition(false);
+        }
 
         /// <summary>
         /// Clear filter textBox and unselect curent folder
@@ -563,7 +570,11 @@ namespace Kebler.ViewModels
             FilterText = string.Empty;
             SelectedFolderIndex = -1;
         }
-    
+
+        public void Find()
+        {
+            Execute.OnUIThread(() => { _view.FilterTextBox.Focus(); });
+        }
 
         public void FilterTextChanged()
         {
@@ -631,7 +642,26 @@ namespace Kebler.ViewModels
             }
         }
 
- 
+        public async void AddMagnet()
+        {
+            if (IsConnected && _transmissionClient != null)
+            {
+                var dialog = new DialogBoxViewModel(Strings.MSG_LinkOrMagnet, string.Empty, false, Enums.MessageBoxDilogButtons.OkCancel, LocalizationProvider.GetLocalizedValue(nameof(Strings.Error_EmptyString)));
+
+                var result = await manager.ShowDialogAsync(dialog);
+
+                if (result == true && dialog.Value is string str && !string.IsNullOrEmpty(str))
+                {
+                    var newTr = new NewTorrent
+                    {
+                        Filename = str,
+                        Paused = false
+                    };
+
+                    await _transmissionClient.TorrentAddAsync(newTr, _cancelTokenSource.Token);
+                }
+            }
+        }
 
         public async void PauseAll()
         {
