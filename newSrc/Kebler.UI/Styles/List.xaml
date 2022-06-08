@@ -277,7 +277,8 @@
                         </DockPanel>
                         <ScrollBar
                             x:Name="PART_HorizontalScrollBar"
-                            Grid.Row="1" Grid.Column="0"
+                            Grid.Row="1"
+                            Grid.Column="0"
                             Cursor="Arrow"
                             Maximum="{TemplateBinding ScrollViewer.ScrollableWidth}"
                             Minimum="0"
@@ -288,7 +289,8 @@
                             Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                         <ScrollBar
                             x:Name="PART_VerticalScrollBar"
-                            Grid.Row="0" Grid.Column="1"
+                            Grid.Row="0"
+                            Grid.Column="1"
                             Cursor="Arrow"
                             Maximum="{TemplateBinding ScrollViewer.ScrollableHeight}"
                             Minimum="0"
@@ -300,7 +302,7 @@
                         <DockPanel
                             Grid.Row="1"
                             Grid.Column="1"
-                            Background="{DynamicResource ScrollViewerBackground}"
+                            Background="Transparent"
                             LastChildFill="false">
                             <Rectangle
                                 Width="1"

@@ -26,7 +26,7 @@ namespace Kebler.UI.Converters
             throw new NotImplementedException();
         }
 
-        public string GetSizeString(long length, bool showEmpty = false)
+        private string GetSizeString(long length, bool showEmpty = false)
         {
             var size = ByteSize.FromBytes(length);
             var text = size.ToBinaryString();

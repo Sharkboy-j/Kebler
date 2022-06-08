@@ -67,7 +67,7 @@ namespace Kebler.ViewModels
 #elif PORTABLE
                 return "Kebler [Portable]";
 #elif RELEASE
- var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var fileVersionInfo =
                     System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 return $"{nameof(Kebler)} {fileVersionInfo.FileVersion} Beta x64";
@@ -264,7 +264,7 @@ namespace Kebler.ViewModels
             await _manager.ShowDialogAsync(vm);
         }
 
-        public async void TorrentChanged(ListView obj, TorrentInfo inf)
+        public async Task TorrentChanged(ListView obj, TorrentInfo inf)
         {
             try
             {
@@ -289,6 +289,15 @@ namespace Kebler.ViewModels
             {
             }
         }
+
+        public void Properties()
+        {
+            _logger.Ui();
+            //Properties(null, null);
+        }
+
+
+
 
         public void CatChange()
         {
@@ -444,28 +453,28 @@ namespace Kebler.ViewModels
             {
 #if RELEASE
 
-//                System.IO
-//Path.GetFullPath(String path)
-//System.IO.FileInfo
-//System.IO.FileInfo..ctor(String originalPath, String fullPath, String fileName, Boolean isNormalized)
-//System.IO.FileInfo
-//System.IO.FileInfo..ctor(String fileName)
-//Kebler.Views
-//TopBarView.OpenLogs(Object sender, RoutedEventArgs e)
-//System.Windows
-//RoutedEventHandlerInfo.InvokeHandler(Object target, RoutedEventArgs routedEventArgs)
-//System.Windows
-//EventRoute.InvokeHandlersImpl(Object source, RoutedEventArgs args, Boolean reRaised)
-//System.Windows
-//UIElement.RaiseEventImpl(DependencyObject sender, RoutedEventArgs args)
-//System.Windows
-//UIElement.RaiseEvent(RoutedEventArgs e)
-//System.Windows.Controls
-//MenuItem.InvokeClickAfterRender(Object arg)
-//System.Windows.Threading
-//ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
-//System.Windows.Threading
-//ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+                //                System.IO
+                //Path.GetFullPath(String path)
+                //System.IO.FileInfo
+                //System.IO.FileInfo..ctor(String originalPath, String fullPath, String fileName, Boolean isNormalized)
+                //System.IO.FileInfo
+                //System.IO.FileInfo..ctor(String fileName)
+                //Kebler.Views
+                //TopBarView.OpenLogs(Object sender, RoutedEventArgs e)
+                //System.Windows
+                //RoutedEventHandlerInfo.InvokeHandler(Object target, RoutedEventArgs routedEventArgs)
+                //System.Windows
+                //EventRoute.InvokeHandlersImpl(Object source, RoutedEventArgs args, Boolean reRaised)
+                //System.Windows
+                //UIElement.RaiseEventImpl(DependencyObject sender, RoutedEventArgs args)
+                //System.Windows
+                //UIElement.RaiseEvent(RoutedEventArgs e)
+                //System.Windows.Controls
+                //MenuItem.InvokeClickAfterRender(Object arg)
+                //System.Windows.Threading
+                //ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+                //System.Windows.Threading
+                //ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
 
                 //App.Log.Error(ex);
 #endif
@@ -488,7 +497,7 @@ namespace Kebler.ViewModels
 #if RELEASE
             //App.Log.Ui(nameof(Check));
 
-           // System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
+            // System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
         }
 
@@ -656,12 +665,36 @@ namespace Kebler.ViewModels
         {
             _logger.Ui();
 
-            if (sender is not MenuItem {Tag: IServer server})
+            if (sender is not MenuItem { Tag: IServer server })
                 return;
 
             foreach (var item in Servers) item.IsChecked = false;
 
             _eventAggregator.PublishOnUIThreadAsync(new ReconnectRequested(server));
+        }
+
+        /// <summary>
+        /// Open torrent properties popUp by double click on grid or RightClickMenu on torrent row.
+        /// </summary>
+        /// <param name="sender">sender...</param>
+        /// <param name="torrentRow">Torrent..</param>
+        public void Properties(object sender, TorrentInfo torrentRow)
+        {
+            //if (_transmissionClient != null)
+            //{
+            //    if (selectedIDs?.ToArray() is uint[] ids && ids.Length > 0)
+            //    {
+            //        manager.ShowDialogAsync(new TorrentPropsViewModel(
+            //            _transmissionClient,
+            //            ids,
+            //            manager));
+            //    }
+            //    else if (sender is ListView && torrentRow is TorrentInfo selectedTorrent)
+            //    {
+            //        manager.ShowDialogAsync(new TorrentPropsViewModel(_transmissionClient, new[] { torrentRow.Id }, manager));
+            //    }
+            //}
+
         }
     }
 

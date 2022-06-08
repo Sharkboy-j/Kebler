@@ -46,281 +46,278 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:CustomWindow}">
-                    <Grid
-                        x:Name="PART_BackGrid"
-                        Margin="0"
-                        TextOptions.TextFormattingMode="Display"
-                        TextOptions.TextRenderingMode="ClearType">
-                        <Border
-                            x:Name="PART_Border"
-                            Width="Auto"
-                            Height="Auto"
-                            Padding="0"
-                            Background="{DynamicResource Window.BackgroundBrush}"
-                            BorderBrush="{DynamicResource Window.BorderBrush}"
-                            BorderThickness="1">
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="7"
-                                    Direction="315"
-                                    Opacity="0.5"
-                                    ShadowDepth="2"
-                                    Color="black" />
-                            </Border.Effect>
-                            <DockPanel
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Background="Transparent">
-                                <Border
-                                    x:Name="TitleBar"
-                                    Background="{TemplateBinding Control.Background}"
-                                    BorderBrush="{DynamicResource ToolBarBorderBrush}"
-                                    BorderThickness="0"
-                                    DockPanel.Dock="Top">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Menu
-                                            Name="PART_TopBarMenu"
-                                            Grid.Column="0"
-                                            Background="Transparent"
-                                            IsMainMenu="True"
-                                            Visibility="{TemplateBinding TopBarMenuVisibility}">
-                                            <MenuItem Header="{lex:BLoc MI_Kebler}">
-                                                <MenuItem
-                                                    cal:Message.Attach="ShowConnectionManager"
-                                                    Header="{lex:BLoc MI_CM}"
-                                                    InputGestureText="Ctrl+C" />
-                                                <MenuItem Header="{lex:BLoc MI_Servers}" ItemsSource="{Binding Servers}" />
-                                                <MenuItem Header="{lex:BLoc MI_Props}" />
-                                                <MenuItem Header="{lex:BLoc MI_Prefs}" />
-                                                <Separator />
-                                                <MenuItem Header="{lex:BLoc MI_Exit}" InputGestureText="Alt+X" />
-                                            </MenuItem>
-                                            <MenuItem Header="{lex:BLoc MI_Torrent}">
-                                                <MenuItem
-                                                    Header="{lex:BLoc MI_AddTorrent}"
-                                                    InputGestureText="Ctrl+N"
-                                                    IsEnabled="{Binding IsConnected}" />
-                                                <MenuItem
-                                                    Header="{lex:BLoc MI_AddMagnet}"
-                                                    InputGestureText="Ctrl+M"
-                                                    IsEnabled="{Binding IsConnected}" />
-                                                <Separator />
-                                                <MenuItem Header="{lex:BLoc QA_Resume}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_Pause}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_Remove}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_RemoveData}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <Separator />
-                                                <MenuItem Header="{lex:BLoc QA_Queue}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
-                                                    <MenuItem Header="{lex:BLoc QA_MoveTop}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                    <MenuItem Header="{lex:BLoc QA_MoveUp}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                    <MenuItem Header="{lex:BLoc QA_MoveDown}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                    <MenuItem Header="{lex:BLoc QA_MoveBot}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                </MenuItem>
-                                                <MenuItem Header="{lex:BLoc QA_Reannounce}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_Verify}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_SetLoc}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <MenuItem Header="{lex:BLoc QA_Rename}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                                <Separator />
-                                                <MenuItem Header="{lex:BLoc QA_Properties}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
-                                            </MenuItem>
-
-                                            <MenuItem Header="{lex:BLoc MI_View}">
-                                                <MenuItem
-                                                    CommandParameter="{Binding .}"
-                                                    Header="{lex:BLoc MI_MoreInoShow}"
-                                                    IsCheckable="True"
-                                                    IsChecked="{Binding IsShowMoreInfo}" />
-                                                <MenuItem
-                                                    CommandParameter="{Binding .}"
-                                                    Header="{lex:BLoc MI_ShowCategoriesCount}"
-                                                    IsCheckable="True"
-                                                    IsChecked="{Binding ShowCategoriesCount}" />
-                                            </MenuItem>
-                                            <MenuItem Header="{lex:BLoc MI_Tools}">
-                                                <MenuItem Header="{lex:BLoc MI_ClearTrackers}" IsEnabled="{Binding IsConnected}" />
-                                                <MenuItem Header="{lex:BLoc MI_AddFromNewTrack}" IsEnabled="{Binding IsConnected}" />
-                                                <MenuItem
-                                                    Header="{lex:BLoc MI_ExportTorrents}"
-                                                    IsEnabled="{Binding IsConnected}"
-                                                    Visibility="Collapsed" />
-                                            </MenuItem>
-                                            <!--<MenuItem Header="{lex:Loc MI_lang}" ItemsSource="{Binding Languages}" />-->
+                    <Border
+                        x:Name="PART_Border"
+                        Width="Auto"
+                        Height="Auto"
+                        Padding="0"
+                        Background="{DynamicResource Window.BackgroundBrush}"
+                        BorderBrush="{DynamicResource Window.BorderBrush}"
+                        BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border
+                                x:Name="TitleBar"
+                                Background="{TemplateBinding Control.Background}"
+                                BorderBrush="{DynamicResource ToolBarBorderBrush}"
+                                BorderThickness="0"
+                                DockPanel.Dock="Top">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Menu
+                                        Name="PART_TopBarMenu"
+                                        Grid.Column="0"
+                                        Background="Transparent"
+                                        IsMainMenu="True"
+                                        Visibility="{TemplateBinding TopBarMenuVisibility}">
+                                        <MenuItem Header="{lex:BLoc MI_Kebler}">
                                             <MenuItem
-                                                Header="{lex:BLoc Mi_Info}"
-                                                IsEnabled="True"
-                                                Style="{DynamicResource TopBarMenuButton}">
-                                                <MenuItem
-                                                    cal:Message.Attach="Report"
-                                                    Header="{lex:BLoc MI_Report}"
-                                                    IsCheckable="False" />
-                                                <MenuItem
-                                                    cal:Message.Attach="OpenLogs"
-                                                    Header="{lex:BLoc MI_Logs}"
-                                                    IsCheckable="False" />
-                                                <Separator />
-                                                <MenuItem
-                                                    cal:Message.Attach="About"
-                                                    Header="{lex:BLoc MI_About}"
-                                                    IsCheckable="False" />
-                                                <MenuItem
-                                                    cal:Message.Attach="Check"
-                                                    Header="{lex:BLoc MI_Check}"
-                                                    IsCheckable="False" />
-                                                <MenuItem
-                                                    cal:Message.Attach="Contact"
-                                                    Header="{lex:BLoc MI_Contact}"
-                                                    IsCheckable="False" />
+                                                cal:Message.Attach="ShowConnectionManager"
+                                                Header="{lex:BLoc MI_CM}"
+                                                InputGestureText="Ctrl+C" />
+                                            <MenuItem Header="{lex:BLoc MI_Servers}" ItemsSource="{Binding Servers}" />
+                                            <MenuItem Header="{lex:BLoc MI_Props}" />
+                                            <MenuItem Header="{lex:BLoc MI_Prefs}" />
+                                            <Separator />
+                                            <MenuItem Header="{lex:BLoc MI_Exit}" InputGestureText="Alt+X" />
+                                        </MenuItem>
+                                        <MenuItem Header="{lex:BLoc MI_Torrent}">
+                                            <MenuItem
+                                                Header="{lex:BLoc MI_AddTorrent}"
+                                                InputGestureText="Ctrl+N"
+                                                IsEnabled="{Binding IsConnected}" />
+                                            <MenuItem
+                                                Header="{lex:BLoc MI_AddMagnet}"
+                                                InputGestureText="Ctrl+M"
+                                                IsEnabled="{Binding IsConnected}" />
+                                            <Separator />
+                                            <MenuItem Header="{lex:BLoc QA_Resume}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_Pause}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_Remove}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_RemoveData}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <Separator />
+                                            <MenuItem Header="{lex:BLoc QA_Queue}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}">
+                                                <MenuItem Header="{lex:BLoc QA_MoveTop}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                                <MenuItem Header="{lex:BLoc QA_MoveUp}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                                <MenuItem Header="{lex:BLoc QA_MoveDown}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                                <MenuItem Header="{lex:BLoc QA_MoveBot}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
                                             </MenuItem>
-                                        </Menu>
-                                        <TextBlock
-                                            x:Name="Caption"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="5"
-                                            Margin="4,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontFamily="Segoe UI"
-                                            FontSize="12"
-                                            Foreground="{DynamicResource Window.TitleBar.Foreground}"
-                                            Opacity="0.66"
-                                            Text="{Binding Path=Title, Mode=OneWay}" />
-                                        <StackPanel
-                                            Grid.Column="2"
-                                            HorizontalAlignment="Right"
-                                            Orientation="Horizontal">
-                                            <Button
-                                                x:Name="MinButton"
-                                                Width="34"
-                                                Height="26"
-                                                VerticalAlignment="Top"
-                                                Foreground="{DynamicResource Window.Button.Static.Foreground}"
-                                                Style="{StaticResource CustomWindowTitleBarButtonStyle}"
-                                                Visibility="{TemplateBinding MinimizeButtonVisibility}">
-                                                <Grid MaxWidth="9" MaxHeight="9">
-                                                    <Path
-                                                        Data="M0,8 H8 M0,7 H8 M0,6 H8"
-                                                        RenderOptions.EdgeMode="Aliased"
-                                                        Stretch="None"
-                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                        StrokeThickness="1" />
-                                                </Grid>
-                                            </Button>
-                                            <Button
-                                                x:Name="MaxButton"
-                                                Width="34"
-                                                Height="26"
-                                                VerticalAlignment="Top"
-                                                Foreground="{DynamicResource Window.Button.Static.Foreground}"
-                                                Style="{StaticResource CustomWindowTitleBarButtonStyle}"
-                                                Visibility="{TemplateBinding MaximizeButtonVisibility}">
-                                                <Grid MaxWidth="9" MaxHeight="9">
-                                                    <Path
-                                                        x:Name="PART_MaxButton_Path"
-                                                        Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
-                                                        RenderOptions.EdgeMode="Aliased"
-                                                        Stretch="None"
-                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                        StrokeThickness="1" />
-                                                </Grid>
-                                            </Button>
-                                            <Button
-                                                x:Name="CloseButton"
-                                                Width="34"
-                                                Height="26"
-                                                VerticalAlignment="Top"
-                                                Foreground="{DynamicResource Window.Button.Static.Foreground}"
-                                                Style="{StaticResource CustomWindowTitleBarButtonStyle}">
-                                                <Grid MaxWidth="9" MaxHeight="9">
-                                                    <Path
-                                                        Data="M0,0 L8,8 M0,8 L8,0"
-                                                        Stretch="None"
-                                                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                        StrokeThickness="1.5" />
-                                                </Grid>
-                                            </Button>
-                                        </StackPanel>
+                                            <MenuItem Header="{lex:BLoc QA_Reannounce}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_Verify}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_SetLoc}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <MenuItem Header="{lex:BLoc QA_Rename}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                            <Separator />
+                                            <MenuItem Header="{lex:BLoc QA_Properties}" IsEnabled="{Binding SelectedTorrent, Converter={StaticResource ObjectToBoolConverter}}" />
+                                        </MenuItem>
 
-                                    </Grid>
-                                </Border>
-                                <ContentPresenter />
-                            </DockPanel>
-                        </Border>
-                        <Line
-                            x:Name="lnSizeNorth"
-                            Cursor="SizeNS"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="1"
-                            Y2="1" />
-                        <Line
-                            x:Name="lnSizeSouth"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNS"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="{TemplateBinding ActualHeight}"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Line
-                            x:Name="lnSizeWest"
-                            Cursor="SizeWE"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="1"
-                            X2="1"
-                            Y1="1"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Line
-                            x:Name="lnSizeEast"
-                            HorizontalAlignment="Right"
-                            Cursor="SizeWE"
-                            Stroke="Transparent"
-                            StrokeThickness="3"
-                            X1="{TemplateBinding ActualWidth}"
-                            X2="{TemplateBinding ActualWidth}"
-                            Y1="1"
-                            Y2="{TemplateBinding ActualHeight}" />
-                        <Rectangle
-                            x:Name="rectSizeNorthWest"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNWSE"
-                            Fill="Transparent" />
-                        <Rectangle
-                            x:Name="rectSizeNorthEast"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNESW"
-                            Fill="Transparent" />
-                        <Rectangle
-                            x:Name="rectSizeSouthWest"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNESW"
-                            Fill="Transparent" />
-                        <Rectangle
-                            x:Name="rectSizeSouthEast"
-                            Width="5"
-                            Height="5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNWSE"
-                            Fill="Transparent" />
-                    </Grid>
+                                        <MenuItem Header="{lex:BLoc MI_View}">
+                                            <MenuItem
+                                                CommandParameter="{Binding .}"
+                                                Header="{lex:BLoc MI_MoreInoShow}"
+                                                IsCheckable="True"
+                                                IsChecked="{Binding IsShowMoreInfo}" />
+                                            <MenuItem
+                                                CommandParameter="{Binding .}"
+                                                Header="{lex:BLoc MI_ShowCategoriesCount}"
+                                                IsCheckable="True"
+                                                IsChecked="{Binding ShowCategoriesCount}" />
+                                        </MenuItem>
+                                        <MenuItem Header="{lex:BLoc MI_Tools}">
+                                            <MenuItem Header="{lex:BLoc MI_ClearTrackers}" IsEnabled="{Binding IsConnected}" />
+                                            <MenuItem Header="{lex:BLoc MI_AddFromNewTrack}" IsEnabled="{Binding IsConnected}" />
+                                            <MenuItem
+                                                Header="{lex:BLoc MI_ExportTorrents}"
+                                                IsEnabled="{Binding IsConnected}"
+                                                Visibility="Collapsed" />
+                                        </MenuItem>
+                                        <!--<MenuItem Header="{lex:Loc MI_lang}" ItemsSource="{Binding Languages}" />-->
+                                        <MenuItem
+                                            Header="{lex:BLoc Mi_Info}"
+                                            IsEnabled="True"
+                                            Style="{DynamicResource TopBarMenuButton}">
+                                            <MenuItem
+                                                cal:Message.Attach="Report"
+                                                Header="{lex:BLoc MI_Report}"
+                                                IsCheckable="False" />
+                                            <MenuItem
+                                                cal:Message.Attach="OpenLogs"
+                                                Header="{lex:BLoc MI_Logs}"
+                                                IsCheckable="False" />
+                                            <Separator />
+                                            <MenuItem
+                                                cal:Message.Attach="About"
+                                                Header="{lex:BLoc MI_About}"
+                                                IsCheckable="False" />
+                                            <MenuItem
+                                                cal:Message.Attach="Check"
+                                                Header="{lex:BLoc MI_Check}"
+                                                IsCheckable="False" />
+                                            <MenuItem
+                                                cal:Message.Attach="Contact"
+                                                Header="{lex:BLoc MI_Contact}"
+                                                IsCheckable="False" />
+                                        </MenuItem>
+                                    </Menu>
+                                    <TextBlock
+                                        x:Name="Caption"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="5"
+                                        Margin="4,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource Window.TitleBar.Foreground}"
+                                        Opacity="0.66"
+                                        Text="{Binding Path=Title, Mode=OneWay}" />
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            x:Name="MinButton"
+                                            Width="34"
+                                            Height="26"
+                                            VerticalAlignment="Top"
+                                            Foreground="{DynamicResource Window.Button.Static.Foreground}"
+                                            Style="{StaticResource CustomWindowTitleBarButtonStyle}"
+                                            Visibility="{TemplateBinding MinimizeButtonVisibility}">
+                                            <Grid MaxWidth="9" MaxHeight="9">
+                                                <Path
+                                                    Data="M0,8 H8 M0,7 H8 M0,6 H8"
+                                                    RenderOptions.EdgeMode="Aliased"
+                                                    Stretch="None"
+                                                    Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                    StrokeThickness="1" />
+                                            </Grid>
+                                        </Button>
+                                        <Button
+                                            x:Name="MaxButton"
+                                            Width="34"
+                                            Height="26"
+                                            VerticalAlignment="Top"
+                                            Foreground="{DynamicResource Window.Button.Static.Foreground}"
+                                            Style="{StaticResource CustomWindowTitleBarButtonStyle}"
+                                            Visibility="{TemplateBinding MaximizeButtonVisibility}">
+                                            <Grid MaxWidth="9" MaxHeight="9">
+                                                <Path
+                                                    x:Name="PART_MaxButton_Path"
+                                                    Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
+                                                    RenderOptions.EdgeMode="Aliased"
+                                                    Stretch="None"
+                                                    Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                    StrokeThickness="1" />
+                                            </Grid>
+                                        </Button>
+                                        <Button
+                                            x:Name="CloseButton"
+                                            Width="34"
+                                            Height="26"
+                                            VerticalAlignment="Top"
+                                            Foreground="{DynamicResource Window.Button.Static.Foreground}"
+                                            Style="{StaticResource CustomWindowTitleBarButtonStyle}">
+                                            <Grid MaxWidth="9" MaxHeight="9">
+                                                <Path
+                                                    Data="M0,0 L8,8 M0,8 L8,0"
+                                                    Stretch="None"
+                                                    Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                    StrokeThickness="1.5" />
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter Grid.Row="1" />
+
+                            <Line
+                                x:Name="lnSizeNorth"
+                                Grid.Row="0"
+                                Cursor="SizeNS"
+                                Stroke="Transparent"
+                                StrokeThickness="3"
+                                X1="1"
+                                X2="{TemplateBinding ActualWidth}"
+                                Y1="1"
+                                Y2="1" />
+                            <Line
+                                x:Name="lnSizeSouth"
+                                Grid.Row="1"
+                                VerticalAlignment="Bottom"
+                                Cursor="SizeNS"
+                                Stroke="Transparent"
+                                StrokeThickness="3"
+                                X1="1"
+                                X2="{TemplateBinding ActualWidth}"
+                                Y1="{TemplateBinding ActualHeight}"
+                                Y2="{TemplateBinding ActualHeight}" />
+                            <Line
+                                x:Name="lnSizeWest"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Cursor="SizeWE"
+                                Stroke="Transparent"
+                                StrokeThickness="3"
+                                X1="1"
+                                X2="1"
+                                Y1="1"
+                                Y2="{TemplateBinding ActualHeight}" />
+                            <Line
+                                x:Name="lnSizeEast"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                HorizontalAlignment="Right"
+                                Cursor="SizeWE"
+                                Stroke="Transparent"
+                                StrokeThickness="3"
+                                X1="{TemplateBinding ActualWidth}"
+                                X2="{TemplateBinding ActualWidth}"
+                                Y1="1"
+                                Y2="{TemplateBinding ActualHeight}" />
+                            <Rectangle
+                                x:Name="rectSizeNorthWest"
+                                Grid.Row="0"
+                                Width="5"
+                                Height="5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Cursor="SizeNWSE"
+                                Fill="Transparent" />
+                            <Rectangle
+                                x:Name="rectSizeNorthEast"
+                                Grid.Row="0"
+                                Width="5"
+                                Height="5"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Cursor="SizeNESW"
+                                Fill="Transparent" />
+                            <Rectangle
+                                x:Name="rectSizeSouthWest"
+                                Grid.Row="1"
+                                Width="5"
+                                Height="5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Cursor="SizeNESW"
+                                Fill="Transparent" />
+                            <Rectangle
+                                x:Name="rectSizeSouthEast"
+                                Grid.Row="1"
+                                Width="5"
+                                Height="5"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Cursor="SizeNWSE"
+                                Fill="Transparent" />
+                        </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="ShowHeaderLine" Value="True">
                             <Setter TargetName="TitleBar" Property="BorderThickness" Value="0,0,0,1" />
@@ -337,7 +334,8 @@
                             <Setter TargetName="rectSizeSouthWest" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="rectSizeSouthEast" Property="Visibility" Value="Collapsed" />
 
-                            <Setter TargetName="PART_BackGrid" Property="Margin" Value="7" />
+                            <Setter TargetName="PART_Border" Property="Margin" Value="7" />
+                            <Setter TargetName="PART_Border" Property="BorderThickness" Value="0" />
 
                         </Trigger>
                         <Trigger Property="ResizeMode" Value="NoResize">
@@ -359,6 +357,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type controls:CustomWindow}}" TargetType="{x:Type controls:DialogWindow}">

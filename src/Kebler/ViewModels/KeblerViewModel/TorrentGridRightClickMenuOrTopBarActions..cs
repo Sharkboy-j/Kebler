@@ -11,39 +11,7 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     { 
-        /// <summary>
-        /// Rename torrent.
-        /// </summary>
-        public async void Rename()
-        {
-            if (selectedIDs.Length > 1)
-            {
-                await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MSG_OnlyOneTorrent)), manager);
-                return;
-            }
-
-            if (selectedIDs.Length < 1)
-            {
-                await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MSG_SelectOneTorrent)), manager);
-                return;
-            }
-
-            if (!IsConnected || SelectedTorrent is null) return;
-            
-            var selectedTorrent = SelectedTorrent;
-            var dialog = new DialogBoxViewModel(LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MSG_InterNewName)), selectedTorrent.Name, false);
-
-            var result = await manager.ShowDialogAsync(dialog);
-            
-            var newName = dialog.Value.ToString();
-            
-            if (result is not true || _transmissionClient is null || newName is null)
-                return;
-            
-            var resp = await _transmissionClient.TorrentRenamePathAsync(selectedTorrent.Id, selectedTorrent.Name, newName,
-                _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
-        }
+  
 
         /// <summary>
         /// Remove torrent without data.
