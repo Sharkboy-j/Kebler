@@ -428,7 +428,6 @@
                 return new[]
                 {
                     #region WORK FIELDS
-
                     NAME,
                     ID,
                     ADDED_DATE,
@@ -440,7 +439,7 @@
                     UPLOADED_EVER,
                     STATUS,
                     DOWNLOAD_DIR,
-                    FILES,
+                    //FILES,
                     MAGNET_LINK,
                     TOTAL_SIZE,
                     ERROR,
