@@ -567,29 +567,6 @@
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-                <ListView.GroupStyle>
-                    <GroupStyle AlternationCount="2">
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="GroupItem">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="GroupItem">
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel.Resources>
-                                                    <Style TargetType="StackPanel">
-                                                        <Setter Property="Background"
-                                                                Value="red"/>
-                                                    </Style>
-                                                </StackPanel.Resources>
-                                                <ItemsPresenter/>
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListView.GroupStyle>
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem cal:Message.Attach="Start" Header="{lex:BLoc QA_Resume}" />

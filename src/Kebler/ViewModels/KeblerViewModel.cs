@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -851,6 +852,15 @@ namespace Kebler.ViewModels
 
         public async Task OpenTorrent(IEnumerable<string> names)
         {
+            StringBuilder str = new StringBuilder();
+
+            foreach(var name in names)
+            {
+                str.AppendLine(name);
+            }
+
+            Log.Trace($"try add {str}");
+
             var skipwindow = false;
             foreach (var item in names)
             {

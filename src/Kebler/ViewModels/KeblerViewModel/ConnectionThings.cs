@@ -288,7 +288,7 @@ namespace Kebler.ViewModels
                     IsConnecting = false;
                     TorrentList = new Bind<TorrentInfo>();
                     IsConnected = false;
-                    Categories.Clear();
+                    Categories?.Clear();
                     IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
                     Log.Info("Disconnected from server");
                     if (requested)

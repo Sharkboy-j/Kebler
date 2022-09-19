@@ -286,10 +286,10 @@ namespace Kebler.ViewModels
                 _eventAggregator.PublishOnUIThreadAsync(new Messages.DownlaodCategoriesChanged(Categories));
             }
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                GridViewSort.ApplyCashSort();
-            });
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
+            //    GridViewSort.ApplyCashSort();
+            //});
         }
 
 
