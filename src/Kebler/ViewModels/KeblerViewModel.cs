@@ -267,6 +267,7 @@ namespace Kebler.ViewModels
                 //_view.MoreView.FileTreeViewControl.OnFileStatusUpdate += FileTreeViewControl_OnFileStatusUpdate;
                 MoreInfoView = new MoreInfoViewModel(_view, UpdateMoreInfoPosition, _eventAggregator);
                 _view.MoreView.FileTreeViewControl.Checked += MoreInfoView.MakeRecheck;
+                _view.list.AlternationCount = ConfigService.Instanse.AlterIndexColor ? 2 : 0;
             }
 
             base.OnViewAttached(view, context);
@@ -529,9 +530,9 @@ namespace Kebler.ViewModels
 
         public void ClosingW()
         {
-            SaveConfig();
+            //SaveConfig();
 
-            Log.Info("-----------Exit-----------");
+            //Log.Info("-----------Exit-----------");
         }
 
 
@@ -595,7 +596,7 @@ namespace Kebler.ViewModels
         {
             if (IsConnected && SelectedTorrent != null)
             {
-                var question = SelectedTorrents.Length > 1?
+                var question = SelectedTorrents.Length > 1 ?
                      LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocForMany)).Replace("%d", selectedIDs.Length.ToString())
                     : LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocOnce));
 
@@ -722,7 +723,7 @@ namespace Kebler.ViewModels
                         var tor = TorrentList.FirstOrDefault(x => x.Id == item);
                         if (tor != null)
                         {
-                            tor.Status = tor.PercentDone == 1  ?6 : 4;
+                            tor.Status = tor.PercentDone == 1 ? 6 : 4;
                         }
                     }
                 }
@@ -846,8 +847,9 @@ namespace Kebler.ViewModels
             }
         }
 
-        private async Task OpenTorrent(IEnumerable<string> names)
+        public async Task OpenTorrent(IEnumerable<string> names)
         {
+            var skipwindow = false;
             foreach (var item in names)
             {
                 if (string.IsNullOrEmpty(item))
@@ -865,30 +867,52 @@ namespace Kebler.ViewModels
                 {
 
                     var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
-                    var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-                        _torrentList, _folderCategory, _eventAggregator,
-                        downs, RemoveTorrent,
-                        ref _isAddWindOpened, ref _view);
 
-
-                    await manager.ShowDialogAsync(dialog);
-
-
-                    _isAddWindOpened = false;
-
-                    if (dialog.Result == true)
+                    if (skipwindow)
                     {
-                        if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
-                            TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
-                            {
-                                Name = dialog.TorrentResult.Value.Name,
-                                HashString = dialog.TorrentResult.Value.HashString
-                            });
+                        var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                               _torrentList, _folderCategory, _eventAggregator,
+                                               downs, RemoveTorrent,
+                                               ref _isAddWindOpened, ref _view);
+
+                        await dialog.AddHidden();
+
+                        _isAddWindOpened = false;
                     }
                     else
                     {
-                        return;
+                        var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                               _torrentList, _folderCategory, _eventAggregator,
+                                               downs, RemoveTorrent,
+                                               ref _isAddWindOpened, ref _view);
+
+                        dialog.IsAddTorrentWindowShow = skipwindow;
+
+
+                        await manager.ShowDialogAsync(dialog);
+
+                        if (dialog.IsAddTorrentWindowShow)
+                        {
+                            skipwindow = true;
+                        }
+
+                        _isAddWindOpened = false;
+
+                        if (dialog.Result == true)
+                        {
+                            if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
+                                TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                                {
+                                    Name = dialog.TorrentResult.Value.Name,
+                                    HashString = dialog.TorrentResult.Value.HashString
+                                });
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
+
                 }
             }
         }

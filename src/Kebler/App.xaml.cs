@@ -125,9 +125,10 @@ namespace Kebler
         {
             if (Current.MainWindow is Window wnd)
             {
+                wnd.Show();
                 wnd.Activate();
 
-                if (wnd?.WindowState != WindowState.Normal)
+                if (wnd.WindowState != WindowState.Normal)
                     wnd.WindowState = WindowState.Normal;
             }
 

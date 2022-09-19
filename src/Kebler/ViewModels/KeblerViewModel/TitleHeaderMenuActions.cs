@@ -108,6 +108,8 @@ namespace Kebler.ViewModels
                 UseShellExecute = true
             };
             p.Start();
+
+            Environment.Exit(0);
         }
 
 

@@ -26,6 +26,8 @@ namespace Kebler.ViewModels
     using UI.CSControls.TreeListView;
     using Views;
     using Microsoft.AppCenter.Crashes;
+    using System.Text;
+    using Kebler.Core.Extensions;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
@@ -166,12 +168,22 @@ namespace Kebler.ViewModels
             this.settings = settings;
 
 
+            Log.Trace("DownlaodCategoriesChanged");
+
+            var str = new StringBuilder();
+            str.AppendLine(string.Empty);
+
             foreach (var item in folderCategory)
             {
                 DownlaodDirs.Add(item.FullPath);
+                str.AppendLine($"'{item.FullPath}'");
             }
 
-            DownlaodDirIndex = 0;
+            Log.Trace(str.ToString());
+
+
+            DownlaodDirIndex = 1;
+            DownlaodDirPath = DownlaodDirs.FirstOrDefault();
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
@@ -202,28 +214,50 @@ namespace Kebler.ViewModels
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
 
-            if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
+            if (IsAddTorrentWindowShow)
             {
-                //var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
-
-                //DownlaodDir = info.DownloadDir;
-                var manager = IoC.Get<IWindowManager>();
-                if (await MessageBoxViewModel.ShowDialog(
-                    LocalizationProvider.GetLocalizedValue(nameof(Strings
-                        .ATD_TorrentExist_UpdateTrackers))
-                    , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
-                {
-                    LoadingGridVisibility = Visibility.Visible;
-                    Add();
-                    await TryCloseAsync(true);
-                }
-                else
-                {
-                    await TryCloseAsync(false);
-                }
+                DownlaodDirIndex = 1;
+                Add();
             }
+
+            //if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
+            //{
+            //    //var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
+
+            //    //DownlaodDir = info.DownloadDir;
+            //    var manager = IoC.Get<IWindowManager>();
+            //    if (await MessageBoxViewModel.ShowDialog(
+            //        LocalizationProvider.GetLocalizedValue(nameof(Strings
+            //            .ASK_UpdateTrackers))
+            //        , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
+            //    {
+            //        LoadingGridVisibility = Visibility.Visible;
+            //        Add();
+            //        await TryCloseAsync(true);
+            //    }
+            //    else
+            //    {
+            //        await TryCloseAsync(false);
+            //    }
+            //}
+            //else
+            //{
+            //    if (IsAddTorrentWindowShow)
+            //    {
+            //        DownlaodDirIndex = 1;
+            //        Add();
+            //    }
+            //}
         }
 
+        public Task AddHidden()
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
+            Add();
+            return Task.CompletedTask;
+        }
 
         public void ChangeVisibilityWindow()
         {
@@ -351,13 +385,18 @@ namespace Kebler.ViewModels
                         {
                             Metainfo = Convert.ToBase64String(torrentBytes),
                             Paused = !IsAutoStart,
-                            DownloadDirectory = DownlaodDirPath,
                             PeerLimit = PeerLimit,
                             FilesUnwanted = unWant.ToArray(),
                             FilesWanted = want.ToArray()
                         };
 
+                        if (!string.IsNullOrEmpty(DownlaodDirPath))
+                        {
+                            newTorrent.DownloadDirectory = DownlaodDirPath;
+                        }
+
                         Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
+                        Log.Info($"DownloadDirectory set to '{newTorrent.DownloadDirectory}'");
 
                         while (true)
                         {
@@ -421,13 +460,13 @@ namespace Kebler.ViewModels
                                                 if (_torrent != null)
                                                 {
                                                     var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
-                                                    
+
                                                     await _wnd.Dispatcher.InvokeAsync(async () =>
                                                     {
-                                                        var result = await MessageBoxViewModel.ShowDialog(
-                                                            LocalizationProvider.GetLocalizedValue(
-                                                            nameof(Strings.ASK_UpdateTrackers))
-                                                            , null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        var quest = LocalizationProvider.GetLocalizedValue(
+                                                            nameof(Strings.ASK_UpdateTrackers));
+                                                        
+                                                        var result = await MessageBoxViewModel.ShowDialog($"{quest} for {_torrent.DisplayName}", null, null, Enums.MessageBoxDilogButtons.YesNo);
 
                                                         if (result == true)
                                                         {
@@ -550,6 +589,18 @@ namespace Kebler.ViewModels
                 foreach (var itm in toAdd)
                     DownlaodDirs.Add(itm);
             }
+
+            Log.Trace("DownlaodCategoriesChanged");
+
+            var str = new StringBuilder();
+
+            foreach (var dir in DownlaodDirs)
+            {
+                str.AppendLine($"'{dir}'" + Environment.NewLine);
+            }
+
+            Log.Trace(str.ToString());
+
 
             return Task.CompletedTask;
         }

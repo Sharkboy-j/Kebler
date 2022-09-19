@@ -156,7 +156,7 @@ namespace Kebler.ViewModels
                         // txtfilter = txtfilter.Replace($"{{p}}:{filterKey}", string.Empty);
 
                         data.Torrents = data.Torrents
-                            .Where(x => FolderCategory.NormalizePath(x.DownloadDir).Equals(filterKey)).ToArray();
+                            .Where(x => x.DownloadDir.Equals(filterKey)).ToArray();
                     }
                     else
                     {
@@ -225,7 +225,9 @@ namespace Kebler.ViewModels
             foreach (var cat in dirs)
             {
                 cat.Count = allTorrents.Torrents.Count(x =>
-                    FolderCategory.NormalizePath(x.DownloadDir) == cat.FullPath);
+                    x.DownloadDir == cat.FullPath);
+
+
                 cat.Title = cat.FolderName;
                 cats.Add(cat);
 
@@ -268,16 +270,16 @@ namespace Kebler.ViewModels
                             foreach (var cat in Categories)
                                 if (cat.FolderName == itm.FolderName)
                                     cat.Title =
-                                        $"{cat.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
+                                        $"{cat.FullPath} ({allTorrents.Torrents.Count(x => x.DownloadDir == itm.FullPath)})";
                             itm.Title =
-                                $"{itm.FullPath} ({allTorrents.Torrents.Count(x => FolderCategory.NormalizePath(x.DownloadDir) == itm.FullPath)})";
+                                $"{itm.FullPath} ({allTorrents.Torrents.Count(x => x.DownloadDir == itm.FullPath)})";
                             Categories.Add(itm);
                         }
                     });
             }
 
 
-            if (_isAddWindOpened)
+            if (_isAddWindOpened && (toAdd.Any() || toRm.Any()))
             {
                 _eventAggregator.PublishOnUIThreadAsync(new Messages.DownlaodCategoriesChanged(Categories));
             }

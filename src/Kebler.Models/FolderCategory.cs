@@ -13,7 +13,7 @@ namespace Kebler.Models
 
         public FolderCategory(string fullPath)
         {
-            FullPath = NormalizePath(fullPath);
+            FullPath = fullPath;
             Dir = new DirectoryInfo(FullPath);
         }
 
@@ -61,12 +61,12 @@ namespace Kebler.Models
             }
         }
 
-        public static string NormalizePath(string path)
-        {
-            if (!Path.EndsInDirectorySeparator(path)) path = $"{path}{Path.AltDirectorySeparatorChar}";
+        //public static string NormalizePath(string path)
+        //{
+        //    if (!Path.EndsInDirectorySeparator(path)) path = $"{path}";
 
-            return path;
-        }
+        //    return path;
+        //}
 
         public override string ToString()
         {

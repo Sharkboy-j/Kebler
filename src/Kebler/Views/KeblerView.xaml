@@ -16,6 +16,7 @@
     Height="600"
     MinWidth="850"
     MinHeight="600"
+    AllowDrop="True"
     cal:Message.Attach="[Event Closing] = [Action ClosingW]"
     d:DataContext="{DynamicResource KeblerViewModel}"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -25,7 +26,9 @@
     Deactivated="CustomizableWindow_Deactivated"
     IsTitleVisible="True"
     ResizeMode="CanResize"
+    Drop="CustomizableWindow_Drop"
     ShowHeaderLine="True"
+    Closing="CustomizableWindow_Closing"
     WindowStartupLocation="CenterScreen"
     WindowState="{Binding State}"
     mc:Ignorable="d">
@@ -472,10 +475,12 @@
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
                 x:FieldModifier="public"
+                AlternationCount="2"
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
                 Style="{DynamicResource ListViewWithGridViewStyle}">
+                
                 <ListView.InputBindings>
                     <KeyBinding
                         Key="Space"
@@ -483,7 +488,7 @@
                         CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" />
                 </ListView.InputBindings>
                 <ListView.View>
-                    <GridView>
+                    <GridView >
                         <GridViewColumn
                             x:Name="col1"
                             Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}"
@@ -562,6 +567,29 @@
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
+                <ListView.GroupStyle>
+                    <GroupStyle AlternationCount="2">
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel.Resources>
+                                                    <Style TargetType="StackPanel">
+                                                        <Setter Property="Background"
+                                                                Value="red"/>
+                                                    </Style>
+                                                </StackPanel.Resources>
+                                                <ItemsPresenter/>
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem cal:Message.Attach="Start" Header="{lex:BLoc QA_Resume}" />

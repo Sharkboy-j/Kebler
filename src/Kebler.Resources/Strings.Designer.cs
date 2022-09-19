@@ -19,7 +19,7 @@ namespace Kebler.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -88,7 +88,7 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Torrent exist. Update trackers?.
+        ///   Looks up a localized string similar to Torrent exist. Update trackers .
         /// </summary>
         public static string ASK_UpdateTrackers {
             get {
@@ -201,15 +201,6 @@ namespace Kebler.Resources {
         public static string ATD_TorrentExist {
             get {
                 return ResourceManager.GetString("ATD_TorrentExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Torrent exist, update trackers?.
-        /// </summary>
-        public static string ATD_TorrentExist_UpdateTrackers {
-            get {
-                return ResourceManager.GetString("ATD_TorrentExist_UpdateTrackers", resourceCulture);
             }
         }
         

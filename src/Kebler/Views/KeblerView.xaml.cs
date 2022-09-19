@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Kebler.Services;
 
 namespace Kebler.Views
 {
@@ -37,7 +38,33 @@ namespace Kebler.Views
                 ShowInTaskbar = false;
         }
 
+        private void CustomizableWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (ConfigService.Instanse.HideOnClose)
+            {
+                e.Cancel = true;
 
+                this.Hide();
+            }
+        }
+
+        private async void CustomizableWindow_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (DataContext is KeblerViewModel vm)
+                {
+                    await vm.OpenTorrent(files);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 
     public class GridViewSort
