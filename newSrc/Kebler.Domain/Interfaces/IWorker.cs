@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Domain.Interfaces.Torrents;
+using Kebler.Domain.Models;
 
 namespace Kebler.Domain.Interfaces
 {
@@ -18,5 +19,6 @@ namespace Kebler.Domain.Interfaces
 
         public Task<(ITorrentClientSettings, Exception)> GetTorrentClientSettingsAsync(CancellationToken token);
 
+        public Task<IEnumerable<AddTorrentResult>> TorrentsAddAsync(IEnumerable<INewTorrent> torrents, CancellationToken token);
     }
 }

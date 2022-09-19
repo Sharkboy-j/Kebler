@@ -24,9 +24,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Localisation", "Kebl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.Mapper", "Kebler.Mapper\Kebler.Mapper.csproj", "{C16EC13B-4051-4866-8400-A02340C39FB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.UI.Models", "Kebler.UI.Models\Kebler.UI.Models.csproj", "{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.UI.Models", "Kebler.UI.Models\Kebler.UI.Models.csproj", "{90B9BB7B-251F-499F-AC72-AD075C4CCDB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kebler.QBittorrent", "Kebler.QBittorrent\Kebler.QBittorrent.csproj", "{4B05AF08-F7CA-4F27-B8FB-FA633A9F6790}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kebler.QBittorrent", "Kebler.QBittorrent\Kebler.QBittorrent.csproj", "{4B05AF08-F7CA-4F27-B8FB-FA633A9F6790}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BencodeNET", "..\src\Bencode\BencodeNET\BencodeNET.csproj", "{F635A0AA-6D0D-4976-9E29-AE897618F038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,10 @@ Global
 		{4B05AF08-F7CA-4F27-B8FB-FA633A9F6790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B05AF08-F7CA-4F27-B8FB-FA633A9F6790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B05AF08-F7CA-4F27-B8FB-FA633A9F6790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F635A0AA-6D0D-4976-9E29-AE897618F038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F635A0AA-6D0D-4976-9E29-AE897618F038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F635A0AA-6D0D-4976-9E29-AE897618F038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F635A0AA-6D0D-4976-9E29-AE897618F038}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -516,52 +516,26 @@ namespace Kebler.ViewModels
 
         #endregion
 
-        private Task OpenTorrent(IEnumerable<string> names)
+        private async Task OpenTorrent(IEnumerable<string> names)
         {
-            return Task.CompletedTask;
-            //foreach (var item in names)
-            //{
-            //    if (string.IsNullOrEmpty(item))
-            //        continue;
+            foreach (var item in names)
+            {
+                if (string.IsNullOrEmpty(item))
+                    continue;
+                var tr = new Domain.Interfaces.Torrents.NewTorrent
+                {
+                    FilePath = item
+                };
 
-            //    if (item.StartsWith("magnet"))
-            //    {
-            //        var tr = new NewTorrent
-            //        {
-            //            Filename = item
-            //        };
-            //        await _transmissionClient?.TorrentAddAsync(tr, _cancelTokenSource.Token)!;
-            //    }
-            //    else
-            //    {
-
-            //        var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
-            //        var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-            //            _torrentList, _folderCategory, _eventAggregator,
-            //            downs, RemoveTorrent,
-            //            ref _isAddWindOpened, ref _view);
-
-
-            //        await manager.ShowDialogAsync(dialog);
-
-
-            //        _isAddWindOpened = false;
-
-            //        if (dialog.Result == true)
-            //        {
-            //            if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
-            //                TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
-            //                {
-            //                    Name = dialog.TorrentResult.Value.Name,
-            //                    HashString = dialog.TorrentResult.Value.HashString
-            //                });
-            //        }
-            //        else
-            //        {
-            //            return;
-            //        }
-            //    }
-            //}
+                if (item.StartsWith("magnet"))
+                {
+                    await _worker.AddTorrentsAsync(SelectedServer, new List<INewTorrent> { tr }, default);
+                }
+                else
+                {
+                    await _worker.AddTorrentsAsync(SelectedServer, new List<INewTorrent> { tr }, default);
+                }
+            }
         }
 
         private void RemoveTorrent(bool removeData = false)

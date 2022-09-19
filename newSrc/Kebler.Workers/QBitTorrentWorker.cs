@@ -4,8 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Interfaces.Torrents;
+using Kebler.Domain.Models;
 using Kebler.Mapper;
 using Kebler.QBittorrent;
+using Kebler.Transmission.Models.Arguments;
+using Kebler.Transmission.Models;
+using System.Linq;
 
 namespace Kebler.Workers
 {
@@ -120,6 +124,42 @@ namespace Kebler.Workers
             {
                 return (null, ex);
             }
+        }
+
+        public async Task<IEnumerable<AddTorrentResult>> TorrentsAddAsync(IEnumerable<INewTorrent> torrents, CancellationToken token)
+        {
+            var results = new List<AddTorrentResult>();
+
+            foreach (var torrent in torrents)
+            {
+                try
+                {
+                    //var newTorrent = TorrentMapper.Mapper.Map<INewTorrent>(torrent);
+
+
+                    var addFileRequest = new AddTorrentFilesRequest(torrents.Select(x => x.FilePath));
+
+                    await _client.AddTorrentsAsync(addFileRequest, token);
+                    //switch (response.Value.Status)
+                    //{
+                    //    case Enums.AddTorrentStatus.Added:
+                    //        results.Add(new AddTorrentResult(true, null, torrent));
+                    //        break;
+                    //    case Enums.AddTorrentStatus.Duplicate:
+                    //        results.Add(new AddTorrentResult(true, new Exception("Duplicated torrent"), torrent));
+                    //        break;
+                    //    case Enums.AddTorrentStatus.UnknownError:
+                    //    case Enums.AddTorrentStatus.ResponseNull:
+                    //        throw new Exception("Unknown error");
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    results.Add(new AddTorrentResult(false, ex, torrent));
+                }
+            }
+
+            return results;
         }
     }
 }

@@ -228,10 +228,24 @@ namespace Kebler.Transmission
             var jObject = response.Deserialize<JObject>();
 
             var result = new AddTorrentResponse(Enums.ReponseResult.NotOk);
-            result.CustomException = response.CustomException;
+
+            if (response.CustomException != null)
+            {
+                //result.CustomException = response.CustomException;
+                throw response.CustomException;
+            }
+
+
+            if (response.WebException != null)
+            {
+                //result.CustomException = response.CustomException;
+                throw response.WebException;
+            }
 
             if (jObject?.First == null || result.CustomException is Exception)
-                return result;
+            {
+                throw new Exception("Impossible to parse response from server");
+            }
 
             if (jObject.TryGetValue("torrent-duplicate", out var value))
             {

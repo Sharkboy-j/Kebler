@@ -77,7 +77,7 @@ namespace Kebler
                 _localizationManager.CurrentCulture = _localizationManager.CultureList.First(x =>
                     x.TwoLetterISOLanguageName == ConfigService.DefaultSettingsInstanse.Language.TwoLetterISOLanguageName);
                     
-            await DisplayRootViewFor<KeblerViewModel>();
+            await DisplayRootViewForAsync<KeblerViewModel>();
 
 #if RELEASE
            //System.Threading.Tasks.Task.Run(Updater.CheckUpdates);

@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kebler.Domain.Interfaces;
 using Kebler.Domain.Interfaces.Torrents;
+using Kebler.Domain.Models;
 using Kebler.Mapper;
 using Kebler.Transmission.Models;
+using Kebler.Transmission.Models.Arguments;
 
 namespace Kebler.Workers
 {
@@ -106,7 +108,7 @@ namespace Kebler.Workers
 
         public async Task<(IEnumerable<ITorrent>, Exception)> TorrentsGetAsync(CancellationToken token)
         {
-            var result = await _client.TorrentGetAsync(Transmission.Models.TorrentFields.Work, token);
+            var result = await _client.TorrentGetAsync(TorrentFields.Work, token);
 
             CheckResponce(result.Response, out var exception);
             if (exception != null)
@@ -136,6 +138,40 @@ namespace Kebler.Workers
             token.ThrowIfCancellationRequested();
 
             return (settings, null);
+        }
+
+        public async Task<IEnumerable<AddTorrentResult>> TorrentsAddAsync(IEnumerable<INewTorrent> torrents, CancellationToken token)
+        {
+            var results = new List<AddTorrentResult>();
+
+            foreach (var torrent in torrents)
+            {
+                try
+                {
+                    var newTorrent = TorrentMapper.Mapper.Map<Transmission.Models.Arguments.NewTorrent>(torrent);
+
+                    var response = await _client.TorrentAddAsync(newTorrent, token);
+
+                    switch (response.Value.Status)
+                    {
+                        case Enums.AddTorrentStatus.Added:
+                            results.Add(new AddTorrentResult(true, null, torrent));
+                            break;
+                        case Enums.AddTorrentStatus.Duplicate:
+                            results.Add(new AddTorrentResult(true, new Exception("Duplicated torrent"), torrent));
+                            break;
+                        case Enums.AddTorrentStatus.UnknownError:
+                        case Enums.AddTorrentStatus.ResponseNull:
+                            throw new Exception("Unknown error");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    results.Add(new AddTorrentResult(false, ex, torrent));
+                }
+            }
+
+            return results;
         }
     }
 }

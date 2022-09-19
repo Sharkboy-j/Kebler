@@ -617,7 +617,6 @@ namespace Kebler.ViewModels
             }
         }
 
-
         public void OpenPaseedWithArgsFiles()
         {
             if (App.Instance.TorrentsToAdd.Count > 0)
@@ -685,6 +684,11 @@ namespace Kebler.ViewModels
             Application.Current.MainWindow?.Activate();
             await OpenTorrent(App.Instance.TorrentsToAdd);
             App.Instance.TorrentsToAdd.Clear();
+        }
+
+        public void Retry()
+        {
+
         }
     }
 }

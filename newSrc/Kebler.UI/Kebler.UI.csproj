@@ -7,10 +7,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="ByteSize" Version="2.1.1" />
-		<PackageReference Include="Caliburn.Micro.Core" Version="4.0.173" />
+		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
 		<PackageReference Include="Humanizer" Version="2.14.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
+		<PackageReference Include="WPFLocalizeExtension" Version="3.9.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,12 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Caliburn.Micro.Platform">
-	    <HintPath>..\..\..\..\.nuget\packages\caliburn.micro\4.0.173\lib\net5.0-windows7.0\Caliburn.Micro.Platform.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Resource Include="Icons\KeblerVided.png" />
 		<Resource Include="Icons\Kebler_16x16.png" />
 		<Resource Include="Icons\Kebler_32x32.png" />
@@ -47,6 +41,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
+		<ProjectReference Include="..\Kebler.Domain\Kebler.Domain.csproj" />
 	</ItemGroup>
 </Project>

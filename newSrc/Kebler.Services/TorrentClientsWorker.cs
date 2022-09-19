@@ -96,5 +96,13 @@ namespace Kebler.Services
 
             return response.Item1;
         }
+
+        public async Task AddTorrentsAsync(IServer server, IEnumerable<INewTorrent> newTorrents, CancellationToken token)
+        {
+            GetOrCreateTorrentClient(in server, null, out var client);
+
+            var resp = await client.TorrentsAddAsync(newTorrents, token);
+
+        }
     }
 }

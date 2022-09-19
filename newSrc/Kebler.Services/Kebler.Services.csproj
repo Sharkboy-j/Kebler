@@ -6,9 +6,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Caliburn.Micro.Core" Version="4.0.173" />
+		<PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
 		<PackageReference Include="SharpConfig" Version="3.2.9.1" />
-		<PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
+		<PackageReference Include="WPFLocalizeExtension" Version="3.9.4" />
 		<PackageReference Include="LiteDB" Version="4.1.4" />
 	</ItemGroup>
 

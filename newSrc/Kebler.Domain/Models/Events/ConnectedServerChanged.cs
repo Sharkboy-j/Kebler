@@ -1,4 +1,5 @@
 ﻿using Kebler.Domain.Interfaces;
+using Kebler.Domain.Interfaces.Torrents;
 
 namespace Kebler.Domain.Models.Events
 {

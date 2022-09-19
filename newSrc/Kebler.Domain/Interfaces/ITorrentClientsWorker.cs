@@ -19,5 +19,7 @@ namespace Kebler.Domain.Interfaces
         public Task<IEnumerable<ITorrent>> TorrentsGetAsync(IServer server, CancellationToken token);
 
         public Task<ITorrentClientSettings> GetTorrentClientSettingsAsync(IServer server, CancellationToken token);
+
+        public Task AddTorrentsAsync(IServer server, IEnumerable<INewTorrent> newTorrents, CancellationToken token);
     }
 }
