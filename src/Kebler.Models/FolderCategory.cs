@@ -13,8 +13,9 @@ namespace Kebler.Models
 
         public FolderCategory(string fullPath)
         {
-            FullPath = fullPath;
-            Dir = new DirectoryInfo(FullPath);
+            var path = fullPath.TrimEnd('/').TrimEnd('\\');
+            FullPath = path;
+            Dir = new DirectoryInfo(path);
         }
 
         public string FolderName => Dir.Name;
