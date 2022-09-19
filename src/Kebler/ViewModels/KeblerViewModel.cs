@@ -541,24 +541,32 @@ namespace Kebler.ViewModels
 
         public void CatChange()
         {
-            if (!IsConnected)
-                return;
-
-            if (!_isChangingLang)
-            {
-                lock (_syncTorrentList)
-                {
-                    _filterCategory = SelectedCat.Cat;
-                }
-
-            }
+            IsConnecting = true;
 
             Task.Run(() =>
             {
-                if (allTorrents.Clone() is TransmissionTorrents data)
-                    ProcessParsingTransmissionResponse(data);
+                try
+                {
+                    if (!IsConnected)
+                        return;
+
+                    if (!_isChangingLang)
+                    {
+                        lock (_syncTorrentList)
+                        {
+                            _filterCategory = SelectedCat.Cat;
+                        }
+
+                    }
+
+                    if (allTorrents.Clone() is TransmissionTorrents data)
+                        ProcessParsingTransmissionResponse(data);
+                }
+                finally
+                {
+                    IsConnecting = false;
+                }
             });
-      
         }
 
 
