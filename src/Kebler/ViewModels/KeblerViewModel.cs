@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -384,17 +383,20 @@ namespace Kebler.ViewModels
                 _moreInfoCancelTokeSource?.Cancel();
                 _moreInfoCancelTokeSource = new CancellationTokenSource();
 
-                await Task.Delay(250, _moreInfoCancelTokeSource.Token);
-
-                if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
-                    return;
                 selectedIDs = SelectedTorrents.Select(x => x.Id).ToArray();
 
                 if (ConfigService.Instanse.MoreInfoShow)
                 {
+                    await Task.Delay(250, _moreInfoCancelTokeSource.Token);
+
+                    if (_moreInfoCancelTokeSource.Token.IsCancellationRequested)
+                        return;
+
                     UpdateMoreInfoPosition(SelectedTorrents.Any());
                     UpdateMoreInfoView(_moreInfoCancelTokeSource.Token);
                 }
+
+
             }
             catch (TaskCanceledException)
             {
@@ -526,13 +528,11 @@ namespace Kebler.ViewModels
         public void Exit()
         {
             Log.Ui();
-            Environment.Exit(0);
-            //TryCloseAsync();//
+            TryCloseAsync();
         }
 
         public void ClosingW()
         {
-
             //SaveConfig();
 
             //Log.Info("-----------Exit-----------");
@@ -553,11 +553,12 @@ namespace Kebler.ViewModels
 
             }
 
-
-
-
-            if (allTorrents.Clone() is TransmissionTorrents data)
-                ProcessParsingTransmissionResponse(data);
+            Task.Run(() =>
+            {
+                if (allTorrents.Clone() is TransmissionTorrents data)
+                    ProcessParsingTransmissionResponse(data);
+            });
+      
         }
 
 
@@ -582,7 +583,12 @@ namespace Kebler.ViewModels
 
         public void FilterTextChanged()
         {
-            if (allTorrents.Clone() is TransmissionTorrents data) ProcessParsingTransmissionResponse(data);
+            Task.Run(() =>
+            {
+                if (allTorrents.Clone() is TransmissionTorrents data)
+                    ProcessParsingTransmissionResponse(data);
+            });
+
         }
 
         public void ChangeFolderFilter()
@@ -852,81 +858,85 @@ namespace Kebler.ViewModels
 
         public async Task OpenTorrent(IEnumerable<string> names)
         {
-            StringBuilder str = new StringBuilder();
-
-            foreach(var name in names)
+            try
             {
-                str.AppendLine(name);
-            }
-
-            Log.Trace($"try add {str}");
-
-            var skipwindow = false;
-            foreach (var item in names)
-            {
-                if (string.IsNullOrEmpty(item))
-                    continue;
-
-                if (item.StartsWith("magnet"))
+                var skipwindow = false;
+                foreach (var item in names)
                 {
-                    var tr = new NewTorrent
+                    if (string.IsNullOrEmpty(item))
+                        continue;
+
+                    if (item.StartsWith("magnet"))
                     {
-                        Filename = item
-                    };
-                    await _transmissionClient?.TorrentAddAsync(tr, _cancelTokenSource.Token)!;
-                }
-                else
-                {
-
-                    var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
-
-                    if (skipwindow)
-                    {
-                        var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-                                               _torrentList, _folderCategory, _eventAggregator,
-                                               downs, RemoveTorrent,
-                                               ref _isAddWindOpened, ref _view);
-
-                        await dialog.AddHidden();
-
-                        _isAddWindOpened = false;
+                        var tr = new NewTorrent
+                        {
+                            Filename = item
+                        };
+                        await _transmissionClient?.TorrentAddAsync(tr, _cancelTokenSource.Token)!;
                     }
                     else
                     {
-                        var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-                                               _torrentList, _folderCategory, _eventAggregator,
-                                               downs, RemoveTorrent,
-                                               ref _isAddWindOpened, ref _view);
 
-                        dialog.IsAddTorrentWindowShow = skipwindow;
+                        var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
 
-
-                        await manager.ShowDialogAsync(dialog);
-
-                        if (dialog.IsAddTorrentWindowShow)
+                        if (skipwindow)
                         {
-                            skipwindow = true;
-                        }
+                            var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                                   _torrentList, _folderCategory, _eventAggregator,
+                                                   downs, RemoveTorrent,
+                                                   ref _isAddWindOpened, ref _view);
 
-                        _isAddWindOpened = false;
+                            await dialog.AddHidden();
 
-                        if (dialog.Result == true)
-                        {
-                            if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
-                                TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
-                                {
-                                    Name = dialog.TorrentResult.Value.Name,
-                                    HashString = dialog.TorrentResult.Value.HashString
-                                });
+                            _isAddWindOpened = false;
                         }
                         else
                         {
-                            return;
-                        }
-                    }
+                            var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                                   _torrentList, _folderCategory, _eventAggregator,
+                                                   downs, RemoveTorrent,
+                                                   ref _isAddWindOpened, ref _view);
 
+                            dialog.IsAddTorrentWindowShow = skipwindow;
+
+                            var needToOpenWindowDialog = await dialog.Init();
+
+                            if (needToOpenWindowDialog)
+                            {
+                                var dialogResult = await manager.ShowDialogAsync(dialog);
+
+                                if (dialog.IsAddTorrentWindowShow)
+                                {
+                                    skipwindow = true;
+                                }
+
+                                _isAddWindOpened = false;
+
+                                if (dialogResult == true)
+                                {
+                                    if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
+                                        TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                                        {
+                                            Name = dialog.TorrentResult.Value.Name,
+                                            HashString = dialog.TorrentResult.Value.HashString
+                                        });
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+
+            }
+
+
         }
 
         #region server
@@ -1262,7 +1272,12 @@ namespace Kebler.ViewModels
         public string FilterText
         {
             get => _filterText ?? string.Empty;
-            set => Set(ref _filterText, value);
+            set
+            {
+
+                Set(ref _filterText, value);
+                FilterTextChanged();
+            }
         }
 
         public int SelectedFolderIndex
@@ -1298,11 +1313,7 @@ namespace Kebler.ViewModels
         public WindowState State
         {
             get => _state;
-            set
-            {
-                Log.Ui();
-                Set(ref _state, value);
-            }
+            set => Set(ref _state, value);
         }
 
 

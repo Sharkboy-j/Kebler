@@ -29,6 +29,8 @@ namespace Kebler.Models
         public bool TraceRequestsEnabled { get; set; } = false;
         public bool HideOnClose { get; set; } = false;
         public bool AlterIndexColor { get; set; } = false;
+        public bool AskUpdateTrackers { get; set; } = true;
+
 
     }
 }

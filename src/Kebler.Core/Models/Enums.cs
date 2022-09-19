@@ -7,7 +7,8 @@
             Added,
             Duplicate,
             UnknownError,
-            ResponseNull
+            ResponseNull,
+            UpdatedTrackers
         }
 
         public enum Categories : byte
@@ -40,8 +41,18 @@
         public enum MessageBoxDilogButtons
         {
             YesNo,
+            YesNoCancel,
             OkCancel,
             Ok,
+            None
+        }
+
+        public enum MessageBoxDilogButtonsResult
+        {
+            Yes,
+            No,
+            Ok,
+            Cancel,
             None
         }
 

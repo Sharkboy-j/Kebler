@@ -414,10 +414,9 @@
                         Margin="0"
                         Padding="0,0,17,0"
                         VerticalContentAlignment="Center"
-                        cal:Message.Attach="[Event TextChanged] = [Action FilterTextChanged]"
                         BorderBrush="{StaticResource BorderBrush}"
                         Foreground="{StaticResource ForegroundBrush}"
-                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
 
                     <Border
                         Width="20"

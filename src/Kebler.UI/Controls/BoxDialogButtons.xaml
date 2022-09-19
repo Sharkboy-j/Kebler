@@ -14,7 +14,7 @@
         <Button
             Height="26"
             HorizontalAlignment="Right"
-            cm:Message.Attach="NoCancel"
+            cm:Message.Attach="No"
             Content="{lex:BLoc BTNS_No}"
             Visibility="{Binding NoVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
@@ -26,7 +26,7 @@
             Visibility="{Binding YesVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
             Height="26"
-            cm:Message.Attach="NoCancel"
+            cm:Message.Attach="Cancel"
             Content="{lex:BLoc BTNS_Cancel}"
             Visibility="{Binding CancelVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <Button
