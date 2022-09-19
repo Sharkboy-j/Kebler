@@ -525,11 +525,13 @@ namespace Kebler.ViewModels
         public void Exit()
         {
             Log.Ui();
-            TryCloseAsync();
+            Environment.Exit(0);
+            //TryCloseAsync();//
         }
 
         public void ClosingW()
         {
+
             //SaveConfig();
 
             //Log.Info("-----------Exit-----------");
@@ -1286,7 +1288,11 @@ namespace Kebler.ViewModels
         public WindowState State
         {
             get => _state;
-            set => Set(ref _state, value);
+            set
+            {
+                Log.Ui();
+                Set(ref _state, value);
+            }
         }
 
 

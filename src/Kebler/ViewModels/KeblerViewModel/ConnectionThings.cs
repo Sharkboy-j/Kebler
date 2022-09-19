@@ -207,7 +207,7 @@ namespace Kebler.ViewModels
                                 allTorrents =
                                     (await Get(
                                         _transmissionClient.TorrentGetAsync(
-                                            TorrentFields.WORK,
+                                            State == WindowState.Minimized ? TorrentFields.WORK_HIDDEN : TorrentFields.WORK,
                                             _cancelTokenSource.Token),
                                         LocalizationProvider.GetLocalizedValue(
                                             nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
@@ -224,7 +224,7 @@ namespace Kebler.ViewModels
                                     if (allTorrents?.Clone() is TransmissionTorrents data)
                                         ProcessParsingTransmissionResponse(data);
                                 }
-                              
+
                             }
                             else
                             {

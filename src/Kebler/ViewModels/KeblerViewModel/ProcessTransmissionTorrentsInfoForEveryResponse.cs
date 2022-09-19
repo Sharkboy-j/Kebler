@@ -10,6 +10,7 @@ using System.Windows;
 using Kebler.Core.Models;
 using Kebler.TransmissionTorrentClient.Models;
 using Microsoft.AppCenter.Crashes;
+using Kebler.Views;
 
 // ReSharper disable once CheckNamespace
 
@@ -173,7 +174,8 @@ namespace Kebler.ViewModels
 
                 //Debug.WriteLine("E" + DateTime.Now.ToString("HH:mm:ss:ffff"));
 
-                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
+                if (State != WindowState.Minimized)
+                    UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
 
 
             }
@@ -283,6 +285,11 @@ namespace Kebler.ViewModels
             {
                 _eventAggregator.PublishOnUIThreadAsync(new Messages.DownlaodCategoriesChanged(Categories));
             }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                GridViewSort.ApplyCashSort();
+            });
         }
 
 
