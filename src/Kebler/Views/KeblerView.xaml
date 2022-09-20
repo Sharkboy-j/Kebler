@@ -478,8 +478,14 @@
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
-                Style="{DynamicResource ListViewWithGridViewStyle}">
-                
+                Style="{DynamicResource ListViewWithGridViewStyle}"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.CacheLength="10"
+                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                ScrollViewer.IsDeferredScrollingEnabled="False"
+                VirtualizingStackPanel.CacheLengthUnit="Item" 
+                VirtualizingStackPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListView.InputBindings>
                     <KeyBinding
                         Key="Space"
@@ -588,6 +594,11 @@
                         <MenuItem cal:Message.Attach="Properties" Header="{lex:BLoc QA_Properties}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
             </ListView>
 
             <Grid
