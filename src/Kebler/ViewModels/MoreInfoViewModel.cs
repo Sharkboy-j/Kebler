@@ -390,7 +390,7 @@ namespace Kebler.ViewModels
                             PiecesCount = _ti.PieceCount;
                             PercentDone = _ti.PercentDone;
 
-                            var decodedPices = _piecesBase64.Length > 0  ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
+                            var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
                             OnUIThread(() =>
                             {
                                 view.MoreView.Pieces.Init(decodedPices, _ti.PieceCount, DonePices);
@@ -430,7 +430,7 @@ namespace Kebler.ViewModels
                         Ratio = $"{_ti.UploadRatio}";
                         MaxPeers = _ti.MaxConnectedPeers;
 
-                        Path = $"{_ti.DownloadDir}{_ti.Name}";
+                        Path = System.IO.Path.Combine(_ti.DownloadDir, _ti.Name);
                         Size = _ti.TotalSize;
                         Hash = _ti.HashString;
                         AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();
