@@ -53,15 +53,17 @@ namespace Kebler.ViewModels
                 DownloadSpeed = $"D: {dSpeed}{altD}";
                 UploadSpeed = $"U: {uSpeed}{altUp}";
 
+
+                var arr = _torrentList.ToArray();
+
+                var downloading = arr.Count(x => x.RateDownload > 0);
+                var uploading = arr.Count(x => x.RateUpload > 0);
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-
-                    var downlaoding = CategoriesList.FirstOrDefault(x => x.Cat == Enums.Categories.Downloading);
-                    var uploading = CategoriesList.FirstOrDefault(x => x.Cat == Enums.Categories.Ended);
-
                     App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed} {Environment.NewLine}" +
-                    $" Downlaoding: {downlaoding?.Count}{Environment.NewLine}" +
-                    $" Uploading: {uploading?.Count}";
+                    $" Downlaoding: {downloading}{Environment.NewLine}" +
+                    $" Uploading: {uploading}";
                 });
 
             }
