@@ -188,8 +188,7 @@ namespace Kebler.ViewModels
 
                 //Debug.WriteLine("E" + DateTime.Now.ToString("HH:mm:ss:ffff"));
 
-                if (State != WindowState.Minimized)
-                    UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
+                UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
 
             }
 
