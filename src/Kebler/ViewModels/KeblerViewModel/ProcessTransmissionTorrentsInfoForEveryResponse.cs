@@ -12,6 +12,7 @@ using Kebler.TransmissionTorrentClient.Models;
 using Microsoft.AppCenter.Crashes;
 using Kebler.Views;
 using System.Threading.Tasks;
+using Hardcodet.Wpf.TaskbarNotification;
 
 // ReSharper disable once CheckNamespace
 
@@ -51,6 +52,12 @@ namespace Kebler.ViewModels
 
                 DownloadSpeed = $"D: {dSpeed}{altD}";
                 UploadSpeed = $"U: {uSpeed}{altUp}";
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed}";
+                });
+
             }
             catch (Exception ex)
             {
