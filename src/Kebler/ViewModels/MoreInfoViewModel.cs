@@ -17,6 +17,7 @@ using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.VisualBasic;
+using NLog;
 using static Kebler.Models.Messages;
 
 // ReSharper disable UnusedMember.Global
@@ -28,7 +29,7 @@ namespace Kebler.ViewModels
     {
         #region Props
 
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
 
 
         private DateTime _addedOn, _createdOn, _completedOn;
@@ -306,7 +307,6 @@ namespace Kebler.ViewModels
         public MoreInfoViewModel(KeblerView view, Action<bool> unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
-            Log = Kebler.Services.Log.Instance;
 
             //IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;

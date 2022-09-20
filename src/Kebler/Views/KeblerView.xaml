@@ -506,7 +506,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            Width="90"
+                            Width="90" 
                             ui11:GridViewSort.PropertyName="Status"
                             Header="Status">
                             <GridViewColumn.CellTemplate>
@@ -533,7 +533,8 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col3"
+                            x:Name="col3"                             Width="Auto"
+
                             ui11:GridViewSort.PropertyName="RateDownload"
                             Header="Download speed">
                             <GridViewColumn.CellTemplate>
@@ -543,7 +544,8 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col4"
+                            x:Name="col4"                             Width="Auto"
+
                             ui11:GridViewSort.PropertyName="UploadedEver"
                             Header="Uploaded">
                             <GridViewColumn.CellTemplate>
@@ -559,6 +561,7 @@
                         <GridViewColumn
                             x:Name="col5"
                             ui11:GridViewSort.PropertyName="TotalSize"
+                            Width="Auto"
                             Header="Size">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -566,6 +569,20 @@
                                         Width="Auto"
                                         MinWidth="75"
                                         Text="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn
+                            x:Name="col6"
+                            ui11:GridViewSort.PropertyName="AddedDate"
+                            Header="Added">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Width="Auto"
+                                        MinWidth="75"
+                                        Text="{Binding AddedDate, Converter={StaticResource LongToDateTime}, Mode=OneWay}"
                                         TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -614,7 +631,7 @@
                     <ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=col4, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=col5, Path=ActualWidth}" />
-
+                    <ColumnDefinition Width="{Binding ElementName=col6, Path=ActualWidth}" />
                 </Grid.ColumnDefinitions>
                 <!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->
                 <Grid x:Name="helperField" Grid.Column="0" />

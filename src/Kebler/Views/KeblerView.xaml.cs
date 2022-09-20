@@ -7,12 +7,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Kebler.Services;
+using NLog;
 
 namespace Kebler.Views
 {
     public partial class KeblerView
 
     {
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
+
+
         public KeblerView()
         {
             InitializeComponent();
@@ -60,8 +64,7 @@ namespace Kebler.Views
             }
             catch (Exception ex)
             {
-                Log.Instance.Error(ex);
-            }
+                Log.Error(ex);            }
         }
     }
 

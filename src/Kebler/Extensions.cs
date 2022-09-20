@@ -6,14 +6,16 @@ using System.Windows;
 using System.Windows.Interop;
 using Kebler.Core.Models;
 using Kebler.Services;
-using Kebler.Services.Interfaces;
 using Kebler.TransmissionTorrentClient.Models;
+using NLog;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace Kebler
 {
     public static class LocalExtensions
     {
+        private static ILogger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
             if (((FrameworkElement)templateFrameworkElement).TemplatedParent is Window window) action(window);
@@ -46,7 +48,7 @@ namespace Kebler
         }
 
 
-        public static void ParseTransmissionReponse(this TransmissionResponse resp, ILog logger)
+        public static void ParseTransmissionReponse(this TransmissionResponse resp)
         {
             if (ConfigService.Instanse.TraceRequestsEnabled)
             {
@@ -74,9 +76,9 @@ namespace Kebler
             }
         }
 
-        public static void ParseTransmissionReponse<T>(this TransmissionResponse<T> resp, ILog logger)
+        public static void ParseTransmissionReponse<T>(this TransmissionResponse<T> resp)
         {
-            resp.Response.ParseTransmissionReponse(logger);
+            resp.Response.ParseTransmissionReponse();
         }
 
 

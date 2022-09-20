@@ -28,6 +28,7 @@ namespace Kebler.ViewModels
     using Microsoft.AppCenter.Crashes;
     using System.Text;
     using Kebler.Core.Extensions;
+    using NLog;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
@@ -37,7 +38,7 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private readonly IRemoteTorrentClient _transmissionClient;
         private CancellationToken cancellationToken;
         private CancellationTokenSource cancellationTokenSource;
@@ -159,16 +160,12 @@ namespace Kebler.ViewModels
             _wnd = wnd;
             //_wnd?.Activate();
 
-            Log = Kebler.Services.Log.Instance;
-
             _infos = infos;
             _fileInfo = new FileInfo(path);
             TorrentPath = _fileInfo.FullName;
             _transmissionClient = transmissionClient;
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-
-
 
             IsAutoStart = ConfigService.Instanse.IsAutoStartTorrentAfterAdd;
             this.settings = settings;
@@ -185,9 +182,6 @@ namespace Kebler.ViewModels
             }
 
             Log.Trace(str.ToString());
-
-
-            DownlaodDirIndex = 1;
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
@@ -211,7 +205,10 @@ namespace Kebler.ViewModels
 
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-            DownlaodDirPath = DownlaodDirs.FirstOrDefault();
+
+
+            DownlaodDirPath = String.IsNullOrEmpty(ConfigService.Instanse.LastUsedLocation) ? DownlaodDirs.FirstOrDefault() : ConfigService.Instanse.LastUsedLocation;
+
             TorrentResult = new AddTorrentResponse(Enums.ReponseResult.Ok);
             TorrentResult.Value = new TorrentAddResult();
 
@@ -330,6 +327,8 @@ namespace Kebler.ViewModels
                 Crashes.TrackError(ex);
             }
         }
+
+
 
         public void ChangePath()
         {
@@ -631,6 +630,23 @@ namespace Kebler.ViewModels
             settings = null;
             _fileInfo = null;
         }
+        public override Task TryCloseAsync(bool? dialogResult = null)
+        {
+            if(ConfigService.Instanse.LastUsedLocation != DownlaodDirPath)
+            {
+                Log.Info("ConfigService.Instanse.LastUsedLocation != DownlaodDirPath");
+
+                Log.Info($"Old '{ConfigService.Instanse.LastUsedLocation}'");
+
+                ConfigService.Instanse.LastUsedLocation = DownlaodDirPath;
+                ConfigService.Save();
+                Log.Info($"New '{ConfigService.Instanse.LastUsedLocation}'");
+
+            }
+
+            return base.TryCloseAsync(dialogResult);
+        }
+
 
         public Task HandleAsync(Messages.DownlaodCategoriesChanged message, CancellationToken cancellationToken)
         {

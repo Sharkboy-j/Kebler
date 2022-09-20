@@ -31,5 +31,7 @@ namespace Kebler.Models
         public bool AlterIndexColor { get; set; } = false;
         public bool AskUpdateTrackers { get; set; } = true;
         public bool IsAutoStartTorrentAfterAdd { get; set; } = false;
+        public string LastUsedLocation { get; set; } = "";
+
     }
 }

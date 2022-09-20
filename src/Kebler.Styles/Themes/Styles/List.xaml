@@ -60,7 +60,7 @@
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#3FC8C8C8" />
+                <Setter Property="Background" Value="#0CC8C8C8" />
             </Trigger>
         </Style.Triggers>
     </Style>

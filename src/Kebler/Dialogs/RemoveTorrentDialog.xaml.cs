@@ -7,6 +7,7 @@ using Kebler.Core.Domain.Intrfaces;
 using Kebler.Core.Models;
 using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
+using NLog;
 
 namespace Kebler.Dialogs
 {
@@ -15,7 +16,7 @@ namespace Kebler.Dialogs
     /// </summary>
     public partial class RemoveTorrentDialog
     {
-        private readonly Services.Interfaces.ILog Log;
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private readonly CancellationToken _cancellationToken;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly uint[] _toRemove;
@@ -26,7 +27,6 @@ namespace Kebler.Dialogs
         public RemoveTorrentDialog(IEnumerable<string> names, uint[] toRm, ref IRemoteTorrentClient transmissionClient,
             bool witData = false)
         {
-            Log = Services.Log.Instance;
             InitializeComponent();
             Container.ItemsSource = names;
             RemoveWithDataCheckBox.IsChecked = witData;

@@ -27,6 +27,7 @@ using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.AppCenter.Crashes;
+using NLog;
 using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
@@ -36,6 +37,7 @@ using TorrentFields = Kebler.TransmissionTorrentClient.Models.TorrentFields;
 
 namespace Kebler.ViewModels
 {
+
     public partial class KeblerViewModel : BaseScreen,
         IHandle<LocalizationCultureChangesMessage>,
         IHandle<ReconnectRequested>,
@@ -52,7 +54,6 @@ namespace Kebler.ViewModels
         public KeblerViewModel()
         {
             _eventAggregator = new EventAggregator();
-            Log = Kebler.Services.Log.Instance;
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -103,7 +104,6 @@ namespace Kebler.ViewModels
         public KeblerViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
-            Log = Kebler.Services.Log.Instance;
 
             _eventAggregator.SubscribeOnPublishedThread(this);
 
@@ -495,7 +495,7 @@ namespace Kebler.ViewModels
                 _longActionTimeStart = DateTimeOffset.Now;
                 LongStatusText = statusText;
                 var resp = await task;
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
                 return resp;
             }
             finally
@@ -528,7 +528,7 @@ namespace Kebler.ViewModels
     {
         public void Exit()
         {
-            Log.Ui();
+            //Log.Ui();
             TryCloseAsync();
         }
 
@@ -630,7 +630,7 @@ namespace Kebler.ViewModels
                             if (Application.Current.Dispatcher.HasShutdownStarted) return;
                             var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value.ToString(), true,
                                 _cancelTokenSource.Token);
-                            resp.ParseTransmissionReponse(Log);
+                            resp.ParseTransmissionReponse();
 
                             if (IsResponseStatusOk(resp))
                                 break;
@@ -657,7 +657,7 @@ namespace Kebler.ViewModels
                     }
                 }
 
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -699,7 +699,7 @@ namespace Kebler.ViewModels
                     }
                 }
 
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -724,7 +724,7 @@ namespace Kebler.ViewModels
                     }
                 }
 
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -746,7 +746,7 @@ namespace Kebler.ViewModels
                     }
                 }
 
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -778,7 +778,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.TorrentVerifyAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -787,7 +787,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.ReannounceTorrentsAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -796,7 +796,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.TorrentQueueMoveTopAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -805,7 +805,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.TorrentQueueMoveUpAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -814,7 +814,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.TorrentQueueMoveDownAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -823,7 +823,7 @@ namespace Kebler.ViewModels
             if (IsConnected && _transmissionClient != null)
             {
                 var resp = await _transmissionClient.TorrentQueueMoveBottomAsync(selectedIDs, _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -1016,7 +1016,7 @@ namespace Kebler.ViewModels
                         AlternativeSpeedEnabled = !_settings?.AlternativeSpeedEnabled
                     },
                     _cancelTokenSource.Token);
-                resp.ParseTransmissionReponse(Log);
+                resp.ParseTransmissionReponse();
             }
         }
 
@@ -1157,7 +1157,7 @@ namespace Kebler.ViewModels
 
     public partial class KeblerViewModel
     {
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private readonly object _syncTorrentList = new object();
         private readonly IWindowManager manager = new WindowManager();
         private readonly object syncObjKeys = new object();
