@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -31,13 +34,16 @@ namespace Kebler
         private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         public static App Instance;
 
+
+
         public KeblerViewModel KeblerVm;
-        private TaskbarIcon _notifyIcon;
+        public static TaskbarIcon NotifyIcon;
         public List<string> TorrentsToAdd = new();
 
 
         private App()
         {
+
             Instance = this;
 
             ConfigService.LoadConfig();
@@ -110,12 +116,13 @@ namespace Kebler
             }
             base.OnStartup(e);
 
-            _notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
+            NotifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _notifyIcon.Dispose();
+            NotifyIcon.CloseBalloon();
+            NotifyIcon.Dispose();
             SingleInstance<App>.Cleanup();
             base.OnExit(e);
         }
