@@ -42,7 +42,7 @@ namespace Kebler.ViewModels
             
             var resp = await _transmissionClient.TorrentRenamePathAsync(selectedTorrent.Id, selectedTorrent.Name, newName,
                 _cancelTokenSource.Token);
-            resp.ParseTransmissionReponse(Log);
+            resp.ParseTransmissionReponse();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Kebler.ViewModels
 
         public void Properties()
         {
-            Log.Ui();
+            //Log.Ui();
             Properties(null, null);
         }
     }

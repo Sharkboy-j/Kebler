@@ -13,8 +13,9 @@ namespace Kebler.Models
 
         public FolderCategory(string fullPath)
         {
-            FullPath = NormalizePath(fullPath);
-            Dir = new DirectoryInfo(FullPath);
+            var path = fullPath.TrimEnd('/').TrimEnd('\\');
+            FullPath = path;
+            Dir = new DirectoryInfo(path);
         }
 
         public string FolderName => Dir.Name;
@@ -61,12 +62,12 @@ namespace Kebler.Models
             }
         }
 
-        public static string NormalizePath(string path)
-        {
-            if (!Path.EndsInDirectorySeparator(path)) path = $"{path}{Path.AltDirectorySeparatorChar}";
+        //public static string NormalizePath(string path)
+        //{
+        //    if (!Path.EndsInDirectorySeparator(path)) path = $"{path}";
 
-            return path;
-        }
+        //    return path;
+        //}
 
         public override string ToString()
         {

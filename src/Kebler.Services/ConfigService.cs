@@ -2,6 +2,7 @@
 using System.IO;
 using Kebler.Const;
 using Kebler.Models;
+using NLog;
 using SharpConfig;
 
 namespace Kebler.Services
@@ -9,7 +10,7 @@ namespace Kebler.Services
     public static class ConfigService
     {
         public static bool IsInited;
-        private static Interfaces.ILog Log;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private static Configuration ConfigurationObj;
 
         public static DefaultSettings Instanse;
@@ -29,7 +30,6 @@ namespace Kebler.Services
 
         public static void LoadConfig()
         {
-            Log = Kebler.Services.Log.Instance;
 
             lock (_sync)
             {

@@ -3,6 +3,10 @@ using System.Diagnostics;
 using System.Windows;
 using Kebler.Dialogs;
 using Kebler.Services;
+using NLog;
+using NLog.Targets.Wrappers;
+using NLog.Targets;
+using System.Linq;
 
 namespace Kebler.Views
 {
@@ -11,6 +15,7 @@ namespace Kebler.Views
     /// </summary>
     public partial class TopBarView
     {
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
 
         public TopBarView()
         {
@@ -20,7 +25,7 @@ namespace Kebler.Views
 
         private void Report(object sender, RoutedEventArgs e)
         {
-            App.Log.Ui(nameof(Report));
+            //App.Log.Ui(nameof(Report));
             Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81/Kebler/issues")
             {
                 CreateNoWindow = true,
@@ -30,7 +35,7 @@ namespace Kebler.Views
 
         private void About(object sender, RoutedEventArgs e)
         {
-            App.Log.Ui(nameof(About));
+            //App.Log.Ui(nameof(About));
 
             var dialog = new About(Application.Current.MainWindow);
             dialog.ShowDialog();
@@ -39,7 +44,7 @@ namespace Kebler.Views
         private void Check(object sender, RoutedEventArgs e)
         {
 #if RELEASE
-            App.Log.Ui(nameof(Check));
+            //App.Log.Ui(nameof(Check));
 
             System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
@@ -47,7 +52,7 @@ namespace Kebler.Views
 
         private void Contact(object sender, RoutedEventArgs e)
         {
-            App.Log.Ui(nameof(Contact));
+            //App.Log.Ui(nameof(Contact));
 
             Process.Start(new ProcessStartInfo("cmd", "/c start https://github.com/Rebell81")
             {
@@ -58,17 +63,23 @@ namespace Kebler.Views
 
         private void OpenLogs(object sender, RoutedEventArgs e)
         {
-            App.Log.Ui(nameof(OpenLogs));
+            //App.Log.Ui(nameof(OpenLogs));
 
             try
             {
-                App.Log.Info($"Try start => cmd {Log.LogFileInfo.DirectoryName}");
+                var file = LogManager.Configuration?.AllTargets.OfType<FileTarget>()
+    .Select(x => x.FileName.Render(LogEventInfo.CreateNullEvent()))
+    .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+
+                Log.Info($"Try start => cmd {file}");
                 var p = new Process();
-                p.StartInfo = new ProcessStartInfo(@Log.LogFileInfo.DirectoryName)
+                p.StartInfo = new ProcessStartInfo(file)
                 {
                     UseShellExecute = true
                 };
                 p.Start();
+
+
             }
             catch (Exception ex)
             {
@@ -97,7 +108,7 @@ namespace Kebler.Views
 //System.Windows.Threading
 //ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
 
-                App.Log.Error(ex);
+                Log.Error(ex);
 #endif
             }
         }

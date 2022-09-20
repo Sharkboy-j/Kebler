@@ -4,14 +4,14 @@ using System.Windows.Data;
 
 namespace Kebler.Services.Converters
 {
-    public class BytesToUserFriendlyString : IValueConverter
+    public class PointToPercent : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter != null && bool.TryParse(parameter.ToString(), out var para))
-                return Utils.GetSizeString(System.Convert.ToInt64(value), para);
+            if (value != null && double.TryParse(value.ToString(), out var para))
+                return $"{Math.Round(para * 100, 2)}%";
 
-            return Utils.GetSizeString((long) value);
+            return "~";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

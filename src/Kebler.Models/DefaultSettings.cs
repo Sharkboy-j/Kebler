@@ -27,7 +27,11 @@ namespace Kebler.Models
         public bool ShowCategoryCount { get; set; } = true;
         public bool TraceEnabled { get; set; } = false;
         public bool TraceRequestsEnabled { get; set; } = false;
-
+        public bool HideOnClose { get; set; } = false;
+        public bool AlterIndexColor { get; set; } = false;
+        public bool AskUpdateTrackers { get; set; } = true;
+        public bool IsAutoStartTorrentAfterAdd { get; set; } = false;
+        public string LastUsedLocation { get; set; } = "";
 
     }
 }

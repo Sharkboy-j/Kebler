@@ -100,7 +100,7 @@ namespace Kebler.ViewModels
         /// </summary>
         public void Settings()
         {
-            Log.Ui();
+            //Log.Ui();
             Log.Info($"Try start => cmd {ConstStrings.CONFIGPATH}");
             var p = new Process();
             p.StartInfo = new ProcessStartInfo(@ConstStrings.CONFIGPATH)
@@ -108,6 +108,8 @@ namespace Kebler.ViewModels
                 UseShellExecute = true
             };
             p.Start();
+
+            Environment.Exit(0);
         }
 
 
@@ -116,7 +118,7 @@ namespace Kebler.ViewModels
         /// </summary>
         public void Preferences()
         {
-            Log.Ui();
+            //Log.Ui();
 
             if (_settings != null)
                 manager.ShowDialogAsync(new ServerPreferencesViewModel(_settings));
@@ -132,7 +134,7 @@ namespace Kebler.ViewModels
         /// </summary>
         private void ServerClicked(object sender, RoutedEventArgs e)
         {
-            Log.Ui();
+            //Log.Ui();
 
             if (!(sender is MenuItem menuItem) || !(menuItem.Tag is Server server))
                 return;
@@ -147,7 +149,7 @@ namespace Kebler.ViewModels
         /// </summary>
         private void LanguageChanged(object sender, RoutedEventArgs e)
         {
-            Log.Ui();
+            //Log.Ui();
 
             if (!(sender is MenuItem menuItem) || !(menuItem.Tag is CultureInfo cultureInfo))
                 return;

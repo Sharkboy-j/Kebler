@@ -16,6 +16,7 @@ using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using LiteDB;
 using Microsoft.AppCenter.Crashes;
+using NLog;
 
 namespace Kebler.ViewModels
 {
@@ -26,7 +27,6 @@ namespace Kebler.ViewModels
         public ConnectionManagerViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            Log = Kebler.Services.Log.Instance;
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -64,7 +64,7 @@ namespace Kebler.ViewModels
 
         public void Add()
         {
-            Log.Ui();
+            //Log.Ui();
 
             var server = new Server
             { Title = $"Transmission Server {ServerList.Count + 1}", AskForPassword = false, AuthEnabled = false };
@@ -81,7 +81,7 @@ namespace Kebler.ViewModels
 
         public void Remove()
         {
-            Log.Ui();
+            //Log.Ui();
 
             if (SelectedServer == null) return;
 
@@ -109,7 +109,7 @@ namespace Kebler.ViewModels
 
         public void Save()
         {
-            Log.Ui();
+            //Log.Ui();
 
             Log.Info($"Try save Server {SelectedServer}");
 
@@ -134,7 +134,7 @@ namespace Kebler.ViewModels
 
         public void Cancel()
         {
-            Log.Ui();
+            //Log.Ui();
             SelectedServer = null;
             ServerIndex = -1;
         }
@@ -180,7 +180,7 @@ namespace Kebler.ViewModels
 
         public async void Test()
         {
-            Log.Ui();
+            //Log.Ui();
             var st = new Stopwatch();
             st.Start();
 
@@ -278,7 +278,7 @@ namespace Kebler.ViewModels
 
     public partial class ConnectionManagerViewModel
     {
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private readonly IWindowManager manager = new WindowManager();
         private IRemoteTorrentClient _client;
         private SolidColorBrush _connectStatusColor;

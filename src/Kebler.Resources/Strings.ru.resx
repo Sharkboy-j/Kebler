@@ -687,4 +687,7 @@
   <data name="MI_ShowCategoriesCount" xml:space="preserve">
     <value>Кол-во торрентов в категории</value>
   </data>
+  <data name="MW_StatusText_AddTorrentsBackground" xml:space="preserve">
+    <value>Добавление в фоне (%done)...</value>
+  </data>
 </root>

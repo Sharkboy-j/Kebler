@@ -151,7 +151,7 @@
                         IsEditable="True"
                         IsReadOnly="False"
                         ItemsSource="{Binding DownlaodDirs}"
-                        SelectedIndex="{Binding DownlaodDirIndex, Mode=OneWay}"
+                        SelectedIndex="{Binding DownlaodDirIndex}"
                         Text="{Binding DownlaodDirPath}" />
 
                     <TextBlock
@@ -300,8 +300,7 @@
                         cal:Message.Attach="ChangeVisibilityWindow"
                         Content="{lex:BLoc ATD_DontShowAddTorrentDialog}"
                         FontSize="13"
-                        IsChecked="{Binding IsAddTorrentWindowShow}"
-                        IsEnabled="False" />
+                        IsChecked="{Binding IsAddTorrentWindowShow}" />
                     <controls:LoadingRing
                         Grid.Column="0"
                         Margin="0,0,10,0"

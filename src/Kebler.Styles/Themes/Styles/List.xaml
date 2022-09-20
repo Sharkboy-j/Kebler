@@ -3,6 +3,7 @@
     <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Background" Value="{DynamicResource ListBox.Static.Background}" />
@@ -15,7 +16,7 @@
                         Padding="{TemplateBinding Control.Padding}"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
-                        BorderThickness="{TemplateBinding Control.BorderThickness}"
+                        BorderThickness="0"
                         SnapsToDevicePixels="true">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
@@ -54,6 +55,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                <Setter Property="Background" Value="Transparent" />
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="#0CC8C8C8" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="{DynamicResource ListBox.Static.Background}" />
@@ -75,11 +84,10 @@
                         Padding="1"
                         Background="{TemplateBinding Control.Background}"
                         BorderBrush="{TemplateBinding Control.BorderBrush}"
-                        BorderThickness="{TemplateBinding Control.BorderThickness}"
+                        BorderThickness="0"
                         SnapsToDevicePixels="true">
                         <ScrollViewer Padding="{TemplateBinding Control.Padding}" Focusable="false">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-
+                            <ItemsControl SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>

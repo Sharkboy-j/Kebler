@@ -43,6 +43,7 @@
             <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <conv:CountToBoolConverter x:Key="CountToBoolConverter" />
             <conv:GridWidthConverter x:Key="GridWidthConverter" />
+            <conv:LongToDateTime x:Key="LongToDateTime" />
 
         </ResourceDictionary>
     </Application.Resources>

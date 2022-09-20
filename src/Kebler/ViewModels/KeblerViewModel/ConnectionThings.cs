@@ -186,56 +186,70 @@ namespace Kebler.ViewModels
                         IsConnected = true;
                         Log.Info($"Connected {_sessionInfo.Version}");
                         ConnectedServer = SelectedServer;
-                        var st = new Stopwatch();
+                        //var st = new Stopwatch();
                         if (App.Instance.TorrentsToAdd.Count > 0)
                             OpenPaseedWithArgsFiles();
 
                         while (IsConnected && !token.IsCancellationRequested)
                         {
-                            if (Application.Current?.Dispatcher != null &&
-                                Application.Current.Dispatcher.HasShutdownStarted)
-                                throw new TaskCanceledException();
-                            st.Start();
-
-                            if (_transmissionClient != null)
+                            try
                             {
-                                _stats = (await Get(
-                                    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(
-                                        nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
+                                if (Application.Current?.Dispatcher != null &&
+                                                               Application.Current.Dispatcher.HasShutdownStarted)
+                                    throw new TaskCanceledException();
+                                //st.Start();
 
-                                allTorrents =
-                                    (await Get(
-                                        _transmissionClient.TorrentGetAsync(
-                                            TorrentFields.WORK,
-                                            _cancelTokenSource.Token),
-                                        LocalizationProvider.GetLocalizedValue(
-                                            nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
-                                _settings = (await Get(
-                                    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                    LocalizationProvider.GetLocalizedValue(
-                                        nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
-
-                                if (allTorrents != null)
+                                if (_transmissionClient != null)
                                 {
-                                    ParseTransmissionServerSettings();
-                                    ParseStats();
 
-                                    if (allTorrents?.Clone() is TransmissionTorrents data)
-                                        ProcessParsingTransmissionResponse(data);
+                                    await GetStatistic(); ;
+
+                                    await GetSettings();
+
+                                    await GetAllTorrentsData();
+
+
+                                    //_stats = (await Get(
+                                    //    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
+                                    //    LocalizationProvider.GetLocalizedValue(
+                                    //        nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
+
+                                    //allTorrents =
+                                    //    (await Get(
+                                    //        _transmissionClient.TorrentGetAsync(
+                                    //            State == WindowState.Minimized ? TorrentFields.WORK_HIDDEN : TorrentFields.WORK,
+                                    //            _cancelTokenSource.Token),
+                                    //        LocalizationProvider.GetLocalizedValue(
+                                    //            nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
+
+                                    //_settings = (await Get(
+                                    //    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
+                                    //    LocalizationProvider.GetLocalizedValue(
+                                    //        nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
+
+                                    if (allTorrents != null)
+                                    {
+                                        ParseTransmissionServerSettings();
+                                        ParseStats();
+
+                                        if (allTorrents?.Clone() is TransmissionTorrents data)
+                                            await ProcessParsingTransmissionResponse(data);
+                                    }
+
                                 }
-                              
+                                else
+                                {
+                                    break;
+                                }
+
+                                //st.Stop();
+                                //Log.Trace(st);
+                                //st.Reset();
                             }
-                            else
+                            finally
                             {
-                                break;
+                                await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                             }
-
-                            st.Stop();
-                            Log.Trace(st);
-                            st.Reset();
-
-                            await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                         }
                     }
                     else
@@ -272,9 +286,9 @@ namespace Kebler.ViewModels
                     }
 
                     Log.Error(ex.Message);
-                    Application.Current?.Dispatcher?.Invoke(() =>
+                    await Application.Current?.Dispatcher?.InvokeAsync(async () =>
                     {
-                        MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
+                        await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
                     });
                 }
                 catch (Exception ex)
@@ -288,7 +302,7 @@ namespace Kebler.ViewModels
                     IsConnecting = false;
                     TorrentList = new Bind<TorrentInfo>();
                     IsConnected = false;
-                    Categories.Clear();
+                    Categories?.Clear();
                     IsConnectedStatusText = DownloadSpeed = UploadSpeed = string.Empty;
                     Log.Info("Disconnected from server");
                     if (requested)
@@ -319,6 +333,26 @@ namespace Kebler.ViewModels
             }
 
             return true;
+        }
+
+
+        private async Task GetStatistic()
+        {
+            var text = LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Stats));
+            _stats = (await Get(_transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token), text)).Value;
+        }
+
+        private async Task GetAllTorrentsData()
+        {
+            var param = State == WindowState.Minimized ? TorrentFields.WORK_HIDDEN : TorrentFields.WORK;
+            var text = LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Torrents));
+            allTorrents = (await Get(_transmissionClient.TorrentGetAsync(param, _cancelTokenSource.Token), text)).Value;
+        }
+
+        private async Task GetSettings()
+        {
+            var text = LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.MW_StatusText_Settings));
+            _settings = (await Get(_transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token), text)).Value;
         }
     }
 }

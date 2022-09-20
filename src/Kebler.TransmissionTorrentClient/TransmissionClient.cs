@@ -225,9 +225,9 @@ namespace Kebler.TransmissionTorrentClient
             var jObject = response.Deserialize<JObject>();
 
             var result = new AddTorrentResponse(Enums.ReponseResult.NotOk);
+            result.CustomException = response.CustomException;
 
-
-            if (jObject?.First == null)
+            if (jObject?.First == null || result.CustomException is Exception)
                 return result;
 
             if (jObject.TryGetValue("torrent-duplicate", out var value))

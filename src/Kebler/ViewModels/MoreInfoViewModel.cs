@@ -17,6 +17,7 @@ using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.VisualBasic;
+using NLog;
 using static Kebler.Models.Messages;
 
 // ReSharper disable UnusedMember.Global
@@ -28,7 +29,7 @@ namespace Kebler.ViewModels
     {
         #region Props
 
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
 
 
         private DateTime _addedOn, _createdOn, _completedOn;
@@ -306,7 +307,6 @@ namespace Kebler.ViewModels
         public MoreInfoViewModel(KeblerView view, Action<bool> unselect, IEventAggregator eventAggregator)
         {
             this.view = view;
-            Log = Kebler.Services.Log.Instance;
 
             //IsShowMoreInfoCheck = ConfigService.Instanse.MoreInfoShow;
             _eventAggregator = eventAggregator;
@@ -390,7 +390,7 @@ namespace Kebler.ViewModels
                             PiecesCount = _ti.PieceCount;
                             PercentDone = _ti.PercentDone;
 
-                            var decodedPices = _piecesBase64.Length > 0  ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
+                            var decodedPices = _piecesBase64.Length > 0 ? Convert.FromBase64CharArray(_piecesBase64.ToCharArray(), 0, _piecesBase64.Length) : new byte[0];
                             OnUIThread(() =>
                             {
                                 view.MoreView.Pieces.Init(decodedPices, _ti.PieceCount, DonePices);
@@ -430,7 +430,7 @@ namespace Kebler.ViewModels
                         Ratio = $"{_ti.UploadRatio}";
                         MaxPeers = _ti.MaxConnectedPeers;
 
-                        Path = $"{_ti.DownloadDir}{_ti.Name}";
+                        Path = System.IO.Path.Combine(_ti.DownloadDir, _ti.Name);
                         Size = _ti.TotalSize;
                         Hash = _ti.HashString;
                         AddedOn = DateTimeOffset.FromUnixTimeSeconds(_ti.AddedDate).UtcDateTime.ToLocalTime();

@@ -6,12 +6,17 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Kebler.Services;
+using NLog;
 
 namespace Kebler.Views
 {
     public partial class KeblerView
 
     {
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
+
+
         public KeblerView()
         {
             InitializeComponent();
@@ -37,7 +42,30 @@ namespace Kebler.Views
                 ShowInTaskbar = false;
         }
 
+        private void CustomizableWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (ConfigService.Instanse.HideOnClose)
+            {
+                e.Cancel = true;
 
+                this.Hide();
+            }
+        }
+
+        private async void CustomizableWindow_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (DataContext is KeblerViewModel vm)
+                {
+                    await vm.OpenTorrent(files);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);            }
+        }
     }
 
     public class GridViewSort
@@ -157,6 +185,9 @@ namespace Kebler.Views
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
             if (headerClicked != null)
             {
+                _e = e;
+                _sender = sender;
+
                 var propertyName = GetPropertyName(headerClicked.Column);
                 if (!string.IsNullOrEmpty(propertyName))
                 {
@@ -180,6 +211,42 @@ namespace Kebler.Views
             }
         }
 
+        private static object _sender;
+        private static RoutedEventArgs _e;
+        private static ListSortDirection direction = ListSortDirection.Ascending;
+        public static void ApplyCashSort()
+        {
+            if (_e != null)
+            {
+                GridViewColumnHeader headerClicked = _e.OriginalSource as GridViewColumnHeader;
+                if (headerClicked != null)
+                {
+                    var propertyName = GetPropertyName(headerClicked.Column);
+                    if (!string.IsNullOrEmpty(propertyName))
+                    {
+                        ListView listView = GetAncestor<ListView>(headerClicked);
+                        if (listView != null)
+                        {
+                            ICommand command = GetCommand(listView);
+                            if (command != null)
+                            {
+                                if (command.CanExecute(propertyName))
+                                {
+                                    command.Execute(propertyName);
+                                }
+                            }
+                            else if (GetAutoSort(listView))
+                            {
+                                ApplySort(listView.Items, propertyName, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+
         #endregion
 
         #region Helper methods
@@ -195,18 +262,21 @@ namespace Kebler.Views
             return (T)parent;
         }
 
-        public static void ApplySort(ICollectionView view, string propertyName)
+        public static void ApplySort(ICollectionView view, string propertyName, bool force = false)
         {
-            ListSortDirection direction = ListSortDirection.Ascending;
             if (view.SortDescriptions.Count > 0)
             {
                 SortDescription currentSort = view.SortDescriptions[0];
                 if (currentSort.PropertyName == propertyName)
                 {
-                    if (currentSort.Direction == ListSortDirection.Ascending)
-                        direction = ListSortDirection.Descending;
-                    else
-                        direction = ListSortDirection.Ascending;
+                    if (force == false)
+                    {
+                        if (currentSort.Direction == ListSortDirection.Ascending)
+                            direction = ListSortDirection.Descending;
+                        else
+                            direction = ListSortDirection.Ascending;
+                    }
+
                 }
                 view.SortDescriptions.Clear();
             }

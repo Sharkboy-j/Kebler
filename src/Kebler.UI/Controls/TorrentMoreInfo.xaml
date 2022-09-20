@@ -16,7 +16,7 @@
     <UserControl.Resources>
         <converters:TI_StateConverter x:Key="TI_StateConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="#0CC8C8C8">
         <TabControl TabIndex="3">
             <TabItem Header="General" TabIndex="2">
                 <Grid Margin="10,5">

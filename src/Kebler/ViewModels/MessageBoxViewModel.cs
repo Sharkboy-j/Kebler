@@ -17,11 +17,13 @@ namespace Kebler.ViewModels
         }
 
 
-        public static Task<bool?> ShowDialog(string msg, IWindowManager manager = null, string titile = "",
+        public static async Task<bool?> ShowDialog(string msg, IWindowManager manager = null, string titile = "",
             Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.Ok)
         {
             var mgr = manager ?? new WindowManager();
-            return mgr.ShowDialogAsync(new MessageBoxViewModel(msg, titile, buttons, true));
+            var vm = new MessageBoxViewModel(msg, titile, buttons, true);
+            var resp =  await mgr.ShowDialogAsync(vm);
+            return vm.Result;
         }
     }
 }

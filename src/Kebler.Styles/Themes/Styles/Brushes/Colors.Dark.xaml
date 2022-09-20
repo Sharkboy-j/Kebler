@@ -80,6 +80,7 @@
     <Color x:Key="ForegroundColor.Gray">#CAC6C6</Color>
 
     <Color x:Key="ListView.BackgroundColor">#212224</Color>
+    <Color x:Key="ListView.AlterColor">#CAC6C6</Color>
 
 
 

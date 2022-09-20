@@ -428,7 +428,6 @@
                 return new[]
                 {
                     #region WORK FIELDS
-
                     NAME,
                     ID,
                     ADDED_DATE,
@@ -440,11 +439,38 @@
                     UPLOADED_EVER,
                     STATUS,
                     DOWNLOAD_DIR,
-                    FILES,
+                    //FILES,
                     MAGNET_LINK,
                     TOTAL_SIZE,
                     ERROR,
                     ERROR_STRING,
+                    #endregion
+                };
+            }
+        }
+        public static string[] WORK_HIDDEN
+        {
+            get
+            {
+                return new[]
+                {
+                    #region WORK FIELDS
+                    //NAME,
+                    ID,
+                    //ADDED_DATE,
+                    //HASH_STRING,
+                    RATE_DOWNLOAD,
+                    RATE_UPLOAD,
+                    //RECHECK,
+                    PERCENT_DONE,
+                    UPLOADED_EVER,
+                    STATUS,
+                    //DOWNLOAD_DIR,
+                    //FILES,
+                    //MAGNET_LINK,
+                    //TOTAL_SIZE,
+                    //ERROR,
+                    //ERROR_STRING,
                     #endregion
                 };
             }

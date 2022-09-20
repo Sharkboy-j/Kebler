@@ -26,6 +26,9 @@ namespace Kebler.ViewModels
     using UI.CSControls.TreeListView;
     using Views;
     using Microsoft.AppCenter.Crashes;
+    using System.Text;
+    using Kebler.Core.Extensions;
+    using NLog;
 
     public class AddTorrentViewModel : Screen, IHandle<Messages.DownlaodCategoriesChanged>
     {
@@ -35,16 +38,16 @@ namespace Kebler.ViewModels
         private BindableCollection<FolderCategory> _folderCategory = new BindableCollection<FolderCategory>();
         private Torrent _torrent;
         private object view;
-        private readonly Kebler.Services.Interfaces.ILog Log;
+        private ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         private readonly IRemoteTorrentClient _transmissionClient;
-        private readonly CancellationToken cancellationToken;
-        private readonly CancellationTokenSource cancellationTokenSource;
+        private CancellationToken cancellationToken;
+        private CancellationTokenSource cancellationTokenSource;
         private FileInfo _fileInfo;
         private BindableCollection<string> _dirs;
         private SessionSettings settings;
         public AddTorrentResponse TorrentResult;
-        public bool Result;
-        private IEnumerable<TorrentInfo> _infos;
+        //public bool Result;
+        private IReadOnlyCollection<TorrentInfo> _infos;
         private IEnumerable<(string, uint)> _torrents;
         private string _torrentPath, _downlaodDirPath;
         private bool _isWorking, _isAddTorrentWindowShow, _isAutoStart;
@@ -115,7 +118,13 @@ namespace Kebler.ViewModels
         public bool IsAutoStart
         {
             get => _isAutoStart;
-            set => Set(ref _isAutoStart, value);
+            set
+            {
+                Set(ref _isAutoStart, value);
+                ConfigService.Instanse.IsAutoStartTorrentAfterAdd = value;
+                ConfigService.Save();
+            }
+
         }
 
         public Visibility ResultVisibility
@@ -139,7 +148,7 @@ namespace Kebler.ViewModels
         #endregion
         KeblerView _wnd;
         public AddTorrentViewModel(string path, IRemoteTorrentClient transmissionClient, SessionSettings settings,
-            IEnumerable<TorrentInfo> infos,
+            IReadOnlyCollection<TorrentInfo> infos,
             BindableCollection<FolderCategory> folderCategory, IEventAggregator eventAggregator,
             IEnumerable<(string, uint)> torrents, Action<uint> remove, ref bool isWindOpened, ref KeblerView wnd)
         {
@@ -149,12 +158,7 @@ namespace Kebler.ViewModels
             _eventAggregator?.SubscribeOnPublishedThread(this);
             _remove = remove;
             _wnd = wnd;
-            _wnd?.Activate();
-
-            Log = Kebler.Services.Log.Instance;
-
-            if (_wnd?.WindowState == WindowState.Minimized)
-                _wnd.WindowState = WindowState.Normal;
+            //_wnd?.Activate();
 
             _infos = infos;
             _fileInfo = new FileInfo(path);
@@ -162,16 +166,22 @@ namespace Kebler.ViewModels
             _transmissionClient = transmissionClient;
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-            IsAutoStart = true;
+
+            IsAutoStart = ConfigService.Instanse.IsAutoStartTorrentAfterAdd;
             this.settings = settings;
 
+
+            Log.Trace("DownlaodCategoriesChanged");
+
+            var str = new StringBuilder();
 
             foreach (var item in folderCategory)
             {
                 DownlaodDirs.Add(item.FullPath);
+                str.Append($"'{item.FullPath}'");
             }
 
-            DownlaodDirIndex = 0;
+            Log.Trace(str.ToString());
 
             if (!ConfigService.Instanse.IsAddTorrentWindowShow)
             {
@@ -186,41 +196,109 @@ namespace Kebler.ViewModels
             _torrent = new BencodeParser().Parse<Torrent>(file);
         }
 
-        protected override async void OnViewLoaded(object view)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Need to show window?</returns>
+        public async Task<bool> Init()
+        {
+
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
+
+            DownlaodDirPath = String.IsNullOrEmpty(ConfigService.Instanse.LastUsedLocation) ? DownlaodDirs.FirstOrDefault() : ConfigService.Instanse.LastUsedLocation;
+
+            TorrentResult = new AddTorrentResponse(Enums.ReponseResult.Ok);
+            TorrentResult.Value = new TorrentAddResult();
+
+            if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
+            {
+                Log.Warn("Found torrent with same hash");
+                //var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
+
+                //DownlaodDir = info.DownloadDir;
+                var manager = IoC.Get<IWindowManager>();
+
+                var quest = LocalizationProvider.GetLocalizedValue(nameof(Strings.ASK_UpdateTrackers));
+
+                var shouldUpdate = (bool?)true;
+                if (ConfigService.Instanse.AskUpdateTrackers)
+                {
+                    Log.Trace("Show dialog for update trackers");
+                    shouldUpdate = await MessageBoxViewModel.ShowDialog($"{quest} for {_torrent.DisplayName}", null, null, Enums.MessageBoxDilogButtons.YesNoCancel);
+                    Log.Trace($"Dialog for update trackers result => {shouldUpdate}");
+                }
+
+                if (shouldUpdate == true)
+                {
+                    var foundedTorrent = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
+
+                    LoadingGridVisibility = Visibility.Visible;
+                    var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
+
+                    Log.Trace("Try update trackers");
+
+
+                    await UpdateTrackers(toAdd, foundedTorrent.Id);
+                    //Result = true;
+
+                    TorrentResult.Value.Status = Enums.AddTorrentStatus.UpdatedTrackers;
+
+                    Log.Trace("Update trackers done");
+
+                    await TryCloseAsync(true);
+                    return false;
+                }
+                else if (shouldUpdate == null)
+                {
+                    TorrentResult.Value.Status = Enums.AddTorrentStatus.UnknownError;
+
+                    await TryCloseAsync(false);
+                    return true;
+                }
+                else
+                {
+                    TorrentResult.Value.Status = Enums.AddTorrentStatus.UpdatedTrackers;
+
+                    await TryCloseAsync(true);
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+
+
+
+        protected override void OnViewLoaded(object view)
         {
             try
             {
                 this.view = view;
                 LoadTree();
+
+                _wnd?.Activate();
+
+                if (_wnd?.WindowState == WindowState.Minimized)
+                    _wnd.WindowState = WindowState.Normal;
+
                 base.OnViewLoaded(view);
             }
             finally
             {
                 LoadingGridVisibility = Visibility.Collapsed;
             }
-
-            if (_infos.Any(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower())))
-            {
-                var info = _infos.First(x => x.HashString.ToLower().Equals(_torrent.OriginalInfoHash.ToLower()));
-
-                //DownlaodDir = info.DownloadDir;
-                var manager = IoC.Get<IWindowManager>();
-                if (await MessageBoxViewModel.ShowDialog(
-                    LocalizationProvider.GetLocalizedValue(nameof(Strings
-                        .ATD_TorrentExist_UpdateTrackers))
-                    , manager, string.Empty, Enums.MessageBoxDilogButtons.YesNo) == true)
-                {
-                    LoadingGridVisibility = Visibility.Visible;
-                    Add();
-                    await TryCloseAsync(true);
-                }
-                else
-                {
-                    await TryCloseAsync(false);
-                }
-            }
         }
 
+        public Task<bool> AddHidden()
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
+            return Add();
+        }
 
         public void ChangeVisibilityWindow()
         {
@@ -249,6 +327,8 @@ namespace Kebler.ViewModels
                 Crashes.TrackError(ex);
             }
         }
+
+
 
         public void ChangePath()
         {
@@ -319,12 +399,12 @@ namespace Kebler.ViewModels
             return output;
         }
 
-        public async void Add()
+        public async Task<bool> Add()
         {
             ResultVisibility = Visibility.Collapsed;
             IsWorking = true;
 
-            await Task.Run(async () =>
+            var result = await Task.Run<bool>(async () =>
             {
                 try
                 {
@@ -348,17 +428,23 @@ namespace Kebler.ViewModels
                         {
                             Metainfo = Convert.ToBase64String(torrentBytes),
                             Paused = !IsAutoStart,
-                            DownloadDirectory = DownlaodDirPath,
                             PeerLimit = PeerLimit,
                             FilesUnwanted = unWant.ToArray(),
                             FilesWanted = want.ToArray()
                         };
 
+                        if (!string.IsNullOrEmpty(DownlaodDirPath))
+                        {
+                            newTorrent.DownloadDirectory = DownlaodDirPath;
+                        }
+
                         Log.Info($"Start adding torrentFileInfo {newTorrent.Filename}");
+                        Log.Info($"DownloadDirectory set to '{newTorrent.DownloadDirectory}'");
 
                         while (true)
                         {
-                            if (Dispatcher.CurrentDispatcher.HasShutdownStarted) return;
+                            if (Dispatcher.CurrentDispatcher.HasShutdownStarted)
+                                return false;
                             try
                             {
                                 cancellationToken.ThrowIfCancellationRequested();
@@ -406,9 +492,9 @@ namespace Kebler.ViewModels
 
                                                 ConfigService.Instanse.TorrentPeerLimit = PeerLimit;
                                                 ConfigService.Save();
-                                                Result = true;
-                                                await TryCloseAsync();
-                                                return;
+                                                //Result = true;
+                                                await TryCloseAsync(true);
+                                                break;
                                             }
                                         case Enums.AddTorrentStatus.Duplicate:
                                             {
@@ -419,28 +505,24 @@ namespace Kebler.ViewModels
                                                 {
                                                     var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
 
-
-
-
                                                     await _wnd.Dispatcher.InvokeAsync(async () =>
                                                     {
-                                                        var result = await MessageBoxViewModel.ShowDialog(
-                                                            LocalizationProvider.GetLocalizedValue(
-                                                            nameof(Strings.ASK_UpdateTrackers))
-                                                            , null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        var quest = LocalizationProvider.GetLocalizedValue(
+                                                            nameof(Strings.ASK_UpdateTrackers));
 
-                                                        if (result == true)
+
+                                                        bool? shouldUpdate = true;
+
+                                                        if (ConfigService.Instanse.AskUpdateTrackers)
                                                         {
-
-                                                            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
-                                                            {
-                                                                IDs = new[] { TorrentResult.Value.ID },
-                                                                TrackerAdd = toAdd
-                                                            }, cancellationToken);
+                                                            shouldUpdate = await MessageBoxViewModel.ShowDialog($"{quest} for {_torrent.DisplayName}", null, null, Enums.MessageBoxDilogButtons.YesNoCancel);
                                                         }
 
+                                                        if (shouldUpdate == true)
+                                                        {
+                                                            await UpdateTrackers(toAdd, TorrentResult.Value.ID);
+                                                        }
                                                     });
-
 
 
                                                     foreach (var tr in toAdd)
@@ -449,19 +531,38 @@ namespace Kebler.ViewModels
                                                     }
 
 
-                                                    Result = true;
-                                                    await TryCloseAsync();
+                                                    //Result = true;
+                                                    await TryCloseAsync(true);
                                                 }
-
-                                                return;
+                                                break;
                                             }
                                     }
+
+                                    return true;
+                                }
+
+                                if (TorrentResult.Result == Enums.ReponseResult.NotOk &&
+                                    TorrentResult.CustomException != null)
+                                {
+
+                                    await _wnd.Dispatcher.InvokeAsync(async () =>
+                                    {
+                                        await MessageBoxViewModel.ShowDialog(TorrentResult.CustomException.Message
+                                            , null, string.Empty);
+
+                                    });
+
+                                    Log?.Error(TorrentResult.CustomException);
+
+                                    return false;
                                 }
                                 else
                                 {
                                     Log?.Info(
                                         $"Adding torrentFileInfo result '{TorrentResult?.Value?.Status}' '{newTorrent?.Filename}'");
-                                    await Task.Delay(100, cancellationToken);
+                                    //await Task.Delay(100, cancellationToken);
+
+                                    return true;
                                 }
                             }
                             catch (OperationCanceledException)
@@ -472,27 +573,39 @@ namespace Kebler.ViewModels
                                 Log.Error(ex);
                                 Crashes.TrackError(ex);
 
-                                return;
                             }
+
+                            return false;
                         }
                     }
-
                     else
                     {
                         Log.Error("Could not parse torrent file");
+                        return false;
                     }
-
-
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex);
                     Crashes.TrackError(ex);
+
+                    return false;
                 }
                 finally
                 {
                     IsWorking = false;
                 }
+            }, cancellationToken);
+
+            return result;
+        }
+
+        private async Task UpdateTrackers(string[] trackers, uint id)
+        {
+            await _transmissionClient.TorrentSetAsync(new TorrentSettings()
+            {
+                IDs = new[] { id },
+                TrackerAdd = trackers
             }, cancellationToken);
         }
 
@@ -506,8 +619,8 @@ namespace Kebler.ViewModels
         {
             IsWorking = false;
             cancellationTokenSource.Cancel();
-            Result = false;
-            await TryCloseAsync();
+            //Result = false;
+            await TryCloseAsync(false);
         }
 
         private void Closing()
@@ -517,6 +630,23 @@ namespace Kebler.ViewModels
             settings = null;
             _fileInfo = null;
         }
+        public override Task TryCloseAsync(bool? dialogResult = null)
+        {
+            if(ConfigService.Instanse.LastUsedLocation != DownlaodDirPath)
+            {
+                Log.Info("ConfigService.Instanse.LastUsedLocation != DownlaodDirPath");
+
+                Log.Info($"Old '{ConfigService.Instanse.LastUsedLocation}'");
+
+                ConfigService.Instanse.LastUsedLocation = DownlaodDirPath;
+                ConfigService.Save();
+                Log.Info($"New '{ConfigService.Instanse.LastUsedLocation}'");
+
+            }
+
+            return base.TryCloseAsync(dialogResult);
+        }
+
 
         public Task HandleAsync(Messages.DownlaodCategoriesChanged message, CancellationToken cancellationToken)
         {
@@ -534,6 +664,23 @@ namespace Kebler.ViewModels
                 foreach (var itm in toAdd)
                     DownlaodDirs.Add(itm);
             }
+
+            Log.Trace("DownlaodCategoriesChanged");
+
+            var str = new StringBuilder();
+
+            foreach (var dir in DownlaodDirs)
+            {
+                str.AppendLine($"'{dir}'" + Environment.NewLine);
+            }
+
+            Log.Trace(str.ToString());
+
+            if (string.IsNullOrEmpty(DownlaodDirPath))
+            {
+                DownlaodDirPath = DownlaodDirs.FirstOrDefault();
+            }
+
 
             return Task.CompletedTask;
         }

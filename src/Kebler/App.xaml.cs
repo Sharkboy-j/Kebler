@@ -8,9 +8,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using Kebler.Services;
-using Kebler.Services.Interfaces;
 using Kebler.SI;
 using Kebler.ViewModels;
+using NLog;
 
 namespace Kebler
 {
@@ -28,7 +28,7 @@ namespace Kebler
 
         public delegate void Langhandler();
 
-        public static ILog Log;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
         public static App Instance;
 
         public KeblerViewModel KeblerVm;
@@ -39,7 +39,6 @@ namespace Kebler
         private App()
         {
             Instance = this;
-            Log = Kebler.Services.Log.Instance;
 
             ConfigService.LoadConfig();
             SetEnv();
@@ -125,9 +124,10 @@ namespace Kebler
         {
             if (Current.MainWindow is Window wnd)
             {
+                wnd.Show();
                 wnd.Activate();
 
-                if (wnd?.WindowState != WindowState.Normal)
+                if (wnd.WindowState != WindowState.Normal)
                     wnd.WindowState = WindowState.Normal;
             }
 

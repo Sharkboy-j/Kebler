@@ -17,7 +17,7 @@ namespace Kebler.ViewModels
             _yesDefault,
             _logoVisibility;
 
-        public bool Result;
+        public bool? Result;
 
 
         public double MinWidth
@@ -80,23 +80,29 @@ namespace Kebler.ViewModels
             switch (buttons)
             {
                 case Enums.MessageBoxDilogButtons.Ok:
-                {
-                    OkVisible = true;
-                    YesDefault = true;
-                    break;
-                }
+                    {
+                        OkVisible = true;
+                        YesDefault = true;
+                        break;
+                    }
                 case Enums.MessageBoxDilogButtons.OkCancel:
-                {
-                    OkVisible = CancelVisible = true;
-                    OkDefault = true;
-                    break;
-                }
+                    {
+                        OkVisible = CancelVisible = true;
+                        OkDefault = true;
+                        break;
+                    }
                 case Enums.MessageBoxDilogButtons.YesNo:
-                {
-                    YesVisible = NoVisible = true;
-                    YesDefault = true;
-                    break;
-                }
+                    {
+                        YesVisible = NoVisible = true;
+                        YesDefault = true;
+                        break;
+                    }
+                case Enums.MessageBoxDilogButtons.YesNoCancel:
+                    {
+                        YesVisible = NoVisible = CancelVisible = true;
+                        YesDefault = true;
+                        break;
+                    }
             }
         }
 
@@ -107,10 +113,16 @@ namespace Kebler.ViewModels
             base.TryCloseAsync(true);
         }
 
-        public virtual void NoCancel()
+        public virtual void No()
         {
             Result = false;
             base.TryCloseAsync(false);
+        }
+
+        public virtual void Cancel()
+        {
+            Result = null;
+            base.TryCloseAsync(null);
         }
     }
 }

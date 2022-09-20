@@ -16,6 +16,7 @@
     Height="600"
     MinWidth="850"
     MinHeight="600"
+    AllowDrop="True"
     cal:Message.Attach="[Event Closing] = [Action ClosingW]"
     d:DataContext="{DynamicResource KeblerViewModel}"
     lex:LocalizeDictionary.DesignCulture="en"
@@ -25,7 +26,9 @@
     Deactivated="CustomizableWindow_Deactivated"
     IsTitleVisible="True"
     ResizeMode="CanResize"
+    Drop="CustomizableWindow_Drop"
     ShowHeaderLine="True"
+    Closing="CustomizableWindow_Closing"
     WindowStartupLocation="CenterScreen"
     WindowState="{Binding State}"
     mc:Ignorable="d">
@@ -411,10 +414,9 @@
                         Margin="0"
                         Padding="0,0,17,0"
                         VerticalContentAlignment="Center"
-                        cal:Message.Attach="[Event TextChanged] = [Action FilterTextChanged]"
                         BorderBrush="{StaticResource BorderBrush}"
                         Foreground="{StaticResource ForegroundBrush}"
-                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
 
                     <Border
                         Width="20"
@@ -472,10 +474,18 @@
                 ui11:GridViewSort.AutoSort="True"
                 ui11:GridViewSort.Command="{Binding SortCommand}"
                 x:FieldModifier="public"
+                AlternationCount="2"
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding TorrentList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                 SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
-                Style="{DynamicResource ListViewWithGridViewStyle}">
+                Style="{DynamicResource ListViewWithGridViewStyle}"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.CacheLength="10"
+                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                ScrollViewer.IsDeferredScrollingEnabled="False"
+                VirtualizingStackPanel.CacheLengthUnit="Item" 
+                VirtualizingStackPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListView.InputBindings>
                     <KeyBinding
                         Key="Space"
@@ -483,7 +493,7 @@
                         CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" />
                 </ListView.InputBindings>
                 <ListView.View>
-                    <GridView>
+                    <GridView >
                         <GridViewColumn
                             x:Name="col1"
                             Width="{Binding ElementName=helperField, Path=ActualWidth, Converter={StaticResource GridWidthConverter}}"
@@ -496,7 +506,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            Width="90"
+                            Width="90" 
                             ui11:GridViewSort.PropertyName="Status"
                             Header="Status">
                             <GridViewColumn.CellTemplate>
@@ -523,7 +533,8 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col3"
+                            x:Name="col3"                             Width="Auto"
+
                             ui11:GridViewSort.PropertyName="RateDownload"
                             Header="Download speed">
                             <GridViewColumn.CellTemplate>
@@ -533,7 +544,8 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                            x:Name="col4"
+                            x:Name="col4"                             Width="Auto"
+
                             ui11:GridViewSort.PropertyName="UploadedEver"
                             Header="Uploaded">
                             <GridViewColumn.CellTemplate>
@@ -549,6 +561,7 @@
                         <GridViewColumn
                             x:Name="col5"
                             ui11:GridViewSort.PropertyName="TotalSize"
+                            Width="Auto"
                             Header="Size">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -556,6 +569,20 @@
                                         Width="Auto"
                                         MinWidth="75"
                                         Text="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn
+                            x:Name="col6"
+                            ui11:GridViewSort.PropertyName="AddedDate"
+                            Header="Added">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Width="Auto"
+                                        MinWidth="75"
+                                        Text="{Binding AddedDate, Converter={StaticResource LongToDateTime}, Mode=OneWay}"
                                         TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -584,6 +611,11 @@
                         <MenuItem cal:Message.Attach="Properties" Header="{lex:BLoc QA_Properties}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
             </ListView>
 
             <Grid
@@ -599,7 +631,7 @@
                     <ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=col4, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=col5, Path=ActualWidth}" />
-
+                    <ColumnDefinition Width="{Binding ElementName=col6, Path=ActualWidth}" />
                 </Grid.ColumnDefinitions>
                 <!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->
                 <Grid x:Name="helperField" Grid.Column="0" />
