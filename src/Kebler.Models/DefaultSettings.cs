@@ -22,7 +22,7 @@ namespace Kebler.Models
         public bool AllowPreRelease { get; set; }
 
         public bool MoreInfoShow { get; set; } = true;
-        public bool CanSearchForSimilatTorrentsWhenAddingNewOne { get; set; } = true;
+        public bool CanSearchForSimilatTorrentsWhenAddingNewOne { get; set; } = false;
 
         public bool ShowCategoryCount { get; set; } = true;
         public bool TraceEnabled { get; set; } = false;
