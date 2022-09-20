@@ -528,6 +528,10 @@ namespace Kebler.ViewModels
     {
         public void Exit()
         {
+            Log.Info("-----------Exit-----------");
+
+            Application.Current.Shutdown();
+            Application.Current.Shutdown(0);
             //Log.Ui();
             TryCloseAsync();
         }
