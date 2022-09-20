@@ -10,8 +10,8 @@ namespace Kebler.Services.Converters
         {
             if (value != null && long.TryParse(value.ToString(), out var para))
             {
-                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(para);
-                return dateTimeOffset.ToString("dd.MM.yyyy hh:mm");
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(para).LocalDateTime;
+                return dateTimeOffset.ToString("dd.MM.yyyy HH:mm");
             }
             return string.Empty;
         }
