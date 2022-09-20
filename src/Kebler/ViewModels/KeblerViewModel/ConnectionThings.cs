@@ -202,39 +202,24 @@ namespace Kebler.ViewModels
                                 if (_transmissionClient != null)
                                 {
 
-                                    await GetStatistic(); ;
+                                    await GetStatistic();
 
-                                    await GetSettings();
-
-                                    await GetAllTorrentsData();
-
-
-                                    //_stats = (await Get(
-                                    //    _transmissionClient.GetSessionStatisticAsync(_cancelTokenSource.Token),
-                                    //    LocalizationProvider.GetLocalizedValue(
-                                    //        nameof(Resources.Strings.MW_StatusText_Stats)))).Value;
-
-                                    //allTorrents =
-                                    //    (await Get(
-                                    //        _transmissionClient.TorrentGetAsync(
-                                    //            State == WindowState.Minimized ? TorrentFields.WORK_HIDDEN : TorrentFields.WORK,
-                                    //            _cancelTokenSource.Token),
-                                    //        LocalizationProvider.GetLocalizedValue(
-                                    //            nameof(Resources.Strings.MW_StatusText_Torrents)))).Value;
-
-                                    //_settings = (await Get(
-                                    //    _transmissionClient.GetSessionSettingsAsync(_cancelTokenSource.Token),
-                                    //    LocalizationProvider.GetLocalizedValue(
-                                    //        nameof(Resources.Strings.MW_StatusText_Settings)))).Value;
-
-                                    if (allTorrents != null)
+                                    if (State == WindowState.Normal)
                                     {
-                                        ParseTransmissionServerSettings();
-                                        ParseStats();
+                                        await GetSettings();
 
-                                        if (allTorrents?.Clone() is TransmissionTorrents data)
-                                            await ProcessParsingTransmissionResponse(data);
+                                        await GetAllTorrentsData();
+
+                                        if (allTorrents != null)
+                                        {
+                                            ParseTransmissionServerSettings();
+
+                                            if (allTorrents?.Clone() is TransmissionTorrents data)
+                                                await ProcessParsingTransmissionResponse(data);
+                                        }
                                     }
+
+                                    ParseStats();
 
                                 }
                                 else
