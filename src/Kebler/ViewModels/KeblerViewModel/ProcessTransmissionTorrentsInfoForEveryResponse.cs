@@ -55,7 +55,13 @@ namespace Kebler.ViewModels
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed}";
+
+                    var downlaoding = CategoriesList.FirstOrDefault(x => x.Cat == Enums.Categories.Downloading);
+                    var uploading = CategoriesList.FirstOrDefault(x => x.Cat == Enums.Categories.Ended);
+
+                    App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed} {Environment.NewLine}" +
+                    $" Downlaoding: {downlaoding?.Count}{Environment.NewLine}" +
+                    $" Uploading: {uploading?.Count}";
                 });
 
             }
