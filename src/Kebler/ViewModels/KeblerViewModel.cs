@@ -338,7 +338,6 @@ namespace Kebler.ViewModels
                     _view.Width = ConfigService.Instanse.MainWindowWidth;
                     _view.Height = ConfigService.Instanse.MainWindowHeight;
                     _view.WindowState = ConfigService.Instanse.MainWindowState;
-                    RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                     IsShowMoreInfo = ConfigService.Instanse.MoreInfoShow;
                     ShowCategoriesCount = ConfigService.Instanse.ShowCategoryCount;
                 }

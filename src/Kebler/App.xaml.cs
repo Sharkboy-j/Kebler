@@ -72,7 +72,6 @@ namespace Kebler
             }
 
 
-            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
 
 
             //log4net.Config.XmlConfigurator.Configure(null);
