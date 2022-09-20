@@ -684,4 +684,7 @@
   <data name="MI_ShowCategoriesCount" xml:space="preserve">
     <value>Torrents in category count</value>
   </data>
+  <data name="MW_StatusText_AddTorrentsBackground" xml:space="preserve">
+    <value>Adding in background (%done)...</value>
+  </data>
 </root>

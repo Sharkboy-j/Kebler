@@ -57,12 +57,10 @@ namespace Kebler.Views
                 {
                     await vm.OpenTorrent(files);
                 }
-
-
             }
             catch (Exception ex)
             {
-
+                Log.Instance.Error(ex);
             }
         }
     }

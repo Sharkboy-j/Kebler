@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -543,7 +544,7 @@ namespace Kebler.ViewModels
         {
             IsConnecting = true;
 
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 try
                 {
@@ -560,7 +561,7 @@ namespace Kebler.ViewModels
                     }
 
                     if (allTorrents.Clone() is TransmissionTorrents data)
-                        ProcessParsingTransmissionResponse(data);
+                        await ProcessParsingTransmissionResponse(data);
                 }
                 finally
                 {
@@ -591,10 +592,10 @@ namespace Kebler.ViewModels
 
         public void FilterTextChanged()
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 if (allTorrents.Clone() is TransmissionTorrents data)
-                    ProcessParsingTransmissionResponse(data);
+                    await ProcessParsingTransmissionResponse(data);
             });
 
         }
@@ -859,92 +860,146 @@ namespace Kebler.ViewModels
                         }
 
                         if (allTorrents.Clone() is TransmissionTorrents data)
-                            ProcessParsingTransmissionResponse(data);
+                            ProcessParsingTransmissionResponse(data).Wait();
                     }
             }
         }
 
         public async Task OpenTorrent(IEnumerable<string> names)
         {
-            try
+            var skipwindow = false;
+
+            Log.Info("Start add task");
+            await Task.Run(async () =>
             {
-                var skipwindow = false;
-                foreach (var item in names)
+                int counter = 1;
+                try
                 {
-                    if (string.IsNullOrEmpty(item))
-                        continue;
-
-                    if (item.StartsWith("magnet"))
+                    foreach (var item in names)
                     {
-                        var tr = new NewTorrent
+                        Log.Info($"{Environment.NewLine}");
+                        Log.Info($"-----------------START\"-----------------");
+                        Log.Info($"Add torrent {counter}/{names.Count()}");
+
+
+                        counter++;
+
+                        IsDoingStuff = true;
+                        _isLongTaskRunning = true;
+
+                        var text = LocalizationProvider.GetLocalizedValue(nameof(Strings.MW_StatusText_AddTorrentsBackground)).Replace("%done", $"{counter}/{names.Count()}");
+
+                        LongStatusText = text;
+
+                        if (string.IsNullOrEmpty(item))
+                            continue;
+
+                        if (item.StartsWith("magnet"))
                         {
-                            Filename = item
-                        };
-                        await _transmissionClient?.TorrentAddAsync(tr, _cancelTokenSource.Token)!;
-                    }
-                    else
-                    {
+                            Log.Info("Magnet");
 
-                        var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
-
-                        if (skipwindow)
-                        {
-                            var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-                                                   _torrentList, _folderCategory, _eventAggregator,
-                                                   downs, RemoveTorrent,
-                                                   ref _isAddWindOpened, ref _view);
-
-                            await dialog.AddHidden();
-
-                            _isAddWindOpened = false;
+                            var tr = new NewTorrent
+                            {
+                                Filename = item
+                            };
+                            await _transmissionClient?.TorrentAddAsync(tr, _cancelTokenSource.Token)!;
                         }
                         else
                         {
-                            var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
-                                                   _torrentList, _folderCategory, _eventAggregator,
-                                                   downs, RemoveTorrent,
-                                                   ref _isAddWindOpened, ref _view);
 
-                            dialog.IsAddTorrentWindowShow = skipwindow;
+                            Log.Info("Not magnet");
 
-                            var needToOpenWindowDialog = await dialog.Init();
+                            var roColelction = new ReadOnlyCollection<TorrentInfo>(_torrentList.ToList());
 
-                            if (needToOpenWindowDialog)
+                            var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
+
+                            if (skipwindow)
                             {
-                                var dialogResult = await manager.ShowDialogAsync(dialog);
+                                Log.Info($"Add hidden {item}");
 
-                                if (dialog.IsAddTorrentWindowShow)
-                                {
-                                    skipwindow = true;
-                                }
+                                var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                                       roColelction, _folderCategory, _eventAggregator,
+                                                       downs, RemoveTorrent,
+                                                       ref _isAddWindOpened, ref _view);
+
+                                var resp = await dialog.AddHidden();
+
+                                Log.Info($"End add hidden {item} with result => {resp}");
 
                                 _isAddWindOpened = false;
+                            }
+                            else
+                            {
+                                Log.Info($"Add windowed {item}");
 
-                                if (dialogResult == true)
+                                var dialog = new AddTorrentViewModel(item, _transmissionClient, _settings,
+                                                       roColelction, _folderCategory, _eventAggregator,
+                                                       downs, RemoveTorrent,
+                                                       ref _isAddWindOpened, ref _view);
+
+
+                                var needToOpenWindowDialog = await dialog.Init();
+
+                                if (needToOpenWindowDialog)
                                 {
-                                    if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
-                                        TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
-                                        {
-                                            Name = dialog.TorrentResult.Value.Name,
-                                            HashString = dialog.TorrentResult.Value.HashString
-                                        });
+
+                                    Log.Info($"Try open dialog");
+
+                                    var dialogResult = (bool?)false;
+                                    await Execute.OnUIThreadAsync(async () =>
+                                    {
+                                        dialogResult = await manager.ShowDialogAsync(dialog);
+                                    });
+
+                                    Log.Info($"End try open dialog");
+
+
+                                    skipwindow = dialog.IsAddTorrentWindowShow;
+
+                                    if (skipwindow)
+                                    {
+                                        Log.Info($"Skip add windowed set true");
+                                    }
+
+                                    _isAddWindOpened = false;
+
+                                    if (dialogResult == true)
+                                    {
+                                        if (dialog.TorrentResult.Value.Status == Enums.AddTorrentStatus.Added)
+                                            TorrentList.Add(new TorrentInfo(dialog.TorrentResult.Value.ID)
+                                            {
+                                                Name = dialog.TorrentResult.Value.Name,
+                                                HashString = dialog.TorrentResult.Value.HashString
+                                            });
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
                                 }
                                 else
                                 {
-                                    return;
+                                    Log.Info($"Skip open dialog window");
                                 }
+
+                                Log.Info($"End add windowed {item}");
                             }
                         }
 
+                        Log.Info($"-----------------END\"-----------------{Environment.NewLine}");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+                finally
+                {
+                    _isLongTaskRunning = false;
+                    IsDoingStuff = false;
+                }
 
-            }
-
-
+            });
         }
 
         #region server

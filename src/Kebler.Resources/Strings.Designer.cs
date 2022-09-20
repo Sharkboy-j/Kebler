@@ -1159,6 +1159,15 @@ namespace Kebler.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding in background (%done)....
+        /// </summary>
+        public static string MW_StatusText_AddTorrentsBackground {
+            get {
+                return ResourceManager.GetString("MW_StatusText_AddTorrentsBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Closing session.
         /// </summary>
         public static string MW_StatusText_CloseSession {

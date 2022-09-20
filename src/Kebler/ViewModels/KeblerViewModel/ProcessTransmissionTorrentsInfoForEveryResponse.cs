@@ -11,6 +11,7 @@ using Kebler.Core.Models;
 using Kebler.TransmissionTorrentClient.Models;
 using Microsoft.AppCenter.Crashes;
 using Kebler.Views;
+using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
 
@@ -64,7 +65,7 @@ namespace Kebler.ViewModels
         /// Parse transmission torrents data.
         /// </summary>
         /// <param name="data"></param>
-        private void ProcessParsingTransmissionResponse(TransmissionTorrents data)
+        private async Task ProcessParsingTransmissionResponse(TransmissionTorrents data)
         {
             if (!IsConnected)
                 return;
@@ -145,8 +146,6 @@ namespace Kebler.ViewModels
                         break;
                 }
 
-
-
                 if (!string.IsNullOrEmpty(FilterText))
                 {
                     //var txtfilter = FilterText;
@@ -166,7 +165,7 @@ namespace Kebler.ViewModels
                     }
                 }
 
-                for (var i = 0; i < data.Torrents.Length; i++) data.Torrents[i] = ValidateTorrent(data.Torrents[i]);
+                //for (var i = 0; i < data.Torrents.Length; i++) data.Torrents[i] = ValidateTorrent(data.Torrents[i]);
 
                 //Debug.WriteLine("S" + DateTime.Now.ToString("HH:mm:ss:ffff"));
 
@@ -177,8 +176,12 @@ namespace Kebler.ViewModels
                 if (State != WindowState.Minimized)
                     UpdateCategories(allTorrents.Torrents.Select(x => new FolderCategory(x.DownloadDir)).ToList());
 
-
             }
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                GridViewSort.ApplyCashSort();
+            });
         }
 
 
@@ -285,11 +288,6 @@ namespace Kebler.ViewModels
             {
                 _eventAggregator.PublishOnUIThreadAsync(new Messages.DownlaodCategoriesChanged(Categories));
             }
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                GridViewSort.ApplyCashSort();
-            });
         }
 
 
