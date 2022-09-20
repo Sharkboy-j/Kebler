@@ -62,8 +62,8 @@ namespace Kebler.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed} {Environment.NewLine}" +
-                    $" Downlaoding: {downloading}{Environment.NewLine}" +
-                    $" Uploading: {uploading}";
+                    $"Downlaoding: {downloading}{Environment.NewLine}" +
+                    $"Uploading: {uploading}";
                 });
 
             }
