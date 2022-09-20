@@ -44,7 +44,7 @@ namespace Kebler.Views
         private void Check(object sender, RoutedEventArgs e)
         {
 #if RELEASE
-            App.Log.Ui(nameof(Check));
+            //App.Log.Ui(nameof(Check));
 
             System.Threading.Tasks.Task.Run(Updater.CheckUpdates);
 #endif
@@ -108,7 +108,7 @@ namespace Kebler.Views
 //System.Windows.Threading
 //ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
 
-                App.Log.Error(ex);
+                Log.Error(ex);
 #endif
             }
         }

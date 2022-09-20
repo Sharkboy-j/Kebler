@@ -13,13 +13,14 @@
     using Kebler.Update.Core;
     using ViewModels;
     using System.Threading.Tasks;
+    using NLog;
 #endif
 
     internal static class Updater
     {
 #if RELEASE
 
-        private static readonly Kebler.Services.Interfaces.ILog Log = Kebler.Services.Log.Instance;
+        private static ILogger Log = NLog.LogManager.GetCurrentClassLogger();
 
         public static async void CheckUpdates()
         {
