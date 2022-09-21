@@ -61,10 +61,10 @@
                         <ItemsControl Name="Container" Background="{DynamicResource TextBox.Static.Background}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <ListBoxItem
+                                    <TextBlock
                                         Margin="0,2"
                                         VerticalAlignment="Center"
-                                        Content="{Binding}"
+                                        Text="{Binding}"
                                         FontSize="13"
                                         FontWeight="Normal"
                                         Foreground="White"
@@ -97,16 +97,8 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}" />
-
                 <Button
                     Grid.Column="1"
-                    Width="Auto"
-                    Padding="10,0,10,0"
-                    HorizontalAlignment="Center"
-                    Click="Cancel"
-                    Content="{lex:BLoc BTNS_No}" />
-                <Button
-                    Grid.Column="3"
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
                     Click="Add"
@@ -114,6 +106,14 @@
                     Content="{lex:BLoc  BTNS_Yes}"
                     Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />
 
+                <Button
+                    Grid.Column="3"
+                    Width="Auto"
+                    Padding="10,0,10,0"
+                    HorizontalAlignment="Center"
+                    Click="Cancel"
+                    Content="{lex:BLoc BTNS_No}" />
+                
                 <Button
                     Grid.Column="3"
                     Padding="10,0,10,0"

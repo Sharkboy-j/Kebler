@@ -28,6 +28,7 @@ using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.AppCenter.Crashes;
 using NLog;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
@@ -841,31 +842,60 @@ namespace Kebler.ViewModels
 
 
 
-        private void RemoveTorrent(bool removeData = false)
+        private async Task RemoveTorrent(bool removeData = false)
         {
-            if (selectedIDs.Length > 0)
+            await Task.Run(async () =>
             {
-                var toRemove = selectedIDs;
-                var dialog =
-                    new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
-                            ref _transmissionClient, removeData)
-                    { Owner = Application.Current.MainWindow };
-
-                if (dialog.ShowDialog() == true && dialog.Result == Enums.RemoveResult.Ok)
-                    lock (_syncTorrentList)
+                try
+                {
+                    if (selectedIDs.Length > 0)
                     {
-                        foreach (var rm in toRemove)
+                        var toRemove = selectedIDs;
+                        var toRemoveNames = SelectedTorrents.Select(x => x.Name).ToArray();
+
+                        RemoveTorrentDialog dialog = null;
+
+                        await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            var itm = TorrentList.First(x => x.Id == rm);
-                            TorrentList.Remove(itm);
+                            dialog =
+                          new RemoveTorrentDialog(toRemoveNames, toRemove, ref _transmissionClient, removeData)
+                          { Owner = Application.Current.MainWindow };
+                            dialog.ShowDialog();
+                        });
 
-                            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
-                        }
+                        //if (dialog.Result == Enums.RemoveResult.Ok)
+                        //{
+                        //    lock (_syncTorrentList)
+                        //    {
+                        //        foreach (var rm in toRemove)
+                        //        {
+                        //            var itm = TorrentList.First(x => x.Id == rm);
+                        //            TorrentList.Remove(itm);
 
-                        if (allTorrents.Clone() is TransmissionTorrents data)
-                            ProcessParsingTransmissionResponse(data).Wait();
+                        //            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
+                        //        }
+
+                        //        if (allTorrents.Clone() is TransmissionTorrents data)
+                        //            ProcessParsingTransmissionResponse(data).Wait();
+                        //    }
+                        //}
+                        toRemoveNames = null;
+                        toRemove = null;
                     }
-            }
+                }
+                finally
+                {
+                    selectedIDs = null;
+                    SelectedTorrents = null;
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        _view?.list.UnselectAll();
+                    });
+
+                    GC.Collect();
+                    GC.Collect(2);
+                }
+            });
         }
 
         public async Task OpenTorrent(IEnumerable<string> names)
@@ -884,7 +914,7 @@ namespace Kebler.ViewModels
                     foreach (var item in names)
                     {
                         Log.Info($"{Environment.NewLine}");
-                        Log.Info($"-----------------START\"-----------------");
+                        Log.Info($"-----------------START-----------------");
                         Log.Info($"Add torrent {counter}/{names.Count()}");
 
 
@@ -990,7 +1020,7 @@ namespace Kebler.ViewModels
                             }
                         }
 
-                        Log.Info($"-----------------END\"-----------------{Environment.NewLine}");
+                        Log.Info($"-----------------END-----------------{Environment.NewLine}");
                     }
                 }
                 catch (Exception ex)
