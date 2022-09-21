@@ -374,7 +374,7 @@ namespace Kebler.ViewModels
 
         #region Events
 
-        public async void TorrentChanged(ListView obj, TorrentInfo inf)
+        public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
         {
             try
             {
