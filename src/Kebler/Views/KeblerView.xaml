@@ -486,7 +486,7 @@
                 VirtualizingStackPanel.CacheLength="10"
                 cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($source,$this)]"
                 CanUserResizeColumns="True"
-                SelectionMode="Single"
+                SelectionMode="Extended"
                 CanUserSortColumns="True"
                 VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                 ScrollViewer.IsDeferredScrollingEnabled="False"

@@ -872,6 +872,9 @@ namespace Kebler.ViewModels
         {
             var skipwindow = false;
 
+            var roColelction = new ReadOnlyCollection<TorrentInfo>(_torrentList);
+
+
             Log.Info("Start add task");
             await Task.Run(async () =>
             {
@@ -911,8 +914,6 @@ namespace Kebler.ViewModels
                         {
 
                             Log.Info("Not magnet");
-
-                            var roColelction = new ReadOnlyCollection<TorrentInfo>(_torrentList.ToList());
 
                             var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
 
@@ -995,6 +996,12 @@ namespace Kebler.ViewModels
                 catch (Exception ex)
                 {
                     Log.Error(ex);
+
+                    await Execute.OnUIThreadAsync(async () =>
+                    {
+                        _ = await manager.ShowDialogAsync(new MessageBoxViewModel(ex.Message, "Error", Enums.MessageBoxDilogButtons.Ok));
+                    });
+
                 }
                 finally
                 {
