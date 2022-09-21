@@ -494,7 +494,13 @@
                 VirtualizingStackPanel.ScrollUnit="Pixel"
                 VirtualizingPanel.VirtualizationMode="Recycling">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn Header="Status" CanUserResize="False" Width="75">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -512,11 +518,41 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="Auto" Header="RateUpload" Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Width="Auto" Header="RateDownload" Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}"/>
-                    <DataGridTextColumn Width="Auto" Header="UploadedEver" Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"/>
-                    <DataGridTextColumn Width="Auto" Header="TotalSize" Binding="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}"/>
-                    <DataGridTextColumn Width="Auto" Header="AddedDate" Binding="{Binding AddedDate, Converter={StaticResource LongToDateTime}, Mode=OneWay}"/>
+                    <DataGridTextColumn Width="Auto" Header="RateUpload" Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="RateDownload" Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="UploadedEver" Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="TotalSize" Binding="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="AddedDate" Binding="{Binding AddedDate, Converter={StaticResource LongToDateTime}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
