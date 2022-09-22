@@ -23,6 +23,7 @@ using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Resources;
 using Kebler.Services;
+using Kebler.Services.Converters;
 using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
@@ -202,6 +203,8 @@ namespace Kebler.ViewModels
 
                 var ind = SelectedCategoryIndex;
 
+                dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
+                uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
 
                 SelectedCategoryIndex = ind;
             }
@@ -1238,6 +1241,7 @@ namespace Kebler.ViewModels
 
         //private Task _whileCycleMoreInfoTask;
         private Task _whileCycleTask;
+        private Task _whileBackgroundCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private bool requested;
         private uint[] selectedIDs;
@@ -1416,7 +1420,24 @@ namespace Kebler.ViewModels
         public WindowState State
         {
             get => _state;
-            set => Set(ref _state, value);
+            set
+            {
+                Set(ref _state, value);
+                switch (value)
+                {
+                    case WindowState.Maximized:
+                    case WindowState.Normal:
+                        allowBack = false;
+                        allowMain = true;
+                        mainSem.Release();
+                        break;
+                    case WindowState.Minimized:
+                        allowBack = true;
+                        allowMain = false;
+                        backSem.Release();
+                        break;
+                }
+            }
         }
 
 

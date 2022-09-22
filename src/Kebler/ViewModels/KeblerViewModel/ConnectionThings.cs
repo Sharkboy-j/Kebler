@@ -24,6 +24,12 @@ namespace Kebler.ViewModels
     public partial class KeblerViewModel
     {
 
+        private bool allowBack = false;
+        private bool allowMain = true;
+
+        SemaphoreSlim mainSem = new SemaphoreSlim(1);
+        SemaphoreSlim backSem = new SemaphoreSlim(1);
+
         /// <summary>
         /// Retry connect to server.
         /// </summary>
@@ -192,49 +198,58 @@ namespace Kebler.ViewModels
 
                         while (IsConnected && !token.IsCancellationRequested)
                         {
-                            try
+                            if (allowMain == false)
                             {
-                                if (Application.Current?.Dispatcher != null &&
-                                                               Application.Current.Dispatcher.HasShutdownStarted)
-                                    throw new TaskCanceledException();
-                                //st.Start();
-
-                                if (_transmissionClient != null)
+                                mainSem.Wait();
+                            }
+                            else
+                            {
+                                try
                                 {
+                                    if (Application.Current?.Dispatcher != null &&
+                                                                   Application.Current.Dispatcher.HasShutdownStarted)
+                                        throw new TaskCanceledException();
+                                    //st.Start();
 
-                                    await GetStatistic();
-
-                                    if (State == WindowState.Normal)
+                                    if (_transmissionClient != null)
                                     {
-                                        await GetSettings();
 
-                                        await GetAllTorrentsData();
-
-                                        if (allTorrents != null)
+                                        if (State == WindowState.Normal)
                                         {
-                                            ParseTransmissionServerSettings();
+                                            await GetStatistic();
 
-                                            if (allTorrents?.Clone() is TransmissionTorrents data)
-                                                await ProcessParsingTransmissionResponse(data);
+                                            await GetSettings();
+
+                                            await GetAllTorrentsData();
+
+                                            if (allTorrents != null)
+                                            {
+                                                ParseTransmissionServerSettings();
+
+                                                if (allTorrents?.Clone() is TransmissionTorrents data)
+                                                    await ProcessParsingTransmissionResponse(data);
+                                            }
                                         }
+
+                                        ParseStats();
+
+                                    }
+                                    else
+                                    {
+                                        break;
                                     }
 
-                                    ParseStats();
-
+                                    //st.Stop();
+                                    //Log.Trace(st);
+                                    //st.Reset();
                                 }
-                                else
+                                finally
                                 {
-                                    break;
+                                    await Task.Delay(ConfigService.Instanse.UpdateTime, token);
                                 }
+                            }
 
-                                //st.Stop();
-                                //Log.Trace(st);
-                                //st.Reset();
-                            }
-                            finally
-                            {
-                                await Task.Delay(ConfigService.Instanse.UpdateTime, token);
-                            }
+                        
                         }
                     }
                     else
@@ -296,7 +311,82 @@ namespace Kebler.ViewModels
                 }
             }, token);
 
+
+
+            _whileBackgroundCycleTask = new Task(async () =>
+            {
+                if (_transmissionClient is null)
+                    return;
+
+                try
+                {
+                    while (true)
+                    {
+                        if (allowBack == false)
+                        {
+                            backSem.Wait();
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (Application.Current?.Dispatcher != null &&
+                                                               Application.Current.Dispatcher.HasShutdownStarted)
+                                    throw new TaskCanceledException();
+
+                                if (_transmissionClient != null)
+                                {
+                                    await GetStatistic();
+                                    ParseStats();
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            finally
+                            {
+                                await Task.Delay(ConfigService.Instanse.BackgroundUpdateTimeMS, token);
+                            }
+                        }
+                      
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                }
+                catch (WebException ex)
+                {
+                    string msg;
+                    switch (ex.Status)
+                    {
+                        case WebExceptionStatus.NameResolutionFailure:
+                            msg =
+                                $"{LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.EX_Host))} '{SelectedServer.FullUriPath}'";
+                            break;
+                        case WebExceptionStatus.UnknownError:
+                            msg = ex.Message;
+                            break;
+                        default:
+                            msg = $"{ex.Status} {Environment.NewLine} {ex?.Message}";
+                            break;
+                    }
+
+                    Log.Error(ex.Message);
+                    await Application.Current?.Dispatcher?.InvokeAsync(async () =>
+                    {
+                        await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                    Crashes.TrackError(ex);
+                }
+            }, token);
+
             _whileCycleTask.Start();
+            _whileBackgroundCycleTask.Start();
         }
 
         private bool IsResponseStatusOk(ITransmissionResponse resp)

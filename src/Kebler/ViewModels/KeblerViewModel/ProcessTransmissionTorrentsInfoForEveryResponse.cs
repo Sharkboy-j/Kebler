@@ -23,6 +23,10 @@ namespace Kebler.ViewModels
     /// </summary>
     public partial class KeblerViewModel
     {
+
+        private string dSpeedText;
+        private string uSpeedText;
+
         /// <summary>
         /// Parse Transmission server statistic.
         /// </summary>
@@ -30,38 +34,39 @@ namespace Kebler.ViewModels
         {
             try
             {
-                Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
-                Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
-
-                IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
-                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
-                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
-                                        $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
-
-                var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
-                var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
-
                 var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
                 var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
+
                 var altUp = _settings?.AlternativeSpeedEnabled == true ?
-                     $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
-                    : string.Empty;
+                       $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedUp * 1000)}]"
+                      : string.Empty;
                 var altD = _settings?.AlternativeSpeedEnabled == true ?
                      $" [{BytesToUserFriendlySpeed.GetSizeString(_settings.AlternativeSpeedDown * 1000)}]"
                     : string.Empty;
-
-                DownloadSpeed = $"D: {dSpeed}{altD}";
-                UploadSpeed = $"U: {uSpeed}{altUp}";
-
 
                 var arr = _torrentList.ToArray();
 
                 var downloading = arr.Count(x => x.RateDownload > 0);
                 var uploading = arr.Count(x => x.RateUpload > 0);
 
+                if (State == WindowState.Normal || State == WindowState.Maximized)
+                {
+                    Thread.CurrentThread.CurrentUICulture = LocalizationManager.CurrentCulture;
+                    Thread.CurrentThread.CurrentCulture = LocalizationManager.CurrentCulture;
+
+                    IsConnectedStatusText = $"Transmission {_sessionInfo?.Version} (RPC:{_sessionInfo?.RpcVersion})     " +
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Uploaded))} {Utils.GetSizeString(_stats.CumulativeStats.UploadedBytes)}" +
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_Downloaded))}  {Utils.GetSizeString(_stats.CumulativeStats.DownloadedBytes)}" +
+                                            $"      {LocalizationProvider.GetLocalizedValue(nameof(Resources.Strings.Stats_ActiveTime))}  {TimeSpan.FromSeconds(_stats.CurrentStats.SecondsActive).ToPrettyFormat()}";
+
+                 
+                    DownloadSpeed = $"D: {dSpeed}{altD}";
+                    UploadSpeed = $"U: {uSpeed}{altUp}";
+                }
+             
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    App.NotifyIcon.ToolTipText = $"{DownloadSpeed} {UploadSpeed}{Environment.NewLine}" +
+                    App.NotifyIcon.ToolTipText = $"D: {dSpeed}{altD} U: {uSpeed}{altUp}{Environment.NewLine}" +
                     $"Downlaoding: {downloading}{Environment.NewLine}" +
                     $"Uploading: {uploading}";
                 });
