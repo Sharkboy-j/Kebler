@@ -49,6 +49,12 @@ namespace Kebler.Views
                 e.Cancel = true;
 
                 this.Hide();
+
+
+                if (DataContext is KeblerViewModel vm)
+                {
+                    vm.State = WindowState.Minimized;
+                }
             }
         }
 
