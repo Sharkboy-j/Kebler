@@ -63,6 +63,15 @@
             Modifiers="Shift" />
     </window:CustomizableWindow.InputBindings>
     <window:CustomizableWindow.Resources>
+        <CollectionViewSource 
+        Source="{Binding TorrentList}" 
+        IsLiveSortingRequested="True"
+        VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+        ScrollViewer.IsDeferredScrollingEnabled="False"
+        VirtualizingStackPanel.CacheLengthUnit="Item" 
+        VirtualizingStackPanel.ScrollUnit="Pixel"
+        VirtualizingPanel.VirtualizationMode="Recycling"
+        x:Key="TorrentsCollectionViewSource" />
         <Style TargetType="{x:Type window:CustomizableWindow}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -465,7 +474,111 @@
                 </ListBox>
             </Grid>
 
-            <ListView
+            <DataGrid   
+                Name="list"
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Source={StaticResource TorrentsCollectionViewSource}}"
+                SelectedValue="{Binding SelectedTorrent, Mode=OneWayToSource}"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.CacheLength="10"
+                cal:Message.Attach="[Event SelectionChanged] = [Action TorrentChanged($source,$this)];[Event PreviewMouseDoubleClick] = [Action Properties($source,$this)]"
+                CanUserResizeColumns="True"
+                SelectionMode="Extended"
+                CanUserSortColumns="True"
+                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                ScrollViewer.IsDeferredScrollingEnabled="False"
+                VirtualizingStackPanel.CacheLengthUnit="Item" 
+                VirtualizingStackPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.VirtualizationMode="Recycling">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Status" CanUserResize="False" Width="75">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <controls:TagBorder
+                                        Height="20"
+                                        Percent="{Binding PercentDone, UpdateSourceTrigger=PropertyChanged}"
+                                        Status="{Binding Status, UpdateSourceTrigger=PropertyChanged}">
+                                    <!--<controls:TagBorder.Effect>
+                                        <DropShadowEffect
+                                                BlurRadius="5"
+                                                Direction="305"
+                                                ShadowDepth="0" />
+                                    </controls:TagBorder.Effect>-->
+                                </controls:TagBorder>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="Auto" Header="RateUpload" Binding="{Binding RateUpload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="RateDownload" Binding="{Binding RateDownload, Converter={StaticResource BytesToUserFriendlySpeed}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="UploadedEver" Binding="{Binding UploadedEver, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="TotalSize" Binding="{Binding TotalSize, Converter={StaticResource BytesToUserFriendlyString}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="AddedDate" Binding="{Binding AddedDate, Converter={StaticResource LongToDateTime}, Mode=OneWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem cal:Message.Attach="Start" Header="{lex:BLoc QA_Resume}" />
+                        <MenuItem cal:Message.Attach="Pause" Header="{lex:BLoc QA_Pause}" />
+                        <MenuItem cal:Message.Attach="Remove" Header="{lex:BLoc QA_Remove}" />
+                        <MenuItem cal:Message.Attach="RemoveWithData" Header="{lex:BLoc QA_RemoveData}" />
+                        <Separator />
+                        <MenuItem Header="{lex:BLoc QA_Queue}">
+                            <MenuItem cal:Message.Attach="MoveTop" Header="{lex:BLoc QA_MoveTop}" />
+                            <MenuItem cal:Message.Attach="MoveUp" Header="{lex:BLoc QA_MoveUp}" />
+                            <MenuItem cal:Message.Attach="MoveDown" Header="{lex:BLoc QA_MoveDown}" />
+                            <MenuItem cal:Message.Attach="MoveBot" Header="{lex:BLoc QA_MoveBot}" />
+                        </MenuItem>
+                        <MenuItem cal:Message.Attach="Reannounce" Header="{lex:BLoc QA_Reannounce}" />
+                        <MenuItem cal:Message.Attach="Verify" Header="{lex:BLoc QA_Verify}" />
+                        <MenuItem cal:Message.Attach="SetLoc" Header="{lex:BLoc QA_SetLoc}" />
+                        <MenuItem cal:Message.Attach="Rename" Header="{lex:BLoc QA_Rename}" />
+                        <Separator />
+                        <MenuItem cal:Message.Attach="CopyMagnet" Header="{lex:BLoc QA_CopyMagnet}" />
+                        <MenuItem cal:Message.Attach="Properties" Header="{lex:BLoc QA_Properties}" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+            <!--<ListView
                 Name="list"
                 Grid.Row="0"
                 Grid.Column="2"
@@ -616,7 +729,7 @@
                         <VirtualizingStackPanel />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-            </ListView>
+            </ListView>-->
 
             <Grid
                 Grid.Row="0"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
 using Kebler.Core.Domain.Intrfaces;
 using Kebler.Core.Models;
 using Kebler.TransmissionTorrentClient;
@@ -39,14 +40,17 @@ namespace Kebler.Dialogs
             DataContext = this;
         }
 
-        public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool) RemoveWithDataCheckBox.IsChecked;
+        public bool WithData => RemoveWithDataCheckBox.IsChecked != null && (bool)RemoveWithDataCheckBox.IsChecked;
         public bool IsWorking { get; set; }
 
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
+            Container.ItemsSource = null;
+            Container = null;
             IsWorking = false;
             DialogResult = false;
+            Result = Enums.RemoveResult.Cancel;
             _cancellationTokenSource.Cancel();
             Close();
         }
@@ -59,26 +63,30 @@ namespace Kebler.Dialogs
 
         public async void Add(object sender, RoutedEventArgs e)
         {
-            IsWorking = true;
-            var with = WithData;
-            await Task.Factory.StartNew(async () =>
-            {
-                Log.Info("Start removing: " + string.Join(", ", _toRemove));
-                while (true)
-                {
-                    if (Dispatcher.HasShutdownStarted)
-                        return;
-                    Result = await _transmissionClient.TorrentRemoveAsync(_toRemove, _cancellationToken, with);
-                    Log.Info("RM response: " + Result);
-                    if (Result == Enums.RemoveResult.Ok)
-                    {
-                        DialogResult = true;
-                        break;
-                    }
 
-                    await Task.Delay(500, _cancellationToken);
-                }
-            }, _cancellationToken);
+            try
+            {
+                IsWorking = true;
+                var with = WithData;
+
+                await Task.Factory.StartNew(async () =>
+                {
+                    Log.Info("Start removing: " + string.Join(", ", _toRemove));
+                    while (true)
+                    {
+                        if (Dispatcher.HasShutdownStarted)
+                            return;
+                        Result = await _transmissionClient.TorrentRemoveAsync(_toRemove, _cancellationToken, with);
+                        Log.Info("RM response: " + Result);
+                    }
+                }, _cancellationToken);
+            }
+            finally
+            {
+                Container.ItemsSource = null;
+                Container = null;
+            }
+
             Close();
         }
 

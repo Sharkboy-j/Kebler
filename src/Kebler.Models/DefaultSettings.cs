@@ -12,6 +12,7 @@ namespace Kebler.Models
         public CultureInfo Language { get; set; } = new CultureInfo("en");
         public bool IsAddTorrentWindowShow { get; set; }
         public int UpdateTime { get; set; } = 5000;
+        public int BackgroundUpdateTimeMS { get; set; } = 25000;
         public int TorrentPeerLimit { get; set; } = 25;
         public double CategoriesWidth { get; set; } = 150;
         public double MoreInfoHeight { get; set; } = 202;

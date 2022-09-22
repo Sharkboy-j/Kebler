@@ -59,7 +59,8 @@
         public enum RemoveResult
         {
             Ok,
-            Error
+            Error,
+            Cancel
         }
 
         public enum ReponseResult

@@ -23,11 +23,13 @@ using Kebler.Dialogs;
 using Kebler.Models;
 using Kebler.Resources;
 using Kebler.Services;
+using Kebler.Services.Converters;
 using Kebler.TransmissionTorrentClient;
 using Kebler.TransmissionTorrentClient.Models;
 using Kebler.Views;
 using Microsoft.AppCenter.Crashes;
 using NLog;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using static Kebler.Models.Messages;
 using Application = System.Windows.Application;
 using Clipboard = System.Windows.Clipboard;
@@ -201,6 +203,8 @@ namespace Kebler.ViewModels
 
                 var ind = SelectedCategoryIndex;
 
+                dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
+                uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
 
                 SelectedCategoryIndex = ind;
             }
@@ -374,7 +378,7 @@ namespace Kebler.ViewModels
 
         #region Events
 
-        public async void TorrentChanged(ListView obj, TorrentInfo inf)
+        public async void TorrentChanged(DataGrid obj, TorrentInfo inf)
         {
             try
             {
@@ -841,36 +845,68 @@ namespace Kebler.ViewModels
 
 
 
-        private void RemoveTorrent(bool removeData = false)
+        private async Task RemoveTorrent(bool removeData = false)
         {
-            if (selectedIDs.Length > 0)
+            await Task.Run(async () =>
             {
-                var toRemove = selectedIDs;
-                var dialog =
-                    new RemoveTorrentDialog(SelectedTorrents.Select(x => x.Name).ToArray(), toRemove,
-                            ref _transmissionClient, removeData)
-                    { Owner = Application.Current.MainWindow };
-
-                if (dialog.ShowDialog() == true && dialog.Result == Enums.RemoveResult.Ok)
-                    lock (_syncTorrentList)
+                try
+                {
+                    if (selectedIDs.Length > 0)
                     {
-                        foreach (var rm in toRemove)
+                        var toRemove = selectedIDs;
+                        var toRemoveNames = SelectedTorrents.Select(x => x.Name).ToArray();
+
+                        RemoveTorrentDialog dialog = null;
+
+                        await Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            var itm = TorrentList.First(x => x.Id == rm);
-                            TorrentList.Remove(itm);
+                            dialog =
+                          new RemoveTorrentDialog(toRemoveNames, toRemove, ref _transmissionClient, removeData)
+                          { Owner = Application.Current.MainWindow };
+                            dialog.ShowDialog();
+                        });
 
-                            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
-                        }
+                        //if (dialog.Result == Enums.RemoveResult.Ok)
+                        //{
+                        //    lock (_syncTorrentList)
+                        //    {
+                        //        foreach (var rm in toRemove)
+                        //        {
+                        //            var itm = TorrentList.First(x => x.Id == rm);
+                        //            TorrentList.Remove(itm);
 
-                        if (allTorrents.Clone() is TransmissionTorrents data)
-                            ProcessParsingTransmissionResponse(data).Wait();
+                        //            allTorrents.Torrents = allTorrents.Torrents.Where(val => val.Id == rm).ToArray();
+                        //        }
+
+                        //        if (allTorrents.Clone() is TransmissionTorrents data)
+                        //            ProcessParsingTransmissionResponse(data).Wait();
+                        //    }
+                        //}
+                        toRemoveNames = null;
+                        toRemove = null;
                     }
-            }
+                }
+                finally
+                {
+                    selectedIDs = null;
+                    SelectedTorrents = null;
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        _view?.list.UnselectAll();
+                    });
+
+                    GC.Collect();
+                    GC.Collect(2);
+                }
+            });
         }
 
         public async Task OpenTorrent(IEnumerable<string> names)
         {
             var skipwindow = false;
+
+            var roColelction = new ReadOnlyCollection<TorrentInfo>(_torrentList);
+
 
             Log.Info("Start add task");
             await Task.Run(async () =>
@@ -881,7 +917,7 @@ namespace Kebler.ViewModels
                     foreach (var item in names)
                     {
                         Log.Info($"{Environment.NewLine}");
-                        Log.Info($"-----------------START\"-----------------");
+                        Log.Info($"-----------------START-----------------");
                         Log.Info($"Add torrent {counter}/{names.Count()}");
 
 
@@ -911,8 +947,6 @@ namespace Kebler.ViewModels
                         {
 
                             Log.Info("Not magnet");
-
-                            var roColelction = new ReadOnlyCollection<TorrentInfo>(_torrentList.ToList());
 
                             var downs = _torrentList.Select(c => new { c.Name, c.Id }).Select(c => (c.Name, c.Id));
 
@@ -989,12 +1023,18 @@ namespace Kebler.ViewModels
                             }
                         }
 
-                        Log.Info($"-----------------END\"-----------------{Environment.NewLine}");
+                        Log.Info($"-----------------END-----------------{Environment.NewLine}");
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex);
+
+                    await Execute.OnUIThreadAsync(async () =>
+                    {
+                        _ = await manager.ShowDialogAsync(new MessageBoxViewModel(ex.Message, "Error", Enums.MessageBoxDilogButtons.Ok));
+                    });
+
                 }
                 finally
                 {
@@ -1201,6 +1241,7 @@ namespace Kebler.ViewModels
 
         //private Task _whileCycleMoreInfoTask;
         private Task _whileCycleTask;
+        private Task _whileBackgroundCycleTask;
         private TransmissionTorrents allTorrents = new TransmissionTorrents();
         private bool requested;
         private uint[] selectedIDs;
@@ -1379,7 +1420,24 @@ namespace Kebler.ViewModels
         public WindowState State
         {
             get => _state;
-            set => Set(ref _state, value);
+            set
+            {
+                Set(ref _state, value);
+                switch (value)
+                {
+                    case WindowState.Maximized:
+                    case WindowState.Normal:
+                        allowBack = false;
+                        allowMain = true;
+                        mainSem.Release();
+                        break;
+                    case WindowState.Minimized:
+                        allowBack = true;
+                        allowMain = false;
+                        backSem.Release();
+                        break;
+                }
+            }
         }
 
 
