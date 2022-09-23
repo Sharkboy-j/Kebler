@@ -213,25 +213,21 @@ namespace Kebler.ViewModels
 
                                     if (_transmissionClient != null)
                                     {
+                                        await GetStatistic();
 
-                                        if (State == WindowState.Normal)
-                                        {
-                                            await GetStatistic();
+                                        await GetSettings();
 
-                                            await GetSettings();
-
-                                            await GetAllTorrentsData();
-
-                                            if (allTorrents != null)
-                                            {
-                                                ParseTransmissionServerSettings();
-
-                                                if (allTorrents?.Clone() is TransmissionTorrents data)
-                                                    await ProcessParsingTransmissionResponse(data);
-                                            }
-                                        }
+                                        await GetAllTorrentsData();
 
                                         ParseStats();
+
+                                        if (allTorrents != null)
+                                        {
+                                            ParseTransmissionServerSettings();
+
+                                            if (allTorrents?.Clone() is TransmissionTorrents data)
+                                                await ProcessParsingTransmissionResponse(data);
+                                        }
 
                                     }
                                     else
