@@ -61,7 +61,7 @@ namespace Kebler.Dialogs
             IsWorking = false;
         }
 
-        public async void Add(object sender, RoutedEventArgs e)
+        public async void Remove(object sender, RoutedEventArgs e)
         {
 
             try
@@ -78,6 +78,9 @@ namespace Kebler.Dialogs
                             return;
                         Result = await _transmissionClient.TorrentRemoveAsync(_toRemove, _cancellationToken, with);
                         Log.Info("RM response: " + Result);
+
+                        if (Result == Enums.RemoveResult.Ok)
+                            break;
                     }
                 }, _cancellationToken);
             }
