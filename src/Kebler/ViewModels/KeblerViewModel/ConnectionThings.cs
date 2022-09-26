@@ -282,10 +282,8 @@ namespace Kebler.ViewModels
                     }
 
                     Log.Error(ex.Message);
-                    await Application.Current?.Dispatcher?.InvokeAsync(async () =>
-                    {
-                        await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
-                    });
+                    await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
+
                 }
                 catch (Exception ex)
                 {
@@ -369,10 +367,8 @@ namespace Kebler.ViewModels
                     }
 
                     Log.Error(ex.Message);
-                    await Application.Current?.Dispatcher?.InvokeAsync(async () =>
-                    {
-                        await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
-                    });
+                    await MessageBoxViewModel.ShowDialog(msg, manager, string.Empty);
+
                 }
                 catch (Exception ex)
                 {
