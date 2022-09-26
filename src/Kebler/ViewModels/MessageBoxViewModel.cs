@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using Kebler.Core.Models;
 using Kebler.TransmissionTorrentClient.Models;
@@ -21,9 +22,14 @@ namespace Kebler.ViewModels
             Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.Ok)
         {
             var mgr = manager ?? new WindowManager();
-            var vm = new MessageBoxViewModel(msg, titile, buttons, true);
-            var resp =  await mgr.ShowDialogAsync(vm);
-            return vm.Result;
+
+            var rsp = await Application.Current.Dispatcher.InvokeAsync<Task<bool?>>(async () =>
+            {
+                var vm = new MessageBoxViewModel(msg, titile, buttons, true);
+                return await mgr.ShowDialogAsync(vm);
+            });
+
+            return await rsp;
         }
     }
 }
