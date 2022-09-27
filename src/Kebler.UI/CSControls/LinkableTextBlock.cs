@@ -12,14 +12,16 @@ namespace Kebler.UI.CSControls
 {
     public class LinkableTextBlock : TextBlock
     {
-        [DefaultValue(false)] [Localizability(LocalizationCategory.Text)]
+        [DefaultValue(false)]
+        [Localizability(LocalizationCategory.Text)]
         public static readonly DependencyProperty SureLinkProperty =
             DependencyProperty.Register(nameof(SureLink), typeof(bool),
                 typeof(LinkableTextBlock),
                 new FrameworkPropertyMetadata());
 
 
-        [DefaultValue(false)] [Localizability(LocalizationCategory.Text)]
+        [DefaultValue(false)]
+        [Localizability(LocalizationCategory.Text)]
         public static readonly DependencyProperty CopyOnlyProperty =
             DependencyProperty.Register(nameof(CopyOnly), typeof(bool),
                 typeof(LinkableTextBlock),
@@ -40,15 +42,19 @@ namespace Kebler.UI.CSControls
                 UpdateSourceTrigger.PropertyChanged));
         }
 
+        public LinkableTextBlock()
+        {
+        }
+
         public bool SureLink
         {
-            get => (bool) GetValue(SureLinkProperty);
+            get => (bool)GetValue(SureLinkProperty);
             set => SetValue(SureLinkProperty, value);
         }
 
         public bool CopyOnly
         {
-            get => (bool) GetValue(CopyOnlyProperty);
+            get => (bool)GetValue(CopyOnlyProperty);
             set => SetValue(CopyOnlyProperty, value);
         }
 
@@ -61,11 +67,11 @@ namespace Kebler.UI.CSControls
 
         protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
         {
-            if(Text.IsNotNullOrNotEmpty())
+            if (Text.IsNotNullOrNotEmpty())
             {
                 if (CopyOnly)
                     Clipboard.SetText(Text);
-                else if (isLink) 
+                else if (isLink)
                     Process.Start(new ProcessStartInfo("cmd", $"/c start {Text}") { CreateNoWindow = true });
             }
         }
@@ -75,11 +81,13 @@ namespace Kebler.UI.CSControls
         {
             if (sender is LinkableTextBlock LTB)
             {
-                var bs = (TextBlock) sender;
+                LTB.ToolTip = LTB.CopyOnly ? "Click to copy" : "Click to open";
 
-                if(string.IsNullOrEmpty(LTB.Text))
+                var bs = (TextBlock)sender;
+
+                if (string.IsNullOrEmpty(LTB.Text))
                     return;
-            
+
                 var result = Uri.TryCreate(LTB.Text, UriKind.RelativeOrAbsolute, out var uriResult);
 
                 if (LTB.SureLink || result)
@@ -88,7 +96,7 @@ namespace Kebler.UI.CSControls
                     SetForeground(sender, Brushes.DodgerBlue);
                 }
 
-                if (LTB.Text.Length > 0) bs.SetValue(TextProperty, LTB.Text); 
+                if (LTB.Text.Length > 0) bs.SetValue(TextProperty, LTB.Text);
             }
         }
     }
