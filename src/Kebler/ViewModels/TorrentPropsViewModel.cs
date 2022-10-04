@@ -32,7 +32,7 @@ namespace Kebler.ViewModels
 
         public TorrentPropsViewModel()
         {
-            
+
         }
 
         /// <summary>
@@ -86,6 +86,12 @@ namespace Kebler.ViewModels
             TryCloseAsync();
         }
 
+        public void Copy()
+        {
+            Clipboard.SetText(SelectedTracker.announce);
+        }
+
+
 
         public async void Save()
         {
@@ -101,13 +107,13 @@ namespace Kebler.ViewModels
                     SeedIdleLimit = StopSeed,
                     IDs = tors,
                     PeerLimit = PeerLimit,
-                    TrackerAdd = toAdd?.Count <=0 ? null : toAdd?.ToArray(),
-                    TrackerRemove = toRm?.Count <=0 ? null : toRm?.ToArray(),
+                    TrackerAdd = toAdd?.Count <= 0 ? null : toAdd?.ToArray(),
+                    TrackerRemove = toRm?.Count <= 0 ? null : toRm?.ToArray(),
                 };
 
                 var resp = await _transmissionClient.TorrentSetAsync(sett, new CancellationToken());
 
-                if(resp.Success)
+                if (resp.Success)
                 {
                     await TryCloseAsync();
                 }
@@ -160,7 +166,7 @@ namespace Kebler.ViewModels
 
             var maxId = Trackers.Max(x => x.ID) + 1;
 
-         
+
             if (dialog.Value is not null)
             {
                 var tracker = new TransmissionTorrentTrackers()

@@ -468,25 +468,21 @@ namespace Kebler.ViewModels
                                                 {
                                                     Log.Info($"Search for similar");
 
-                                                    await _wnd.Dispatcher.InvokeAsync(async () =>
+                                                    if (_torrents.Select(x => x.Item1).Contains(torrent.DisplayName))
                                                     {
-                                                        if (_torrents.Select(x => x.Item1).Contains(torrent.DisplayName))
+                                                        Log.Info($"Here is similar torrent");
+
+                                                        var title = LocalizationProvider.GetLocalizedValue(
+                                                                nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
+                                                        var res = await MessageBoxViewModel.ShowDialog(title,
+                                                            null, null, Enums.MessageBoxDilogButtons.YesNo);
+                                                        Log.Info($"Response for removing similar => {res}");
+
+                                                        if (res == true)
                                                         {
-                                                            Log.Info($"Here is similar torrent");
-
-                                                            var title = LocalizationProvider.GetLocalizedValue(
-                                                                    nameof(Strings.ASK_REMOVE_SIMILAR)).Replace("%d", torrent.DisplayName);
-                                                            var res = await MessageBoxViewModel.ShowDialog(title,
-                                                                null, null, Enums.MessageBoxDilogButtons.YesNo);
-                                                            Log.Info($"Response for removing similar => {res}");
-
-                                                            if (res == true)
-                                                            {
-                                                                _remove(_torrents.First(x => x.Item1.Equals(torrent.DisplayName)).Item2);
-                                                            }
+                                                            _remove(_torrents.First(x => x.Item1.Equals(torrent.DisplayName)).Item2);
                                                         }
-
-                                                    });
+                                                    }
 
                                                 }
 
@@ -505,24 +501,21 @@ namespace Kebler.ViewModels
                                                 {
                                                     var toAdd = _torrent.Trackers.Select(tr => tr.First()).ToArray();
 
-                                                    await _wnd.Dispatcher.InvokeAsync(async () =>
-                                                    {
-                                                        var quest = LocalizationProvider.GetLocalizedValue(
+                                                    var quest = LocalizationProvider.GetLocalizedValue(
                                                             nameof(Strings.ASK_UpdateTrackers));
 
 
-                                                        bool? shouldUpdate = true;
+                                                    bool? shouldUpdate = true;
 
-                                                        if (ConfigService.Instanse.AskUpdateTrackers)
-                                                        {
-                                                            shouldUpdate = await MessageBoxViewModel.ShowDialog($"{quest} for {_torrent.DisplayName}", null, null, Enums.MessageBoxDilogButtons.YesNoCancel);
-                                                        }
+                                                    if (ConfigService.Instanse.AskUpdateTrackers)
+                                                    {
+                                                        shouldUpdate = await MessageBoxViewModel.ShowDialog($"{quest} for {_torrent.DisplayName}", null, null, Enums.MessageBoxDilogButtons.YesNoCancel);
+                                                    }
 
-                                                        if (shouldUpdate == true)
-                                                        {
-                                                            await UpdateTrackers(toAdd, TorrentResult.Value.ID);
-                                                        }
-                                                    });
+                                                    if (shouldUpdate == true)
+                                                    {
+                                                        await UpdateTrackers(toAdd, TorrentResult.Value.ID);
+                                                    }
 
 
                                                     foreach (var tr in toAdd)
@@ -545,12 +538,8 @@ namespace Kebler.ViewModels
                                     TorrentResult.CustomException != null)
                                 {
 
-                                    await _wnd.Dispatcher.InvokeAsync(async () =>
-                                    {
-                                        await MessageBoxViewModel.ShowDialog(TorrentResult.CustomException.Message
-                                            , null, string.Empty);
-
-                                    });
+                                    await MessageBoxViewModel.ShowDialog(TorrentResult.CustomException.Message
+                                        , null, string.Empty);
 
                                     Log?.Error(TorrentResult.CustomException);
 

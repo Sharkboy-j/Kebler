@@ -101,7 +101,7 @@
                     Grid.Column="1"
                     Padding="10,0,10,0"
                     HorizontalAlignment="Center"
-                    Click="Add"
+                    Click="Remove"
                     IsDefault="True"
                     Content="{lex:BLoc  BTNS_Yes}"
                     Visibility="{Binding IsWorking, Converter={StaticResource ReverseBoolToVisibilityConverter}, FallbackValue=Visible}" />

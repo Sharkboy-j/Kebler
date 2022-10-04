@@ -329,7 +329,7 @@ namespace Kebler.ViewModels
 
         #region Config
 
-        private void ApplyConfig()
+        private async void ApplyConfig()
         {
             try
             {
@@ -355,7 +355,7 @@ namespace Kebler.ViewModels
                 Log.Error(ex);
                 Crashes.TrackError(ex);
 
-                MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Strings.ConfigApllyError)), manager);
+                await MessageBoxViewModel.ShowDialog(LocalizationProvider.GetLocalizedValue(nameof(Strings.ConfigApllyError)), manager);
             }
         }
 
@@ -835,12 +835,12 @@ namespace Kebler.ViewModels
         }
 
 
-        public void CopyMagnet()
+        public async void CopyMagnet()
         {
             if (SelectedTorrent != null)
                 Clipboard.SetText(SelectedTorrent.MagnetLink);
             else
-                MessageBoxViewModel.ShowDialog("Please select torrent");
+                await MessageBoxViewModel.ShowDialog("Please select torrent");
         }
 
 

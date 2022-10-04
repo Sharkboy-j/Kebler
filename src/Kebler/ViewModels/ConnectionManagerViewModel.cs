@@ -79,7 +79,7 @@ namespace Kebler.ViewModels
             // App.InvokeServerListChanged();
         }
 
-        public void Remove()
+        public async void Remove()
         {
             //Log.Ui();
 
@@ -92,7 +92,7 @@ namespace Kebler.ViewModels
             Log.Info($"RemoveResult: {result}");
             if (!result)
                 //TODO: Add string 
-                MessageBoxViewModel.ShowDialog("RemoveErrorContent", manager);
+                await MessageBoxViewModel.ShowDialog("RemoveErrorContent", manager);
 
             var ind = ServerIndex -= 1;
 
@@ -100,7 +100,7 @@ namespace Kebler.ViewModels
             //{
             //    App.Instance.KeblerControl.Disconnect();
             //}
-            _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
+            await _eventAggregator.PublishOnUIThreadAsync(new Messages.ServersUpdated());
 
             SelectedServer = null;
             GetServers();

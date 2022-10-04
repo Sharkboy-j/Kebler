@@ -34,6 +34,9 @@ namespace Kebler.ViewModels
         {
             try
             {
+                var dSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.DownloadSpeed);
+                var uSpeedText = BytesToUserFriendlySpeed.GetSizeString(_stats.UploadSpeed);
+
                 var dSpeed = string.IsNullOrEmpty(dSpeedText) ? "0 b/s" : dSpeedText;
                 var uSpeed = string.IsNullOrEmpty(uSpeedText) ? "0 b/s" : uSpeedText;
 
