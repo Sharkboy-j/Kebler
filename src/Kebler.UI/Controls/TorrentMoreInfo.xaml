@@ -431,7 +431,7 @@
                     ItemsSource="{Binding Peers, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="*" Header="{lex:BLoc MoreInfo_Peers_Host}">
+                        <DataGridTemplateColumn Width="Auto" Header="{lex:BLoc MoreInfo_Peers_Host}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="3,0" Orientation="Horizontal">
@@ -449,8 +449,13 @@
                             Header="{lex:BLoc MoreInfo_Peers_Client}" />
                         <DataGridTextColumn
                             Width="Auto"
+                            Binding="{Binding FlagStr, NotifyOnTargetUpdated=True}"
+                            Header="Flags" />
+                        <DataGridTextColumn
+                            Width="Auto"
                             Binding="{Binding Progress, Converter={StaticResource PercentToUserFriendlyConvertor}, NotifyOnTargetUpdated=True}"
                             Header="{lex:BLoc MoreInfo_Peers_Progress}" />
+                    
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding RateToClient, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
@@ -459,7 +464,7 @@
                             Width="Auto"
                             Binding="{Binding RateToPeer, Converter={StaticResource BytesToUserFriendlySpeed}, NotifyOnTargetUpdated=True}"
                             Header="{lex:BLoc MoreInfo_PeersRateToPeer}" />
-
+                      
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding IsEncrypted, Mode=OneWay, NotifyOnTargetUpdated=True}"

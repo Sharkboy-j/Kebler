@@ -70,9 +70,19 @@
                         SelectedIndex="{Binding SelectedIndex, Mode=OneWay}"
                         Text="{Binding Value}"
                         Visibility="{Binding ShowCombo, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+
                 </Grid>
 
-
+                <CheckBox
+                        Name="CHKBOX"
+                        Height="25"
+                        Margin="0,10,0,0"
+                        VerticalContentAlignment="Center"
+                        Content="{Binding DialogCheckBoxText}"
+                        IsChecked="{Binding DialogCheckBoxValue}"
+                        Visibility="{Binding ShowCheckBox, Converter={StaticResource BoolToVisibilityConverter}}" />
+                
                 <PasswordBox
                     Name="DialogPasswordBox"
                     Height="25"

@@ -626,7 +626,7 @@ namespace Kebler.ViewModels
                     : LocalizationProvider.GetLocalizedValue(nameof(Strings.SetLocOnce));
 
                 var path = SelectedTorrent.DownloadDir;
-                var dialog = new DialogBoxViewModel(question, Categories.Select(x => x.FullPath), path);
+                var dialog = new DialogBoxViewModel(question, Categories.Select(x => x.FullPath), path, Enums.MessageBoxDilogButtons.OkCancel, "Move files?");
 
                 if (await manager.ShowDialogAsync(dialog) == true && _transmissionClient != null)
                     await Task.Factory.StartNew(async () =>
@@ -635,7 +635,7 @@ namespace Kebler.ViewModels
                         while (true)
                         {
                             if (Application.Current.Dispatcher.HasShutdownStarted) return;
-                            var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value.ToString(), true,
+                            var resp = await _transmissionClient.TorrentSetLocationAsync(itms, dialog.Value.ToString(), dialog.DialogCheckBoxValue,
                                 _cancelTokenSource.Token);
                             resp.ParseTransmissionReponse();
 

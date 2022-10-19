@@ -11,8 +11,8 @@ namespace Kebler.ViewModels
 {
     public class DialogBoxViewModel : BoxViewModel
     {
-        private string _dialogTextBoxText;
-        private bool _showTextBox, _showPasswordBox, _showCombo;
+        private string _dialogTextBoxText, _dialogCheckBoxText;
+        private bool _showTextBox, _showPasswordBox, _showCombo, _showCheckBox, _dialogCheckBoxValue;
         private IDialogBox _view;
         private object _value;
         private int _selectedIndex;
@@ -41,7 +41,25 @@ namespace Kebler.ViewModels
         }
 
 
-        public DialogBoxViewModel(string message, IEnumerable<string> values, string val = "", Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
+        //public DialogBoxViewModel(string message, IEnumerable<string> values, string val = "", Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel)
+        //{
+        //    ShowPasswordBox = false;
+        //    ShowTextBox = false;
+        //    Message = message;
+        //    LogoVisibility = true;
+        //    Values = values;
+        //    Value = val;
+        //    ShowCombo = true;
+        //    ShowCheckBox = false;
+        //    ShowButtons(buttons);
+        //}
+
+        public DialogBoxViewModel(
+            string message,
+            IEnumerable<string> values,
+            string val = "",
+            Enums.MessageBoxDilogButtons buttons = Enums.MessageBoxDilogButtons.OkCancel,
+            string checkBoxText = "")
         {
             ShowPasswordBox = false;
             ShowTextBox = false;
@@ -50,6 +68,9 @@ namespace Kebler.ViewModels
             Values = values;
             Value = val;
             ShowCombo = true;
+            ShowCheckBox = string.IsNullOrEmpty(checkBoxText) ? false : true;
+            DialogCheckBoxText = checkBoxText;
+            DialogCheckBoxValue = true;
             ShowButtons(buttons);
         }
 
@@ -57,6 +78,12 @@ namespace Kebler.ViewModels
         {
             get => _showTextBox;
             set => Set(ref _showTextBox, value);
+        }  
+        
+        public bool DialogCheckBoxValue
+        {
+            get => _dialogCheckBoxValue;
+            set => Set(ref _dialogCheckBoxValue, value);
         }
 
         public bool ShowPasswordBox
@@ -69,12 +96,24 @@ namespace Kebler.ViewModels
         {
             get => _dialogTextBoxText;
             set => Set(ref _dialogTextBoxText, value);
+        }  
+        
+        public string DialogCheckBoxText
+        {
+            get => _dialogCheckBoxText;
+            set => Set(ref _dialogCheckBoxText, value);
         }
 
         public bool ShowCombo
         {
             get => _showCombo;
             set => Set(ref _showCombo, value);
+        }
+
+        public bool ShowCheckBox
+        {
+            get => _showCheckBox;
+            set => Set(ref _showCheckBox, value);
         }
 
         public IEnumerable<object> Values
