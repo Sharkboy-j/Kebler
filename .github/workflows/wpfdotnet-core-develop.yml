@@ -38,42 +38,42 @@ jobs:
 #      run: dotnet test src/Kebler.sln
     
     - name: Release64
-      run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release64.pubxml
+      run: dotnet publish newSrc/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release64.pubxml
 
     - name: dir
-      run: dir src\
+      run: dir newSrc\
       shell: cmd
 
     - name: dir
-      run: dir src\publish\
+      run: dir newSrc\publish\
       shell: cmd
 
     - name: dir
-      run: dir src\publish\RELEASE\
+      run: dir newSrc\publish\RELEASE\
       shell: cmd
 
     - name: dir
-      run: dir src\publish\RELEASE\App\
+      run: dir newSrc\publish\RELEASE\App\
       shell: cmd
 
     - name: Get version
       id: vars
       shell: PowerShell
       run: |
-        $data = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\src\publish\RELEASE\App\Kebler.exe").ProductVersion
+        $data = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\newSrc\publish\RELEASE\App\Kebler.exe").ProductVersion
         echo "::set-output name=ASSEMBLY_VERSION::$data"
 
     - name: Installer
-      run: dotnet publish ./src/Kebler.Update/Kebler.Update.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
+      run: dotnet publish ./newSrc/Kebler.Update/Kebler.Update.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\INSTALLER_PUB.pubxml
 
     - name: dir
-      run: dir src\publish
+      run: dir newSrc\publish
       shell: cmd
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-       path: src\publish\
+       path: newSrc\publish\
        name: BuildArchive
        
     - name: ZIP
@@ -83,9 +83,9 @@ jobs:
         release_name="${{ steps.vars.outputs.ASSEMBLY_VERSION  }}"
 
         # Build everything
-        # dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+        # dotnet publish newSrc/App/App.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
 
-        7z a -tzip "${release_name}.zip" ".\src\publish\RELEASE\*"
+        7z a -tzip "${release_name}.zip" ".\newSrc\publish\RELEASE\*"
         dir    
   
     - name: Create Release
@@ -116,6 +116,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{steps.create_release.outputs.upload_url}} 
-        asset_path: .\src\publish\RELEASE\Installer.exe
+        asset_path: .\newSrc\publish\RELEASE\Installer.exe
         asset_name: Installer.exe
         asset_content_type: application/exe
