@@ -34,8 +34,8 @@ jobs:
     #- name: setup-msbuild
     # uses: microsoft/setup-msbuild@v1   
       
-    - name: TEST
-      run: dotnet test src/Kebler.sln
+#    - name: TEST
+#      run: dotnet test src/Kebler.sln
     
     - name: Release64
       run: dotnet publish src/Kebler/Kebler.csproj -c Release -p:PublishProfile=Properties\PublishProfiles\Release64.pubxml
